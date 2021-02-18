@@ -53,6 +53,10 @@ addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas con protección de autenticación aquí
     Route.get("categoria", "CategoriaController.index")
+    Route.delete('delete_cat/:id', 'CategoriaController.destroy')
+    Route.post('newCategoria', 'CategoriaController.store')
+    Route.put('updateCategoria/:id', 'CategoriaController.update')
+    Route.get('getCategoriaById/:id', 'CategoriaController.getCategoriaById')
 
     Route.post('producto', 'UploadController.registrarProducto')
     Route.put('producto/:id', 'ProductoController.update')

@@ -12,6 +12,9 @@ const routes = [
       { path: '/proveedores_pendientes', component: () => import('pages/admin/Pendientes.vue') },
       { path: '/descripcionusuario/:id', component: () => import('pages/admin/DescripcionUsuario.vue') },
       { path: '/reportes_usuarios', component: () => import('pages/admin/Reportes.vue') },
+      { path: '/categorias', component: () => import('pages/admin/Categorias.vue') },
+      { path: '/registrocategorias', component: () => import('pages/admin/RegistroCategorias.vue') },
+      { path: '/edit_cat/:id', component: () => import('pages/admin/RegistroCategorias.vue') },
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue'), meta: { botonchat: true } },
       { path: '/productos', component: () => import('pages/proveedor/Productos.vue'), meta: { botonchat: true } },

@@ -1,7 +1,8 @@
 <template>
   <div>
-   <div class="q-mt-lg text-center q-pa-md text-weight-bolder bg-secondary text-black q-ma-md" style="border-radius:12px">BIENVENIDO ADMINISTRADOR</div>
-   <div class="row estilo-titulos q-mt-lg q-ml-sm q-mb-sm q-pl-sm">
+    <div class="q-mt-lg text-center q-pa-md text-weight-bolder bg-secondary text-black q-ma-md" style="border-radius:12px">BIENVENIDO ADMINISTRADOR</div>
+
+    <div class="row estilo-titulos q-mt-lg q-ml-sm q-mb-sm q-pl-sm">
       <q-icon class="q-mt-xs" name="stop_circle" style="font-size: 0.6em"/>
       <q-icon class="q-mt-xs" name="stop_circle" style="font-size: 0.6em"/>
       <q-icon class="q-mt-xs" name="stop_circle" style="font-size: 0.6em"/>
@@ -58,6 +59,20 @@
           </q-item-section>
           <q-item-section>
             <q-item-label class="text-black text-weight-bolder text-h6">Reportes</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <q-icon name="arrow_right" color="primary" />
+          </q-item-section>
+        </q-item>
+      </q-card>
+
+      <q-card v-ripple class="q-pa-sm q-my-md bordes" @click="$router.push('/categorias')" >
+        <q-item>
+          <q-item-section avatar>
+            <q-avatar icon="leaderboard" class="text-black" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label class="text-black text-weight-bolder text-h6">Categorias</q-item-label>
           </q-item-section>
           <q-item-section side>
             <q-icon name="arrow_right" color="primary" />
