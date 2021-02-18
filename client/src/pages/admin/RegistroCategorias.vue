@@ -5,7 +5,9 @@
     </div>
     <q-card class="q-mx-xl q-ma-md justify-center" style=" border-left: 6px solid $primary; background-color: rgba(202, 202, 202, 0.474); border-radius: 12px;">
       <div class="q-px-md q-py-md column">
-        <q-avatar size="100px" font-size="70px" color="amber-5" :icon="form.icons ? form.icons : 'add_circle_outline'" class="q-mb-md text-black" @blur="$v.form.icons.$touch()"/>
+        <div class="row col-2 justify-center">
+          <q-avatar size="100px" font-size="70px" color="amber-5" :icon="form.icons ? form.icons : 'add_circle_outline'" class="q-mb-md text-black" @blur="$v.form.icons.$touch()"/>
+        </div>
         <q-select rounded outlined v-model="form.icons" label="Icono" dense :options="['lightbulb','article','format_paint','local_shipping','settings','build','support_agent']" error-message="Ingrese su País" :error="$v.form.icons.$error" @blur="$v.form.icons.$touch()"/>
         <q-input rounded outlined bg-color="yellow-2" v-model="form.name" label="Nombre" dense :error="$v.form.name.$error" error-message="Este campo es requerido" @blur="$v.form.name.$touch()"/>
         <q-btn color="amber" glossy :label="edit ? 'Actualizar' : 'Agregar'" @click="!edit ? agregar() : actualizar()"/>
