@@ -5,7 +5,7 @@ const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 const fs = require('fs')
-var randomize = require('randomatic');
+// var randomize = require('randomatic');
 const User = use("App/Models/User")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -25,8 +25,6 @@ class CategoriaController {
   }
 
   async store ({ request, response, auth }) {
-    // let user = await auth.getUser()
-    // let codeFile = randomize('Aa0', 30)
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
     const validation = await validate(dat, Categoria.fieldValidationRules())
@@ -38,18 +36,9 @@ class CategoriaController {
     }
   }
 
-  /**
-   * Update producto details.
-   * PUT or PATCH productos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    console.log('dat', dat ,'dat');
     const validation = await validate(dat, Categoria.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
@@ -59,14 +48,6 @@ class CategoriaController {
     }
   }
 
-  /**
-  * Delete a categoria with id.
-  * DELETE categorias/:id
-  *
-  * @param {object} ctx
-  * @param {Request} ctx.request
-  * @param {Response} ctx.response
-  */
   async destroy ({ params, request, response }) {
     let categoria = await Categoria.find(params.id)
     await categoria.delete()
