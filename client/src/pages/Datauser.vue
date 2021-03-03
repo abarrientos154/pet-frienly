@@ -6,9 +6,9 @@
             <q-card class="bg-amber-1 q-pa-md q-ma-md shadow-3">
                 <div class="row justify-center items-center">
                     <div class="q-mt-none q-ml-sm text-h7 text-grey-9 text-bold"></div>
-                      <q-avatar size="180px">
+                      <!-- <q-avatar size="180px">
                         <img :src="baseu + 'perfil' + form._id" >
-                      </q-avatar>
+                      </q-avatar> -->
                       <div class="text-h5 q-ma-sm text-center text-bold"> {{form.full_name}} {{form.last_name }} </div>
                          <q-list style="width:100%">
                             <q-item clickable v-ripple>
@@ -50,9 +50,9 @@
           <div v-if="datosproveedor">
            <q-card class="bg-amber-1 q-pa-md q-ma-md shadow-3">
                 <div class="row justify-center items-center">
-                      <q-avatar size="180px">
+                      <!-- <q-avatar size="180px">
                         <img :src="baseu + 'perfil' + form._id" >
-                      </q-avatar>
+                      </q-avatar> -->
                       <div class="text-h5 q-ma-sm text-center text-bold"> {{form.full_name}}</div>
                           <q-list style="width:100%">
                           <q-item clickable v-ripple>
@@ -77,7 +77,7 @@
                             </q-item>
                           </div>
 
-                          <div class="q-mt-sm column">
+                          <!-- <div class="q-mt-sm column">
                             <div  class="q-mt-md q-pl-md text-grey-10">Fotos que posee la tienda:</div>
                               <q-card class="q-pa-md bg-amber-1 shadow-up-3 q-mt-sm" style="border-top-left-radius:25px;border-top-right-radius:25px">
                               <q-scroll-area
@@ -91,7 +91,7 @@
                               </div>
                             </q-scroll-area>
                           </q-card>
-                          </div>
+                          </div> -->
 
                         <div v-if="delivery">
                             <div class="q-mt-md q-pl-md text-grey-10">Delivery de la empresa:</div>

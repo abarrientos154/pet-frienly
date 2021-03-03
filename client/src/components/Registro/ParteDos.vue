@@ -1,11 +1,6 @@
 <template>
 <q-card class="q-ma-md q-pa-md">
   <div class="column">
-    <animation-transition :animation-in-type="AnimationType.BOUNCEINDOWN" :animation-out-type="AnimationType.ROLLOUT">
-      <div class="animated-body row justify-center" v-show="show">
-        <img src="logo-400x400.png" alt="Logo" style="width: 90%;height:260px">
-      </div>
-    </animation-transition>
     <div class="row q-pa-sm">
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
         <q-input
@@ -53,17 +48,14 @@
 
 <script>
 import { required, email, maxLength, minLength, sameAs } from 'vuelidate/lib/validators'
-import { AnimationVueTransition, AnimationVueTransitionType } from 'vue-animation'
 export default {
   components: {
-    [AnimationVueTransition.name]: AnimationVueTransition
   },
   props: ['form', 'panel'],
   data () {
     return {
       repeatPassword: '',
       password: '',
-      AnimationType: AnimationVueTransitionType,
       show: false
     }
   },

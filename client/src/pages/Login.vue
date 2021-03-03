@@ -2,9 +2,6 @@
   <div style="height:100%;width:100%">
     <div class="absolute-center" style="width:80%; height:85%">
       <div class="absolute-center full-width">
-          <div class="q-mb-md row justify-center">
-            <q-img :src="url" spinner-color="white" style="height: 140px; max-width: 190px"/>
-          </div>
           <div class="row justify-center">
             <q-input
               style="width: 100%"
@@ -51,10 +48,8 @@ export default {
   data () {
     return {
       loading: false,
-      form: {
-      },
-      isPwd: true,
-      url: 'logo-400x400.png'
+      form: {},
+      isPwd: true
     }
   },
   validations: {
@@ -110,7 +105,3 @@ export default {
 
 }
 </script>
-
-<style>
-
-</style>

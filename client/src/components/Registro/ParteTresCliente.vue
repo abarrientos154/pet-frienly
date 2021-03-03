@@ -22,12 +22,12 @@
           :error="$v.form.direccion.$error" @blur="$v.form.direccion.$touch()"
         />
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+      <!-- <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
         <q-input :disable="form.country ? false : true" v-model="form.run_dni" :label="form.country === 'Chile' ? 'Ingrese RUN' : form.country === 'Colombia' ? 'Ingrese DNI' : 'Debes seleccionar un país'" outlined dense
           error-message="Ingrese RUN O DNI"
           :error="$v.form.run_dni.$error" @blur="$v.form.run_dni.$touch()"
         />
-      </div>
+      </div> -->
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
           <q-input v-model="form.phone" type="tel" label="Telefono" outlined dense
             error-message="Ingrese el número de su Teléfono"
