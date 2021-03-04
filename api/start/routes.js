@@ -57,5 +57,12 @@ addPrefixToGroup(
     Route.put("update_status/:id", "UserController.userStatus") // metodo para bloquear o desbloquear usuarios
     Route.put('datosnew/:id', 'UserController.updatedata')
 
+    Route.post('mascota', 'MascotaController.store')
+    Route.get('mascota', 'MascotaController.index')
+    Route.get('mascota_by_user_id/:user_id', 'MascotaController.mascotaByUserId')
+    Route.get('mascota/:id', 'MascotaController.show')
+    Route.put('mascota/:id', 'MascotaController.update')
+    Route.delete('mascota/:id', 'MascotaController.destroy')
+
   }).middleware("auth")
 );

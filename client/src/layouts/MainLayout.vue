@@ -9,9 +9,9 @@
     <q-footer>
       <div class="bg-grey-1 text-primary shadow-2 full-width row justify-around" >
         <q-btn icon="home" color="primary" flat round size="md" :to="rol === 2 ? '/inicio_cliente' : rol === 3 ? '/inicio_proveedor' : rol === 1 ? '/inicio_administrador' : ''" />
-        <!-- <q-btn icon="view_list" color="primary" flat round size="md" :to="rol === 2 ? '/solicitudes' : rol === 3 ? '/productos' : rol === 1 ? '/reportes_usuarios' : ''"/>
-        <q-btn v-if="rol != 1" icon="add" outline color="secondary" class="q-mb-sm" round size="lg" :to="rol === 2 ? '/registronecesidades' : rol === 3 ? '/registroproductos' : ''"/>
-        <q-btn :icon="rol === 1 ? 'lock_clock' : 'shopping_cart'" color="primary" flat round size="md" :to="rol === 1 ? '/proveedores_pendientes' : '/mis_cotizaciones'" /> -->
+        <q-btn v-if="rol != 1" :icon="rol === 3 ? 'view_list' : 'pets'" color="primary" flat round size="md" :to="rol === 2 ? '/mascotas' : rol === 3 ? '/productos' : ''"/>
+        <!-- <q-btn v-if="rol != 1" icon="add" outline color="secondary" class="q-mb-sm" round size="lg" :to="rol === 2 ? '/registromascota' : rol === 3 ? '/registroproductos' : ''"/> -->
+        <!-- <q-btn :icon="rol === 1 ? 'lock_clock' : 'shopping_cart'" color="primary" flat round size="md" :to="rol === 1 ? '/proveedores_pendientes' : '/mis_cotizaciones'" /> -->
         <q-btn icon="logout" color="primary" flat round size="md" to="/login" />
       </div>
     </q-footer>
