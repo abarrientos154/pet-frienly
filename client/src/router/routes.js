@@ -9,6 +9,9 @@ const routes = [
       { path: '/inicio_administrador', component: () => import('pages/admin/Inicio.vue') },
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue'), meta: { botonchat: true } },
+      { path: '/productos', component: () => import('pages/proveedor/Productos.vue'), meta: { botonchat: true } },
+      { path: '/registroproductos', component: () => import('pages/proveedor/RegistroProductos.vue'), meta: { botonchat: false } },
+      { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue'), meta: { botonchat: false } },
       // Cliente
       { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue'), meta: { botonchat: true } },
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue'), meta: { botonchat: true } },
