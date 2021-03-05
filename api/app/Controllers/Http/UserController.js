@@ -57,36 +57,14 @@ class UserController {
     const validation = await validate(dat, User.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
-    } else if (((await User.where({email: requestAll.email}).fetch()).toJSON()).length) {
+    } else if (((await User.where({email: dat.email}).fetch()).toJSON()).length) {
       response.unprocessableEntity([{
         message: 'Correo ya registrado en el sistema!'
       }])
     } else {
-      let images = []
-      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
-        for (let i = 0; i < dat.cantidadArchivos; i++) {
-          let codeFile = randomize('Aa0', 30)
-          const profilePic = request.file('tiendaFiles_' + i, {
-            types: ['image']
-          })
-          if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
-            await profilePic.move(Helpers.appRoot('storage/uploads/tiendaFiles'), {
-              name: codeFile,
-              overwrite: true
-            })
-          } else {
-            mkdirp.sync(`${__dirname}/storage/Excel`)
-          }
-          images.push(profilePic.fileName)
-        }
-      }
       let body = dat
       const rol = body.roles
       body.roles = [rol]
-      if (images.length > 0) {
-        body.tiendaFiles = images
-        delete body.cantidadArchivos
-      }
       const user = await User.create(body)
       const profilePic = request.file('perfilFile', {
         types: ['image']
@@ -202,13 +180,13 @@ class UserController {
       })
     })
 
-    token.full_name = user.full_name
-    token.last_name = user.last_name
-    token.enable = user.enable
+    console.log(permissions, 'permissions')
     token.email = user.email
-    token.verify = user.verify
+    token.estatus = user.estatus
+    token.full_name = user.full_name ? user.full_name : null
+    token.last_name = user.last_name
     let data = {}
-    data.TRI_SESSION_INFO = token
+    data.TUR_SESSION_INFO = token
     return data
   }
 

@@ -128,7 +128,7 @@
         </div>
     </div>
     <div class="row">
-      <q-btn @click="panel.panel = 'parte_dos'" color="primary" push label="Atras" flat/>
+      <q-btn @click="panel.panel = 'parte_uno'" color="primary" push label="Atras" flat/>
       <q-space />
       <q-btn @click="next()" color="primary" push label="Guardar" glossy/>
     </div>

@@ -42,7 +42,11 @@ export default {
     async onSubmit (rol) {
       this.$q.loading.show()
       this.form.roles = rol
-      this.panel.panel = 'parte_dos'
+      if (this.form.roles === 2) {
+        this.panel.panel = 'parte_tres_cliente_datos'
+      } else if (this.form.roles === 3) {
+        this.panel.panel = 'parte_tres_proveedor_datos'
+      }
       this.$q.loading.hide()
     }
   }

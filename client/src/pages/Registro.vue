@@ -4,11 +4,6 @@
       <ParteUno :form="form" :panel="panelito" />
       <q-btn style="width: 100%" color="primary" push label="Volver" glossy @click="$router.push('/login')" />
     </q-tab-panel>
-    <q-tab-panel name="parte_dos" >
-      <div class="column">
-        <ParteDos :form="form" :panel="panelito" />
-      </div>
-    </q-tab-panel>
     <q-tab-panel name="parte_tres_proveedor_datos">
       <div class="column">
         <ParteTresProv :form="form" :panel="panelito" />
@@ -29,14 +24,13 @@
 
 <script>
 import ParteUno from '../components/Registro/ParteUno'
-import ParteDos from '../components/Registro/ParteDos'
 import ParteTresProv from '../components/Registro/ParteTresProveedor'
 import ParteTresClient from '../components/Registro/ParteTresCliente'
 /* import ParteCuatro from '../components/Registro/ParteCuatroProveedor' */
 import { required, email, maxLength, minLength, sameAs } from 'vuelidate/lib/validators'
 export default {
   components: {
-    ParteUno, ParteDos, ParteTresProv, ParteTresClient
+    ParteUno, ParteTresProv, ParteTresClient
   },
   computed: {
     panel () {

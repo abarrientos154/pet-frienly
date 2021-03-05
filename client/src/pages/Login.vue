@@ -1,55 +1,78 @@
 <template>
-  <div style="height:100%;width:100%">
-    <div class="absolute-center" style="width:80%; height:85%">
-      <div class="absolute-center full-width">
-          <div class="row justify-center">
-            <q-input
-              style="width: 100%"
-              autofocus
-              outlined
-              v-model="form.email"
-              :error="$v.form.email.$error"
-              error-message="Este campo es requerido"
-              @blur="$v.form.email.$touch()"
-              type="email"
-              placeholder="Ingrese su email" />
+<div>
+  <div class="fullscreen bg-white no-box-shadow">
+          <div class="row q-pa-xl justify-center items-center no-box-shadow">
+            <div class="column no-box-shadow">
+              <div class="row justify-center">
+                <q-avatar size="150px">
+                  <img src="https://cdn.quasar.dev/app-icons/icon-128x128.png" />
+                </q-avatar>
+              </div>
+              <div class="col-xs-12 col-sm-6 q-ma-sm col-md-6 col-lg-6">
+                <div class="q-pl-xl q-mb-sm text-black text-h7"> Correo electronico</div>
+                <q-input type="email" v-model="form.email" placeholder="Correo electronico" autofocus filled :error="$v.form.email.$error" error-message="Este campo es requerido" @blur="$v.form.email.$touch()" >
+                  <template v-slot:before>
+                    <q-icon name="email" color= "primary" />
+                  </template>
+                </q-input>
+                  <div class="q-pl-xl q-mb-sm text-black text-h7"> Contraseña</div>
+                  <q-input :type="isPwd ? 'password' : 'text'" v-model="form.password" placeholder="Contraseña" filled :error="$v.form.password.$error" error-message="Este campo es requerido" @blur="$v.form.password.$touch()" >
+                    <template v-slot:before>
+                    <q-icon name="vpn_key" color= "primary" />
+                  </template>
+                  </q-input>
+              </div>
+              <div class="row justify-center">
+                <div class="text-h9 text-primary">¿Olvidaste tu contraseña?</div>
+              </div>
+              <div class="col-xs-12 col-sm-6 q-ma-sm col-md-6 col-lg-6">
+                <q-btn
+                  rounded
+                  class="full-width"
+                  color="primary"
+                  :loading="loading"
+                  @click="onSubmit()"
+                >Iniciar sesion
+                  <template v-slot:loading>
+                    <q-spinner-hourglass class="on-center" />
+                    Loading...
+                  </template>
+                </q-btn>
+              </div>
+              <div class="row justify-center">
+                <div class="row">
+                  <div class="text-black text-h9">Aun no tienes cuenta?</div>
+                  <div class="text-primary q-ml-sm text-bold text-h9" @click="$router.push('/registro')">Registrate.</div>
+                </div>
+               </div>
+              <div class="colunm justify-center q-pa-sm">
+                <p align="center" style="cursor:pointer"><a class="text-bold text-grey">O registrate con algunas de tus redes sociales</a></p>
+                <div class="row justify-between q-mr-xl q-ml-xl q-mt-sm q-mb-sm">
+                  <q-btn  round color="white" style="width: 40px; height: 40px">
+                    <img src="icons/Iconos_Redes.png" style="width: 20px; height: 20px"/>
+                  </q-btn>
+                  <q-btn  round color="indigo-10" style="width: 40px; height: 40px">
+                    <img src="icons/Iconos_Redes_1.png" style="width: 20px; height: 20px"/>
+                  </q-btn>
+                  <q-btn  round color="white" style="width: 40px; height: 40px">
+                    <img src="icons/Iconos_Redes_3.png" style="width: 20px; height: 20px"/>
+                  </q-btn>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="row justify-center q-mt-md">
-            <q-input
-              style="width: 100%"
-              autofocus
-              outlined
-              v-model="form.password"
-              :error="$v.form.password.$error"
-              error-message="Este campo es requerido"
-              @blur="$v.form.password.$touch()"
-              :type="isPwd ? 'password' : 'text'"
-              placeholder="Ingrese su contraseña">
-                <template v-slot:append>
-                  <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd"/>
-                </template>
-            </q-input>
-          </div>
-          <div class="q-mt-md row justify-center">
-              <q-btn color="primary" text-color="white" label="Iniciar Sesión" :loading="loading" @click="loguear()"/>
-          </div>
-          <div class="q-mt-sm row justify-center">
-              <q-btn flat color="primary" label="Regístrate aquí" @click="$router.push('/registro')"/>
-          </div>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
-      loading: false,
       form: {},
-      isPwd: true
+      user: {}
     }
   },
   validations: {
@@ -60,7 +83,8 @@ export default {
   },
   methods: {
     ...mapMutations('generals', ['login']),
-    loguear () {
+    ...mapActions('generals', ['saveUser']),
+    onSubmit () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.loading = true
@@ -68,29 +92,17 @@ export default {
           message: 'Iniciando sesión'
         })
         this.$api.post('login', this.form).then(res => {
-          if (res) { // Se debe ejecutar una mutacion que modifique el state con sessionInfo
-            // const client = res.TRI_SESSION_INFO.roles.find(value => value === 2)
-            if (res.TRI_SESSION_INFO.enable === false) {
-              this.loading = false
-              this.$q.dialog({
-                title: 'Alerta',
-                message: 'Este usuario ha sido bloqueado por el administrador. Debe ponerse en contracto con nosotros para más información.',
-                cancel: false,
-                persistent: true
-              }).onOk(() => {
-                // ok
-              }).onCancel(() => {
-                // cancel
-              })
-            } else if (res.TRI_SESSION_INFO.roles[0] === 3) {
-              this.login(res)
-              this.$router.push('/inicio_proveedor')
-            } else if (res.TRI_SESSION_INFO.roles[0] === 2) {
-              this.login(res)
-              this.$router.push('/inicio_cliente')
-            } else if (res.TRI_SESSION_INFO.roles[0] === 1) {
-              this.login(res)
+          if (res) {
+            this.user = res.TUR_SESSION_INFO
+            console.log('user', this.user)
+
+            this.login(res)
+            if (this.user.roles[0] === 1) {
               this.$router.push('/inicio_administrador')
+            } else if (this.user.roles[0] === 2) {
+              this.$router.push('/inicio_cliente')
+            } else if (this.user.roles[0] === 3) {
+              this.$router.push('/inicio_proveedor')
             }
           } else {
             console.log('error de ususario')
@@ -98,10 +110,10 @@ export default {
             this.$q.loading.hide()
           }
           this.$q.loading.hide()
+          this.loading = false
         })
       }
     }
   }
-
 }
 </script>
