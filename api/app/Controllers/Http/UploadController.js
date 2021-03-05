@@ -49,6 +49,38 @@ class UploadController {
       response.send(guardar)
     }
   }
+  async registrarHospedaje ({ request, response, auth }) {
+    let user = await auth.getUser()
+    let codeFile = randomize('Aa0', 30)
+    var dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
+    const validation = await validate(dat, Producto.fieldValidationRules())
+    if (validation.fails()) {
+      response.unprocessableEntity(validation.messages())
+    } else {
+      const profilePic = request.file('files', {
+        types: ['image'],
+        size: '20mb'
+      })
+      if (Helpers.appRoot('storage/uploads/productos')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
+          name: codeFile,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const data = { name: profilePic.fileName }
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        dat.fileName = data.name
+      }
+      dat.proveedor_id = user._id.toString()
+      let guardar = await Producto.create(dat)
+      response.send(guardar)
+    }
+  }
   async getFile({
     params,
     response
@@ -278,11 +310,6 @@ class UploadController {
 
   async testFile ({ params, response, request }) {
     response.download(Helpers.appRoot('storage/uploads/tiendaFiles/' + params.file))
-  }
-
-  async getFileByDirectoryNecesidad ({ params, request, response }) {
-    const dir = params.file
-    response.download(Helpers.appRoot('storage/uploads/necesidades') + `/${dir}`)
   }
 
   async getFileByDirectoryTienda ({ params, request, response }) {

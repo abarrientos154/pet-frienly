@@ -12,6 +12,9 @@ const routes = [
       { path: '/productos', component: () => import('pages/proveedor/Productos.vue'), meta: { botonchat: true } },
       { path: '/registroproductos', component: () => import('pages/proveedor/RegistroProductos.vue'), meta: { botonchat: false } },
       { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue'), meta: { botonchat: false } },
+      { path: '/hospedaje', component: () => import('pages/proveedor/Hospedaje.vue'), meta: { botonchat: true } },
+      { path: '/registrohospedaje', component: () => import('pages/proveedor/RegistroHospedaje.vue'), meta: { botonchat: false } },
+      { path: '/editar_hospedaje/:id', component: () => import('pages/proveedor/RegistroHospedaje.vue'), meta: { botonchat: false } },
       // Cliente
       { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue'), meta: { botonchat: true } },
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue'), meta: { botonchat: true } },

@@ -72,5 +72,13 @@ addPrefixToGroup(
     Route.get('producto/:id', 'ProductoController.show')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')
 
+    Route.post('hospedaje', 'UploadController.registrarHospedaje')
+    Route.put('hospedaje/:id', 'HospedajeController.update')
+    Route.get('hospedaje_by_proveedor/:proveedor_id', 'HospedajeController.hospedajeByProveedor')
+    Route.delete('hospedaje/:id', 'HospedajeController.destroy')
+    Route.get('hospedaje', 'HospedajeController.index')
+    Route.get('hospedaje/:id', 'HospedajeController.show')
+    Route.get('hospedaje_filtrado/:filtrar', 'HospedajeController.hospedajeFiltrado')
+
   }).middleware("auth")
 );
