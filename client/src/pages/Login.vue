@@ -1,13 +1,14 @@
 <template>
 <div>
   <div class="fullscreen bg-white no-box-shadow">
-          <div class="row q-pa-xl justify-center items-center no-box-shadow">
+          <div class="row q-pa-md justify-center items-center no-box-shadow">
             <div class="column no-box-shadow">
               <div class="row justify-center">
                 <q-avatar size="150px">
                   <img src="https://cdn.quasar.dev/app-icons/icon-128x128.png" />
                 </q-avatar>
               </div>
+              <div class="column items-center justify-center text-black text-h6"> Bienvenido de vuelta!</div>
               <div class="col-xs-12 col-sm-6 q-ma-sm col-md-6 col-lg-6">
                 <div class="q-pl-xl q-mb-sm text-black text-h7"> Correo electronico</div>
                 <q-input type="email" v-model="form.email" placeholder="Correo electronico" autofocus filled :error="$v.form.email.$error" error-message="Este campo es requerido" @blur="$v.form.email.$touch()" >
@@ -72,6 +73,8 @@ export default {
   data () {
     return {
       form: {},
+      isPwd: true,
+      loading: false,
       user: {}
     }
   },
@@ -93,7 +96,7 @@ export default {
         })
         this.$api.post('login', this.form).then(res => {
           if (res) {
-            this.user = res.TUR_SESSION_INFO
+            this.user = res.TRI_SESSION_INFO
             console.log('user', this.user)
 
             this.login(res)

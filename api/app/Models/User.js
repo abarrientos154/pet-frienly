@@ -18,6 +18,14 @@ class User extends Model {
     }
     return rulesUser
   }
+
+  static fieldValidationRulesProveedor() {
+    const rulesUser = {
+      email: 'required|email',
+      password: 'required|string|max:256'
+    }
+    return rulesUser
+  }
   static boot() {
     super.boot()
 

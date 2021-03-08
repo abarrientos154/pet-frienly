@@ -38,6 +38,7 @@ addPrefixToGroup(
     // Insertar rutas sin protección de autenticación aquí
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
+    Route.post("register_proveedor", "UserController.registerProveedor")
     Route.get("validate_email/:email", "UserController.validateEmail")
 
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')

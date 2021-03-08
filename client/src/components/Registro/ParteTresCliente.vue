@@ -1,7 +1,6 @@
 <template>
   <div class="column">
-    <div class="row q-pa-sm">
-      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+    <div class="row q-pa-md justify-center items-center no-box-shadow">
         <div class="column items-center justify-center">
             <q-avatar size="150px">
               <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
@@ -11,17 +10,16 @@
             </q-avatar>
             <div class="text-negative text-h7" v-if="$v.perfilFile.$error"> La imagen es Requerida </div>
         </div>
-        <div class="q-pa-md column items-center justify-center">
-          <div class="text-black text-h5"> ¡Bienvenido!</div>
+        <div class="column items-center text-center justify-center">
+          <div class="text-black text-h5"> ¿Eres fanatico de las mascotas?</div>
         </div>
-      </div>
 
         <div class="q-mr-md q-mb-sm q-ml-md">
           <div class="q-pl-lg text-black text-h7"> Correo electronico</div>
             <q-input v-model="form.email" type="email" label="Correo electronico" outlined filled
               dense error-message="Ingrese un email válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
               <template v-slot:before>
-                <q-icon name="email" />
+                <q-icon name="email" color="primary" />
               </template>
             </q-input>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -30,7 +28,7 @@
                   error-message="Ingrese su Fecha de Nacimiento" type="date"
                   :error="$v.form.fechaNac.$error" @blur="$v.form.fechaNac.$touch()">
                   <template v-slot:before>
-                    <q-icon name="calendar_today" />
+                    <q-icon name="calendar_today" color="primary" />
                   </template>
                 </q-input>
               </div>
@@ -45,16 +43,16 @@
                         :error="$v.password.$error"
                         @blur="$v.password.$touch()">
                         <template v-slot:before>
-                          <q-icon name="vpn_key" />
+                          <q-icon name="vpn_key" color="primary" />
                         </template>
                     </q-input>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                  <div class="q-pl-lg text-black text-h7"> Retite Contraseña</div>
+                  <div class="q-pl-lg q-pa-sm text-black text-h7"> Retite Contraseña</div>
                     <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined
                       dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()">
                       <template v-slot:before>
-                        <q-icon name="vpn_key" />
+                        <q-icon name="vpn_key" color="primary" />
                       </template>
                     </q-input>
                   <div class="column items-center justify-center">
