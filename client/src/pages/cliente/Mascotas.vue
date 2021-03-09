@@ -53,7 +53,10 @@ export default {
   },
   methods: {
     getMascotas () {
-      this.$api.get('user_info').then(res => {
+      this.$api.get('mascota').then(res => {
+        console.log(res)
+      })
+      /* this.$api.get('user_info').then(res => {
         if (res) {
           var id = res._id
           this.$api.get('mascota_by_user_id/' + id).then(v => {
@@ -62,7 +65,7 @@ export default {
             }
           })
         }
-      })
+      }) */
     },
     editMascota (id) {
       this.$router.push('/edit_mascota/' + id)

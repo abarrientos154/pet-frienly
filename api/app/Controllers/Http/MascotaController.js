@@ -23,9 +23,10 @@ class MascotaController {
    * @param {View} ctx.view
    */
   async index ({ request, response, auth }) {
-    let datos = (await Necesidad.query().where({}).with('creador').fetch()).toJSON()
-    let filter = datos.filter(v => v.creador.enable && !v.cotizado)
-    response.send(filter)
+    var user = (await auth.getUser()).toJSON();
+    let pets = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
+    console.log(pets)
+    response.send(pets)
   }
 
   async mascotaByUserId ({ response, params }) {
@@ -54,7 +55,41 @@ class MascotaController {
    * @param {Response} ctx.response
    */
   async store ({ request, response, auth }) {
-    let recibir = request.all()
+    let codeFile = randomize('Aa0', 30)
+    console.log(request.all())
+    var dat = request.only(['dat'])
+    let profilefile = request.file('perfilFile', {
+      types: ['image'],
+      size: '2mb'
+    })
+    dat = JSON.parse(dat.dat)
+    const validation = await validate(dat, Mascota.fieldValidationRules())
+    if (validation.fails()) {
+      response.unprocessableEntity(validation.messages())
+    } else {
+      if (profilefile) {
+        if (Helpers.appRoot('storage/uploads/pets')) {
+          await profilefile.move(Helpers.appRoot('storage/uploads/pets'), {
+            name: codeFile,
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+
+        data.name = profilefile.fileName
+
+        if (!profilefile.moved()) {
+          return profilefile.error()
+        }
+      }
+      let body = dat
+      body.ownerId = ((await auth.getUser()).toJSON())._id
+      let guardar = await Mascota.create(body)
+      response.send(guardar)
+    }
+
+    /* let recibir = request.all()
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
     const validation = await validate(dat, Necesidad.fieldValidationRules())
@@ -87,7 +122,7 @@ class MascotaController {
       body.ownerId = ((await auth.getUser()).toJSON())._id
       let guardar = await Necesidad.create(body)
       response.send(guardar)
-    }
+    } */
   }
 
   /**
@@ -124,7 +159,7 @@ class MascotaController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    var dat = request.only(['dat'])
+    /* var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
     const validation = await validate(dat, Necesidad.fieldValidationRules())
     if (validation.fails()) {
@@ -158,7 +193,7 @@ class MascotaController {
       delete dat.cantidadArchivos
       let modificar = await Mascota.query().where('_id', params.id).update(dat)
       response.send(modificar)
-    }
+    } */
   }
 
   /**
@@ -169,16 +204,22 @@ class MascotaController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-    let eliminar = await Mascota.find(params.id)
+  async destroy ({ params, request, response, auth }) {
+    var user = await auth.getUser();
+    let { id } = params;
+    let pet = (await Mascota.find(id)).delete();
+    console.log('probando')
+    response.send(pet)
+
+    /* let eliminar = await Mascota.find(params.id)
     for (let j of eliminar.images) {
-      fs.unlink(`storage/uploads/necesidades/${j}`, (err) => {
+      fs.unlink(`storage/uploads/pets/${j}`, (err) => {
         if (err) throw err;
         console.log(`${j} Eliminado por el Cliente`);
       });
     }
     eliminar.delete()
-    response.send(eliminar)
+    response.send(eliminar) */
   }
 
 }
