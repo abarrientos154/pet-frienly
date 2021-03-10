@@ -168,19 +168,19 @@ export default {
         if (this.album) {
           this.form.cantidadArchivos = this.album.length
           for (let i = 0; i < this.album.length; i++) {
-            formData.append('album_' + i, this.album[i])
+            formData.append('album' + i, this.album[i])
           }
         } else {
           this.form.cantidadArchivos = 0
         }
         formData.append('dat', JSON.stringify(this.form))
-        await this.$api.put('necesidad/' + this.id, formData, {
+        await this.$api.put('mascota/' + this.id, formData, {
           headers: {
             'Content-Type': undefined
           }
         }).then((res) => {
           this.$q.loading.hide()
-          this.$router.push('/solicitudes')
+          this.$router.push('/mascotas')
         })
       }
     }

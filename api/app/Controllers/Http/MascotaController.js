@@ -74,7 +74,7 @@ class MascotaController {
           })
           if (Helpers.appRoot('storage/uploads/pets')) {
             await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
-              name: codeFile2,
+              name: codeFile2 + '.jpg',
               overwrite: true
             })
           } else {
@@ -93,7 +93,7 @@ class MascotaController {
       if (profilefile) {
         if (Helpers.appRoot('storage/uploads/pets')) {
           await profilefile.move(Helpers.appRoot('storage/uploads/pets'), {
-            name: codeFile,
+            name: codeFile + '.jpg',
             overwrite: true
           })
         } else {
@@ -103,6 +103,7 @@ class MascotaController {
         dat.imageProfile = imageProfile
       }
       let body = dat
+      delete body.cantidadArchivos
       body.ownerId = ((await auth.getUser()).toJSON())._id
       let guardar = await Mascota.create(body)
       response.send(guardar)
@@ -119,7 +120,7 @@ class MascotaController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
-    response.send(await Necesidad.find(params.id))
+    response.send(await Mascota.find(params.id))
   }
 
   /**
@@ -143,9 +144,9 @@ class MascotaController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    /* var dat = request.only(['dat'])
+    var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    const validation = await validate(dat, Necesidad.fieldValidationRules())
+    const validation = await validate(dat, Mascota.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
@@ -153,21 +154,21 @@ class MascotaController {
       if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
         for (let i = 0; i < dat.cantidadArchivos; i++) {
           let codeFile = randomize('Aa0', 30)
-          const profilePic = request.file('solicitudFiles_' + i, {
+          const albumpic = request.file('album' + i, {
             types: ['image']
           })
-          if (Helpers.appRoot('storage/uploads/necesidades')) {
-            await profilePic.move(Helpers.appRoot('storage/uploads/necesidades'), {
+          if (Helpers.appRoot('storage/uploads/pets')) {
+            await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
               name: codeFile,
               overwrite: true
             })
           } else {
             mkdirp.sync(`${__dirname}/storage/Excel`)
           }
-          images.push(profilePic.fileName)
+          images.push(albumpic.fileName)
         }
         for (let j of dat.images) {
-          fs.unlink(`storage/uploads/necesidades/${j}`, (err) => {
+          fs.unlink(`storage/uploads/pets/${j}`, (err) => {
             if (err) throw err;
             console.log(`${j} Eliminado por el Cliente`);
           });
@@ -175,9 +176,9 @@ class MascotaController {
         dat.images = images
       }
       delete dat.cantidadArchivos
-      let modificar = await Mascota.query().where('_id', params.id).update(dat)
+      let modificar = await Mascota.where({_id: params.id}).update(dat)
       response.send(modificar)
-    } */
+    }
   }
 
   /**
@@ -191,9 +192,16 @@ class MascotaController {
   async destroy ({ params, request, response, auth }) {
     var user = await auth.getUser();
     let { id } = params;
-    let pet = (await Mascota.find(id)).delete();
+    let pet = (await Mascota.find(id)).toJSON();
+    for (let j of pet.images) {
+      fs.unlink(`storage/uploads/pets/${j}`, (err) => {
+        if (err) throw err;
+        console.log(`${j} Eliminado por el Cliente`);
+      });
+    }
+    let petDestroy = (await Mascota.find(id)).delete();
     console.log('probando')
-    response.send(pet)
+    response.send(petDestroy)
 
     /* let eliminar = await Mascota.find(params.id)
     for (let j of eliminar.images) {

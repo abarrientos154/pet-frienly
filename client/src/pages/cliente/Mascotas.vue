@@ -39,7 +39,7 @@
 </template>
 
 <script>
-// import env from '../../env'
+import env from '../../env'
 export default {
   data () {
     return {
@@ -49,12 +49,14 @@ export default {
   },
   mounted () {
     this.getMascotas()
-    // this.baseu = env.apiUrl + '/necesidad_img'
+    this.baseu = env.apiUrl + 'storage/uploads/pets'
+    console.log(this.baseu)
   },
   methods: {
     getMascotas () {
       this.$api.get('mascota').then(res => {
         console.log(res)
+        this.data = res
       })
       /* this.$api.get('user_info').then(res => {
         if (res) {
