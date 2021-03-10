@@ -9,7 +9,7 @@ class Mascota extends Model {
   }
   static fieldValidationRules() {
     const rules = {
-      name: "string",
+      name: "required|string",
       race: "required|string",
       age: "required|string",
       vaccines: "required|string",

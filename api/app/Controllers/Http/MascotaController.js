@@ -2,6 +2,7 @@
 const Mascota = use("App/Models/Mascota")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
+const path = require('path')
 const mkdirp = use('mkdirp')
 const fs = require('fs')
 var randomize = require('randomatic');
@@ -58,15 +59,37 @@ class MascotaController {
     let codeFile = randomize('Aa0', 30)
     console.log(request.all())
     var dat = request.only(['dat'])
-    let profilefile = request.file('perfilFile', {
-      types: ['image'],
-      size: '2mb'
-    })
     dat = JSON.parse(dat.dat)
     const validation = await validate(dat, Mascota.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
+      let images = []
+      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+        for (let i = 0; i < dat.cantidadArchivos; i++) {
+          let codeFile2 = randomize('Aa0', 30)
+          const albumpic = request.file('album' + i, {
+            types: ['image'],
+            size: '20mb'
+          })
+          if (Helpers.appRoot('storage/uploads/pets')) {
+            await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
+              name: codeFile2,
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+          images.push(albumpic.fileName)
+        }
+        dat.images = images
+
+      }
+      let imageProfile = []
+      let profilefile = request.file('perfilFile', {
+        types: ['image'],
+        size: '20mb'
+      })
       if (profilefile) {
         if (Helpers.appRoot('storage/uploads/pets')) {
           await profilefile.move(Helpers.appRoot('storage/uploads/pets'), {
@@ -76,53 +99,14 @@ class MascotaController {
         } else {
           mkdirp.sync(`${__dirname}/storage/Excel`)
         }
-
-        data.name = profilefile.fileName
-
-        if (!profilefile.moved()) {
-          return profilefile.error()
-        }
+        imageProfile = profilefile.fileName
+        dat.imageProfile = imageProfile
       }
       let body = dat
       body.ownerId = ((await auth.getUser()).toJSON())._id
       let guardar = await Mascota.create(body)
       response.send(guardar)
     }
-
-    /* let recibir = request.all()
-    var dat = request.only(['dat'])
-    dat = JSON.parse(dat.dat)
-    const validation = await validate(dat, Necesidad.fieldValidationRules())
-    if (validation.fails()) {
-      response.unprocessableEntity(validation.messages())
-    } else {
-      let images = []
-      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
-        for (let i = 0; i < dat.cantidadArchivos; i++) {
-          let codeFile = randomize('Aa0', 30)
-          const profilePic = request.file('solicitudFiles_' + i, {
-            types: ['image'],
-            size: '20mb'
-          })
-          if (Helpers.appRoot('storage/uploads/necesidades')) {
-            await profilePic.move(Helpers.appRoot('storage/uploads/necesidades'), {
-              name: codeFile,
-              overwrite: true
-            })
-          } else {
-            mkdirp.sync(`${__dirname}/storage/Excel`)
-          }
-          images.push(profilePic.fileName)
-        }
-        dat.images = images
-
-      }
-      let body = dat
-      delete body.cantidadArchivos
-      body.ownerId = ((await auth.getUser()).toJSON())._id
-      let guardar = await Necesidad.create(body)
-      response.send(guardar)
-    } */
   }
 
   /**
