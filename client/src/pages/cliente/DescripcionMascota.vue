@@ -39,6 +39,8 @@
             <div class="q-pa-md">{{form.personal_description}}</div>
             <div class="text-subtitle2 q-ml-md q-pt-xs">Raza:</div>
             <div class="q-pa-md">{{form.race}}</div>
+            <div class="text-subtitle2 q-ml-md q-pt-xs">Edad:</div>
+            <div class="q-pa-md">{{form.age}}</div>
             <div class="text-subtitle2 q-ml-md q-pt-xs">Vacunas:</div>
             <div class="q-pa-md">{{form.vaccines}}</div>
             <div class="text-subtitle2 q-ml-md q-pt-xs">Enfermedades:</div>
