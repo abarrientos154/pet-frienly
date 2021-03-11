@@ -41,7 +41,7 @@
   </div>
 </template>
 
-<script></script>
+<script>
 import { required, minLength, maxLength } from 'vuelidate/lib/validators'
 import env from '../../env'
 export default {
