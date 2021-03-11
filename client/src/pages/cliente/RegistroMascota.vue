@@ -192,7 +192,7 @@ export default {
   justify-content: center;
   align-items: center; */
   max-width: 600px;
-  min-width: 200px;
+  min-width: 300px;
   /* margin: auto; */
   /* position: relative; */
 }

@@ -10,10 +10,10 @@
     <q-list class="q-mx-lg q-mx-md q-my-md q-gutter-sm respon" v-if="data.length > 0">
       <q-card class="q-pa-md bordes" v-for="(item, index) in data" :key="index" v-ripple >
         <div class="row justify-between">
-          <div class="col-4">
+          <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-4">
             <q-img :src="item.images ? baseu + '/' + item.images[0] : 'noimgpro.png'" style="width:100px; height: 80px;" />
           </div>
-          <div class="col-6">
+          <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-6">
               <q-scroll-area
                 horizontal
                 style="height: 27px"
