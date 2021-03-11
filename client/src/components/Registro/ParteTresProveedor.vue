@@ -195,8 +195,9 @@ export default {
       console.log(center, 'center')
     },
     handleNewPlace (place, coordinates) {
-      console.log('handleNewPlace', coordinates, this.form, 'from')
+      console.log('handleNewPlace', coordinates, place, this.form, 'from')
       this.form.ubicacion = coordinates
+      this.form.place = place
     },
     loguear () {
       this.$api.post('login', this.form).then(res => {

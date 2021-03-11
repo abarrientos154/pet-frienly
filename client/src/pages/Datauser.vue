@@ -66,7 +66,7 @@
                             <q-item-section avatar>
                               <q-icon color="primary" name="credit_card" />
                             </q-item-section>
-                            <q-item-section> {{form.run_dni}}</q-item-section>
+                            <q-item-section> {{form.dni}}</q-item-section>
                           </q-item>
                           <div class="q-mt-sm row">
                             <q-item clickable v-ripple>
