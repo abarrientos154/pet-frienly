@@ -1,22 +1,14 @@
 <template>
  <div>
-    <div class="column items-center justify-center q-my-md">
-      <q-avatar size="150px">
-        <img :src="imgPerfil ? imgPerfil : 'petnoimg.png'">
-        <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="test" accept=".jpg, image/*" style="z-index:1">
-          <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-        </q-file>
-      </q-avatar>
-      <div class="text-negative text-h7" v-if="$v.perfilFile.$error"> La imagen es Requerida </div>
-    </div>
-    <div class="column q-mx-xl">
+    <div class="column q-mx-xl respon">
+      <div class="column text-h6 q-my-md items-center">Nueva Mascota</div>
       <q-input outlined bg-color="yellow-2" v-model="form.name" label="Nombre" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()"/>
       <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.race" label="Raza" dense :error="$v.form.race.$error" error-message="Este campo es requerido" @blur="$v.form.race.$touch()" />
       <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.age" label="Edad" dense :error="$v.form.age.$error" error-message="Este campo es requerido" @blur="$v.form.age.$touch()" />
       <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.vaccines" label="Vacunas" dense :error="$v.form.vaccines.$error" error-message="Este campo es requerido" @blur="$v.form.vaccines.$touch()" />
       <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.diseases" label="Enfermedades" dense :error="$v.form.diseases.$error" error-message="Este campo es requerido" @blur="$v.form.diseases.$touch()" />
     </div>
-    <div class="q-mx-xl">
+    <div class="q-mx-xl respon">
       <q-card class="shadow-13 q-mb-md bg-yellow-2" style="border-radius:10px">
             <q-card-section>
               <div>Albúm de fotos</div>
@@ -26,20 +18,20 @@
                     </q-file>
               </div>
               <div class="col-2 row justify-center">
-                <q-icon size="md" name="close" color="negative" @click="album = [], imgSolicitud = [], edit ? imgsTraidas() : ''" class="cursor-pointer" />
+                <q-icon size="md" name="close" color="negative" @click="album = [], imgMascota = [], edit ? imgsTraidas() : ''" class="cursor-pointer" />
               </div>
               </div>
             </q-card-section>
-              <!-- <q-separator /> -->
-              <!-- <q-card-section class="row justify-around">
-                <div v-if="!imgSolicitud.length" class="text-subtitle2 text-grey text-center">No hay fotos de la tienda</div>
-                <div v-else v-ripple v-for="(item, index) in imgSolicitud" :key="index" class="col-5 q-pa-sm">
+              <q-separator />
+              <q-card-section class="row justify-around">
+                <div v-if="!imgMascota.length" class="text-subtitle2 text-grey text-center">No hay fotos de la tienda</div>
+                <div v-else v-ripple v-for="(item, index) in imgMascota" :key="index" class="col-5 q-pa-sm">
                   <q-img
-                    :src="imgSolicitud.length > 0 ? imgSolicitud[index] : 'favicon.ico'"
+                    :src="imgMascota.length > 0 ? imgMascota[index] : 'favicon.ico'"
                     style="width:120px"
                   />
                 </div>
-              </q-card-section> -->
+              </q-card-section>
       </q-card>
       <q-card class="q-pa-md shadow-up-4" style="border-radius:10px">
         <div class="text-h6 q-ml-sm q-pt-xs">Descripción personal</div>
@@ -62,7 +54,7 @@ export default {
       imgPerfil: '',
       form: {},
       album: [],
-      imgSolicitud: [],
+      imgMascota: [],
       id: '',
       file: null,
       edit: false,
@@ -79,11 +71,10 @@ export default {
       personal_description: { required }
 
     },
-    album: { required },
-    perfilFile: { required }
+    album: { required }
   },
   mounted () {
-    this.baseu = env.apiUrl + '/necesidad_img'
+    this.baseu = env.apiUrl + 'mascota_img'
     if (this.$route.params.id) {
       this.edit = true
       this.editImg = true
@@ -93,13 +84,13 @@ export default {
           this.form = res
           this.categoria_id = this.form.categoria_id
           this.imgsTraidas()
-          for (let i = 0; i < this.categorias.length; i++) {
+          /* for (let i = 0; i < this.categorias.length; i++) {
             if (this.categorias[i]._id === this.form.categoria_id) {
               this.categorias[i].select = true
             } else {
               this.categorias[i].select = false
             }
-          }
+          } */
         }
       }).catch(error => {
         console.log(error)
@@ -112,30 +103,32 @@ export default {
     },
     imgsTraidas () {
       for (let i = 0; i < this.form.images.length; i++) {
+        console.log('prueba')
         var cc = ''
         cc = this.baseu + '/' + this.form.images[i]
-        this.imgSolicitud.push(cc)
+        this.imgMascota.push(cc)
       }
       this.editImg = true
+      console.log(this.editImg)
     },
     filesMascota () {
       var img = ''
       var cc = {}
       if (this.editImg && this.album.length > 0) {
-        this.imgSolicitud = []
+        this.imgMascota = []
         this.editImg = false
       }
       if (this.album.length > 0) {
         cc = this.album[this.album.length - 1]
         img = URL.createObjectURL(cc)
-        this.imgSolicitud.push(img)
+        this.imgMascota.push(img)
       }
     },
     agregar () {
       this.$v.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
-          message: 'Subiendo Solicitud, Por Favor Espere...'
+          message: 'Subiendo su mascota, Por Favor Espere...'
         })
         var formData = new FormData()
         formData.append('perfilFile', this.perfilFile)
@@ -191,5 +184,16 @@ export default {
 <style>
 .color-select {
   background-color: #fff599
+}
+.respon {
+  /* height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; */
+  max-width: 600px;
+  min-width: 200px;
+  /* margin: auto; */
+  /* position: relative; */
 }
 </style>
