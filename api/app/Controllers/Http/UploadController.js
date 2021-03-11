@@ -26,23 +26,23 @@ class UploadController {
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
-      const profilePic = request.file('files', {
-        types: ['image'],
-        size: '20mb'
-      })
-      if (Helpers.appRoot('storage/uploads/productos')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
-          name: codeFile,
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-      const data = { name: profilePic.fileName }
-      if (!profilePic.moved()) {
-        return profilePic.error()
-      } else {
-        dat.fileName = data.name
+      let images = []
+      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+        for (let i = 0; i < dat.cantidadArchivos; i++) {
+          let codeFile = randomize('Aa0', 30)
+          const profilePic = request.file('files_' + (i + 1), {
+            types: ['image']
+          })
+          if (Helpers.appRoot('storage/uploads/productos')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
+              name: codeFile,
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+          images.push(profilePic.fileName)
+        }
       }
       dat.proveedor_id = user._id.toString()
       let guardar = await Producto.create(dat)
