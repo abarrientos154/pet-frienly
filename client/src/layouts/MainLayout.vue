@@ -1,12 +1,14 @@
 <template>
   <q-layout view="lHh Lpr lFf">
+
     <q-header elevated>
       <q-toolbar class="bg-white row justify-between">
-        <q-btn round dense flat icon="menu" color="primary" @click="drawer = !drawer"/>
+        <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/>
         <div class="text-black">Inicio</div>
-        <q-btn flat dense :icon="rol !== 1 ? 'person' : ''" class="bg-secondary" @click="rol !== 1 ? $router.push('/Datos') : ''"  style=""/>
+        <q-btn flat dense :icon="rol != 1 ? 'person' : ''" class="bg-secondary" @click="rol !== 1 ? $router.push('/Datos') : ''"/>
       </q-toolbar>
     </q-header>
+
     <q-drawer v-if="drawer === true" v-model="drawer" :width="200" :breakpoint="500" overlay bordered content-class="bg-white">
       <q-separator/>
       <q-scroll-area class="fit">
@@ -25,15 +27,7 @@
         </q-list>
       </q-scroll-area>
     </q-drawer>
-    <!-- <q-footer>
-      <div class="bg-grey-1 text-primary shadow-2 full-width row justify-around" >
-        <q-btn icon="home" color="primary" flat round size="md" :to="rol === 2 ? '/inicio_cliente' : rol === 3 ? '/inicio_proveedor' : rol === 1 ? '/inicio_administrador' : ''" />
-        <q-btn v-if="rol != 1" :icon="rol === 3 ? 'view_list' : 'pets'" color="primary" flat round size="md" :to="rol === 2 ? '/mascotas' : rol === 3 ? '/productos' : ''"/>
-        <q-btn v-if="rol != 1" :icon="rol === 3 ? 'hotel' : 'shopping_cart'" color="primary" flat round size="md" :to="rol === 2 ? '#' : rol === 3 ? '/hospedaje' : ''"/>
-        <q-btn :icon="rol === 1 ? 'lock_clock' : 'shopping_cart'" color="primary" flat round size="md" :to="rol === 1 ? '/proveedores_pendientes' : '/mis_cotizaciones'" />
-        <q-btn icon="logout" color="primary" flat round size="md" to="/login" />
-      </div>
-    </q-footer> -->
+
     <q-page-container>
       <router-view />
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
@@ -42,25 +36,41 @@
         </q-btn>
       </q-page-sticky>
     </q-page-container>
+
   </q-layout>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
-  computed: {
-    ...mapGetters('generals', ['can']),
-    mostrarBoton () {
-      return this.$route.meta.botonchat
-    }
-  },
   name: 'MainLayout',
   data () {
     return {
       usuario: {},
       rol: null,
       drawer: false,
-      menu: [
+      menu: [],
+      admin: [
+        {
+          icon: 'home',
+          label: 'Inicio',
+          ruta: '/inicio_administrador',
+          permission: 1
+        },
+        {
+          icon: 'list',
+          label: 'Proveedores',
+          ruta: '/proveedores',
+          permission: 1
+        },
+        {
+          icon: 'logout',
+          label: 'Cerrar Sesión',
+          ruta: '',
+          permission: 1
+        }
+      ],
+      cliente: [
         {
           icon: 'home',
           label: 'Inicio',
@@ -79,33 +89,67 @@ export default {
           ruta: '',
           permission: 1
         }
+      ],
+      proveedor: [
+        {
+          icon: 'home',
+          label: 'Inicio',
+          ruta: '/inicio',
+          permission: 1
+        },
+        {
+          icon: 'list',
+          label: 'Productos',
+          ruta: '/productos',
+          permission: 1
+        },
+        {
+          icon: 'logout',
+          label: 'Cerrar Sesión',
+          ruta: '',
+          permission: 1
+        }
       ]
     }
   },
   mounted () {
     this.getUser()
   },
+  computed: {
+    ...mapGetters('generals', ['can']),
+    mostrarBoton () {
+      return this.$route.meta.botonchat
+    }
+  },
   methods: {
+    ...mapMutations('generals', ['logout']),
+    cerrarSesion () {
+      this.logout()
+      this.$router.push('/login')
+    },
     getUser () {
       this.$api.get('user_info').then(v => {
         if (v) {
           this.rol = v.roles[0]
         }
       })
+    },
+    clickmenu () {
+      this.drawer = !this.drawer
+      if (this.rol === 1) {
+        this.menu = this.admin
+      } else {
+        if (this.rol === 2) {
+          this.menu = this.cliente
+        } else {
+          if (this.rol === 3) {
+            this.menu = this.proveedor
+          } else {
+            console.log(this.rol)
+          }
+        }
+      }
     }
   }
 }
 </script>
-<style>
-.float{
-position:fixed;
-width:55px;
-height:55px;
-bottom:80px;
-right:10px;
-background-color:#0C9;
-color:#FFF;
-border-radius:50px;
-text-align:center;
-}
-</style>

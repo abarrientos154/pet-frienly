@@ -170,13 +170,13 @@ class UserController {
 
   async userByRol({ request, params, response }) {
     let rol = request.all()
-    const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
+    const user = (await User.query().where({roles: rol.rol, estatus: true}).fetch()).toJSON()
     response.send(user)
   }
 
   async userByStatus({ request, params, response }) {
     let rol = request.all()
-    const user = (await User.query().where({roles: rol.rol, status: 0}).fetch()).toJSON()
+    const user = (await User.query().where({roles: rol.rol, estatus: false}).fetch()).toJSON()
     response.send(user)
   }
 
