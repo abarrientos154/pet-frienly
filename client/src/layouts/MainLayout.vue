@@ -74,7 +74,7 @@ export default {
         {
           icon: 'home',
           label: 'Inicio',
-          ruta: '/inicio',
+          ruta: '/inicio_cliente',
           permission: 1
         },
         {
@@ -94,7 +94,7 @@ export default {
         {
           icon: 'home',
           label: 'Inicio',
-          ruta: '/inicio',
+          ruta: '/inicio_proveedor',
           permission: 1
         },
         {
