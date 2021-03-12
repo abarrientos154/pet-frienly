@@ -75,8 +75,12 @@
         </div>
       </q-scroll-area>
       </q-card>
-
-     <div class="q-pa-sm text-h7 text-black-9 text-bold">Todos nuestros productos:</div>
+      <div class="row">
+     <div class="q-pa-sm text-h7  text-black-9 text-bold">Todos nuestros productos:</div>
+     <div class="q-pl-md">
+      <q-btn class="" color="primary" icon="add" label="Producto" @click="$router.push('/registroproductos')" />
+      </div>
+      </div>
       <q-card class="q-pa-sm full-width">
         <q-scroll-area
           horizontal

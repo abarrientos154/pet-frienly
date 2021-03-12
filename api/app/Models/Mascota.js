@@ -5,19 +5,18 @@ const Model = use('Model')
 
 class Mascota extends Model {
   static get fillable() {
-    return ['categoria_id','direccion','necesidad','descripcion', 'status']
+    return ['name', 'race', 'age', 'vaccines', 'diseases', 'personal_descripcion']
   }
   static fieldValidationRules() {
     const rules = {
-      categoria_id: "string",
-      necesidad: "required|string",
-      descripcion: "required|string",
-      direccion: "string"
+      name: "required|string",
+      race: "required|string",
+      age: "required|string",
+      vaccines: "required|string",
+      diseases: "required|string",
+      personal_description: "required|string"
     }
     return rules
-  }
-  creador () {
-    return this.hasOne('App/Models/User', 'ownerId', '_id')
   }
 }
 

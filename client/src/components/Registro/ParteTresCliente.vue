@@ -48,7 +48,7 @@
                     </q-input>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                  <div class="q-pl-lg q-pa-sm text-black text-h7"> Retite Contraseña</div>
+                  <div class="q-pl-lg q-pa-sm text-black text-h7"> Repite Contraseña</div>
                     <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined
                       dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()">
                       <template v-slot:before>
