@@ -56,7 +56,6 @@ class MascotaController {
    * @param {Response} ctx.response
    */
   async store ({ request, response, auth }) {
-    let codeFile = randomize('Aa0', 30)
     console.log(request.all())
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
@@ -74,7 +73,7 @@ class MascotaController {
           })
           if (Helpers.appRoot('storage/uploads/pets')) {
             await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
-              name: codeFile2 + '.jpg',
+              name: codeFile2,
               overwrite: true
             })
           } else {
@@ -83,24 +82,6 @@ class MascotaController {
           images.push(albumpic.fileName)
         }
         dat.images = images
-
-      }
-      let imageProfile = []
-      let profilefile = request.file('perfilFile', {
-        types: ['image'],
-        size: '20mb'
-      })
-      if (profilefile) {
-        if (Helpers.appRoot('storage/uploads/pets')) {
-          await profilefile.move(Helpers.appRoot('storage/uploads/pets'), {
-            name: codeFile + '.jpg',
-            overwrite: true
-          })
-        } else {
-          mkdirp.sync(`${__dirname}/storage/Excel`)
-        }
-        imageProfile = profilefile.fileName
-        dat.imageProfile = imageProfile
       }
       let body = dat
       delete body.cantidadArchivos

@@ -88,7 +88,6 @@ class UploadController {
   }) {
     const fileName = params.filename
     return fileName
-    response.download(Helpers.appRoot('storage/uploads') + `/${fileName}`)
   }
 
    async subirimgtienda ({ request, response, auth }) {
@@ -321,6 +320,10 @@ class UploadController {
   async getFileByDirectoryPerfil ({ params, request, response }) {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/perfil') + `/${dir}`)
+  }
+  async getFileByDirectoryMascota ({ params, request, response }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/pets') + `/${dir}`)
   }
 
 }

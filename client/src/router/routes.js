@@ -7,6 +7,9 @@ const routes = [
     children: [
       // Administrador
       { path: '/inicio_administrador', component: () => import('pages/admin/Inicio.vue') },
+      { path: '/proveedores', component: () => import('pages/admin/Proveedores.vue') },
+      { path: '/proveedores_pendientes', component: () => import('pages/admin/Pendientes.vue') },
+      { path: '/descripcionusuario/:id', component: () => import('pages/admin/DescripcionUsuario.vue') },
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue'), meta: { botonchat: true } },
       { path: '/productos', component: () => import('pages/proveedor/Productos.vue'), meta: { botonchat: true } },
@@ -20,6 +23,7 @@ const routes = [
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue'), meta: { botonchat: true } },
       { path: '/registromascota', component: () => import('pages/cliente/RegistroMascota.vue'), meta: { botonchat: false } },
       { path: '/edit_mascota/:id', component: () => import('pages/cliente/RegistroMascota.vue'), meta: { botonchat: false } },
+      { path: '/descripcionmascota/:id', component: () => import('pages/cliente/DescripcionMascota.vue'), meta: { botonchat: false } },
       // Generales
       { path: '/Datos', component: () => import('pages/Datauser.vue'), meta: { botonchat: true } },
       { path: '/Datosedit', component: () => import('pages/Userdata.vue'), meta: { botonchat: false } }
