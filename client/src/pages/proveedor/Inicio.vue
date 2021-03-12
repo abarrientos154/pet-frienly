@@ -1,9 +1,9 @@
 <template>
   <div>
   <q-page>
-    <div style="width: 100%;height:100%">
-      <q-img :src="baseu + form._id" style="height: 100%; width: 100%" />
-    </div>
+    <q-card class="row justify-center" style="width: 100%;height:100%">
+      <img :src="baseu + form._id" style="height: 400px; width: 100%;max-width:500px" />
+    </q-card>
     <q-card class="my-card">
       <q-list>
         <q-item>
@@ -30,6 +30,7 @@
         horizontal
         style="height: 90px; width:100%"
       >
+        <div class="column items-center justify-center">
         <div class="row no-wrap" style="width: 100%">
           <div v-ripple v-for="(item, index) in servicios" class="column items-center justify-center bg-white q-mt-xs q-mr-xl" style="border-radius:12px;width: 100px" :key="index">
             <q-img :src="item.img" spinner-color="white" style="height: 60px; width: 70px">
@@ -38,6 +39,7 @@
                 <div class="text-caption text-bold">{{item.label}}</div>
               </div>
           </div>
+        </div>
         </div>
       </q-scroll-area>
       </q-card>
@@ -55,16 +57,15 @@
       <q-card class="q-pa-sm full-width">
         <q-scroll-area
           horizontal
-          style="height: 280px; width:100%"
+          style="height: 290px; width:100%"
         >
         <div class="row no-wrap" style="width: 100%">
-
-          <q-card v-ripple v-for="(item2, index2) in productos" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 160px" :key="index2">
-            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white"> </q-img>
-            <q-card-section class="bg-grey" style="width: 160px">
+          <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 160px" :key="index2">
+            <q-img :src="item2.images.length > 0 ? baseu2 + item2.images[0] : 'noimgpro.png'" spinner-color="white"> </q-img>
+            <q-card-section class="bg-grey" style="width: 160px;height: 160px">
                 <div class="colum">
-                    <div class="text-h6 text-grey-9 text-bold">{{item2.label}}</div>
-                    <div class="text-h7 text-grey-9 text-bold">{{item2.tienda}}</div>
+                    <div class="text-h6 text-grey-9 text-bold">{{item2.name}}</div>
+                    <div class="text-h7 text-grey-9 text-bold">{{item2.datos_proveedor.name}}</div>
                     <div class="q-gutter-y-md row">
                     <q-rating class="q-mb-xl" v-model="item2.rating" max="5" size="1.5em" color="yellow" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
                     </div>
@@ -87,7 +88,6 @@
           style="height: 280px; width:100%"
         >
         <div class="row no-wrap" style="width: 100%">
-
           <q-card v-ripple v-for="(item2, index2) in productos" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 160px" :key="index2">
             <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white"> </q-img>
             <q-card-section class="bg-grey" style="width: 160px">
@@ -107,7 +107,7 @@
       <div class="q-pa-sm q-mt-md text-h5 text-black">Alojamientos</div>
       <div class="q-pa-sm text-h6 text-black">Alojamientos mejor calificados</div>
       <q-card class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width:100%">
-            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white">
+            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white" style="height: 350px; width: 100%" >
               <q-btn round color="primary" class="absolute-top-left text-white" icon="favorite" />
             </q-img>
             <q-list>
@@ -170,14 +170,18 @@ export default {
           rating: 3
         }
       ],
+      productos2: {},
       slide: 0,
       ratingModel: 3,
-      baseu: ''
+      baseu: '',
+      baseu2: ''
     }
   },
   mounted () {
     this.getUser()
     this.baseu = env.apiUrl + '/perfil_img/'
+    this.baseu2 = env.apiUrl + '/productos_img/'
+    this.obtener_productos()
   },
   methods: {
     getUser () {
@@ -186,6 +190,14 @@ export default {
           this.rol = v.roles[0]
           this.form = v
           console.log(this.form, 'usuarioooooooo')
+        }
+      })
+    },
+    obtener_productos () {
+      this.$api.get('producto').then(res => {
+        if (res) {
+          this.productos2 = res
+          console.log(this.productos2, 'los productos')
         }
       })
     }

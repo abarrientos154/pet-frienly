@@ -19,7 +19,6 @@ var randomize = require('randomatic');
 class UploadController {
   async registrarProducto ({ request, response, auth }) {
     let user = await auth.getUser()
-    let codeFile = randomize('Aa0', 30)
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
     const validation = await validate(dat, Producto.fieldValidationRules())
@@ -45,6 +44,8 @@ class UploadController {
         }
       }
       dat.proveedor_id = user._id.toString()
+      delete dat.cantidadArchivos
+      dat.images = images
       let guardar = await Producto.create(dat)
       response.send(guardar)
     }

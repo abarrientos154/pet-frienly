@@ -24,8 +24,8 @@ class ProductoController {
    */
   async index ({ request, response, view }) {
     let datos = (await Producto.query().where({}).with('datos_proveedor').fetch()).toJSON()
-    let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
-    response.send(filter)
+    //let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
+    response.send(datos)
   }
 
   async productoByProveedor ({ request, response, params }) {

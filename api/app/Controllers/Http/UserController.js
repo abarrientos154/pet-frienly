@@ -64,7 +64,7 @@ class UserController {
     } else {
       let body = dat
       const rol = body.roles
-      body.estatus = false // Estatus para verificacion del Cliente
+      body.estatus = 0 // Estatus para verificacion del Cliente
       body.roles = [rol]
       const user = await User.create(body)
       const profilePic = request.file('perfilFile', {
@@ -115,7 +115,7 @@ class UserController {
         }
         let body = dat
         const rol = 3 // Rol Proveedor
-        body.estatus = false // Estatus para verificacion del Proveedor
+        body.estatus = 0 // Estatus para verificacion del Proveedor
         body.roles = [rol]
         if (images.length > 0) {
           body.tiendaFiles = images
