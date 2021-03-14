@@ -3,7 +3,7 @@
     <div class="column items-center justify-center">
       <q-avatar size="150px">
         <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
-        <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="test" accept=".jpg, image/*" style="z-index:1">
+        <q-file borderless v-model="perfilFile" class="absolute-center button-subir" @input="test" accept=".jpg, image/*" style="z-index:1">
           <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
         </q-file>
       </q-avatar>
@@ -215,6 +215,17 @@ export default {
 }
 </script>
 
-<style>
-
-</style>>
+<style scoped lang="scss">
+.button-subir {
+  text-decoration: none;
+  padding: 10px;
+  font-weight: 540;
+  font-size: 0px;
+  color: #0016b0;
+  background-color: $primary;
+  border-radius: 30px;
+  border: 1px solid #7e7e7e;
+  height:40px;
+  width: 40px;
+}
+</style>

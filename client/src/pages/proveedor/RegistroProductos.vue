@@ -4,7 +4,10 @@
       <q-card-section horizontal>
         <q-card-section>
           <div class="column items-center justify-center">
-            <q-btn v-for="(item, index) in botones" :key="index" icon="edit" color="grey-5" :flat="!item.select" class="q-mt-xl" @click="seleccionar(index)" style="height:50px" />
+            <q-avatar rounded v-for="(item, index) in botones" :key="index">
+              <q-img :src="cargarImagen(index)" :class="item.select ? 'seleccionado':''" @click="seleccionar(index)" />
+            </q-avatar>
+            <!-- <q-btn v-for="(item, index) in botones" :key="index" icon="edit" color="grey-5" :flat="!item.select" class="q-mt-xl" @click="seleccionar(index)" style="height:50px" /> -->
           </div>
         </q-card-section>
         <div class="column full-width">
@@ -110,6 +113,14 @@ export default {
     }
   },
   methods: {
+    cargarImagen (ind) {
+      console.log(ind, 'filee')
+      if (this.botones[ind].file) {
+        return URL.createObjectURL(this.botones[ind].file)
+      } else {
+        return 'noimgpro.png'
+      }
+    },
     perfil_img () {
       const indexSelect = this.botones.findIndex(v => v.select)
       this.botones[indexSelect].file = this.productoFile
@@ -204,5 +215,9 @@ export default {
   color: white;
   height:40px;
   width:40px
+}
+.seleccionado {
+  border-radius: 5px;
+  background: $grey-4;
 }
 </style>

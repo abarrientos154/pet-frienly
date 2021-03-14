@@ -70,6 +70,7 @@ export default {
         // obtener direccion del marcador a traves de coordenadas
         var geocoder = new this.google.maps.Geocoder()
         geocoder.geocode({ location: this.marker.getPosition() }, function (results, status) {
+          console.log('aaaaaaaaaaaaaa')
           if (status === 'OK') {
             if (results[0]) {
               vm.place = results[0].formatted_address
@@ -89,7 +90,6 @@ export default {
               map.setCenter({ lat: position.coords.latitude, lng: position.coords.longitude })
               vm.marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
               console.log(vm.place, 'placeeeeeeeeeeeeeee')
-              vm.getPolygon()
               vm.$emit('newPlace', vm.place, { lat: position.coords.latitude, lng: position.coords.longitude }, vm.bounds)
             })
           })
