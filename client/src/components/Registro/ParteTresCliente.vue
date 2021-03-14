@@ -1,7 +1,7 @@
 <template>
-  <div class="column">
-    <div class="row q-pa-md justify-center items-center no-box-shadow">
-        <div class="column items-center justify-center">
+  <div>
+    <div class="column fullscreen justify-center items-center no-box-shadow">
+        <div class="items-center justify-center">
             <q-avatar size="150px">
               <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
               <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="test" accept=".jpg, image/*" style="z-index:1">
@@ -61,12 +61,13 @@
                   </div>
                 </div>
         </div>
-    </div>
-      <div class="column items-center justify-center">
+        <div class="full-width column items-center justify-center">
         <!-- <q-btn @click="panel.panel = 'parte_uno'" color="primary" push label="Atras" flat/> -->
         <q-space />
         <q-btn @click="registrarse()" color="primary" rounded push label="Siguiente" glossy style="width:70%;height:40px"/>
       </div>
+    </div>
+
   </div>
 </template>
 

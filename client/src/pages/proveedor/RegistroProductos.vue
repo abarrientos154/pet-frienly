@@ -8,11 +8,13 @@
           </div>
         </q-card-section>
         <div class="column full-width">
-          <q-img style="height: 250px;" class="col" :src="mostrarImg">
-            <q-file borderless v-model="productoFile" class="absolute-top-right q-ma-sm button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1">
-              <q-icon name="mode_edit" class="absolute-center" size="20px" color="white" />
-            </q-file>
-          </q-img>
+          <div style="">
+            <q-img :ratio="1" style="height: 250px; max-height:550px" :src="mostrarImg">
+              <q-file borderless v-model="productoFile" class="absolute-top-right q-ma-sm button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1">
+                <q-icon name="mode_edit" class="absolute-center" size="20px" color="white" />
+              </q-file>
+            </q-img>
+          </div>
           <div class="q-mt-lg text-h6">Nombre del producto</div>
           <q-input filled v-model="form.name"  label="Nombre del producto" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
            <template v-slot:append>
@@ -24,14 +26,16 @@
             </div>
           <div class="q-mt-md text-h6">Descripcion</div>
             <q-input filled outlined v-model="form.descripcion" type="textarea" :error="$v.form.descripcion.$error" error-message="Este campo es requerido"  @blur="$v.form.descripcion.$touch()"/>
-            <div class=" row">
-        <div class="q-mt-sm text-h6 q-pr-sm">Cantidad</div>
-        <q-input v-model.number="form.cantidad" class="q-pr-sm" type="number" dense :error="$v.form.cantidad.$error" error-message=""  @blur="$v.form.cantidad.$touch()" style="width: 60px"/>
-          <div class="q-pr-xs">
-          <q-btn color="grey" icon="add" style="height: 40px;width:40px" @click="form.cantidad++"/>
-          <q-btn color="grey" icon="remove" style="height: 40px;width:40px" @click="resta()"/>
+        <div class=" row items-center justify-center">
+          <div class="q-mt-sm text-h6 q-pr-sm">Cantidad</div>
+          <div class="q-mt-lg">
+            <q-input v-model.number="form.cantidad" borderless class="q-pr-sm" type="number" dense :error="$v.form.cantidad.$error" error-message=""  @blur="$v.form.cantidad.$touch()" style="width: 30px"/>
           </div>
-      </div>
+          <div class="q-pr-xs">
+            <q-btn color="grey" dense icon="add" style="height: 30px;width:30px" @click="form.cantidad++"/>
+            <q-btn color="grey" dense icon="remove" style="height: 30px;width:30px" @click="resta()"/>
+          </div>
+        </div>
         </div>
       </q-card-section>
     </q-card>

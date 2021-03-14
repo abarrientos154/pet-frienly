@@ -1,103 +1,97 @@
 <template>
   <div>
-    <div class="row q-pa-md justify-center items-center no-box-shadow">
-        <div class="column items-center justify-center">
-            <q-avatar size="150px">
-              <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
-              <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="test" accept=".jpg, image/*" style="z-index:1">
-                <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-              </q-file>
-            </q-avatar>
-            <div class="text-negative text-h7" v-if="$v.perfilFile.$error"> La imagen es Requerida </div>
+    <div class="column items-center justify-center">
+      <q-avatar size="150px">
+        <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
+        <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="test" accept=".jpg, image/*" style="z-index:1">
+          <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
+        </q-file>
+      </q-avatar>
+      <div class="text-negative text-h7" v-if="$v.perfilFile.$error"> La imagen es Requerida </div>
+    </div>
+    <q-card v-if="imgTienda.length > 0" class="q-pa-md bg-white full-width">
+      <q-scroll-area horizontal style="height: 110px; width:100%">
+        <div class="row no-wrap" style="width: 100%">
+          <div v-ripple v-for="(item, index) in imgTienda" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;width: 100px" :key="index">
+            <q-img :src="imgTienda.length > 0 ? imgTienda[index] : 'favicon.ico'" spinner-color="white" style="height: 100px; width: 100px" />
+          </div>
         </div>
-        <q-card v-if="imgTienda.length > 0" class="q-pa-md bg-white full-width">
-            <q-scroll-area
-            horizontal
-            style="height: 110px; width:100%"
-          >
-            <div class="row no-wrap" style="width: 100%">
-              <div v-ripple v-for="(item, index) in imgTienda" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;width: 100px" :key="index">
-                <q-img :src="imgTienda.length > 0 ? imgTienda[index] : 'favicon.ico'" spinner-color="white" style="height: 100px; width: 100px" />
-              </div>
-            </div>
-          </q-scroll-area>
-          </q-card>
-        <div class="column items-center text-center justify-center">
-          <div class="q-pa-sm q-mb-sm text-black text-h5"> Registro de tienda</div>
-        </div>
-
+      </q-scroll-area>
+    </q-card>
+    <div class="column items-center text-center justify-center">
+      <div class="q-pa-sm q-mb-sm text-black text-h5"> Registro de tienda</div>
+    </div>
+    <div class="row q-pa-sm">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="q-pl-lg text-black text-caption"> Correo electronico</div>
+          <q-input v-model="form.email" type="email" label="Correo electronico" outlined filled
+            dense error-message="Ingrese un email válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
+            <template v-slot:before>
+              <q-icon name="email" color="primary" />
+            </template>
+          </q-input>
+      </div>
         <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-           <div class="q-pl-lg text-black text-caption"> Correo electronico</div>
-            <q-input v-model="form.email" type="email" label="Correo electronico" outlined filled
-              dense error-message="Ingrese un email válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
+          <div class="q-pl-lg text-black text-caption"> Contraseña</div>
+            <q-input  v-model="password" label="Contraseña" outlined dense filled
+              error-message="Ingrese una contraseña válida, mínimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
               <template v-slot:before>
-                <q-icon name="email" color="primary" />
+                <q-icon name="vpn_key" color="primary" />
               </template>
             </q-input>
-
-            <div class="q-pl-lg text-black text-caption"> Contraseña</div>
-              <q-input  v-model="password"
-                label="Contraseña"
-                outlined
-                dense
-                filled
-                error-message="Ingrese una contraseña válida, mínimo 6 caracteres"
-                :error="$v.password.$error"
-                @blur="$v.password.$touch()">
+        </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="q-pl-lg q-pa-sm text-black text-caption"> Repite Contraseña</div>
+              <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined
+                dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()">
                 <template v-slot:before>
                   <q-icon name="vpn_key" color="primary" />
                 </template>
               </q-input>
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <div class="q-pl-lg q-pa-sm text-black text-caption"> Repite Contraseña</div>
-                <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined
-                  dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()">
-                  <template v-slot:before>
-                    <q-icon name="vpn_key" color="primary" />
-                  </template>
-                </q-input>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="q-pl-lg text-black text-caption"> Ingrese sus Imagenes Aqui</div>
+            <q-file max-files="5" style="width: 100%" @input="tienda" filled accept=".jpg, image/*" multiple append v-model="tiendaFiles" outlined label="Imagenes permitidas (5)">
+              <template v-slot:before>
+              <q-icon name="attachment" color="primary" @click="tiendaFiles = [], imgTienda = []" class="cursor-pointer" />
+              </template>
 
-                <q-file max-files="5" style="width: 100%" @input="tienda" filled accept=".jpg, image/*" multiple append v-model="tiendaFiles" outlined label="Imagenes permitidas (5)">
-                  <template v-slot:before>
-                  <q-icon name="attachment" color="primary" @click="tiendaFiles = [], imgTienda = []" class="cursor-pointer" />
-                  </template>
-
-                  <template v-slot:append>
-                  <q-icon name="close" color="negative" @click="tiendaFiles = [], imgTienda = []" class="cursor-pointer" />
-                  </template>
-                </q-file>
-
-              <div class="q-pl-lg text-black text-caption"> Nombre de la tienda</div>
-                <q-input v-model="form.name" outlined filled
-                  dense error-message="Ingrese un nombre válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
-                  <template v-slot:before>
-                    <q-icon name="person" color="primary" />
-                  </template>
-                </q-input>
-
-                <div class="q-pl-lg text-black text-caption"> Numero indentificador de la empresa</div>
-                <q-input v-model="form.dni" outlined filled
-                  dense error-message="Ingrese un dni válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
-                  <template v-slot:before>
-                    <q-icon name="payment" color="primary" />
-                  </template>
-                </q-input>
-            </div>
-
-        <div class="full-width q-mb-xl">
-          <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
-        </div>
-        <div class="column items-center justify-center">
-          <q-checkbox v-model="terminos" size="xs" label="Acepto Terminos y condiciones de uso" />
-          <div class="text-negative text-h7" v-if="!terminos && aparecer"> Debe Aceptar los terminos </div>
-        </div>
+              <template v-slot:append>
+              <q-icon name="close" color="negative" @click="tiendaFiles = [], imgTienda = []" class="cursor-pointer" />
+              </template>
+            </q-file>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="q-pl-lg text-black text-caption"> Nombre de la tienda</div>
+            <q-input v-model="form.name" outlined filled
+              dense error-message="Ingrese un nombre válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
+              <template v-slot:before>
+                <q-icon name="person" color="primary" />
+              </template>
+            </q-input>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+            <div class="q-pl-lg text-black text-caption"> Numero indentificador de la empresa</div>
+            <q-input v-model="form.dni" outlined filled
+              dense error-message="Ingrese un dni válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
+              <template v-slot:before>
+                <q-icon name="payment" color="primary" />
+              </template>
+            </q-input>
+          </div>
+      <div class="full-width q-mb-xl">
+        <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
+      </div>
+      <div class="column items-center justify-center full-width">
+        <q-checkbox v-model="terminos" size="xs" label="Acepto Terminos y condiciones de uso" />
+        <div class="text-negative text-h7" v-if="!terminos && aparecer"> Debe Aceptar los terminos </div>
+      </div>
     </div>
       <div class="column items-center justify-center">
         <!-- <q-btn @click="panel.panel = 'parte_uno'" color="primary" push label="Atras" flat/> -->
         <q-space />
         <q-btn @click="registrarse()" color="primary" rounded push label="Siguiente" glossy style="width:70%;height:40px"/>
-      </div>
+    </div>
   </div>
 </template>
 

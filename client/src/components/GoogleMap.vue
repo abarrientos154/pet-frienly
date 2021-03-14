@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     async ejecutar () {
-      console.log('withoutDirection', this.withoutDirection)
+      console.log('withoutDirection WWWWWWWWWWWWWWWWWWWWWWWWWWWWW', this.withoutDirection)
       var vm = this
       // instanciar mapa
       await this.$refs.myMap.$mapPromise.then((map) => {
@@ -88,8 +88,9 @@ export default {
             navigator.geolocation.getCurrentPosition(function (position) {
               map.setCenter({ lat: position.coords.latitude, lng: position.coords.longitude })
               vm.marker.setPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+              console.log(vm.place, 'placeeeeeeeeeeeeeee')
+              vm.getPolygon()
               vm.$emit('newPlace', vm.place, { lat: position.coords.latitude, lng: position.coords.longitude }, vm.bounds)
-              console.log('asdasdasd')
             })
           })
         }
@@ -112,6 +113,7 @@ export default {
     },
     // Crear un poligono rectangular alrededor del marcador
     getPolygon () {
+      console.log('GET POLYGON')
       var circle = new this.google.maps.Circle()
       circle.setCenter(this.center)
       circle.setRadius(5000)
