@@ -2,24 +2,24 @@
   <div style="max-width: 100%">
     <div class="q-mt-md q-mx-sm text-h6">Bienvenido Usuario</div>
     <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">El amor es una palabra de cuatro patas</div>
-    <q-input outlined type="text" class="q-mb-xs q-mx-sm" label="Que necesitas?" dense style="width: auto border-radius: 20px">
+    <q-input outlined type="text" class="q-mb-xs q-mx-sm shadow-8" label="Que necesitas?" dense style="width: auto border-radius: 20px">
       <template v-slot:prepend>
         <q-icon name="search"/>
       </template>
     </q-input>
     <div class="q-mb-md q-mx-sm text-h6">Catalogo de productos</div>
     <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab label="Categoria" />
-        <q-tab label="Categoria" />
-        <q-tab label="Categoria" />
-        <q-tab label="Categoria" />
+      <q-tabs v-model="tab" dense class="text-grey row justify-between" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
+        <q-tab class="col" label="Categoria" />
+        <q-tab class="col" label="Categoria" />
+        <q-tab class="col" label="Categoria" />
+        <q-tab class="col" label="Categoria" />
       </q-tabs>
     </q-scroll-area>
     <div class="q-mb-xs q-mx-sm">Ultimos Productos agregados</div>
-    <q-scroll-area horizontal class="q-mx-sm q-mb-md" style="height: 320px;">
+    <q-scroll-area horizontal class="q-mx-sm q-mb-md" style="height: 330px;">
       <div class="row no-wrap" style="width: 100%">
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -40,7 +40,7 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -61,7 +61,7 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -82,7 +82,7 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -117,9 +117,9 @@
       </q-tabs>
     </q-scroll-area>
     <div class="q-mb-xs q-mx-sm">Tiendas mejores calificadas</div>
-    <q-scroll-area horizontal class="q-mx-sm q-mb-md" style="height: 320px;">
+    <q-scroll-area horizontal class="q-mx-sm q-mb-md" style="height: 330px;">
       <div class="row no-wrap" style="width: 100%">
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -140,7 +140,7 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -161,7 +161,7 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -182,7 +182,7 @@
             </div>
           </q-card-section>
         </q-card>
-        <q-card class="q-mt-xs q-mr-sm bordes" style="width: 200px; height: 300px;">
+        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
             <q-avatar square class="absolute-center" color="secondary" style="width: 180px; height: 90%"/>
           </q-card-section>
@@ -207,8 +207,8 @@
     </q-scroll-area>
     <div class="q-mx-sm text-h6">Alojamientos</div>
     <div class="q-mb-md q-mx-sm">Alojamientos mejor catificados</div>
-    <q-list class="q-px-sm q-mb-xl" style="width: 100%; height: auto;">
-      <q-card class="q-mb-md" style="width: 100%; border-radius: 12px;">
+    <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
+      <q-card class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
         <q-card-section class="bg-secondary" style="height: 175px;">
           <q-btn position="top-left" round icon="favorite" color="primary" size="10px"/>
         </q-card-section>
@@ -224,7 +224,7 @@
           <q-btn flat dense class="bg-primary text-white" style="width: 100px">$850 / mes</q-btn>
         </q-card-section>
       </q-card>
-      <q-card class="q-mb-md" style="width: 100%; border-radius: 12px">
+      <q-card class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
         <q-card-section class="bg-secondary" style="height: 175px;">
           <q-btn position="top-left" round icon="favorite" color="primary" size="10px"/>
         </q-card-section>
@@ -250,7 +250,7 @@
           <q-icon name="mail_outline"/>
         </template>
         <template v-slot:append class="bg-secondary">
-          <q-btn flat dense icon="send" class="bg-primary" text-color="white" style="height: 100%; width: 50px; margin-right: -11px"/>
+          <q-btn flat dense icon="send" class="bg-primary" text-color="white" style="height: 100%; width: 50px; margin-right: -12px"/>
         </template>
       </q-input>
     </div>

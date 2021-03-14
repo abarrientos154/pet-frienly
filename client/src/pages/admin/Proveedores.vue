@@ -6,8 +6,8 @@
           <q-badge v-if="pendientes.length > 0" color="red" :label="pendientes.length" floating/>
         </q-btn>
     </q-card>
-    <q-list class="q-mx-sm q-mb-md" v-if="data.length > 0">
-      <q-card class="q-mb-md bg-secondary" v-for="(item, index) in data" :key="index" v-ripple style="border-radius: 15px">
+    <q-list class="row justify-center" v-if="data.length > 0">
+      <q-card class="q-mx-sm q-mb-md bg-secondary col no-wrap" v-for="(item, index) in data" :key="index" v-ripple style="border-radius: 15px; max-width: 400px; min-width: 300px;">
         <div class="row justify-between">
           <div class="col-4" @click="$router.push('/descripcionusuario/'+item._id)" style="width: 100px; height: 110px; border-radius: 15px">
             <q-img :src="baseu + item._id" style="width: 100px; height: 110px; border-radius: 15px"/>

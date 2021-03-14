@@ -170,13 +170,13 @@ class UserController {
 
   async userByRol({ request, params, response }) {
     let rol = request.all()
-    const user = (await User.query().where({roles: rol.rol, estatus: true}).fetch()).toJSON()
+    const user = (await User.query().where({roles: rol.rol, estatus: 1}).fetch()).toJSON()
     response.send(user)
   }
 
   async userByStatus({ request, params, response }) {
     let rol = request.all()
-    const user = (await User.query().where({roles: rol.rol, estatus: false}).fetch()).toJSON()
+    const user = (await User.query().where({roles: rol.rol, estatus: 0}).fetch()).toJSON()
     response.send(user)
   }
 
@@ -188,7 +188,7 @@ class UserController {
 
   async userStatus({ params, request, response }) {
     let dat = request.all()
-    let modificar = await User.query().where('_id', params.id).update({status: dat.status})
+    let modificar = await User.query().where('_id', params.id).update({estatus: dat.estatus})
     response.send(modificar)
   }
 

@@ -4,7 +4,7 @@
     <q-header elevated>
       <q-toolbar class="bg-white row justify-between">
         <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/>
-        <div class="text-black">Inicio</div>
+        <div class="text-black">{{page}}</div>
         <q-btn flat dense :icon="rol != 1 ? 'person' : ''" class="bg-secondary" @click="rol !== 1 ? $router.push('/Datos') : ''"/>
       </q-toolbar>
     </q-header>
@@ -14,7 +14,7 @@
       <q-scroll-area class="fit">
         <q-list>
           <template v-for="(item, index) in menu">
-            <q-item :key="index" clickable v-ripple v-if="can(item.permission)" @click="item.label === 'Cerrar Sesión' ? cerrarSesion() : $router.push(item.ruta)">
+            <q-item :key="index" clickable v-ripple v-if="can(item.permission)" @click="item.label === 'Cerrar Sesión' ? cerrarSesion() : ruta (item)">
               <q-item-section avatar>
                 <q-icon :name="item.icon" />
               </q-item-section>
@@ -50,6 +50,7 @@ export default {
       rol: null,
       drawer: false,
       menu: [],
+      page: '',
       admin: [
         {
           icon: 'home',
@@ -149,6 +150,10 @@ export default {
           }
         }
       }
+    },
+    ruta (item) {
+      this.$router.push(item.ruta)
+      this.page = item.label
     }
   }
 }

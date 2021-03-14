@@ -1,10 +1,10 @@
 <template>
   <div>
-    <q-card class="row q-mx-sm q-my-md justify-between bg-secondary">
+    <q-card class="row q-mx-sm q-my-md justify-between bg-secondary" style="min-width: 300px">
         <div class="text-h6 q-mx-sm">Proveedores pendientes</div>
     </q-card>
-    <q-list class="q-mx-sm q-my-md" v-if="data.length > 0">
-      <q-card class="q-mb-md bg-secondary" v-for="(item, index) in data" :key="index" v-ripple style="border-radius: 15px">
+    <q-list class="row justify-center" v-if="data.length > 0">
+      <q-card class="q-mx-sm q-mb-md bg-secondary col no-wrap" v-for="(item, index) in data" :key="index" v-ripple style="border-radius: 15px; max-width: 400px; min-width: 300px">
         <div class="row justify-between">
           <div class="col-4" @click="$router.push('/descripcionusuario/'+item._id)" style="width: 100px; height: 110px; border-radius: 15px">
             <q-img :src="baseu + item._id" style="width: 100px; height: 110px; border-radius: 15px"/>
@@ -57,7 +57,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.put('update_status/' + id, { estatus: true }).then(res => {
+        this.$api.put('update_status/' + id, { estatus: 1 }).then(res => {
           if (res) {
             this.getProveedores()
           }
@@ -73,7 +73,7 @@ export default {
         cancel: true,
         persistent: true
       }).onOk(() => {
-        this.$api.put('update_status/' + id, { estatus: false }).then(res => {
+        this.$api.put('update_status/' + id, { estatus: 2 }).then(res => {
           if (res) {
             this.getProveedores()
           }
