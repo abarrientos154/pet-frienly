@@ -4,7 +4,7 @@
         <div class="items-center justify-center">
             <q-avatar size="150px">
               <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
-              <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="test" accept=".jpg, image/*" style="z-index:1">
+              <q-file borderless v-model="perfilFile" class="absolute-center button-subir" @input="test" accept=".jpg, image/*" style="z-index:1">
                 <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
               </q-file>
             </q-avatar>
@@ -96,6 +96,7 @@ export default {
         email: { required, email }
       },
       perfilFile: { required },
+      terminos: { required },
       repeatPassword: { sameAsPassword: sameAs('password') },
       password: { required, maxLength: maxLength(256), minLength: minLength(6) }
     }
@@ -111,8 +112,10 @@ export default {
     async registrarse () {
       console.log(this.form, 'form')
       this.$v.$touch()
-      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && !this.terminos) {
+      console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos)
+      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos) {
         this.form.password = this.password
+        console.log(this.form, 'form2')
         var formData = new FormData()
         var files = []
         files[0] = this.perfilFile
@@ -128,7 +131,7 @@ export default {
               message: 'Ya formas parte de PeT, Bienvenido',
               color: 'positive'
             })
-            //  this.loguear()
+            this.loguear()
           }
         })
       } else {
@@ -157,6 +160,17 @@ export default {
 }
 </script>
 
-<style>
-
-</style>>
+<style scoped lang="scss">
+.button-subir {
+  text-decoration: none;
+  padding: 10px;
+  font-weight: 540;
+  font-size: 0px;
+  color: #0016b0;
+  background-color: $primary;
+  border-radius: 30px;
+  border: 1px solid #7e7e7e;
+  height:40px;
+  width: 40px;
+}
+</style>

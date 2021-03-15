@@ -106,7 +106,7 @@
       </q-card>
       <div class="q-pa-sm q-mt-md text-h5 text-black">Alojamientos</div>
       <div class="q-pa-sm text-h6 text-black">Alojamientos mejor calificados</div>
-      <q-card class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width:100%">
+      <q-card class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
             <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white" style="height: 350px; width: 100%" >
               <q-btn round color="primary" class="absolute-top-left text-white" icon="favorite" />
             </q-img>
