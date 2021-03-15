@@ -24,6 +24,7 @@ const routes = [
       { path: '/registromascota', component: () => import('pages/cliente/RegistroMascota.vue'), meta: { botonchat: false } },
       { path: '/edit_mascota/:id', component: () => import('pages/cliente/RegistroMascota.vue'), meta: { botonchat: false } },
       { path: '/descripcionmascota/:id', component: () => import('pages/cliente/DescripcionMascota.vue'), meta: { botonchat: false } },
+      { path: '/descripcionalojamiento', component: () => import('pages/cliente/VerAlojamiento.vue'), meta: { botonchat: false } },
       // Generales
       { path: '/Datos', component: () => import('pages/Datauser.vue'), meta: { botonchat: true } },
       { path: '/Datosedit', component: () => import('pages/Userdata.vue'), meta: { botonchat: false } }

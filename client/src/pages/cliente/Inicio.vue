@@ -208,7 +208,7 @@
     <div class="q-mx-sm text-h6">Alojamientos</div>
     <div class="q-mb-md q-mx-sm">Alojamientos mejor catificados</div>
     <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
-      <q-card class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+      <q-card @click="seeAccommodation" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
         <q-card-section class="bg-secondary" style="height: 175px;">
           <q-btn position="top-left" round icon="favorite" color="primary" size="10px"/>
         </q-card-section>
@@ -224,7 +224,7 @@
           <q-btn flat dense class="bg-primary text-white" style="width: 100px">$850 / mes</q-btn>
         </q-card-section>
       </q-card>
-      <q-card class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+      <q-card @click="seeAccommodation" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
         <q-card-section class="bg-secondary" style="height: 175px;">
           <q-btn position="top-left" round icon="favorite" color="primary" size="10px"/>
         </q-card-section>
@@ -269,6 +269,9 @@ export default {
   mounted () {
   },
   methods: {
+    seeAccommodation () {
+      this.$router.push('/descripcionalojamiento')
+    }
   }
 }
 </script>
