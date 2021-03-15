@@ -64,7 +64,7 @@
         <div class="full-width column items-center justify-center">
         <!-- <q-btn @click="panel.panel = 'parte_uno'" color="primary" push label="Atras" flat/> -->
         <q-space />
-        <q-btn @click="registrarse()" color="primary" rounded push label="Siguiente" glossy style="width:70%;height:40px"/>
+        <q-btn @click="registrarse()" color="primary" rounded push label="Siguiente" glossy style="width:30%;height:40px"/>
       </div>
     </div>
 
