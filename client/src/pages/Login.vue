@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="column justify-center items-center fullscreen bg-white no-box-shadow">
+  <div class="column justify-center items-center q-mt-xl bg-white no-box-shadow">
           <div class="row q-pa-md justify-center items-center no-box-shadow">
             <div class="column no-box-shadow">
               <div class="row justify-center">
