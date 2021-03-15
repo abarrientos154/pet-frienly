@@ -182,6 +182,10 @@ export default {
           }
         })
       } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos correspondientes',
+          color: 'negative'
+        })
         this.aparecer = true
       }
     },

@@ -1,19 +1,16 @@
 <template>
   <div>
-    <div class="column fullscreen justify-center items-center no-box-shadow">
-        <div class="items-center justify-center">
-            <q-avatar size="150px">
-              <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
-              <q-file borderless v-model="perfilFile" class="absolute-center button-subir" @input="test" accept=".jpg, image/*" style="z-index:1">
-                <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-              </q-file>
-            </q-avatar>
-            <div class="text-negative text-h7" v-if="$v.perfilFile.$error"> La imagen es Requerida </div>
-        </div>
+    <div class="column items-center justify-center">
+      <q-avatar size="150px">
+        <img :src="imgPerfil ? imgPerfil : 'noimg.png'">
+        <q-file borderless v-model="perfilFile" class="absolute-center button-subir" @input="test" accept=".jpg, image/*" style="z-index:1">
+          <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
+        </q-file>
+      </q-avatar>
+        <div class="text-negative text-h7" v-if="$v.perfilFile.$error"> La imagen es Requerida </div>
         <div class="column items-center text-center justify-center">
           <div class="text-black text-h5"> ¿Eres fanatico de las mascotas?</div>
         </div>
-
         <div class="q-mr-md q-mb-sm q-ml-md">
           <div class="q-pl-lg text-black text-h7"> Correo electronico</div>
             <q-input v-model="form.email" type="email" label="Correo electronico" outlined filled
@@ -35,16 +32,16 @@
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
                   <div class="q-pl-lg text-black text-h7"> Contraseña</div>
                     <q-input  v-model="password"
-                        label="Contraseña"
-                        outlined
-                        dense
-                        filled
-                        error-message="Ingrese una contraseña válida, mínimo 6 caracteres"
-                        :error="$v.password.$error"
-                        @blur="$v.password.$touch()">
-                        <template v-slot:before>
-                          <q-icon name="vpn_key" color="primary" />
-                        </template>
+                      label="Contraseña"
+                      outlined
+                      dense
+                      filled
+                      error-message="Ingrese una contraseña válida, mínimo 6 caracteres"
+                      :error="$v.password.$error"
+                      @blur="$v.password.$touch()">
+                      <template v-slot:before>
+                        <q-icon name="vpn_key" color="primary" />
+                      </template>
                     </q-input>
                 </div>
                 <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
@@ -62,12 +59,9 @@
                 </div>
         </div>
         <div class="full-width column items-center justify-center">
-        <!-- <q-btn @click="panel.panel = 'parte_uno'" color="primary" push label="Atras" flat/> -->
-        <q-space />
-        <q-btn @click="registrarse()" color="primary" rounded push label="Siguiente" glossy style="width:30%;height:40px"/>
-      </div>
+          <q-btn @click="registrarse()" color="primary" rounded push label="Siguiente" glossy style="width:180px;height:40px"/>
+        </div>
     </div>
-
   </div>
 </template>
 
@@ -135,6 +129,10 @@ export default {
           }
         })
       } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos correspondientes',
+          color: 'negative'
+        })
         this.aparecer = true
       }
     },
