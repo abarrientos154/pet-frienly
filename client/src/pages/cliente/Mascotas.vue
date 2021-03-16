@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="row justify-between q-ma-sm">
-        <q-btn no-caps class="shadow-11" color="white" text-color="black" icon="add" to="/registromascota"/>
+      <q-btn no-caps class="shadow-11" color="white" text-color="black" icon="add" to="/registromascota"/>
     </div>
     <q-separator inset />
     <div class="row justify-center">
-        <div class="text-h6 q-ma-md text-center estilo-titulos">Mis Mascotas</div>
+      <div class="text-h6 q-ma-md text-center estilo-titulos">Mis Mascotas</div>
     </div>
-    <q-list class="q-mx-lg q-mx-md q-my-md q-gutter-sm respon" v-if="data.length > 0">
-      <q-card class="q-pa-md bordes" v-for="(item, index) in data" :key="index" v-ripple >
+    <q-list class="row justify-center" v-if="data.length > 0">
+      <q-card class="q-pa-md bordes dimension col-6 no-wrap q-mx-xl q-my-sm" v-for="(item, index) in data" :key="index" v-ripple >
         <div class="row justify-between">
           <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-4">
-            <q-img :src="item.images ? baseu + '/' + item.images[0] : 'noimgpro.png'" style="width:100px; height: 80px;" />
+            <q-img :src="item.images ? baseu + '/' + item.images[0] : 'noimgpro.png'" style="height: 80px;" />
           </div>
-          <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-6">
+          <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-5">
               <q-scroll-area
                 horizontal
                 style="height: 27px"
@@ -24,7 +24,7 @@
               <q-chip text-color="white" :label="item.race" color="amber-7" />
           </div>
           <q-separator vertical color="black" />
-          <div class="column justify-around">
+          <div class="column col-2 justify-around">
             <q-btn round flat color="white" size="sm" text-color="black" icon="edit" @click="editMascota(item._id)" />
             <q-separator color="black" />
             <q-btn round flat color="white" size="sm" text-color="red" icon="delete" @click="deleteMascota(item._id)" />
@@ -97,25 +97,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.bordes {
+/* .bordes {
   border-left: 6px solid $primary;
   background-color: rgba(202, 202, 202, 0.474);
   border-radius: 12px;
-}
+} */
 .estilo-titulos {
   background-color: #fff599;
   width: 250px;
   border-radius: 12px
 }
-.respon {
-  /* height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center; */
-  max-width: 600px;
-  min-width: 350px;
-  /* margin: auto; */
-  /* position: relative; */
+/* .respon {
+  // height: 100%;
+  // display: flex;
+  // flex-direction: column;
+  // justify-content: center;
+  // align-items: center;
+  // max-width: 600px;
+  // min-width: 350px;
+  //margin: auto;
+  // position: relative;
+} */
+.dimension {
+  min-width: 300px;
+  max-width: 800px;
 }
 </style>
