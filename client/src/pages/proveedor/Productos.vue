@@ -8,8 +8,8 @@
     <div class="row justify-center">
         <div class="text-h6 q-ma-md text-center estilo-titulos">Mis Productos</div>
     </div>
-    <q-list class="q-mx-sm q-my-md q-gutter-sm" v-if="data.length > 0">
-      <q-card class="q-pa-md bordes" v-for="(item, index) in data" :key="index" v-ripple>
+    <q-list class="row justify-center" v-if="data.length > 0">
+      <q-card class="q-pa-md bordes dimension col-6 no-wrap q-mx-xl q-my-sm" v-for="(item, index) in data" :key="index" v-ripple>
         <div class="row justify-between">
           <div @click="$router.push('/descripcionproducto/' + item._id)" class="col-4">
             <q-img :src="item.fileName ? baseu + '/' + item.fileName : 'noimgpro.png'" style="width:100px; height: 80px;" />
@@ -78,7 +78,7 @@ export default {
           if (res) {
             this.$q.notify({
               color: 'positive',
-              message: 'Eliminado Correctamente'
+              message: 'Producto Eliminado Correctamente'
             })
             this.getProduct()
           }
@@ -101,5 +101,9 @@ export default {
   background-color: #fff599;
   width: 250px;
   border-radius: 12px
+}
+.dimension {
+  min-width: 350px;
+  max-width: 800px;
 }
 </style>
