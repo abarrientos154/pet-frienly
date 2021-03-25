@@ -60,16 +60,17 @@
           style="height: 290px; width:100%"
         >
         <div class="row no-wrap" style="width: 100%">
-          <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 160px" :key="index2">
+          <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 180px" :key="index2">
             <q-img :src="item2.images.length > 0 ? baseu2 + item2.images[0] : 'noimgpro.png'" spinner-color="white"> </q-img>
-            <q-card-section class="bg-grey" style="width: 160px;height: 160px">
+            <q-card-section class="bg-grey" style="width: 180px;height: 160px">
                 <div class="colum">
                     <div class="text-h6 text-grey-9 text-bold">{{item2.name}}</div>
-                    <div class="text-h7 text-grey-9 text-bold">{{item2.datos_proveedor.name}}</div>
+                    <div class="text-h7 text-grey-9 text-bold">Proveedor: {{item2.datos_proveedor.name}}</div>
+                    <div class="text-h7 text-grey-9 text-bold">Precio: ${{item2.precio}}</div>
                     <div class="q-gutter-y-md row">
                     <q-rating class="q-mb-xl" v-model="item2.rating" max="5" size="1.5em" color="yellow" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
                     </div>
-                      <q-btn round color="white" class="absolute-bottom-right text-red" icon="keyboard_arrow_right" />
+                      <q-btn round color="white" class="q-mb-sm q-mr-sm absolute-bottom-right text-red" icon="keyboard_arrow_right" @click="$router.push('/descripcion_producto/' + item2._id)"/>
                   </div>
             </q-card-section>
         </q-card>

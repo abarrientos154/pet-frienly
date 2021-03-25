@@ -30,6 +30,10 @@ class ProductoController {
 
   async productoByProveedor ({ request, response, params }) {
     let datos = (await Producto.query().where({proveedor_id: params.proveedor_id}).fetch()).toJSON()
+    for (let i in datos) {
+      datos[i].filename = datos[i].images[0]
+    }
+    console.log(datos, 'datos');
     response.send(datos)
   }
 

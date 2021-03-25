@@ -11,10 +11,10 @@
     <q-list class="row justify-center" v-if="data.length > 0">
       <q-card class="q-pa-md bordes dimension col-6 no-wrap q-mx-xl q-my-sm" v-for="(item, index) in data" :key="index" v-ripple>
         <div class="row justify-between">
-          <div @click="$router.push('/descripcionproducto/' + item._id)" class="col-4">
-            <q-img :src="item.fileName ? baseu + '/' + item.fileName : 'noimgpro.png'" style="width:100px; height: 80px;" />
+          <div @click="$router.push('/descripcion_producto/' + item._id)" class="col-4">
+            <q-img :src="item.filename ? baseu + '/' + item.filename : 'noimgpro.png'" style="width:100px; height: 80px;" />
           </div>
-          <div @click="$router.push('/descripcionproducto/' + item._id)" class="col-6">
+          <div @click="$router.push('/descripcion_producto/' + item._id)" class="col-6">
               <q-scroll-area
                 horizontal
                 style="height: 27px"
@@ -49,7 +49,7 @@ export default {
   },
   mounted () {
     this.getProduct()
-    this.baseu = env.apiUrl + '/productos_img'
+    this.baseu = env.apiUrl + 'productos_img'
   },
   methods: {
     getProduct () {
@@ -81,6 +81,7 @@ export default {
               message: 'Producto Eliminado Correctamente'
             })
             this.getProduct()
+            this.$router.push('/productos')
           }
         })
       }).onCancel(() => {

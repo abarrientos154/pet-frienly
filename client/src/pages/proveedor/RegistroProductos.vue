@@ -155,7 +155,9 @@ export default {
         console.log(this.botones)
         this.imgProducto.push(cc)
       }
-
+      if (this.botones[0].src !== '') {
+        this.mostrarImg = this.botones[0].src
+      }
       this.editImg = true
       console.log(this.editImg)
     },
@@ -240,7 +242,7 @@ export default {
             color: 'primary'
           })
           this.$q.loading.hide()
-          // this.$router.push('/productos')
+          this.$router.push('/productos')
         })
       }
     },
@@ -287,7 +289,7 @@ export default {
             color: 'primary'
           })
           this.$q.loading.hide()
-          // this.$router.push('/productos')
+          this.$router.push('/productos')
         })
       }
     }
