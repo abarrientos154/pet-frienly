@@ -167,12 +167,12 @@ class ProductoController {
           images.splice(dat.index[i], 1, profilePic.fileName)
         }
         console.log(dat.images, 'images');
-        for (let j of dat.images) {
+        /* for (let j of dat.images) {
           fs.unlink(`storage/uploads/productos/${j.src}`, (err) => {
             if (err) throw err;
             console.log(`${j.src} Eliminado por el Cliente`);
           });
-        }
+        } */
         dat.images = images
       }
       dat.proveedor_id = user._id.toString()
