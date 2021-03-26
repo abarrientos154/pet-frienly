@@ -38,7 +38,6 @@ export default {
     console.log(this.data)
     if (this.ruta === 'cliente' || this.ruta === 'tienda') {
       this.baseu = env.apiUrl + 'productos_img/'
-    } else {
     }
   },
   methods: {
