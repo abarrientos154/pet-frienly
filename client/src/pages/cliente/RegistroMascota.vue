@@ -92,7 +92,7 @@ export default {
       this.$api.get('mascota/' + this.id).then(res => {
         if (res) {
           this.form = res
-          this.categoria_id = this.form.categoria_id
+          // this.categoria_id = this.form.categoria_id
           this.imgsTraidas()
           /* for (let i = 0; i < this.categorias.length; i++) {
             if (this.categorias[i]._id === this.form.categoria_id) {
@@ -163,7 +163,7 @@ export default {
     async actualizarMascota () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
-        this.form.categoria_id = this.categoria_id
+        // this.form.categoria_id = this.categoria_id
         this.$q.loading.show({
           message: 'Actualizando Mascota, Por Favor Espere...'
         })
