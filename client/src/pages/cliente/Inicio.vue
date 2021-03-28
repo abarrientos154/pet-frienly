@@ -9,7 +9,7 @@
     </q-input>
     <div class="q-mb-md q-mx-sm text-h6">Catalogo de productos</div>
     <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">
-      <q-tabs v-model="tab" dense class="text-grey row justify-between" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
+      <q-tabs v-model="tabCat" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
         <q-tab label="Categoria" />
         <q-tab label="Categoria" />
         <q-tab label="Categoria" />
@@ -26,7 +26,7 @@
           <q-separator />
           <q-card-section class="bg-orange-2" style="height: 35%;">
             <div>
-              <q-scroll-area horizontal style="height: 20px; width:100%">
+              <q-scroll-area horizontal style="height: 23px; width:100%">
                 <div class="text-subtitle2 text-weight-bolder" style="font-size: 13px">{{item.name}}</div>
               </q-scroll-area>
               <div class="items-center row text-grey">
@@ -48,7 +48,7 @@
     </q-scroll-area>
     <div class="q-mb-md q-mx-sm text-h6">Nuestras tiendas</div>
     <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">
-      <q-tabs v-model="tab" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
+      <q-tabs v-model="tabSer" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
         <q-tab label="Servicio" />
         <q-tab label="Servicio" />
         <q-tab label="Servicio" />
@@ -67,7 +67,7 @@
           <q-separator />
           <q-card-section class="bg-orange-2" style="height: 35%;">
             <div>
-              <q-scroll-area horizontal style="height: 20px; width:100%">
+              <q-scroll-area horizontal style="height: 23px; width:100%">
                 <div class="text-subtitle2 text-weight-bolder" style="font-size: 13px">{{item.name}}</div>
               </q-scroll-area>
               <div class="items-center row text-grey">
@@ -149,7 +149,8 @@ export default {
       place: [],
       imgTienda: '',
       imgProducto: '',
-      tab: 'mails',
+      tabCat: 'mails',
+      tabSer: 'mails',
       tiendas: [],
       productos: []
     }
