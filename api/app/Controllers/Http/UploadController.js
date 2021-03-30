@@ -4,6 +4,7 @@ const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 const User = use("App/Models/User")
 const Producto = use("App/Models/Producto")
+const Hospedaje = use("App/Models/Hospedaje")
 const { validate } = use("Validator")
 const fs = require('fs')
 var randomize = require('randomatic');
@@ -52,33 +53,34 @@ class UploadController {
   }
   async registrarHospedaje ({ request, response, auth }) {
     let user = await auth.getUser()
-    let codeFile = randomize('Aa0', 30)
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    const validation = await validate(dat, Producto.fieldValidationRules())
+    const validation = await validate(dat, Hospedaje.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
-      const profilePic = request.file('files', {
-        types: ['image'],
-        size: '20mb'
-      })
-      if (Helpers.appRoot('storage/uploads/productos')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
-          name: codeFile,
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-      const data = { name: profilePic.fileName }
-      if (!profilePic.moved()) {
-        return profilePic.error()
-      } else {
-        dat.fileName = data.name
+      let images = []
+      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+        for (let i = 0; i < dat.cantidadArchivos; i++) {
+          let codeFile = randomize('Aa0', 30)
+          const profilePic = request.file('files_' + (i + 1), {
+            types: ['image']
+          })
+          if (Helpers.appRoot('storage/uploads/hospedajes')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/hospedajes'), {
+              name: codeFile,
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+          images.push(profilePic.fileName)
+        }
       }
       dat.proveedor_id = user._id.toString()
-      let guardar = await Producto.create(dat)
+      delete dat.cantidadArchivos
+      dat.images = images
+      let guardar = await Hospedaje.create(dat)
       response.send(guardar)
     }
   }
@@ -306,6 +308,11 @@ class UploadController {
   async getFileByDirectoryProductos({ params, response, request }) {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/productos') + `/${dir}`)
+  }
+
+  async getFileByDirectoryHospedajes ({ params, response, request }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/hospedajes') + `/${dir}`)
   }
 
   async testFile ({ params, response, request }) {

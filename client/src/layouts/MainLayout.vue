@@ -105,6 +105,12 @@ export default {
           permission: 1
         },
         {
+          icon: 'apartment',
+          label: 'Hospedaje',
+          ruta: '/hospedajes',
+          permission: 1
+        },
+        {
           icon: 'logout',
           label: 'Cerrar Sesión',
           ruta: '',

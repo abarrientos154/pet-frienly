@@ -1,5 +1,5 @@
 'use strict'
-const Producto = use("App/Models/Producto")
+const Hospedaje = use("App/Models/Hospedaje")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
@@ -10,12 +10,12 @@ var randomize = require('randomatic');
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with productos
+ * Resourceful controller for interacting with hospedajes
  */
 class HospedajeController {
   /**
-   * Show a list of all productos.
-   * GET productos
+   * Show a list of all hospedajes.
+   * GET hospedajes
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -23,19 +23,23 @@ class HospedajeController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    let datos = (await Producto.query().where({}).with('datos_proveedor').fetch()).toJSON()
-    let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
-    response.send(filter)
+    let datos = (await Hospedaje.query().where({}).with('datos_proveedor').fetch()).toJSON()
+    //let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
+    response.send(datos)
   }
 
   async hospedajeByProveedor ({ request, response, params }) {
-    let datos = (await Producto.query().where({proveedor_id: params.proveedor_id}).fetch()).toJSON()
+    let datos = (await Hospedaje.query().where({ proveedor_id: params.proveedor_id }).fetch()).toJSON()
+    for (let i in datos) {
+      datos[i].filename = datos[i].images[0]
+    }
+    console.log(datos, 'datos');
     response.send(datos)
   }
 
   /**
-   * Render a form to be used for creating a new producto.
-   * GET productos/create
+   * Render a form to be used for creating a new Hospedaje.
+   * GET hospedajes/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -46,8 +50,8 @@ class HospedajeController {
   }
 
   /**
-   * Create/save a new producto.
-   * POST productos
+   * Create/save a new Hospedaje.
+   * POST hospedajes
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -55,19 +59,19 @@ class HospedajeController {
    */
   async store ({ request, response }) {
     let recibir = request.all()
-    const validation = await validate(recibir, Producto.fieldValidationRules())
+    const validation = await validate(recibir, Hospedaje.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
-      let body = request.only(Producto.fillable)
-      let guardar = await Producto.create(body)
+      let body = request.only(Hospedaje.fillable)
+      let guardar = await Hospedaje.create(body)
       response.send(guardar)
     }
   }
 
   /**
-   * Display a single producto.
-   * GET productos/:id
+   * Display a single Hospedaje.
+   * GET hospedajes/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -75,18 +79,23 @@ class HospedajeController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
-    response.send(await Producto.find(params.id))
+    let hospedaje = (await Hospedaje.find(params.id)).toJSON()
+    hospedaje.images = hospedaje.images.map(ele => {
+      return { src: ele }
+    })
+    console.log(hospedaje)
+    response.send(hospedaje)
   }
 
   async hospedajeFiltrado ({ params, request, response, view }) {
-    let datos = (await Producto.query().where('categoria_id', params.filtrar).with('datos_proveedor').fetch()).toJSON()
+    let datos = (await Hospedaje.query().where('categoria_id', params.filtrar).with('datos_proveedor').fetch()).toJSON()
     let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
     response.send(filter)
   }
 
   /**
-   * Render a form to update an existing producto.
-   * GET productos/:id/edit
+   * Render a form to update an existing Hospedaje.
+   * GET hospedajes/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -97,63 +106,77 @@ class HospedajeController {
   }
 
   /**
-   * Update producto details.
-   * PUT or PATCH productos/:id
+   * Update Hospedaje details.
+   * PUT or PATCH hospedajes/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update ({ params, request, response, auth }) {
+    let user = await auth.getUser()
+    console.log('prueba');
+    let hospedaje = (await Hospedaje.find(params.id)).toJSON()
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    const validation = await validate(dat, Producto.fieldValidationRules())
+    console.log(dat.cantidadArchivos, 'data archivos')
+    const validation = await validate(dat, Hospedaje.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
-      if (dat.buscar_file) {
-        let codeFile = randomize('Aa0', 30)
-        const profilePic = request.file('files', {
-          types: ['image'],
-          size: '20mb'
-        })
-        if (Helpers.appRoot('storage/uploads/productos')) {
-          await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
-            name: codeFile,
-            overwrite: true
+      let images = hospedaje.images
+      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+        for (let i = 0; i < dat.cantidadArchivos; i++) {
+          let codeFile = randomize('Aa0', 30)
+          const profilePic = request.file('files_' + (i + 1), {
+            types: ['image']
           })
-        } else {
-          mkdirp.sync(`${__dirname}/storage/Excel`)
+          console.log(profilePic.index, 'ind')
+          if (Helpers.appRoot('storage/uploads/hospedajes')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/hospedajes'), {
+              name: codeFile,
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+          images.splice(dat.index[i], 1, profilePic.fileName)
         }
-        const data = { name: profilePic.fileName }
-        if (!profilePic.moved()) {
-          return profilePic.error()
-        } else {
-          dat.fileName = data.name
-          delete dat.buscar_file
-        }
-      } else { }
-      let modificar = await Producto.query().where('_id', params.id).update(dat)
+        console.log(dat.images, 'images');
+        /* for (let j of dat.images) {
+          fs.unlink(`storage/uploads/hospedajes/${j.src}`, (err) => {
+            if (err) throw err;
+            console.log(`${j.src} Eliminado por el Cliente`);
+          });
+        } */
+        dat.images = images
+      }
+      dat.proveedor_id = user._id.toString()
+      delete dat.cantidadArchivos
+      delete dat.index
+      let modificar = await Hospedaje.where('_id', params.id).update(dat)
       response.send(modificar)
     }
   }
 
   /**
-   * Delete a producto with id.
-   * DELETE productos/:id
+   * Delete a hospedajes with id.
+   * DELETE hospedajes/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
-    let producto = await Producto.find(params.id)
-    fs.unlink(`storage/uploads/productos/${producto.fileName}`, (err) => {
+  async destroy ({ params, request, response, auth }) {
+    var user = await auth.getUser();
+    let { id } = params;
+    let hospedaje = await Hospedaje.find(id)
+    /* fs.unlink(`storage/uploads/hospedajes/${hospedaje.fileName}`, (err) => {
       if (err) throw err;
-      console.log(`${producto.fileName} Eliminado por el Cliente`);
-    });
-    await producto.delete()
-    response.send(producto)
+      console.log(`${hospedaje.fileName} Eliminado por el Cliente`);
+    }); */
+    let hospedajeDestroy = (await Hospedaje.find(id)).delete();
+    response.send(hospedajeDestroy)
   }
 }
 
