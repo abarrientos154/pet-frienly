@@ -170,7 +170,7 @@ class UserController {
 
   async userByRol({ request, params, response }) {
     let rol = request.all()
-    const user = (await User.query().where({roles: rol.rol, estatus: 1}).fetch()).toJSON()
+    const user = (await User.query().where({roles: rol.rol, estatus: 1}).with('paisUser').with('ciudadUser').fetch()).toJSON()
     response.send(user)
   }
 

@@ -20,6 +20,9 @@ class Ciudad extends Model {
     static get objectIDs () {
         return ["_id", "pais_id"];
     }
+    static get objectIDcity () {
+        return ["ciudad_id", "_id"];
+    }
 }
 
 module.exports = Ciudad

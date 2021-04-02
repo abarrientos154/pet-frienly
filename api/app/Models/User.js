@@ -53,6 +53,14 @@ class User extends Model {
   tokens() {
     return this.hasMany('App/Models/Token')
   }
+
+  paisUser () {
+    return this.hasOne("App/Models/Pais", "pais_id", "_id")
+  }
+
+  ciudadUser () {
+    return this.hasOne("App/Models/Ciudad", "ciudad_id", "_id")
+  }
   // static get objectIDs () { return [ 'country_id','_id', 'city_id' ] }
 }
 

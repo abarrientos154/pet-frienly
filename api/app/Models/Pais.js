@@ -16,6 +16,9 @@ class Pais extends Model {
     ciudades () {
         return this.hasMany("App/Models/Ciudad", "_id", "pais_id")
     }
+    static get objectIDpais () {
+        return ["pais_id", "_id"];
+    }
 }
 
 module.exports = Pais

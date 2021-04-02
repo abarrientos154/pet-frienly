@@ -2,11 +2,28 @@
   <div class="q-pa-sm row justify-center">
     <div class="col" style="max-width: 500px; min-width: 300px;">
       <q-card class="q-mb-md shadow-11" style="border-radius: 15px;">
-        <q-img :src="imgProd + form.images[0].src"  style="height: 300px;"/>
+        <!-- <q-img :src="imgProd + form.images[0].src"  style="height: 300px;"/> -->
+        <div class="row justify-between bg-secondary">
+          <div class="col-3">
+            <q-scroll-area style="height: 250px;" class="q-ma-sm">
+              <div class="column no-wrap" style="width: 100%">
+                <q-card v-for="(img, index) in form.images" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;" :key="index">
+                  <q-img :src="imgProd + img.src" @click="mostrarimg(index)" spinner-color="white" style="height: 100px; width: 100%" />
+                </q-card>
+              </div>
+            </q-scroll-area>
+          </div>
+          <div class="q-pa-sm col column items-center">
+            <q-img :src="imgProd + form.images[selecImg].src" style="width: 100%; height: 250px; border-radius:12px;">
+              <div class="row justify-center" style="width: 100%;">
+                <div class="q-pl-xs q-pt-xs text-weight-bolder text-h6">{{form.name}}</div>
+              </div>
+            </q-img>
+          </div>
+        </div>
         <q-separator />
         <q-card-section class="bg-orange-2" style="height: 35%;">
           <div class="q-mb-sm column items-center">
-            <div class="text-weight-bolder text-h6">{{form.name}}</div>
             <q-item-label class="text-grey text-subtitle2">Precio: {{form.precio}}$ C/u</q-item-label>
             <q-item-label class="text-grey text-subtitle2">Cantidad: {{form.cantidad}}</q-item-label>
           </div>
@@ -63,7 +80,8 @@ export default {
       form: {},
       infoProv: {},
       imgProd: '',
-      imgProv: ''
+      imgProv: '',
+      selecImg: 0
     }
   },
   mounted () {
@@ -89,6 +107,9 @@ export default {
           })
         }
       })
+    },
+    mostrarimg (ind) {
+      this.selecImg = ind
     }
   }
 }

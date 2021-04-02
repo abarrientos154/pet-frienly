@@ -73,7 +73,7 @@
               <div class="items-center row text-grey">
                 <q-icon class="col-1" name="place" />
                 <q-scroll-area class="col" style="height: 20px; width:100%">
-                  <div class="text-subtitle2" style="font-size: 12px">{{item.place}}</div>
+                  <div class="text-subtitle2" style="font-size: 12px">{{item.paisUser.pais}}, {{item.ciudadUser.ciudad}}</div>
                 </q-scroll-area>
               </div>
             </div>
@@ -168,6 +168,7 @@ export default {
         this.imgTienda = env.apiUrl + 'perfil_img/'
         if (res) {
           this.tiendas = res
+          console.log(this.tiendas)
         }
       })
     },
@@ -176,6 +177,7 @@ export default {
         this.imgProducto = env.apiUrl + 'productos_img/'
         if (res) {
           this.productos = res
+          console.log(this.productos)
         }
       })
     }
