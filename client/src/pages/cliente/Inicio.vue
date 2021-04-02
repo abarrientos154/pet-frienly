@@ -32,7 +32,7 @@
               <div class="items-center row text-grey">
                 <q-icon class="col-1" name="place" />
                 <q-scroll-area class="col" style="height: 20px; width:100%">
-                  <div class="text-subtitle2" style="font-size: 12px">{{item.proveedor_id === place[index]._id ? place[index].place : ''}}</div>
+                  <div class="text-subtitle2" style="font-size: 12px">{{item.datos_proveedor.place}}</div>
                 </q-scroll-area>
               </div>
             </div>
@@ -176,12 +176,6 @@ export default {
         this.imgProducto = env.apiUrl + 'productos_img/'
         if (res) {
           this.productos = res
-          for (const i in this.productos) {
-            this.$api.get('user_by_id/' + this.productos[i].proveedor_id).then(r => {
-              this.place[i] = r
-            })
-          }
-          console.log(this.place)
         }
       })
     }

@@ -19,7 +19,7 @@
           <div v-if="rol === 2" class="row justify-center">
             <q-btn flat dense class="bg-primary text-white">
               <div class="row items-center justify-center" style="width:100%">
-                <q-icon class="col-1 q-ma-sm" name="payment" color="blak" style="font-size: 20px;"/>
+                <q-icon class="col-1 q-ma-sm" name="add_shopping_cart" color="blak" style="font-size: 20px;"/>
                 <div class="q-pl-xs q-pt-xs text-subtitle2">Comprar</div>
               </div>
             </q-btn>
