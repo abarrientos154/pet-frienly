@@ -5,14 +5,15 @@ const Model = use('Model')
 
 class Hospedaje extends Model {
   static get fillable() {
-    return ['name','categoria_id','description','cantidad']
+    return ['name','description','price']
   }
   static fieldValidationRules() {
     const rules = {
       name: "required|string",
-      categoria_id: "string",
       description: "required|string",
-      cantidad: "required|number"
+      price: "required|number",
+      dimensions: "required|number",
+      pet_type: "required|string"
     }
     return rules
   }

@@ -15,9 +15,11 @@ const routes = [
       { path: '/productos', component: () => import('pages/proveedor/Productos.vue') },
       { path: '/registroproductos', component: () => import('pages/proveedor/RegistroProductos.vue') },
       { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
-      { path: '/hospedaje', component: () => import('pages/proveedor/Hospedaje.vue') },
+      { path: '/descripcion_producto/:id', component: () => import('pages/proveedor/DescripcionProducto.vue') },
+      { path: '/hospedajes', component: () => import('pages/proveedor/Hospedaje.vue') },
       { path: '/registrohospedaje', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
       { path: '/editar_hospedaje/:id', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
+      { path: '/descripcion_hospedaje/:id', component: () => import('pages/proveedor/DescripcionHospedaje.vue') },
       // Cliente
       { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue') },
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue') },

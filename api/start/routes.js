@@ -45,7 +45,7 @@ addPrefixToGroup(
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
     Route.get('tienda_img/:file', 'UploadController.getFileByDirectoryTienda')
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
-
+    Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
   })
 );
