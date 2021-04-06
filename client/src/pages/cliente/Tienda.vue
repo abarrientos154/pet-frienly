@@ -7,19 +7,18 @@
             <q-scroll-area v-if="rol === 3" style="height: 250px;" class="q-ma-sm">
               <div class="column no-wrap" style="width: 100%">
                 <q-card v-for="(img, index) in data.tiendaFiles" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;" :key="index">
-                  <q-img :src="baseuTienda + img" spinner-color="white" style="height: 100px; width: 100%" />
+                  <q-img :src="baseuTienda + img" @click="mostrarimg(index)" spinner-color="white" style="height: 100px; width: 100%" />
                 </q-card>
               </div>
             </q-scroll-area>
           </div>
           <div class="q-pa-sm col column items-center">
-            <q-avatar size="200px">
-              <q-img :src="baseu + perfile" style="width: 100%; height: 100%;"/>
-            </q-avatar>
-            <div class="row justify-center" style="width: 100%;">
-              <q-icon class="col-1" name="person" color="Black" style="font-size: 1.5rem;"/>
-              <div class="q-pl-xs q-pt-xs text-weight-bolder text-h6">{{data.name}}</div>
-            </div>
+            <q-img :src="perfilimg ? baseu + perfile : baseuTienda + data.tiendaFiles[selecimg]" @click="perfilimg = true" style="width: 100%; height: 250px; border-radius:12px;">
+              <div class="row justify-center" style="width: 100%;">
+                <q-icon class="col-1" name="person" color="Black" style="font-size: 1.5rem;"/>
+                <div class="q-pl-xs q-pt-xs text-weight-bolder text-h6">{{data.name}}</div>
+              </div>
+            </q-img>
           </div>
         </div>
         <q-separator />
@@ -72,7 +71,9 @@ export default {
       img: '',
       estado: false,
       dialogStado: false,
-      ratingPerfil: 0
+      ratingPerfil: 0,
+      perfilimg: true,
+      selecimg: 0
     }
   },
   mounted () {
@@ -102,6 +103,10 @@ export default {
           this.misDatos = v
         }
       })
+    },
+    mostrarimg (ind) {
+      this.perfilimg = false
+      this.selecimg = ind
     }
   }
 }
