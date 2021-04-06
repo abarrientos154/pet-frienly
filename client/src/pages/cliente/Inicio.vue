@@ -90,36 +90,22 @@
     <div class="q-mx-sm text-h6">Alojamientos</div>
     <div class="q-mb-md q-mx-sm">Alojamientos mejor catificados</div>
     <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
-      <q-card @click="seeAccommodation" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-        <q-card-section class="bg-secondary" style="height: 175px;">
-          <q-btn position="top-left" round icon="favorite" color="primary" size="10px"/>
-        </q-card-section>
+      <q-card v-for="(hospedaje, index) in hospedajes" :key="index" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+        <q-img @click="seeAccommodation(hospedaje._id)" :src="hospedaje.images[0] ? urlHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" style="height: 175px;">
+          <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
+        </q-img>
+        <!-- <q-card-section class="bg-secondary" style="height: 175px;">
+        </q-card-section> -->
         <q-separator />
         <q-card-section class="row justify-between">
           <div>
-            <div class="text-subtitle2" style="font-size: 13px">Nombre del alojamiento</div>
+            <div class="text-subtitle2" style="font-size: 13px">{{hospedaje.name}}</div>
             <div class="items-center row text-grey">
                 <q-icon name="place" />
-                <div class="text-subtitle2" style="font-size: 12px">País, Ciudad</div>
+                <div class="text-subtitle2" style="font-size: 12px">{{hospedaje.datos_proveedor.place}}</div>
             </div>
           </div>
-          <q-btn flat dense class="bg-primary text-white" style="width: 100px">$850 / mes</q-btn>
-        </q-card-section>
-      </q-card>
-      <q-card @click="seeAccommodation" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-        <q-card-section class="bg-secondary" style="height: 175px;">
-          <q-btn position="top-left" round icon="favorite" color="primary" size="10px"/>
-        </q-card-section>
-        <q-separator />
-        <q-card-section class="row justify-between">
-          <div>
-            <div class="text-subtitle2" style="font-size: 13px">Nombre del alojamiento</div>
-            <div class="items-center row text-grey">
-                <q-icon name="place" />
-                <div class="text-subtitle2" style="font-size: 12px">País, Ciudad</div>
-            </div>
-          </div>
-          <q-btn flat dense class="bg-primary text-white" style="width: 100px">$850 / mes</q-btn>
+          <q-btn flat dense class="bg-primary text-white" style="width: 100px">${{hospedaje.price}} / noche</q-btn>
         </q-card-section>
       </q-card>
     </q-list>
@@ -152,16 +138,20 @@ export default {
       tabCat: 'mails',
       tabSer: 'mails',
       tiendas: [],
-      productos: []
+      productos: [],
+      hospedajes: [],
+      urlHospedaje: ''
     }
   },
   mounted () {
-    this.getTiendas()
-    this.getProductos()
+    /* this.getTiendas()
+    this.getProductos() */
+    this.urlHospedaje = env.apiUrl + 'hospedajes_img'
+    this.obtener_hospedajes()
   },
   methods: {
-    seeAccommodation () {
-      this.$router.push('/descripcionalojamiento')
+    seeAccommodation (id) {
+      this.$router.push('/descripcionalojamiento/' + id)
     },
     getTiendas () {
       this.$api.post('user_by_rol', { rol: [3] }).then(res => {
@@ -182,6 +172,14 @@ export default {
             })
           }
           console.log(this.place)
+        }
+      })
+    },
+    obtener_hospedajes () {
+      this.$api.get('hospedaje').then(res => {
+        if (res) {
+          this.hospedajes = res
+          console.log(this.hospedajes)
         }
       })
     }
