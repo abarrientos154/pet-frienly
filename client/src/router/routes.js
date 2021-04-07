@@ -29,6 +29,7 @@ const routes = [
       { path: '/descripcionalojamiento', component: () => import('pages/cliente/VerAlojamiento.vue') },
       { path: '/tienda/:id', component: () => import('pages/cliente/Tienda.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
+      { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       // Generales
       { path: '/Datos', component: () => import('pages/Datauser.vue') },
       { path: '/Datosedit', component: () => import('pages/Userdata.vue') }

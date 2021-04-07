@@ -2,11 +2,14 @@
   <div style="max-width: 100%">
     <div class="q-mt-md q-mx-sm text-h6">Bienvenido Usuario</div>
     <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">El amor es una palabra de cuatro patas</div>
-    <q-input outlined type="text" class="q-mb-xs q-mx-sm shadow-6" label="Que necesitas?" dense style="width: auto border-radius: 20px">
-      <template v-slot:prepend>
-        <q-icon name="search"/>
-      </template>
-    </q-input>
+    <div class="row">
+      <q-input outlined type="text" class="q-mb-xs q-mx-sm shadow-6" label="Que necesitas?" dense style="width: auto border-radius: 20px">
+        <template v-slot:prepend>
+          <q-icon name="search"/>
+        </template>
+      </q-input>
+      <q-btn dense flat icon="search" color="primary" @click="$router.push('/buscar_hospedaje')">alojamientos</q-btn>
+    </div>
     <div class="q-mb-md q-mx-sm text-h6">Catalogo de productos</div>
     <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">
       <q-tabs v-model="tabCat" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
