@@ -1,5 +1,6 @@
 'use strict'
 const Hospedaje = use("App/Models/Hospedaje")
+const User = use("App/Models/Hospedaje")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
@@ -78,12 +79,14 @@ class HospedajeController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
-    let hospedaje = (await Hospedaje.find(params.id)).toJSON()
+  async show ({ params, request, response, view, auth }) {
+    let user = auth.getUser()
+    console.log('user :>> ', user);
+    let hospedaje = (await Hospedaje.with('datos_proveedor').find(params.id)).toJSON()
+    console.log('hospedaje :>> ', hospedaje);
     hospedaje.images = hospedaje.images.map(ele => {
       return { src: ele }
     })
-    console.log(hospedaje)
     response.send(hospedaje)
   }
 
