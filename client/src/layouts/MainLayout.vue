@@ -12,7 +12,7 @@
     <q-drawer v-if="drawer === true" v-model="drawer" :width="200" :breakpoint="500" overlay bordered content-class="bg-white">
       <q-separator/>
       <q-scroll-area class="fit">
-        <q-list>
+        <q-list v-if="rol != null">
           <template v-for="(item, index) in menu">
             <q-item :key="index" clickable v-ripple v-if="can(item.permission)" @click="item.label === 'Cerrar Sesión' ? cerrarSesion() : ruta (item)">
               <q-item-section avatar>
@@ -25,13 +25,16 @@
             <q-separator :key="'sep' + index" />
           </template>
         </q-list>
+        <div v-else class="column q-pa-md items-center">
+          <q-btn label="Iniciar Sesión" color="primary" @click="$router.push('/login')" no-caps/>
+        </div>
       </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
       <router-view />
       <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn v-if="rol != 1 && 3" round icon="shopping_bag" color="primary" size="20px">
+        <q-btn v-if="rol != 1 && 3 && null" round icon="shopping_bag" color="primary" size="20px">
           <q-badge color="red" label="2" floating/>
         </q-btn>
       </q-page-sticky>
@@ -138,6 +141,8 @@ export default {
       this.$api.get('user_info').then(v => {
         if (v) {
           this.rol = v.roles[0]
+        } else {
+          console.log(this.rol)
         }
       })
     },

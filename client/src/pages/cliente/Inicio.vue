@@ -147,8 +147,8 @@ export default {
     }
   },
   mounted () {
-    /* this.getTiendas()
-    this.getProductos() */
+    this.getTiendas()
+    this.getProductos()
     this.urlHospedaje = env.apiUrl + 'hospedajes_img'
     this.obtener_hospedajes()
   },

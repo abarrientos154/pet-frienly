@@ -39,11 +39,11 @@ const routes = [
   { path: '/registro', component: () => import('pages/Registro.vue') },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/inicio_cliente'
   },
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/inicio_cliente'
   },
 
   // Always leave this as last one,

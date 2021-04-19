@@ -92,19 +92,19 @@ export default {
       this.$api.get('user_info').then(res => {
         if (res) {
           this.rol = res.roles[0]
-          this.$api.get('producto/' + this.id).then(res => {
-            if (res) {
-              this.form = res
-              this.imgProd = env.apiUrl + 'productos_img/'
-              if (this.form) {
-                console.log(this.form)
-                this.$api.get('user_by_id/' + this.form.proveedor_id).then(v => {
-                  this.infoProv = v
-                  this.imgProv = env.apiUrl + 'perfil_img/'
-                })
-              }
-            }
-          })
+        }
+      })
+      this.$api.get('producto/' + this.id).then(res => {
+        if (res) {
+          this.form = res
+          this.imgProd = env.apiUrl + 'productos_img/'
+          if (this.form) {
+            console.log(this.form)
+            this.$api.get('user_by_id/' + this.form.proveedor_id).then(v => {
+              this.infoProv = v
+              this.imgProv = env.apiUrl + 'perfil_img/'
+            })
+          }
         }
       })
     },
