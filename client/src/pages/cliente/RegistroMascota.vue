@@ -1,15 +1,21 @@
 <template>
  <div>
-    <div class="column q-mx-xl respon">
-      <div class="column text-h6 q-my-md items-center">Nueva Mascota</div>
-      <q-input outlined bg-color="yellow-2" v-model="form.name" label="Nombre" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()"/>
-      <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.race" label="Raza" dense :error="$v.form.race.$error" error-message="Este campo es requerido" @blur="$v.form.race.$touch()" />
-      <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.age" label="Edad" dense :error="$v.form.age.$error" error-message="Este campo es requerido" @blur="$v.form.age.$touch()" />
-      <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.vaccines" label="Vacunas" dense :error="$v.form.vaccines.$error" error-message="Este campo es requerido" @blur="$v.form.vaccines.$touch()" />
-      <q-input class="q-mt-md" outlined autogrow bg-color="yellow-2" v-model="form.diseases" label="Enfermedades" dense :error="$v.form.diseases.$error" error-message="Este campo es requerido" @blur="$v.form.diseases.$touch()" />
-    </div>
-    <div class="q-mx-xl respon">
-      <q-card class="shadow-13 q-mb-md bg-yellow-2" style="border-radius:10px">
+   <div class="column text-h6 q-my-md items-center">Nueva Mascota</div>
+   <div class="row justify-center">
+      <div class="q-pa-md col col-xs-10 col-sm-8 col-md-7 col-lg-5 col-xl-4 no-wrap q-mx-md q-my-sm">
+        <div class="column dimension no-wrap">
+          <q-input outlined bg-color="amber-2" v-model="form.name" label="Nombre" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()"/>
+          <q-input class="q-mt-md" outlined autogrow bg-color="amber-2" v-model="form.race" label="Raza" dense :error="$v.form.race.$error" error-message="Este campo es requerido" @blur="$v.form.race.$touch()" />
+          <q-input class="q-mt-md" outlined autogrow bg-color="amber-2" v-model="form.age" label="Edad" dense :error="$v.form.age.$error" error-message="Este campo es requerido" @blur="$v.form.age.$touch()" />
+        </div>
+        <div class="dimension no-wrap">
+          <q-input class="q-mt-md" outlined autogrow bg-color="amber-2" v-model="form.vaccines" label="Vacunas" dense :error="$v.form.vaccines.$error" error-message="Este campo es requerido" @blur="$v.form.vaccines.$touch()" />
+          <q-input class="q-mt-md" outlined autogrow bg-color="amber-2" v-model="form.diseases" label="Enfermedades" dense :error="$v.form.diseases.$error" error-message="Este campo es requerido" @blur="$v.form.diseases.$touch()" />
+        </div>
+      </div>
+      <div class="q-pa-md col col-xs-10 col-sm-8 col-md-7 col-lg-5 col-xl-4 no-wrap q-mx-md q-my-sm">
+        <div class="dimension no-wrap">
+          <q-card class="q-mb-md bg-amber-2" style="border-radius:10px">
             <q-card-section>
               <div>Albúm de fotos</div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 row justify-between">
@@ -24,7 +30,7 @@
             </q-card-section>
               <q-separator />
               <q-card-section class="row justify-around">
-                <div v-if="!imgMascota.length" class="text-subtitle2 text-grey text-center">No hay fotos de la tienda</div>
+                <div v-if="!imgMascota.length" class="text-subtitle2 text-grey text-center">No hay fotos de la mascota</div>
                 <div v-else v-ripple v-for="(item, index) in imgMascota" :key="index" class="col-5 q-pa-sm">
                   <q-img
                     :src="imgMascota.length > 0 ? imgMascota[index] : 'favicon.ico'"
@@ -32,11 +38,15 @@
                   />
                 </div>
               </q-card-section>
-      </q-card>
-      <q-card class="q-pa-md shadow-up-4" style="border-radius:10px">
-        <div class="text-h6 q-ml-sm q-pt-xs">Descripción personal</div>
-        <q-input borderless v-model="form.personal_description" type="textarea" />
-      </q-card>
+          </q-card>
+          <q-card class="q-pa-md" style="border-radius:10px">
+            <div class="text-h6 q-ml-sm q-pt-xs">Descripción personal</div>
+            <q-input borderless v-model="form.personal_description" type="textarea" />
+          </q-card>
+        </div>
+      </div>
+    </div>
+   <div class="column q-my-md">
       <div class="row justify-center q-pa-sm">
         <q-btn color="primary" :label="edit ? 'Actualizar Mascota' : 'Crear Mascota'" @click="!edit ? agregar() : actualizarMascota()"/>
       </div>
@@ -82,7 +92,7 @@ export default {
       this.$api.get('mascota/' + this.id).then(res => {
         if (res) {
           this.form = res
-          this.categoria_id = this.form.categoria_id
+          // this.categoria_id = this.form.categoria_id
           this.imgsTraidas()
           /* for (let i = 0; i < this.categorias.length; i++) {
             if (this.categorias[i]._id === this.form.categoria_id) {
@@ -153,7 +163,7 @@ export default {
     async actualizarMascota () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
-        this.form.categoria_id = this.categoria_id
+        // this.form.categoria_id = this.categoria_id
         this.$q.loading.show({
           message: 'Actualizando Mascota, Por Favor Espere...'
         })
@@ -185,15 +195,18 @@ export default {
 .color-select {
   background-color: #fff599
 }
-.respon {
-  /* height: 100%;
+/* .respon {
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center; */
+  align-items: center;
   max-width: 600px;
   min-width: 300px;
-  /* margin: auto; */
-  /* position: relative; */
+  margin: auto;
+  position: relative;
+} */
+.dimension {
+  min-width: 200px;
 }
 </style>

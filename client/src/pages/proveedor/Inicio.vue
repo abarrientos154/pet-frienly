@@ -60,16 +60,17 @@
           style="height: 290px; width:100%"
         >
         <div class="row no-wrap" style="width: 100%">
-          <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 160px" :key="index2">
+          <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 180px" :key="index2">
             <q-img :src="item2.images.length > 0 ? baseu2 + item2.images[0] : 'noimgpro.png'" spinner-color="white"> </q-img>
-            <q-card-section class="bg-grey" style="width: 160px;height: 160px">
+            <q-card-section class="bg-grey" style="width: 180px;height: 160px">
                 <div class="colum">
                     <div class="text-h6 text-grey-9 text-bold">{{item2.name}}</div>
-                    <div class="text-h7 text-grey-9 text-bold">{{item2.datos_proveedor.name}}</div>
+                    <div class="text-h7 text-grey-9 text-bold">Proveedor: {{item2.datos_proveedor.name}}</div>
+                    <div class="text-h7 text-grey-9 text-bold">Precio: ${{item2.precio}}</div>
                     <div class="q-gutter-y-md row">
                     <q-rating class="q-mb-xl" v-model="item2.rating" max="5" size="1.5em" color="yellow" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
                     </div>
-                      <q-btn round color="white" class="absolute-bottom-right text-red" icon="keyboard_arrow_right" />
+                      <q-btn round color="white" class="q-mb-sm q-mr-sm absolute-bottom-right text-red" icon="keyboard_arrow_right" @click="$router.push('/descripcion_producto/' + item2._id)"/>
                   </div>
             </q-card-section>
         </q-card>
@@ -106,22 +107,30 @@
       </q-card>
       <div class="q-pa-sm q-mt-md text-h5 text-black">Alojamientos</div>
       <div class="q-pa-sm text-h6 text-black">Alojamientos mejor calificados</div>
-      <q-card class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white" style="height: 350px; width: 100%" >
+      <q-scroll-area
+        horizontal
+        style="height: 400px; width:100%"
+      >
+        <div class="row no-wrap" style="width: 100%">
+          <q-card v-for="(hospedaje, index) in hospedajes" :key="index" class="q-mb-md col-3 q-mx-sm shadow-11" style="border-radius: 12px; min-width: 209px;">
+            <q-img :src="hospedaje.images[0] ? urlHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" spinner-color="white" style="height: 250px; width: 100%" >
               <q-btn round color="primary" class="absolute-top-left text-white" icon="favorite" />
             </q-img>
             <q-list>
-        <q-item>
-          <q-item-section>
-            <div class="text-h6 text-grey-9 text-bold">Nombre alojamiento</div>
-            <div class="text-h7 text-grey-9 text-bold">{{form.place}}</div>
-          </q-item-section>
-          <q-item-section class="q-pt-xl" side top>
-            <q-btn color="primary" icon="attach_money" label="Boton" />
-          </q-item-section>
-        </q-item>
-      </q-list>
-        </q-card>
+              <q-item>
+                <q-item-section>
+                  <div class="text-h5 text-grey-9 text-bold">{{hospedaje.name}}</div>
+                  <div class="text-h6 text-grey-9 text-bold">Tipo de Mascotas</div>
+                  <div class="text-h7 text-grey-9 text-bold">{{hospedaje.pet_type}}</div>
+                </q-item-section>
+                <q-item-section class="q-pt-xl" side top>
+                  <q-btn color="primary" label="Ver" @click="$router.push('/descripcion_hospedaje/' + hospedaje._id)" />
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card>
+        </div>
+    </q-scroll-area>
   </q-page>
   </div>
 </template>
@@ -174,14 +183,18 @@ export default {
       slide: 0,
       ratingModel: 3,
       baseu: '',
-      baseu2: ''
+      baseu2: '',
+      hospedajes: [],
+      urlHospedaje: ''
     }
   },
   mounted () {
     this.getUser()
-    this.baseu = env.apiUrl + '/perfil_img/'
-    this.baseu2 = env.apiUrl + '/productos_img/'
+    this.baseu = env.apiUrl + 'perfil_img/'
+    this.baseu2 = env.apiUrl + 'productos_img/'
+    this.urlHospedaje = env.apiUrl + 'hospedajes_img'
     this.obtener_productos()
+    this.obtener_hospedajes()
   },
   methods: {
     getUser () {
@@ -198,6 +211,14 @@ export default {
         if (res) {
           this.productos2 = res
           console.log(this.productos2, 'los productos')
+        }
+      })
+    },
+    obtener_hospedajes () {
+      this.$api.get('hospedaje').then(res => {
+        if (res) {
+          this.hospedajes = res
+          console.log(this.hospedajes)
         }
       })
     }

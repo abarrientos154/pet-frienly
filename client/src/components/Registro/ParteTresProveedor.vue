@@ -79,35 +79,19 @@
               </template>
             </q-input>
           </div>
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-          <div class="q-pl-lg text-black text-caption"> servicios de la Tienda</div>
-          <q-select
-            outlined
-            filled
-            v-model="servicios"
-            :options="options"
-            label="Selecciona las servicios"
-            multiple
-            emit-value
-            map-options
-            error-message="Ingrese las servicios de la empresa"
-            :error="$v.servicios.$error" @blur="$v.servicios.$touch()"
-        >
-          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-            <q-item
-              v-bind="itemProps"
-              v-on="itemEvents"
-            >
-              <q-item-section>
-                <q-item-label v-html="opt.label" ></q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-checkbox :value="selected" @input="toggleOption(opt)" />
-              </q-item-section>
-            </q-item>
-          </template>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
+        <div class="q-pl-lg text-black text-caption"> País</div>
+        <q-select outlined dense filled v-model="selectPais" :options="paises" option-value="ciudades" option-label="pais" emit-value map-options>
           <template v-slot:before>
-            <q-icon name="design_services" color="primary" />
+            <q-icon name="public" color="primary" />
+          </template>
+        </q-select>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
+        <div class="q-pl-lg text-black text-caption"> Ciudad</div>
+        <q-select outlined dense filled v-model="form.ciudad_id" :options="selectPais" option-value="_id" option-label="ciudad" emit-value map-options>
+          <template v-slot:before>
+            <q-icon name="location_city" color="primary" />
           </template>
         </q-select>
       </div>
@@ -174,7 +158,9 @@ export default {
       show: false,
       terminos: false,
       aparecer: false,
-      mostrar: false
+      mostrar: false,
+      paises: [],
+      selectPais: []
     }
   },
   validations () {
@@ -182,7 +168,8 @@ export default {
       form: {
         dni: { required },
         name: { required },
-        ubicacion: { required },
+        pais_id: { required },
+        ciudad_id: { required },
         email: { required, email }
       },
       perfilFile: { required },
@@ -192,6 +179,7 @@ export default {
     }
   },
   mounted () {
+    this.getPaises()
     this.baseu = env.apiUrl
   },
   methods: {
@@ -211,11 +199,9 @@ export default {
     },
     async registrarse () {
       this.$v.$touch()
-      this.$v.servicios.$touch()
-      this.form.servicios = this.servicios
-      console.log(this.servicios, 'servicios')
-      console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos, this.$v.servicios.$error, 'verificaaaaaaaaa')
-      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos && !this.$v.servicios.$error) {
+      this.form.pais_id = this.selectPais[0].pais_id
+      console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos)
+      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos) {
         this.form.password = this.password
         this.form.cantidadArchivos = this.tiendaFiles.length
         console.log(this.form, 'form')
@@ -272,6 +258,17 @@ export default {
           // this.loading = false
         }
         this.$q.loading.hide()
+      })
+    },
+    savePais (pais) {
+      console.log(pais)
+      this.form.pais = pais
+    },
+    getPaises () {
+      this.$api.get('pais').then(res => {
+        if (res) {
+          this.paises = res
+        }
       })
     }
   }

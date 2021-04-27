@@ -11,34 +11,39 @@ const routes = [
       { path: '/proveedores_pendientes', component: () => import('pages/admin/Pendientes.vue') },
       { path: '/descripcionusuario/:id', component: () => import('pages/admin/DescripcionUsuario.vue') },
       // Proveedor
-      { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue'), meta: { botonchat: true } },
-      { path: '/productos', component: () => import('pages/proveedor/Productos.vue'), meta: { botonchat: true } },
-      { path: '/registroproductos', component: () => import('pages/proveedor/RegistroProductos.vue'), meta: { botonchat: false } },
-      { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue'), meta: { botonchat: false } },
-      { path: '/hospedaje', component: () => import('pages/proveedor/Hospedaje.vue'), meta: { botonchat: true } },
-      { path: '/registrohospedaje', component: () => import('pages/proveedor/RegistroHospedaje.vue'), meta: { botonchat: false } },
-      { path: '/editar_hospedaje/:id', component: () => import('pages/proveedor/RegistroHospedaje.vue'), meta: { botonchat: false } },
+      { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
+      { path: '/productos', component: () => import('pages/proveedor/Productos.vue') },
+      { path: '/registroproductos', component: () => import('pages/proveedor/RegistroProductos.vue') },
+      { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
+      { path: '/descripcion_producto/:id', component: () => import('pages/proveedor/DescripcionProducto.vue') },
+      { path: '/hospedajes', component: () => import('pages/proveedor/Hospedaje.vue') },
+      { path: '/registrohospedaje', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
+      { path: '/editar_hospedaje/:id', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
+      { path: '/descripcion_hospedaje/:id', component: () => import('pages/proveedor/DescripcionHospedaje.vue') },
       // Cliente
-      { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue'), meta: { botonchat: true } },
-      { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue'), meta: { botonchat: true } },
-      { path: '/registromascota', component: () => import('pages/cliente/RegistroMascota.vue'), meta: { botonchat: false } },
-      { path: '/edit_mascota/:id', component: () => import('pages/cliente/RegistroMascota.vue'), meta: { botonchat: false } },
-      { path: '/descripcionmascota/:id', component: () => import('pages/cliente/DescripcionMascota.vue'), meta: { botonchat: false } },
-      { path: '/descripcionalojamiento', component: () => import('pages/cliente/VerAlojamiento.vue'), meta: { botonchat: false } },
+      { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue') },
+      { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue') },
+      { path: '/registromascota', component: () => import('pages/cliente/RegistroMascota.vue') },
+      { path: '/edit_mascota/:id', component: () => import('pages/cliente/RegistroMascota.vue') },
+      { path: '/descripcionmascota/:id', component: () => import('pages/cliente/DescripcionMascota.vue') },
+      { path: '/descripcionalojamiento/:id', component: () => import('pages/cliente/VerAlojamiento.vue') },
+      { path: '/tienda/:id', component: () => import('pages/cliente/Tienda.vue') },
+      { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
+      { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       // Generales
-      { path: '/Datos', component: () => import('pages/Datauser.vue'), meta: { botonchat: true } },
-      { path: '/Datosedit', component: () => import('pages/Userdata.vue'), meta: { botonchat: false } }
+      { path: '/Datos', component: () => import('pages/Datauser.vue') },
+      { path: '/Datosedit', component: () => import('pages/Userdata.vue') }
     ]
   },
   { path: '/login', component: () => import('pages/Login.vue') },
   { path: '/registro', component: () => import('pages/Registro.vue') },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/inicio_cliente'
   },
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/inicio_cliente'
   },
 
   // Always leave this as last one,
