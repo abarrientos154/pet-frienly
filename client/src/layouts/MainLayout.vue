@@ -1,11 +1,14 @@
 <template>
   <q-layout view="lHh Lpr lFf">
 
-    <q-header elevated>
+    <q-header>
       <q-toolbar class="bg-white row justify-between">
         <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/>
         <div class="text-black">{{page}}</div>
-        <q-btn flat dense :icon="rol != 1 ? 'person' : ''" class="bg-secondary" @click="rol !== 1 ? $router.push('/Datos') : ''"/>
+        <div>
+          <q-avatar rounded v-if="rol != 1" class="bg-secondary" icon="person" style="border-radius: 10px"></q-avatar>
+          <!-- <q-btn flat dense v-if="rol != 1" :icon="rol != 1 ? 'person' : ''" class="bg-secondary" @click="rol !== 1 ? $router.push('/Datos') : ''"/> -->
+        </div>
       </q-toolbar>
     </q-header>
 
@@ -33,11 +36,6 @@
 
     <q-page-container>
       <router-view />
-      <q-page-sticky position="bottom-right" :offset="[18, 18]">
-        <q-btn v-if="rol != 1 && 3 && null" round icon="shopping_bag" color="primary" size="20px">
-          <q-badge color="red" label="2" floating/>
-        </q-btn>
-      </q-page-sticky>
     </q-page-container>
 
   </q-layout>
@@ -53,7 +51,7 @@ export default {
       rol: null,
       drawer: false,
       menu: [],
-      page: '',
+      page: 'Inicio',
       admin: [
         {
           icon: 'home',

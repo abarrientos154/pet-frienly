@@ -1,26 +1,23 @@
 <template>
   <div style="max-width: 100%">
-    <div class="q-mt-md q-mx-sm text-h6">Bienvenido Usuario</div>
+    <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
     <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">El amor es una palabra de cuatro patas</div>
-    <div class="row">
-      <q-input outlined type="text" class="q-mb-xs q-mx-sm shadow-6" label="Que necesitas?" dense style="width: auto border-radius: 20px">
+    <div class="row q-mx-sm q-mb-sm">
+      <q-input dense class="shadow-4 col q-mr-sm" standout="bg-primary text-white" type="text" label="Que necesitas?" style="border-radius: 10px">
         <template v-slot:prepend>
           <q-icon name="search"/>
         </template>
       </q-input>
       <q-btn dense flat icon="apartment" color="primary" @click="$router.push('/buscar_hospedaje')"/>
     </div>
-    <div class="q-mb-md q-mx-sm text-h6">Catalogo de productos</div>
-    <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">
+    <div class="q-mb-md q-mx-sm text-h5">Catalogo de productos</div>
+    <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
       <q-tabs v-model="tabCat" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab label="Categoria" />
-        <q-tab label="Categoria" />
-        <q-tab label="Categoria" />
-        <q-tab label="Categoria" />
+        <q-tab v-for="index in 10" :key="index" label="Categoria" no-caps/>
       </q-tabs>
     </q-scroll-area>
     <div class="q-mb-xs q-mx-sm">Ultimos Productos agregados</div>
-    <q-scroll-area horizontal class="q-mx-sm q-mb-md" style="height: 330px;">
+    <q-scroll-area horizontal class="q-mx-sm q-mb-md" :thumb-style="thumbStyle" style="height: 330px;" ref="first">
       <div class="row no-wrap" style="width: 100%">
         <q-card class="q-mt-sm q-mx-sm bordes shadow-11" v-for="(item, index) in productos" :key="index" v-ripple style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
@@ -34,9 +31,7 @@
               </q-scroll-area>
               <div class="items-center row text-grey">
                 <q-icon class="col-1" name="place" />
-                <q-scroll-area class="col" style="height: 20px; width:100%">
-                  <div class="text-subtitle2" style="font-size: 12px">{{item.datos_proveedor.place}}</div>
-                </q-scroll-area>
+                <div class="text-subtitle2 col" style="font-size: 12px">{{item.datos_proveedor.place}}</div>
               </div>
             </div>
             <div class="items-center row justify-between">
@@ -49,19 +44,14 @@
         </q-card>
       </div>
     </q-scroll-area>
-    <div class="q-mb-md q-mx-sm text-h6">Nuestras tiendas</div>
-    <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">
+    <div class="q-mb-md q-mx-sm text-h5">Nuestras tiendas</div>
+    <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
       <q-tabs v-model="tabSer" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab label="Servicio" />
-        <q-tab label="Servicio" />
-        <q-tab label="Servicio" />
-        <q-tab label="Servicio" />
-        <q-tab label="Servicio" />
-        <q-tab label="Servicio" />
+        <q-tab v-for="index in 10" :key="index" label="Servicio" no-caps/>
       </q-tabs>
     </q-scroll-area>
     <div class="q-mb-xs q-mx-sm">Tiendas mejores calificadas</div>
-    <q-scroll-area horizontal class="q-mx-sm q-mb-md" style="height: 330px;">
+    <q-scroll-area horizontal class="q-mx-sm q-mb-md" :thumb-style="thumbStyle" style="height: 330px;" ref="first">
       <div class="row no-wrap" style="width: 100%">
         <q-card class="q-mt-sm q-mx-sm bordes shadow-11" v-for="(item, index) in tiendas" :key="index" v-ripple style="width: 200px; height: 300px;">
           <q-card-section style="height: 65%;">
@@ -75,9 +65,7 @@
               </q-scroll-area>
               <div class="items-center row text-grey">
                 <q-icon class="col-1" name="place" />
-                <q-scroll-area class="col" style="height: 20px; width:100%">
-                  <div class="text-subtitle2" style="font-size: 12px">{{item.paisUser.pais}}, {{item.ciudadUser.ciudad}}</div>
-                </q-scroll-area>
+                <div class="text-subtitle2 col" style="font-size: 12px">{{item.paisUser.pais}}, {{item.ciudadUser.ciudad}}</div>
               </div>
             </div>
             <div class="items-center row justify-between">
@@ -90,15 +78,13 @@
         </q-card>
       </div>
     </q-scroll-area>
-    <div class="q-mx-sm text-h6">Alojamientos</div>
+    <div class="q-mx-sm text-h5">Alojamientos</div>
     <div class="q-mb-md q-mx-sm">Alojamientos mejor catificados</div>
     <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
       <q-card v-for="(hospedaje, index) in hospedajes" :key="index" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
         <q-img @click="seeAccommodation(hospedaje._id)" :src="hospedaje.images[0] ? urlHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" style="height: 175px;">
           <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
         </q-img>
-        <!-- <q-card-section class="bg-secondary" style="height: 175px;">
-        </q-card-section> -->
         <q-separator />
         <q-card-section class="row justify-between">
           <div>
@@ -108,7 +94,7 @@
                 <div class="text-subtitle2" style="font-size: 12px">{{hospedaje.datos_proveedor.place}}</div>
             </div>
           </div>
-          <q-btn flat dense class="bg-primary text-white" style="width: 100px">${{hospedaje.price}} / noche</q-btn>
+          <q-btn no-caps flat dense class="bg-primary text-white" style="width: 100px; border-radius: 10px">${{hospedaje.price}} / noche</q-btn>
         </q-card-section>
       </q-card>
     </q-list>
@@ -125,6 +111,11 @@
         </template>
       </q-input>
     </div>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn round icon="shopping_bag" color="primary" size="20px">
+        <q-badge color="red" label="2" floating/>
+      </q-btn>
+    </q-page-sticky>
   </div>
 </template>
 
@@ -143,7 +134,12 @@ export default {
       tiendas: [],
       productos: [],
       hospedajes: [],
-      urlHospedaje: ''
+      urlHospedaje: '',
+      thumbStyle: {
+        borderRadius: '5px',
+        backgroundColor: 'gray',
+        opacity: 0.25
+      }
     }
   },
   mounted () {
