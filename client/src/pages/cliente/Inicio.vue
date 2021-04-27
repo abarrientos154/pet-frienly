@@ -8,7 +8,7 @@
           <q-icon name="search"/>
         </template>
       </q-input>
-      <q-btn dense flat icon="search" color="primary" @click="$router.push('/buscar_hospedaje')">alojamientos</q-btn>
+      <q-btn dense flat icon="apartment" color="primary" @click="$router.push('/buscar_hospedaje')"/>
     </div>
     <div class="q-mb-md q-mx-sm text-h6">Catalogo de productos</div>
     <q-scroll-area horizontal class="q-mb-md" style="height: 48px;">

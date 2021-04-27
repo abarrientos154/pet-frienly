@@ -5,7 +5,7 @@
           <div class="row">
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
               <div class="q-mb-sm text-black">Ciudad</div>
-              <q-select dense filled label="Pais, Region, Ciudad, Dirección">
+              <q-select dense filled v-model="form.ciudad_id" :options="ciudades" option-value="_id" option-label="ciudad" emit-value map-options>
                 <template v-slot:prepend>
                   <q-icon color="primary" name="location_on" />
                 </template>
@@ -13,54 +13,101 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
               <div class="q-mb-sm text-black">Fecha</div>
-              <q-select dense filled label="">
+              <q-input dense filled @click="ingresarFecha()" v-model="form.fecha">
                 <template v-slot:prepend>
                   <q-icon color="primary" name="calendar_today" />
                 </template>
-              </q-select>
+              </q-input>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
               <div class="q-mb-sm text-black">Cantidad de mascotas</div>
-              <q-select dense filled label="">
+              <q-input filled v-model.number="form.pet_num" type="number" dense lazy-rules :rules="[ val => val > 0 && val <= 20 ]">
                 <template v-slot:prepend>
                   <q-icon color="primary" name="person" />
                 </template>
-              </q-select>
+              </q-input>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
               <div class="q-mb-sm text-black">Tipo de habitacion</div>
-              <q-select dense filled label="">
+              <q-select dense filled v-model="form.habt_type" :options="tiposHabt" option-value="name" option-label="name" emit-value map-options>
                 <template v-slot:prepend>
                   <q-icon color="primary" name="star" />
                 </template>
               </q-select>
             </div>
           </div>
-          <q-btn dense class="q-mb-sm bg-primary text-white" style="width: 100%">Buscar</q-btn>
+          <q-btn dense class="q-mb-sm bg-primary text-white" style="width: 100%" @click="buscar()">Buscar</q-btn>
           <div class="full-width q-mb-xl">
-            <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
+            <mapa :center="center"/>
           </div>
         </q-card>
+
+      <q-dialog v-model="fch">
+        <q-card>
+          <div class="q-pa-md">
+            <q-date v-model="fecha" range />
+          </div>
+
+          <q-card-actions align="right">
+            <q-btn flat label="Cancel" color="primary" v-close-popup />
+            <q-btn flat label="OK" color="primary" @click="agregarFecha()" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
 </template>
 
 <script>
-import GoogleMap from '../../components/GoogleMap.vue'
+import Mapa from '../../components/Mapa.vue'
 export default {
   components: {
-    GoogleMap
+    Mapa
   },
   data () {
     return {
-      center: { lat: -33.4504117, lng: -70.6707553 }
+      center: { lat: -33.4504117, lng: -70.6707553 },
+      form: {},
+      fecha: { from: '2020/07/08', to: '2020/07/17' },
+      fch: false,
+      ciudades: [],
+      tiposHabt: [],
+      hospedajes: []
     }
   },
+  mounted () {
+    this.getCiudades()
+    this.getTiposHabt()
+  },
   methods: {
-    handleNewPlace (place, coordinates) {
-      console.log('handleNewPlace', coordinates, place)
+    buscar () {
+      console.log(this.form)
+      this.$api.post('hospedaje_filtrado', this.form).then(res => {
+        if (res) {
+          this.hospedajes = res
+          console.log(this.hospedajes)
+        }
+      })
     },
-    getBounds (bounds, center) {
-      console.log(center, 'center')
+    getCiudades () {
+      this.$api.get('ciudades').then(res => {
+        if (res) {
+          this.ciudades = res
+        }
+      })
+    },
+    getTiposHabt () {
+      this.$api.get('habitacion_type').then(res => {
+        if (res) {
+          this.tiposHabt = res
+        }
+      })
+    },
+    ingresarFecha () {
+      this.fch = true
+    },
+    agregarFecha () {
+      this.form.fecha = this.fecha.from + ' - ' + this.fecha.to
+      console.log(this.form.fecha)
     }
   }
 }

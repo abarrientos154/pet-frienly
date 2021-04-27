@@ -40,6 +40,14 @@
                 </q-input>
                 <q-input filled v-model="form.pet_type"  label="Tipo de Mascotas" dense :error="$v.form.pet_type.$error" error-message="Este campo es requerido"  @blur="$v.form.pet_type.$touch()">
                 </q-input>
+                <q-input filled v-model.number="form.pet_num" type="number" label="Cantidad de Mascotas" dense :error="$v.form.pet_num.$error" error-message="Este campo es requerido"  @blur="$v.form.pet_num.$touch()" lazy-rules :rules="[ val => val > 0 && val <= 1000 ]"/>
+                <q-list dense bordered padding v-if="edit == false" class="rounded-borders q-mb-lg">
+                  <q-item clickable v-ripple v-for="(item, index) in tiposHabt" :key="index" >
+                    <q-item-section>
+                      <q-checkbox v-model="tiposHabt[index].status" @input="selecTiposHabt(item)" :label="item.name" />
+                    </q-item-section>
+                  </q-item>
+                </q-list>
               </div>
             </div>
           </q-card-section>
@@ -58,6 +66,7 @@ import env from '../../env'
 export default {
   data () {
     return {
+      user: {},
       imgHospedaje: [],
       mostrarImg: 'noimgpro.png',
       id: '',
@@ -67,6 +76,9 @@ export default {
       form: {},
       file: null,
       imgPro: null,
+      tiposHabt: [],
+      tipos_selec: [],
+      posicion: 0,
       botones: [
         {
           file: null,
@@ -102,8 +114,8 @@ export default {
       description: { required },
       price: { required, minLength: minLength(1) },
       dimensions: { required },
-      pet_type: { required }
-
+      pet_type: { required },
+      pet_num: { required }
     },
     file: { required }
   },
@@ -123,7 +135,8 @@ export default {
         console.log(error)
       })
     }
-    console.log(this.botones)
+    this.getTiposHabt()
+    this.getUser()
   },
   methods: {
     async convertImg (img) {
@@ -203,6 +216,7 @@ export default {
     async agregar () {
       console.log('guardar')
       this.$v.$touch()
+      this.form.ciudad_id = this.user.ciudad_id
       if (!this.$v.form.$error) {
         console.log('sin fallo')
         this.$q.loading.show({
@@ -278,6 +292,26 @@ export default {
           // this.$router.push('/hospedajes')
         })
       }
+    },
+    getTiposHabt () {
+      this.$api.get('habitacion_type').then(res => {
+        if (res) {
+          this.tiposHabt = res
+        }
+      })
+    },
+    getUser () {
+      this.$api.get('user_info').then(v => {
+        if (v) {
+          this.user = v
+          console.log(this.user)
+        }
+      })
+    },
+    selecTiposHabt (itm) {
+      this.tipos_selec = this.tiposHabt.filter(v => v.status)
+      this.form.habt_types = this.tipos_selec
+      console.log(this.tipos_selec)
     }
   }
 }

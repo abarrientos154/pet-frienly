@@ -40,6 +40,8 @@ addPrefixToGroup(
     Route.post("register", "UserController.register")
     Route.post("register_proveedor", "UserController.registerProveedor")
     Route.get("pais", "PaisController.index")
+    Route.get("ciudades", "CiudadController.index")
+    Route.get("habitacion_type", "HabitacionController.index")
     Route.get("validate_email/:email", "UserController.validateEmail")
 
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
@@ -86,7 +88,7 @@ addPrefixToGroup(
     Route.put('hospedaje/:id', 'HospedajeController.update')
     Route.get('hospedaje_by_proveedor/:proveedor_id', 'HospedajeController.hospedajeByProveedor')
     Route.delete('hospedaje/:id', 'HospedajeController.destroy')
-    Route.get('hospedaje_filtrado/:filtrar', 'HospedajeController.hospedajeFiltrado')
+    Route.post('hospedaje_filtrado', 'HospedajeController.hospedajeFiltrado')
 
   }).middleware("auth")
 );

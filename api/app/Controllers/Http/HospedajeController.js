@@ -91,9 +91,76 @@ class HospedajeController {
   }
 
   async hospedajeFiltrado ({ params, request, response, view }) {
-    let datos = (await Hospedaje.query().where('categoria_id', params.filtrar).with('datos_proveedor').fetch()).toJSON()
-    let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
-    response.send(filter)
+    let filtrar = request.all()
+    console.log(filtrar)
+    if (filtrar.ciudad_id && filtrar.pet_num && filtrar.habt_type) {
+      let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
+      let filter = datos.filter(v => {
+        for (let i of v.habt_types) {
+          if (i.name === filtrar.habt_type) {
+            return v
+          }
+        }
+      })
+      console.log('1')
+      response.send(filter)
+    }
+    else if (filtrar.ciudad_id && filtrar.pet_num) {
+      let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
+      console.log('2')
+      response.send(datos)
+    }
+    else if (filtrar.pet_num && filtrar.habt_type) {
+      let datos = (await Hospedaje.query().where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
+      let filter = datos.filter(v => {
+        for (let i of v.habt_types) {
+          if (i.name === filtrar.habt_type) {
+            return v
+          }
+        }
+      })
+      console.log('3')
+      response.send(filter)
+    }
+    else if (filtrar.ciudad_id && filtrar.habt_type) {
+      let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).with('datos_proveedor').fetch()).toJSON()
+      let filter = datos.filter(v => {
+        for (let i of v.habt_types) {
+          if (i.name === filtrar.habt_type) {
+            return v
+          }
+        }
+      })
+      console.log('4')
+      response.send(filter)
+    }
+    else if (filtrar.ciudad_id) {
+      let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).with('datos_proveedor').fetch()).toJSON()
+      console.log('5')
+      response.send(datos)
+    }
+    else if (filtrar.pet_num) {
+      let datos = (await Hospedaje.query().where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
+      console.log('6')
+      response.send(datos)
+    }
+    else if (filtrar.habt_type) {
+      let datos = (await Hospedaje.query().where({}).with('datos_proveedor').fetch()).toJSON()
+      console.log(datos)
+      let filter = datos.filter(v => {
+        for (let i of v.habt_types) {
+          if (i.name === filtrar.habt_type) {
+            return v
+          }
+        }
+      })
+      console.log('7')
+      response.send(filter)
+    }
+    else if (filtrar.fecha) {
+      let datos = (await Hospedaje.query().where({}).with('datos_proveedor').fetch()).toJSON()
+      response.send(datos)
+    }
   }
 
   /**
