@@ -128,6 +128,29 @@ export default {
       perfilFile: null,
       tiendaFiles: [],
       imgTienda: [],
+      servicios: [],
+      options: [
+        {
+          label: 'paseo de mascota',
+          value: 1
+        },
+        {
+          label: 'corte de pelo',
+          value: 2
+        },
+        {
+          label: 'psicólogo',
+          value: 3
+        },
+        {
+          label: 'veterinario',
+          value: 4
+        },
+        {
+          label: 'alojamiento',
+          value: 5
+        }
+      ],
       imgPerfil: '',
       baseu: '',
       repeatPassword: '',
@@ -150,6 +173,7 @@ export default {
         email: { required, email }
       },
       perfilFile: { required },
+      servicios: { required },
       repeatPassword: { sameAsPassword: sameAs('password') },
       password: { required, maxLength: maxLength(256), minLength: minLength(6) }
     }
