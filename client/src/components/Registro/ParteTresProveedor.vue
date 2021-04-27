@@ -79,6 +79,38 @@
               </template>
             </q-input>
           </div>
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="q-pl-lg text-black text-caption"> servicios de la Tienda</div>
+          <q-select
+            outlined
+            filled
+            v-model="servicios"
+            :options="options"
+            label="Selecciona las servicios"
+            multiple
+            emit-value
+            map-options
+            error-message="Ingrese las servicios de la empresa"
+            :error="$v.servicios.$error" @blur="$v.servicios.$touch()"
+        >
+          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+            <q-item
+              v-bind="itemProps"
+              v-on="itemEvents"
+            >
+              <q-item-section>
+                <q-item-label v-html="opt.label" ></q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-checkbox :value="selected" @input="toggleOption(opt)" />
+              </q-item-section>
+            </q-item>
+          </template>
+          <template v-slot:before>
+            <q-icon name="design_services" color="primary" />
+          </template>
+        </q-select>
+      </div>
       <div class="full-width q-mb-xl">
         <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
       </div>
@@ -112,6 +144,29 @@ export default {
       perfilFile: null,
       tiendaFiles: [],
       imgTienda: [],
+      servicios: [],
+      options: [
+        {
+          label: 'paseo de mascota',
+          value: 1
+        },
+        {
+          label: 'corte de pelo',
+          value: 2
+        },
+        {
+          label: 'psicólogo',
+          value: 3
+        },
+        {
+          label: 'veterinario',
+          value: 4
+        },
+        {
+          label: 'alojamiento',
+          value: 5
+        }
+      ],
       imgPerfil: '',
       baseu: '',
       repeatPassword: '',
@@ -131,6 +186,7 @@ export default {
         email: { required, email }
       },
       perfilFile: { required },
+      servicios: { required },
       repeatPassword: { sameAsPassword: sameAs('password') },
       password: { required, maxLength: maxLength(256), minLength: minLength(6) }
     }
@@ -155,8 +211,11 @@ export default {
     },
     async registrarse () {
       this.$v.$touch()
-      console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos)
-      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos) {
+      this.$v.servicios.$touch()
+      this.form.servicios = this.servicios
+      console.log(this.servicios, 'servicios')
+      console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos, this.$v.servicios.$error, 'verificaaaaaaaaa')
+      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos && !this.$v.servicios.$error) {
         this.form.password = this.password
         this.form.cantidadArchivos = this.tiendaFiles.length
         console.log(this.form, 'form')

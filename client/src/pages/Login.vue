@@ -24,7 +24,7 @@
                   </q-input>
               </div>
               <div class="row justify-center">
-                <div class="text-h9 text-primary">¿Olvidaste tu contraseña?</div>
+                <div class="text-h9 text-primary" style="cursor:pointer">¿Olvidaste tu contraseña?</div>
               </div>
               <div class="col-xs-12 col-sm-6 q-ma-sm col-md-6 col-lg-6">
                 <q-btn
@@ -43,7 +43,7 @@
               <div class="row justify-center">
                 <div class="row">
                   <div class="text-black text-h9">Aun no tienes cuenta?</div>
-                  <div class="text-primary q-ml-sm text-bold text-h9" @click="$router.push('/registro')">Registrate.</div>
+                  <div class="text-primary q-ml-sm text-bold text-h9" style="cursor:pointer" @click="$router.push('/registro')">Registrate.</div>
                 </div>
                </div>
               <div class="colunm justify-center q-pa-sm">
