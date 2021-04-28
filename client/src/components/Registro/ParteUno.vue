@@ -1,27 +1,25 @@
 <template>
   <div>
-    <div class="text-h6 text-center text-grey-9" >¿Eres Un?</div>
-    <q-list>
-      <q-card
-        v-ripple
-        style="border-radius:10px;width:100%"
-        class="q-pa-sm q-mt-md q-mb-md shadow-11"
-        v-for="(item, index) in options_roles"
-        :key="index"
-        @click="onSubmit(item.value)" >
-        <q-item>
-          <q-item-section avatar>
-            <q-avatar :icon="item.icon" class="text-primary" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label class="text-primary text-h6">{{item.label}}</q-item-label>
-          </q-item-section>
-          <q-item-section side>
-            <q-icon name="arrow_right" color="primary" />
-          </q-item-section>
-        </q-item>
-      </q-card>
-    </q-list>
+  <q-carousel
+      animated
+      v-model="slide"
+      arrows
+      navigation
+      infinite
+    >
+
+      <q-carousel-slide v-for="(item, index) in options_roles" :key="index" :name="index+1" :img-src="item.image">
+       <q-carousel-control
+          position="bottom-left"
+          :offset="[110, 60]"
+        >
+          <q-btn color="grey" text-color="black" @click="onSubmit(item.value)" :label="item.label" style="width:110px"/>
+        </q-carousel-control>
+      </q-carousel-slide>
+       <template v-slot:control>
+
+      </template>
+    </q-carousel>
   </div>
 </template>
 
@@ -32,9 +30,10 @@ export default {
   data () {
     return {
       options_roles: [
-        { label: 'Proveedor', value: 3, icon: 'store' },
-        { label: 'Cliente', value: 2, icon: 'person' }
-      ]
+        { label: 'Proveedor', value: 3, icon: 'store', image: 'https://cdn.quasar.dev/img/parallax1.jpg' },
+        { label: 'Cliente', value: 2, icon: 'person', image: 'https://cdn.quasar.dev/img/quasar.jpg' }
+      ],
+      slide: 1
     }
   },
   methods: {

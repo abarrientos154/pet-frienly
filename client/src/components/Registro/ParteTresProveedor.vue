@@ -95,6 +95,41 @@
           </template>
         </q-select>
       </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+          <div class="q-pl-lg text-black text-caption"> servicios de la Tienda</div>
+          <q-select
+            outlined
+            filled
+            option-value="id"
+            option-label="name"
+            v-model="servicios2"
+            :options="servicios"
+            label="Selecciona las servicios"
+            multiple
+            emit-value
+            map-options
+            error-message="Ingrese las servicios de la empresa"
+            :error="$v.servicios2.$error" @blur="$v.servicios2.$touch()"
+        >
+          <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+            <q-item
+              v-bind="itemProps"
+              v-on="itemEvents"
+            >
+              <q-item-section>
+                <q-item-label v-html="opt.name" ></q-item-label>
+              </q-item-section>
+              <q-item-section side>
+                <q-checkbox :value="selected" @input="toggleOption(opt)" />
+              </q-item-section>
+            </q-item>
+          </template>
+          <template v-slot:before>
+            <q-icon name="design_services" color="primary" />
+          </template>
+          </q-select>
+      </div>
+
       <div class="full-width q-mb-xl">
         <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
       </div>
@@ -129,28 +164,7 @@ export default {
       tiendaFiles: [],
       imgTienda: [],
       servicios: [],
-      options: [
-        {
-          label: 'paseo de mascota',
-          value: 1
-        },
-        {
-          label: 'corte de pelo',
-          value: 2
-        },
-        {
-          label: 'psicólogo',
-          value: 3
-        },
-        {
-          label: 'veterinario',
-          value: 4
-        },
-        {
-          label: 'alojamiento',
-          value: 5
-        }
-      ],
+      servicios2: [],
       imgPerfil: '',
       baseu: '',
       repeatPassword: '',
@@ -173,13 +187,14 @@ export default {
         email: { required, email }
       },
       perfilFile: { required },
-      servicios: { required },
+      servicios2: { required },
       repeatPassword: { sameAsPassword: sameAs('password') },
       password: { required, maxLength: maxLength(256), minLength: minLength(6) }
     }
   },
   mounted () {
     this.getPaises()
+    this.obtenerDatos()
     this.baseu = env.apiUrl
   },
   methods: {
@@ -197,11 +212,21 @@ export default {
     test () {
       if (this.perfilFile) { this.imgPerfil = URL.createObjectURL(this.perfilFile) }
     },
+    obtenerDatos () {
+      this.$api.get('servicios').then(res => {
+        if (res) {
+          this.servicios = res
+          console.log(this.servicios, 'miraaaaaaaaaaaaaaaaa')
+        }
+      })
+    },
     async registrarse () {
       this.$v.$touch()
+      this.$v.servicios2.$touch()
+      this.form.servicios = this.servicios2
       this.form.pais_id = this.selectPais[0].pais_id
       console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos)
-      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos) {
+      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos && !this.$v.servicios2.$error) {
         this.form.password = this.password
         this.form.cantidadArchivos = this.tiendaFiles.length
         console.log(this.form, 'form')

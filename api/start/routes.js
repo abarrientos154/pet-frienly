@@ -36,6 +36,7 @@ const addPrefixToGroup = group => {
 addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas sin protección de autenticación aquí
+    Route.get("servicios", "ServicioController.index")
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
     Route.post("register_proveedor", "UserController.registerProveedor")
@@ -49,19 +50,19 @@ addPrefixToGroup(
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
-    
+
     Route.post("user_by_rol", "UserController.userByRol") // metodo para obtener usuarios segun el rol
     Route.get("user_by_id/:id", "UserController.userById") // metodo para obtener informacion del usuario por id del mismo
-    
+
     Route.get('producto', 'ProductoController.index')
     Route.get('producto/:id', 'ProductoController.show')
     Route.get('producto_by_proveedor/:proveedor_id', 'ProductoController.productoByProveedor')
-    
+
     Route.get('hospedaje', 'HospedajeController.index')
     Route.get('hospedaje/:id', 'HospedajeController.show')
   })
 );
-  
+
 addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas con protección de autenticación aquí

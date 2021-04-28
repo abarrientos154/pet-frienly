@@ -2,7 +2,7 @@
   <div>
   <q-page>
     <q-card class="row justify-center" style="width: 100%;height:100%">
-      <img :src="baseu + form._id" style="height: 400px; width: 100%;max-width:500px" />
+      <img :src="baseu + form._id" style="height: 400px; width: 100%;max-width:800px" />
     </q-card>
     <q-card class="my-card">
       <q-list>
@@ -28,16 +28,18 @@
       <q-card class="q-pa-sm full-width">
         <q-scroll-area
         horizontal
-        style="height: 90px; width:100%"
+        style="height: 100px; width: 100%;"
+        class="bg-grey-1 rounded-borders"
       >
         <div class="column items-center justify-center">
         <div class="row no-wrap" style="width: 100%">
-          <div v-ripple v-for="(item, index) in servicios" class="column items-center justify-center bg-white q-mt-xs q-mr-xl" style="border-radius:12px;width: 100px" :key="index">
-            <q-img :src="item.img" spinner-color="white" style="height: 60px; width: 70px">
-            </q-img>
-              <div class="column items-center justify-center">
-                <div class="text-caption text-bold">{{item.label}}</div>
-              </div>
+          <div v-ripple v-for="(item, index) in form.formatSer" class="q-mt-sm q-mr-sm q-ml-sm" style="border-radius:12px;width: 100px" :key="index">
+            <div class="column items-center justify-center">
+          <q-avatar square size="40px">
+            <img :src="item.icons">
+          </q-avatar>
+          <div class="text-caption text-center">{{item.name}}</div>
+        </div>
           </div>
         </div>
         </div>
@@ -57,7 +59,7 @@
       <q-card class="q-pa-sm full-width">
         <q-scroll-area
           horizontal
-          style="height: 290px; width:100%"
+          style="height: 310px; width:100%"
         >
         <div class="row no-wrap" style="width: 100%">
           <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 180px" :key="index2">
@@ -144,6 +146,7 @@ export default {
     return {
       form: {},
       text: '',
+      servicios2: [],
       lorem: '¡Descubre diferentes lugares, playas, hoteles y principales zonas turísticas en Mejillones para planificar de manera más organizada y divertida tu viaje! Consigue ofertas exclusivas, gestiona tus reservas y revisa la opinión de otros viajeros.',
       servicios: [
         {
@@ -190,9 +193,10 @@ export default {
   },
   mounted () {
     this.getUser()
-    this.baseu = env.apiUrl + 'perfil_img/'
-    this.baseu2 = env.apiUrl + 'productos_img/'
-    this.urlHospedaje = env.apiUrl + 'hospedajes_img'
+    this.obtenerDatos()
+    this.baseu = env.apiUrl + '/perfil_img/'
+    this.baseu2 = env.apiUrl + '/productos_img/'
+    this.urlHospedaje = env.apiUrl + '/hospedajes_img'
     this.obtener_productos()
     this.obtener_hospedajes()
   },
@@ -203,6 +207,14 @@ export default {
           this.rol = v.roles[0]
           this.form = v
           console.log(this.form, 'usuarioooooooo')
+        }
+      })
+    },
+    obtenerDatos () {
+      this.$api.get('servicios').then(res => {
+        if (res) {
+          this.servicios2 = res
+          console.log(this.servicios2, 'miraaaaaaaaaaaaaaaaa')
         }
       })
     },
