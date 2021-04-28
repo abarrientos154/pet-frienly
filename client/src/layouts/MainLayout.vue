@@ -7,7 +7,6 @@
         <div class="text-black">{{page}}</div>
         <div>
           <q-avatar rounded v-if="rol != 1" class="bg-secondary" icon="person" style="border-radius: 10px"></q-avatar>
-          <!-- <q-btn flat dense v-if="rol != 1" :icon="rol != 1 ? 'person' : ''" class="bg-secondary" @click="rol !== 1 ? $router.push('/Datos') : ''"/> -->
         </div>
       </q-toolbar>
     </q-header>

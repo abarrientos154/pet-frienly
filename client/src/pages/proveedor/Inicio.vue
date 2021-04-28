@@ -1,32 +1,44 @@
 <template>
   <div>
-  <q-page>
-    <q-card class="row justify-center" style="width: 100%;height:100%">
-      <img :src="baseu + form._id" style="height: 400px; width: 100%;max-width:500px" />
-    </q-card>
-    <q-card class="my-card">
-      <q-list>
-        <q-item>
-          <q-item-section>
-            <div class="text-h6 text-grey-9 text-bold">{{form.name}}</div>
-            <div class="text-h7 text-grey-9 text-bold">{{form.place}}</div>
-            <div class="q-gutter-y-md row">
-              <q-rating
-                v-model="ratingModel"
-                size="2em"
-                icon="star"
-              />
-            <div class="q-pa-sm text-h7 text-green-9 text-bold">{{"("}}{{this.ratingModel}}{{")"}}</div>
-            </div>
-          </q-item-section>
-          <q-item-section class="q-pt-xl" side top>
-            <q-btn color="primary" icon="send" label="Boton" />
-          </q-item-section>
-        </q-item>
-      </q-list>
-    </q-card>
-      <q-card class="q-pa-sm full-width">
-        <q-scroll-area
+    <div class="q-mb-md">
+      <q-carousel animated arrows navigation infinite class="img" v-model="carrusel">
+        <q-carousel-slide :name="0" :img-src="baseu + form._id" />
+        <q-carousel-slide v-for="(img, index) in form.tiendaFiles" :key="index" :name="index + 1" :img-src="baseuTienda + img" />
+      </q-carousel>
+
+      <div class="row items-center justify-between q-pa-md">
+        <div>
+          <div class="text-h5">{{form.name}}</div>
+          <div class="row text-grey">
+            <q-icon name="place" size="20px"/>
+            <div>{{form.place ? form.place : 'Pais, Ciudad'}}</div>
+          </div>
+          <div class="q-gutter-y-md row">
+            <q-rating
+              v-model="ratingModel"
+              size="20px"
+              icon="star"
+            />
+          <div class="q-pa-sm text-green-9 text-bold">{{"("}}{{this.ratingModel}}{{")"}}</div>
+          </div>
+        </div>
+        <q-btn color="primary" icon="send" label="Hablar" style="border-radius: 10px" no-caps/>
+      </div>
+    </div>
+
+    <!-- <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 100px" ref="first">
+      <q-tabs v-model="tabSer" dense class="text-grey-10" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
+        <q-tab v-for="(item, index) in servicios" :key="index" no-caps>
+          <q-img :src="item.img" spinner-color="white" style="height: 60px; width: 70px"/>
+          <div class="column items-center justify-center">
+            <div class="text-caption text-bold">{{item.label}}</div>
+          </div>
+        </q-tab>
+      </q-tabs>
+    </q-scroll-area> -->
+
+    <q-card class="q-pa-sm full-width">
+      <q-scroll-area
         horizontal
         style="height: 90px; width:100%"
       >
@@ -42,96 +54,89 @@
         </div>
         </div>
       </q-scroll-area>
-      </q-card>
-        <div class="q-pa-xs text-h7 text-black-9 text-bold">Nuestra tienda:</div>
-        <div class="q-pa-xs text-grey-8 ">
-        {{ lorem }}
-      </div>
-      <q-input borderless v-model="text" label="¿Que estas buscando?" class="bg-grey-2">
-          <template v-slot:prepend>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-      <div class="q-pa-sm text-h7 text-black-9 text-bold">Ultimos productos agregados:</div>
+    </q-card>
 
-      <q-card class="q-pa-sm full-width">
-        <q-scroll-area
-          horizontal
-          style="height: 290px; width:100%"
-        >
+    <div class="q-pa-sm q-mb-sm">
+      <div class="text-h6">Nuestra tienda</div>
+      <div class="text-grey-7 text-subtitle q-mb-sm">{{ lorem }}</div>
+      <q-input dense borderless class="shadow-4 q-mx-md q-mb-md" v-model="text" label="Que necesitas?" style="border-radius: 10px">
+        <template v-slot:prepend>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+      <div class="text-h6 q-mb-md">Ultimos productos agregados</div>
+      <q-scroll-area horizontal class="q-mb-sm" style="height: 330px; width:100%">
         <div class="row no-wrap" style="width: 100%">
-          <q-card v-ripple v-for="(item2, index2) in productos2" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 180px" :key="index2">
-            <q-img :src="item2.images.length > 0 ? baseu2 + item2.images[0] : 'noimgpro.png'" spinner-color="white"> </q-img>
-            <q-card-section class="bg-grey" style="width: 180px;height: 160px">
-                <div class="colum">
-                    <div class="text-h6 text-grey-9 text-bold">{{item2.name}}</div>
-                    <div class="text-h7 text-grey-9 text-bold">Proveedor: {{item2.datos_proveedor.name}}</div>
-                    <div class="text-h7 text-grey-9 text-bold">Precio: ${{item2.precio}}</div>
-                    <div class="q-gutter-y-md row">
-                    <q-rating class="q-mb-xl" v-model="item2.rating" max="5" size="1.5em" color="yellow" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
-                    </div>
-                      <q-btn round color="white" class="q-mb-sm q-mr-sm absolute-bottom-right text-red" icon="keyboard_arrow_right" @click="$router.push('/descripcion_producto/' + item2._id)"/>
-                  </div>
+          <q-card class="q-mt-sm q-mx-sm bordes shadow-11" v-for="(item, index) in productos" :key="index" v-ripple style="width: 200px; height: 300px;">
+            <q-card-section style="height: 65%;">
+              <q-img class="absolute-center" :src="item.images.length > 0 ? baseuproductos + item.images[0] : 'noimgpro.png'" style="width: 90%; height: 90%;"/>
             </q-card-section>
-        </q-card>
-        </div>
-      </q-scroll-area>
-      </q-card>
-      <div class="row">
-     <div class="q-pa-sm text-h7  text-black-9 text-bold">Todos nuestros productos:</div>
-     <div class="q-pl-md">
-      <q-btn class="" color="primary" icon="add" label="Producto" @click="$router.push('/registroproductos')" />
-      </div>
-      </div>
-      <q-card class="q-pa-sm full-width">
-        <q-scroll-area
-          horizontal
-          style="height: 280px; width:100%"
-        >
-        <div class="row no-wrap" style="width: 100%">
-          <q-card v-ripple v-for="(item2, index2) in productos" class="column items-center justify-center bg-white q-mt-xs q-mr-md" style="border-radius:12px;width: 160px" :key="index2">
-            <q-img src="https://cdn.quasar.dev/img/parallax2.jpg" spinner-color="white"> </q-img>
-            <q-card-section class="bg-grey" style="width: 160px">
-                <div class="colum">
-                    <div class="text-h6 text-grey-9 text-bold">{{item2.label}}</div>
-                    <div class="text-h7 text-grey-9 text-bold">{{item2.tienda}}</div>
-                    <div class="q-gutter-y-md row">
-                    <q-rating class="q-mb-xl" v-model="item2.rating" max="5" size="1.5em" color="yellow" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
-                    </div>
-                    <q-btn round color="white" class="absolute-bottom-right text-red" icon="keyboard_arrow_right" />
-                  </div>
+            <q-separator />
+            <q-card-section class="bg-orange-2" style="height: 35%;">
+              <div>
+                <q-scroll-area horizontal style="height: 23px; width:100%">
+                  <div class="text-subtitle2 text-weight-bolder" style="font-size: 13px">{{item.name}}</div>
+                </q-scroll-area>
+                <div class="items-center row text-grey">
+                  <q-icon class="col-1" name="place" />
+                  <div class="text-subtitle2 col" style="font-size: 12px">País, Ciudad</div>
+                </div>
+              </div>
+              <div class="items-center row justify-between">
+                <q-rating max="5" size="20px" v-model="rating" color="primary" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
+                <q-btn round @click="$router.push('/descripcion_producto/' + item._id)" icon="keyboard_arrow_right" text-color="primary" color="white" size="10px"/>
+              </div>
             </q-card-section>
-        </q-card>
-        </div>
-      </q-scroll-area>
-      </q-card>
-      <div class="q-pa-sm q-mt-md text-h5 text-black">Alojamientos</div>
-      <div class="q-pa-sm text-h6 text-black">Alojamientos mejor calificados</div>
-      <q-scroll-area
-        horizontal
-        style="height: 400px; width:100%"
-      >
-        <div class="row no-wrap" style="width: 100%">
-          <q-card v-for="(hospedaje, index) in hospedajes" :key="index" class="q-mb-md col-3 q-mx-sm shadow-11" style="border-radius: 12px; min-width: 209px;">
-            <q-img :src="hospedaje.images[0] ? urlHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" spinner-color="white" style="height: 250px; width: 100%" >
-              <q-btn round color="primary" class="absolute-top-left text-white" icon="favorite" />
-            </q-img>
-            <q-list>
-              <q-item>
-                <q-item-section>
-                  <div class="text-h5 text-grey-9 text-bold">{{hospedaje.name}}</div>
-                  <div class="text-h6 text-grey-9 text-bold">Tipo de Mascotas</div>
-                  <div class="text-h7 text-grey-9 text-bold">{{hospedaje.pet_type}}</div>
-                </q-item-section>
-                <q-item-section class="q-pt-xl" side top>
-                  <q-btn color="primary" label="Ver" @click="$router.push('/descripcion_hospedaje/' + hospedaje._id)" />
-                </q-item-section>
-              </q-item>
-            </q-list>
           </q-card>
         </div>
-    </q-scroll-area>
-  </q-page>
+      </q-scroll-area>
+      <div class="q-mb-md text-h6">Todos nuestros productos</div>
+      <q-scroll-area horizontal class="q-mb-sm" style="height: 330px; width:100%">
+        <div class="row no-wrap" style="width: 100%">
+          <q-card class="q-mt-sm q-mx-sm bordes shadow-11" v-for="(item, index) in productos" :key="index" v-ripple style="width: 200px; height: 300px;">
+            <q-card-section style="height: 65%;">
+              <q-img class="absolute-center" :src="item.images.length > 0 ? baseuproductos + item.images[0] : 'noimgpro.png'" style="width: 90%; height: 90%;"/>
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="bg-orange-2" style="height: 35%;">
+              <div>
+                <q-scroll-area horizontal style="height: 23px; width:100%">
+                  <div class="text-subtitle2 text-weight-bolder" style="font-size: 13px">{{item.name}}</div>
+                </q-scroll-area>
+                <div class="items-center row text-grey">
+                  <q-icon class="col-1" name="place" />
+                  <div class="text-subtitle2 col" style="font-size: 12px">País, Ciudad</div>
+                </div>
+              </div>
+              <div class="items-center row justify-between">
+                <q-rating max="5" size="20px" v-model="rating" color="primary" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
+                <q-btn round @click="$router.push('/descripcion_producto/' + item._id)" icon="keyboard_arrow_right" text-color="primary" color="white" size="10px"/>
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </q-scroll-area>
+      <div class="q-mb-sm text-h6">Alojamientos</div>
+      <div class="q-mb-md">Alojamientos mejor calificados</div>
+      <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
+        <q-card v-for="(hospedaje, index) in hospedajes" :key="index" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+          <q-img @click="seeAccommodation(hospedaje._id)" :src="hospedaje.images[0] ? baseuHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" style="height: 175px;">
+            <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
+          </q-img>
+          <q-separator />
+          <q-card-section class="row justify-between">
+            <div>
+              <div class="text-subtitle2" style="font-size: 13px">{{hospedaje.name}}</div>
+              <div class="items-center row text-grey">
+                  <q-icon name="place" />
+                  <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
+              </div>
+            </div>
+            <q-btn no-caps flat dense @click="$router.push('/descripcion_hospedaje/' + hospedaje._id)" class="bg-primary text-white" style="width: 100px; border-radius: 10px">${{hospedaje.price}} / noche</q-btn>
+          </q-card-section>
+        </q-card>
+      </q-list>
+    </div>
   </div>
 </template>
 
@@ -143,6 +148,7 @@ export default {
   data () {
     return {
       form: {},
+      carrusel: 0,
       text: '',
       lorem: '¡Descubre diferentes lugares, playas, hoteles y principales zonas turísticas en Mejillones para planificar de manera más organizada y divertida tu viaje! Consigue ofertas exclusivas, gestiona tus reservas y revisa la opinión de otros viajeros.',
       servicios: [
@@ -157,42 +163,43 @@ export default {
         {
           img: 'favicon.ico',
           label: 'Servicio'
-        }
-      ],
-      productos: [
-        {
-          img: 'favicon.ico',
-          label: 'Producto',
-          tienda: 'tienda',
-          rating: 3
         },
         {
           img: 'favicon.ico',
-          label: 'Producto',
-          tienda: 'tienda',
-          rating: 3
+          label: 'Servicio'
         },
         {
           img: 'favicon.ico',
-          label: 'Producto',
-          tienda: 'tienda',
-          rating: 3
+          label: 'Servicio'
+        },
+        {
+          img: 'favicon.ico',
+          label: 'Servicio'
         }
       ],
-      productos2: {},
+      tabSer: 'mails',
+      productos: [],
+      rating: 4,
       slide: 0,
       ratingModel: 3,
       baseu: '',
-      baseu2: '',
+      baseuTienda: '',
+      baseuproductos: '',
+      baseuHospedaje: '',
       hospedajes: [],
-      urlHospedaje: ''
+      thumbStyle: {
+        borderRadius: '5px',
+        backgroundColor: 'gray',
+        opacity: 0.25
+      }
     }
   },
   mounted () {
     this.getUser()
     this.baseu = env.apiUrl + 'perfil_img/'
-    this.baseu2 = env.apiUrl + 'productos_img/'
-    this.urlHospedaje = env.apiUrl + 'hospedajes_img'
+    this.baseuTienda = env.apiUrl + 'tienda_img/'
+    this.baseuproductos = env.apiUrl + 'productos_img/'
+    this.baseuHospedaje = env.apiUrl + 'hospedajes_img'
     this.obtener_productos()
     this.obtener_hospedajes()
   },
@@ -202,15 +209,15 @@ export default {
         if (v) {
           this.rol = v.roles[0]
           this.form = v
-          console.log(this.form, 'usuarioooooooo')
+          console.log(this.form, 'usuario')
         }
       })
     },
     obtener_productos () {
       this.$api.get('producto').then(res => {
         if (res) {
-          this.productos2 = res
-          console.log(this.productos2, 'los productos')
+          this.productos = res
+          // console.log(this.productos, 'los productos')
         }
       })
     },
@@ -218,7 +225,7 @@ export default {
       this.$api.get('hospedaje').then(res => {
         if (res) {
           this.hospedajes = res
-          console.log(this.hospedajes)
+          // console.log(this.hospedajes)
         }
       })
     }
@@ -227,6 +234,16 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-.my-card
+.img
   width: 100%
+  height: 350px
+  border-top-left-radius: 0px
+  border-top-right-radius: 0px
+  border-bottom-left-radius: 15px
+  border-bottom-right-radius: 15px
+.bordes
+  border-top-left-radius: 0px
+  border-top-right-radius: 30px
+  border-bottom-left-radius: 30px
+  border-bottom-right-radius: 30px
 </style>

@@ -3,9 +3,9 @@
     <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
     <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">El amor es una palabra de cuatro patas</div>
     <div class="row q-mx-sm q-mb-sm">
-      <q-input dense class="shadow-4 col q-mr-sm" standout="bg-primary text-white" type="text" label="Que necesitas?" style="border-radius: 10px">
+      <q-input dense borderless class="shadow-4 col q-mr-sm" type="text" label="Que necesitas?" style="border-radius: 10px">
         <template v-slot:prepend>
-          <q-icon name="search"/>
+          <q-icon name="search" />
         </template>
       </q-input>
       <q-btn dense flat icon="apartment" color="primary" @click="$router.push('/buscar_hospedaje')"/>
@@ -35,10 +35,8 @@
               </div>
             </div>
             <div class="items-center row justify-between">
-              <div class="row">
-                <q-icon size="20px" name="star" color="secondary" v-for="(i, index) in 5" :key="index"/>
-              </div>
-              <q-btn round icon="keyboard_arrow_right" text-color="primary" color="white" size="10px" @click="$router.push('/descripcionproducto/'+item._id)"/>
+              <q-rating max="5" size="20px" v-model="rating" color="primary" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
+              <q-btn round @click="$router.push('/descripcionproducto/' + item._id)" icon="keyboard_arrow_right" text-color="primary" color="white" size="10px"/>
             </div>
           </q-card-section>
         </q-card>
@@ -69,10 +67,8 @@
               </div>
             </div>
             <div class="items-center row justify-between">
-              <div class="row">
-                <q-icon size="20px" name="star" color="secondary" v-for="(i, index) in 5" :key="index"/>
-              </div>
-              <q-btn round icon="keyboard_arrow_right" text-color="primary" color="white" size="10px" @click="$router.push('/tienda/'+item._id)"/>
+              <q-rating max="5" size="20px" v-model="rating" color="primary" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
+              <q-btn round @click="$router.push('/tienda/' + item._id)" icon="keyboard_arrow_right" text-color="primary" color="white" size="10px"/>
             </div>
           </q-card-section>
         </q-card>
@@ -94,7 +90,7 @@
                 <div class="text-subtitle2" style="font-size: 12px">{{hospedaje.datos_proveedor.place}}</div>
             </div>
           </div>
-          <q-btn no-caps flat dense class="bg-primary text-white" style="width: 100px; border-radius: 10px">${{hospedaje.price}} / noche</q-btn>
+          <q-btn no-caps flat dense @click="$router.push('/descripcionalojamiento/' + hospedaje._id)" class="bg-primary text-white" style="width: 100px; border-radius: 10px">${{hospedaje.price}} / noche</q-btn>
         </q-card-section>
       </q-card>
     </q-list>
@@ -133,6 +129,7 @@ export default {
       tabSer: 'mails',
       tiendas: [],
       productos: [],
+      rating: 3,
       hospedajes: [],
       urlHospedaje: '',
       thumbStyle: {
