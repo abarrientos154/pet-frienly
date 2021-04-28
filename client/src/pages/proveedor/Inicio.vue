@@ -26,18 +26,18 @@
       </div>
     </div>
 
-    <!-- <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 100px" ref="first">
+    <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 100px" ref="first">
       <q-tabs v-model="tabSer" dense class="text-grey-10" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab v-for="(item, index) in servicios" :key="index" no-caps>
-          <q-img :src="item.img" spinner-color="white" style="height: 60px; width: 70px"/>
+        <q-tab v-for="(item, index) in form.formatSer" :key="index" no-caps>
+          <q-img :src="item.icons" spinner-color="white" style="height: 60px; width: 70px"/>
           <div class="column items-center justify-center">
-            <div class="text-caption text-bold">{{item.label}}</div>
+            <div class="text-caption text-bold">{{item.name}}</div>
           </div>
         </q-tab>
       </q-tabs>
-    </q-scroll-area> -->
+    </q-scroll-area>
 
-    <q-card class="q-pa-sm full-width">
+    <!-- <q-card class="q-pa-sm full-width">
       <q-scroll-area
         horizontal
         style="height: 100px; width: 100%;"
@@ -56,7 +56,7 @@
         </div>
         </div>
       </q-scroll-area>
-    </q-card>
+    </q-card> -->
 
     <div class="q-pa-sm q-mb-sm">
       <div class="text-h6">Nuestra tienda</div>
@@ -152,34 +152,8 @@ export default {
       form: {},
       carrusel: 0,
       text: '',
-      servicios2: [],
+      servicios: [],
       lorem: '¡Descubre diferentes lugares, playas, hoteles y principales zonas turísticas en Mejillones para planificar de manera más organizada y divertida tu viaje! Consigue ofertas exclusivas, gestiona tus reservas y revisa la opinión de otros viajeros.',
-      servicios: [
-        {
-          img: 'favicon.ico',
-          label: 'Servicio'
-        },
-        {
-          img: 'favicon.ico',
-          label: 'Servicio'
-        },
-        {
-          img: 'favicon.ico',
-          label: 'Servicio'
-        },
-        {
-          img: 'favicon.ico',
-          label: 'Servicio'
-        },
-        {
-          img: 'favicon.ico',
-          label: 'Servicio'
-        },
-        {
-          img: 'favicon.ico',
-          label: 'Servicio'
-        }
-      ],
       tabSer: 'mails',
       productos: [],
       rating: 4,
@@ -220,8 +194,8 @@ export default {
     obtenerDatos () {
       this.$api.get('servicios').then(res => {
         if (res) {
-          this.servicios2 = res
-          console.log(this.servicios2, 'miraaaaaaaaaaaaaaaaa')
+          this.servicios = res
+          console.log(this.servicios, 'miraaaaaaaaaaaaaaaaa')
         }
       })
     },
