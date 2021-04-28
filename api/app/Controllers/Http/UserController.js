@@ -5,6 +5,7 @@ const mkdirp = use('mkdirp')
 const fs = require('fs')
 var randomize = require('randomatic');
 const User = use("App/Models/User")
+const Servicio = use("App/Models/Servicio")
 const Role = use("App/Models/Role")
 const { validate } = use("Validator")
 
@@ -160,6 +161,13 @@ class UserController {
 
   async userInfo({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
+    user.formatSer = []
+    if (user.servicios) {
+      for (let i of user.servicios) {
+        let serv = await Servicio.findBy('id', i)
+        user.formatSer.push(serv)
+      }
+    }
     response.send(user)
   }
 

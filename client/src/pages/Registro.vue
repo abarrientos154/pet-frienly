@@ -2,7 +2,7 @@
   <q-tab-panels v-model="panel" animated>
     <q-tab-panel name="parte_uno" >
       <ParteUno :form="form" :panel="panelito" />
-      <q-btn style="width: 100%" color="primary" push label="Volver" glossy @click="$router.push('/login')" />
+      <q-btn class="q-mt-md" style="width: 100%" color="primary" push label="Volver" glossy @click="$router.push('/login')" />
     </q-tab-panel>
     <q-tab-panel name="parte_tres_proveedor_datos">
       <div class="column">
