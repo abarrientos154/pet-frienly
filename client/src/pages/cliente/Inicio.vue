@@ -142,7 +142,7 @@ export default {
   mounted () {
     this.getTiendas()
     this.getProductos()
-    this.urlHospedaje = env.apiUrl + 'hospedajes_img'
+    this.urlHospedaje = env.apiUrl + '/hospedajes_img'
     this.obtener_hospedajes()
   },
   methods: {
@@ -151,7 +151,7 @@ export default {
     },
     getTiendas () {
       this.$api.post('user_by_rol', { rol: [3] }).then(res => {
-        this.imgTienda = env.apiUrl + 'perfil_img/'
+        this.imgTienda = env.apiUrl + '/perfil_img/'
         if (res) {
           this.tiendas = res
           console.log(this.tiendas)
@@ -160,7 +160,7 @@ export default {
     },
     getProductos () {
       this.$api.get('producto').then(res => {
-        this.imgProducto = env.apiUrl + 'productos_img/'
+        this.imgProducto = env.apiUrl + '/productos_img/'
         if (res) {
           this.productos = res
           console.log(this.productos)

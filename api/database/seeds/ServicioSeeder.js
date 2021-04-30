@@ -16,27 +16,32 @@ const Servicio = use("App/Models/Servicio")
 const servicioData = [
   {
     id: 1,
-    name: 'paseo de mascota',
+    name: 'Hospedador',
     icons: 'petnoimg.png'
   },
   {
     id: 2,
-    name: 'corte de pelo',
+    name: 'Veterinarios',
     icons: 'petnoimg.png'
   },
   {
     id: 3,
-    name: 'psicólogo',
+    name: 'Paseador',
     icons: 'petnoimg.png'
   },
   {
     id: 4,
-    name: 'psicólogo',
+    name: 'Entrenador',
     icons: 'petnoimg.png'
   },
   {
     id: 5,
-    name: 'alojamiento',
+    name: 'Comida',
+    icons: 'petnoimg.png'
+  },
+  {
+    id: 6,
+    name: 'Otros',
     icons: 'petnoimg.png'
   }
 
