@@ -37,27 +37,6 @@
       </q-tabs>
     </q-scroll-area>
 
-    <!-- <q-card class="q-pa-sm full-width">
-      <q-scroll-area
-        horizontal
-        style="height: 100px; width: 100%;"
-        class="bg-grey-1 rounded-borders"
-      >
-        <div class="column items-center justify-center">
-        <div class="row no-wrap" style="width: 100%">
-          <div v-ripple v-for="(item, index) in form.formatSer" class="q-mt-sm q-mr-sm q-ml-sm" style="border-radius:12px;width: 100px" :key="index">
-            <div class="column items-center justify-center">
-          <q-avatar square size="40px">
-            <img :src="item.icons">
-          </q-avatar>
-          <div class="text-caption text-center">{{item.name}}</div>
-        </div>
-          </div>
-        </div>
-        </div>
-      </q-scroll-area>
-    </q-card> -->
-
     <div class="q-pa-sm q-mb-sm">
       <div class="text-h6">Nuestra tienda</div>
       <div class="text-grey-7 text-subtitle q-mb-sm">{{ lorem }}</div>

@@ -121,6 +121,7 @@ export default {
   },
   mounted () {
     this.getUser()
+    console.log(localStorage, 'local')
   },
   computed: {
     ...mapGetters('generals', ['can']),
@@ -135,13 +136,15 @@ export default {
       this.$router.push('/login')
     },
     getUser () {
-      this.$api.get('user_info').then(v => {
-        if (v) {
-          this.rol = v.roles[0]
-        } else {
-          console.log(this.rol)
-        }
-      })
+      if (localStorage.TRI_SESSION_INFO) {
+        this.$api.get('user_info').then(v => {
+          if (v) {
+            this.rol = v.roles[0]
+          } else {
+            console.log(this.rol)
+          }
+        })
+      }
     },
     clickmenu () {
       this.drawer = !this.drawer

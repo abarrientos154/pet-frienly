@@ -154,7 +154,7 @@ export default {
         this.imgTienda = env.apiUrl + 'perfil_img/'
         if (res) {
           this.tiendas = res
-          console.log(this.tiendas)
+          // console.log(this.tiendas)
         }
       })
     },
@@ -163,7 +163,7 @@ export default {
         this.imgProducto = env.apiUrl + 'productos_img/'
         if (res) {
           this.productos = res
-          console.log(this.productos)
+          // console.log(this.productos)
         }
       })
     },
@@ -171,7 +171,7 @@ export default {
       this.$api.get('hospedaje').then(res => {
         if (res) {
           this.hospedajes = res
-          console.log(this.hospedajes)
+          // console.log(this.hospedajes)
         }
       })
     }
