@@ -121,6 +121,7 @@ export default {
   },
   mounted () {
     this.getUser()
+    console.log(localStorage, 'local')
   },
   computed: {
     ...mapGetters('generals', ['can']),
@@ -135,29 +136,31 @@ export default {
       this.$router.push('/login')
     },
     getUser () {
-      this.$api.get('user_info').then(v => {
-        if (v) {
-          this.rol = v.roles[0]
-        } else {
-          console.log(this.rol)
-        }
-      })
-    },
-    clickmenu () {
-      this.drawer = !this.drawer
-      if (this.rol === 1) {
-        this.menu = this.admin
-      } else {
-        if (this.rol === 2) {
-          this.menu = this.cliente
-        } else {
-          if (this.rol === 3) {
-            this.menu = this.proveedor
+      if (localStorage.TRI_SESSION_INFO) {
+        this.$api.get('user_info').then(v => {
+          if (v) {
+            this.rol = v.roles[0]
+            if (this.rol === 1) {
+              this.menu = this.admin
+            } else {
+              if (this.rol === 2) {
+                this.menu = this.cliente
+              } else {
+                if (this.rol === 3) {
+                  this.menu = this.proveedor
+                } else {
+                  console.log(this.rol)
+                }
+              }
+            }
           } else {
             console.log(this.rol)
           }
-        }
+        })
       }
+    },
+    clickmenu () {
+      this.drawer = !this.drawer
     },
     ruta (item) {
       this.$router.push(item.ruta)
