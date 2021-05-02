@@ -153,10 +153,10 @@ export default {
   mounted () {
     this.getUser()
     this.obtenerDatos()
-    this.baseu = env.apiUrl + 'perfil_img/'
-    this.baseuTienda = env.apiUrl + 'tienda_img/'
-    this.baseuproductos = env.apiUrl + 'productos_img/'
-    this.baseuHospedaje = env.apiUrl + 'hospedajes_img'
+    this.baseu = env.apiUrl + '/perfil_img/'
+    this.baseuTienda = env.apiUrl + '/tienda_img/'
+    this.baseuproductos = env.apiUrl + '/productos_img/'
+    this.baseuHospedaje = env.apiUrl + '/hospedajes_img'
     this.obtener_productos()
     this.obtener_hospedajes()
   },

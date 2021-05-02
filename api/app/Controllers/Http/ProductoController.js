@@ -24,8 +24,8 @@ class ProductoController {
    */
   async index ({ request, response, view }) {
     let datos = (await Producto.query().where({}).with('datos_proveedor').fetch()).toJSON()
-    //let filter = datos.filter(v => v.datos_proveedor.status === 1 && v.datos_proveedor.enable)
-    response.send(datos)
+    let filter = datos.filter(v => v.datos_proveedor.estatus === 1)
+    response.send(filter)
   }
 
   async productoByProveedor ({ request, response, params }) {
@@ -80,9 +80,9 @@ class ProductoController {
    */
   async show ({ params, request, response, view }) {
     let producto = (await Producto.find(params.id)).toJSON()
-    producto.images = producto.images.map(ele => { 
+    producto.images = producto.images.map(ele => {
       return { src: ele }
-    }) 
+    })
     console.log(producto)
     response.send(producto)
   }
