@@ -97,7 +97,7 @@ class HospedajeController {
       let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
       let filter = datos.filter(v => {
         for (let i of v.habt_types) {
-          if (i.name === filtrar.habt_type) {
+          if (i === filtrar.habt_type) {
             return v
           }
         }
@@ -114,7 +114,7 @@ class HospedajeController {
       let datos = (await Hospedaje.query().where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
       let filter = datos.filter(v => {
         for (let i of v.habt_types) {
-          if (i.name === filtrar.habt_type) {
+          if (i === filtrar.habt_type) {
             return v
           }
         }
@@ -126,7 +126,7 @@ class HospedajeController {
       let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).with('datos_proveedor').fetch()).toJSON()
       let filter = datos.filter(v => {
         for (let i of v.habt_types) {
-          if (i.name === filtrar.habt_type) {
+          if (i === filtrar.habt_type) {
             return v
           }
         }
@@ -149,7 +149,7 @@ class HospedajeController {
       console.log(datos)
       let filter = datos.filter(v => {
         for (let i of v.habt_types) {
-          if (i.name === filtrar.habt_type) {
+          if (i === filtrar.habt_type) {
             return v
           }
         }

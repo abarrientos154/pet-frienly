@@ -29,7 +29,7 @@
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
             <div class="q-mb-sm text-black">Tipo de habitacion</div>
-            <q-select dense filled v-model="form.habt_type" :options="tiposHabt" option-value="name" option-label="name" emit-value map-options>
+            <q-select dense filled v-model="form.habt_type" :options="tiposHabt" option-value="_id" option-label="name" emit-value map-options>
               <template v-slot:prepend>
                 <q-icon color="primary" name="star" />
               </template>

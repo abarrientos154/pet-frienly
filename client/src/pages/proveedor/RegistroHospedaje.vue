@@ -41,13 +41,18 @@
                 <q-input filled v-model="form.pet_type"  label="Tipo de Mascotas" dense :error="$v.form.pet_type.$error" error-message="Este campo es requerido"  @blur="$v.form.pet_type.$touch()">
                 </q-input>
                 <q-input filled v-model.number="form.pet_num" type="number" label="Cantidad de Mascotas" dense :error="$v.form.pet_num.$error" error-message="Este campo es requerido"  @blur="$v.form.pet_num.$touch()" lazy-rules :rules="[ val => val > 0 && val <= 1000 ]"/>
-                <q-list dense bordered padding v-if="edit == false" class="rounded-borders q-mb-lg">
-                  <q-item clickable v-ripple v-for="(item, index) in tiposHabt" :key="index" >
-                    <q-item-section>
-                      <q-checkbox v-model="tiposHabt[index].status" @input="selecTiposHabt(item)" :label="item.name" />
-                    </q-item-section>
-                  </q-item>
-                </q-list>
+                <q-select dense outlined filled option-value="_id" option-label="name" v-model="tiposHabtSelect" :options="tiposHabt" label="Tipos de habitaciones" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.tiposHabtSelect.$error" @blur="$v.tiposHabtSelect.$touch()">
+                  <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+                    <q-item v-bind="itemProps" v-on="itemEvents">
+                      <q-item-section>
+                        <q-item-label v-html="opt.name" ></q-item-label>
+                      </q-item-section>
+                      <q-item-section side>
+                        <q-checkbox :value="selected" @input="toggleOption(opt)" />
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                </q-select>
               </div>
             </div>
           </q-card-section>
@@ -77,7 +82,7 @@ export default {
       file: null,
       imgPro: null,
       tiposHabt: [],
-      tipos_selec: [],
+      tiposHabtSelect: [],
       posicion: 0,
       botones: [
         {
@@ -117,7 +122,8 @@ export default {
       pet_type: { required },
       pet_num: { required }
     },
-    file: { required }
+    file: { required },
+    tiposHabtSelect: { required }
   },
   mounted () {
     this.baseu = env.apiUrl + 'hospedajes_img'
@@ -128,6 +134,7 @@ export default {
       this.$api.get('hospedaje/' + this.id).then(res => {
         if (res) {
           this.form = res
+          this.tiposHabtSelect = this.form.habt_types
           this.imgsTraidas()
           // this.imgPro = env.apiUrl + '/hospedajes_img/' + this.form.fileName
         }
@@ -216,6 +223,8 @@ export default {
     async agregar () {
       console.log('guardar')
       this.$v.$touch()
+      this.form.habt_types = this.tiposHabtSelect
+      console.log(this.form.habt_types)
       this.form.ciudad_id = this.user.ciudad_id
       if (!this.$v.form.$error) {
         console.log('sin fallo')
@@ -307,11 +316,6 @@ export default {
           console.log(this.user)
         }
       })
-    },
-    selecTiposHabt (itm) {
-      this.tipos_selec = this.tiposHabt.filter(v => v.status)
-      this.form.habt_types = this.tipos_selec
-      console.log(this.tipos_selec)
     }
   }
 }
