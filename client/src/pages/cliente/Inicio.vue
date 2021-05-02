@@ -45,7 +45,7 @@
     <div class="q-mb-md q-mx-sm text-h5">Nuestras tiendas</div>
     <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
       <q-tabs v-model="tabSer" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab v-for="index in 10" :key="index" label="Servicio" no-caps/>
+        <q-tab v-for="(item, index) in servicios" :key="index" :label="item.name" no-caps/>
       </q-tabs>
     </q-scroll-area>
     <div class="q-mb-xs q-mx-sm">Tiendas mejores calificadas</div>
@@ -132,6 +132,7 @@ export default {
       rating: 3,
       hospedajes: [],
       urlHospedaje: '',
+      servicios: [],
       thumbStyle: {
         borderRadius: '5px',
         backgroundColor: 'gray',
@@ -144,6 +145,7 @@ export default {
     this.getProductos()
     this.urlHospedaje = env.apiUrl + 'hospedajes_img'
     this.obtener_hospedajes()
+    this.getServicios()
   },
   methods: {
     seeAccommodation (id) {
@@ -154,7 +156,7 @@ export default {
         this.imgTienda = env.apiUrl + 'perfil_img/'
         if (res) {
           this.tiendas = res
-          // console.log(this.tiendas)
+          console.log(this.tiendas)
         }
       })
     },
@@ -172,6 +174,14 @@ export default {
         if (res) {
           this.hospedajes = res
           // console.log(this.hospedajes)
+        }
+      })
+    },
+    getServicios () {
+      this.$api.get('servicios').then(res => {
+        if (res) {
+          this.servicios = res
+          // console.log(this.servicios, 'mira')
         }
       })
     }
