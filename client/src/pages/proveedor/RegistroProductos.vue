@@ -1,59 +1,74 @@
 <template>
-  <div>
-    <div class="row justify-center">
-      <div class="q-pa-md col col-xs-10 col-sm-8 col-md-7 col-lg-5 col-xl-4 no-wrap q-mx-md q-my-sm">
-        <q-card flat bordered class="dimension">
-          <q-card-section horizontal>
-            <q-card-section>
-              <div v-if="imgProducto && edit" class="column items-center justify-center">
-                <q-avatar rounded v-for="(item, index) in botones" :key="index">
-                  <q-img :src="cargarPhoto(index)" :class="item.select ? 'seleccionado':''" @click="seleccionar(index)" />
-                </q-avatar>
-              </div>
-              <div v-else class="column items-center justify-center">
-                <q-avatar rounded v-for="(item, index) in botones" :key="index">
-                  <q-img :src="cargarImagen(index)" :class="item.select ? 'seleccionado':''" @click="seleccionar(index)" />
-                </q-avatar>
-                <!-- <q-btn v-for="(item, index) in botones" :key="index" icon="edit" color="grey-5" :flat="!item.select" class="q-mt-xl" @click="seleccionar(index)" style="height:50px" /> -->
-              </div>
-            </q-card-section>
-            <div class="column full-width">
-              <div class="q-mt-md">
-                <q-img :ratio="1" style="height: 250px; max-height:550px" :src="mostrarImg">
-                  <q-file borderless v-model="productoFile" class="absolute-top-right q-ma-sm button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1">
-                    <q-icon name="mode_edit" class="absolute-center" size="20px" color="black" />
-                  </q-file>
-                </q-img>
-              </div>
-              <div class="q-mx-xl q-mt-md">
-                <q-input filled v-model="form.name"  label="Nombre del producto" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-                <template v-slot:append>
-                  <q-icon name="mode_edit" />
-                </template>
-                </q-input>
-                <div class="q-mt-md">
-                    <q-input prefix="$" filled label="Precio" color="primary" v-model.number="form.precio" type="number" dense :error="$v.form.precio.$error" error-message="Este campo es requerido"  @blur="$v.form.precio.$touch()" :rules="[val => val > 0]" min="0"/>
-                  </div>
-                <div class="q-mt-md text-h6">Descripcion</div>
-                  <q-input filled outlined v-model="form.descripcion" type="textarea" :error="$v.form.descripcion.$error" error-message="Este campo es requerido"  @blur="$v.form.descripcion.$touch()"/>
-                <div class=" row items-center justify-center">
-                  <div class="q-mt-sm text-h6 q-pr-sm">Cantidad</div>
-                  <div class="q-mt-lg">
-                    <q-input v-model.number="form.cantidad" borderless class="q-pr-sm" type="number" dense :error="$v.form.cantidad.$error" error-message=""  @blur="$v.form.cantidad.$touch()" style="width: 50px" min="0"/>
-                  </div>
-                  <div class="q-pr-xs">
-                    <q-btn class="q-mx-xs" color="grey" dense icon="add" style="height: 30px;width:30px" @click="form.cantidad++"/>
-                    <q-btn color="grey" dense icon="remove" style="height: 30px;width:30px" @click="resta()"/>
-                  </div>
-                </div>
-              </div>
+  <div class="column justify-between">
+    <div class="q-pa-md row">
+      <div v-if="imgProducto && edit" class="q-mr-md col-2 column items-center">
+        <q-avatar rounded v-for="(item, index) in botones" :key="index" :class="item.select ? 'seleccionado q-mb-sm':'bg-orange-1 q-mb-sm'" @click="seleccionar(index)" style="height: 75px; width: 100%; border-radius: 15px;">
+          <q-img style="height: 100%;" :src="cargarPhoto(index)"/>
+          <q-icon :name="item.src ? 'mode_edit' : 'add'" class="absolute-center" size="30px" color="black" />
+        </q-avatar>
+      </div>
+
+      <div v-else class="q-mr-md col-2 column items-center">
+        <q-avatar rounded v-for="(item, index) in botones" :key="index" :class="item.select ? 'seleccionado q-mb-sm':'bg-orange-1 q-mb-sm'" @click="seleccionar(index)" style="height: 75px; width: 100%; border-radius: 15px;">
+          <q-img style="height: 100%;" :src="cargarImagen(index)"/>
+          <q-icon :name="item.file ? 'mode_edit' : 'add'" class="absolute-center" size="30px" color="black" />
+        </q-avatar>
+      </div>
+
+      <div class="col column items-center">
+        <q-avatar rounded style="height: 350px; width: 100%; border-radius: 15px;" :class="mostrarImg !=  null ? 'q-mb-md':'bg-secondary q-mb-md'">
+          <q-img style="height: 100%;" :src="mostrarImg !=  null ? mostrarImg : ''">
+            <q-file borderless v-model="productoFile" class="q-ma-sm button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
+            <q-icon :name="mostrarImg !=  null ? 'mode_edit' : 'add_a_photo'" class="absolute-top-right q-ma-sm" size="30px" color="black" />
+          </q-img>
+        </q-avatar>
+
+        <div class="column full-width">
+          <div v-if="edit && editNameCant === false" class="row">
+            <div class="text-h6">{{form.name}}</div>
+            <div>
+              <q-btn round flat dense class="q-mr-xs" icon="mode_edit" style="height: 30px;width:30px" @click="editNameCant = !editNameCant"/>
             </div>
-          </q-card-section>
-        </q-card>
+          </div>
+          <div v-if="edit && editNameCant === false" class="text-grey q-mb-lg">Disponible - {{form.cantidad}} Unidades</div>
+          <q-input filled v-if="editNameCant || edit === false" v-model="form.name"  label="Nombre del producto" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
+            <template v-slot:append>
+              <q-icon name="mode_edit" />
+            </template>
+          </q-input>
+
+          <div v-if="edit && editprecio === false" class="row q-mb-lg">
+            <div class="text-h4 text-primary">$ {{form.precio}}</div>
+            <div>
+              <q-btn round flat dense class="q-mr-xs" icon="mode_edit" style="height: 30px;width:30px" @click="editprecio = !editprecio"/>
+            </div>
+          </div>
+          <q-input v-if="editprecio || edit === false" prefix="$" filled label="Precio" color="primary" v-model.number="form.precio" type="number" dense :error="$v.form.precio.$error" error-message="Este campo es requerido"  @blur="$v.form.precio.$touch()" :rules="[val => val > 0]" min="0"/>
+
+          <div class="row justify-between">
+            <div class="text-h6">Descripcion</div>
+            <div v-if="edit && editdescripcion === false">
+              <q-btn round flat dense class="q-mr-xs" icon="mode_edit" style="height: 30px;width:30px" @click="editdescripcion = !editdescripcion"/>
+            </div>
+          </div>
+          <div v-if="edit && editdescripcion === false" class="text-grey">{{form.descripcion}}</div>
+          <q-input filled outlined v-if="editdescripcion || edit === false" v-model="form.descripcion" type="textarea" :error="$v.form.descripcion.$error" error-message="Este campo es requerido"  @blur="$v.form.descripcion.$touch()"/>
+
+          <div v-if="editNameCant || edit === false" class="row items-center justify-center">
+            <div class="q-mr-xs text-h6 q-pr-sm">Cantidad</div>
+            <div class="q-mr-xs q-mt-lg">
+              <q-input v-model.number="form.cantidad" borderless class="q-pr-sm" type="number" dense :error="$v.form.cantidad.$error" error-message=""  @blur="$v.form.cantidad.$touch()" style="width: 50px" min="0"/>
+            </div>
+            <div class="q-pr-xs">
+              <q-btn round flat dense class="q-mr-xs" color="primary" icon="add" style="height: 30px;width:30px" @click="form.cantidad++"/>
+              <q-btn round flat dense class="q-mr-xs" color="primary" icon="remove" style="height: 30px;width:30px" @click="resta()"/>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="row justify-center q-ma-lg">
-      <q-btn color="primary" text-color="white" rounded :label="edit ? 'Actualizar' : 'Guardar'" @click="!edit ? agregar() : actualizarProducto()"/>
+    <div class="row justify-center q-ma-md">
+      <q-btn class="full-width" color="primary" text-color="white" rounded :label="edit ? 'Actualizar' : 'Guardar'" @click="!edit ? agregar() : actualizarProducto()" no-caps/>
     </div>
   </div>
 </template>
@@ -65,12 +80,14 @@ export default {
   data () {
     return {
       imgProducto: [],
-      mostrarImg: 'noimgpro.png',
+      mostrarImg: null,
       id: '',
       productoFile: null,
       edit: false,
+      editNameCant: false,
+      editprecio: false,
+      editdescripcion: false,
       editImg: false,
-      lorem: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
       form: {
         cantidad: 0
       },
@@ -165,15 +182,11 @@ export default {
       if (this.botones[ind].file) {
         console.log(this.botones[ind].file)
         return URL.createObjectURL(this.botones[ind].file)
-      } else {
-        return 'noimgpro.png'
       }
     },
     cargarPhoto (ind) {
       if (this.botones[ind].src !== '') {
         return this.botones[ind].src
-      } else {
-        return 'noimgpro.png'
       }
     },
 
@@ -203,8 +216,7 @@ export default {
           // this.mostrarImg = URL.createObjectURL(data[ind].file)
         }
       } else {
-        console.log('no data')
-        this.mostrarImg = 'noimgpro.png'
+        this.mostrarImg = null
       }
     },
     changeFile () {
@@ -308,8 +320,8 @@ export default {
   width:40px
 }
 .seleccionado {
-  border-radius: 5px;
-  background: $grey-4;
+  border-radius: 15px;
+  background: $grey-5;
 }
 .dimension {
   min-width: 200px;

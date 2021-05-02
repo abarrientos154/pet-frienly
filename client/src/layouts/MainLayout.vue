@@ -121,7 +121,7 @@ export default {
   },
   mounted () {
     this.getUser()
-    console.log(localStorage, 'local')
+    // console.log(localStorage, 'local')
   },
   computed: {
     ...mapGetters('generals', ['can']),
