@@ -2,7 +2,6 @@
   <div>
     <q-separator inset />
     <div class="row justify-center">
-        <div class="text-h6 q-ma-md text-center estilo-titulos">Datos de Perfil</div>
         <div v-if="datosusuario">
            <q-card class="bg-amber-1 q-pa-lg q-ma-md shadow-3">
                 <div class="row justify-center items-center">
@@ -71,174 +70,234 @@
     </div>
 
     <div v-if="datosproveedor">
-            <q-card class="bg-amber-1 q-pa-lg q-ma-md shadow-3">
-                <div class="row justify-center items-center">
-                        <div class="column">
-                          <q-avatar size="180px">
-                            <img  :src="baseu + 'perfil' + form2._id">
-                            <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1">
-                              <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-                            </q-file>
-                          </q-avatar>
-                        </div>
+      <q-card class="q-pa-lg q-ma-md shadow-3">
+          <div class="row justify-center items-center">
+                  <div class="column">
+                    <q-avatar size="180px">
+                      <img  :src="baseu + form2._id">
+                      <q-file borderless v-model="perfilFile" class="absolute-center button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1">
+                        <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
+                      </q-file>
+                    </q-avatar>
+                  </div>
 
-                    <q-card style="width: 100%" class="shadow-11 bg-amber-1 q-mt-md">
-                      <div class="q-mt-sm column">
-                        <q-card class="q-pa-md bg-amber-1 shadow-up-3 q-mt-sm" style="border-radius:25px">
-                              <q-scroll-area
-                              horizontal
-                              style="height: 110px;"
-                            >
-                              <div class="row no-wrap" style="width: 100%">
-                                <q-card v-for="(item, index) in form2.tiendaFiles" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;width: 100px" :key="index">
-                                  <q-img :src="form2.tiendaFiles ? baseu2 + item : 'noimgpro.png'" spinner-color="white" style="height: 100px; width: 100px" />
-                                   <q-btn icon="delete" style="position:absolute;top:0px;right:0px" flat round @click="eliminarimg = true, nameImgBorrar = item , estatus = rol" />
-                                </q-card>
-                              </div>
-                            </q-scroll-area>
+              <q-card style="width: 100%" class="shadow-11 q-mt-md">
+                <div class="q-mt-sm column">
+                  <q-card flat class="q-pa-md shadow-up-3 q-mt-sm">
+                        <q-scroll-area
+                        horizontal
+                        style="height: 110px;"
+                      >
+                        <div class="row no-wrap" style="width: 100%">
+                          <q-card v-for="(item, index) in form2.tiendaFiles" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;width: 100px" :key="index">
+                            <q-img :src="form2.tiendaFiles ? baseu2 + item : 'noimgpro.png'" spinner-color="white" style="height: 100px; width: 100px" />
+                              <q-btn icon="delete" style="position:absolute;top:0px;right:0px" flat round @click="eliminarimg = true, nameImgBorrar = item , estatus = rol" />
                           </q-card>
-
-                        <div class="row justify-center items-center">
-                          <div class="column">
-                            <div class="column shadow-3 justify-center items-center q-ma-sm q-ml-sm bg-amber-1" style="height:100px;border-radius:12px;width:140px">
-                              <div class="text-center text-primary q-mb-sm" style="text-decoration: underline">Agregar Imagen</div>
-                              <q-avatar size="50px">
-                                <div style="z-index:1">
-                                  <q-file borderless v-model="tiendaFiles" class="button-camera" @input="addImg()" accept=".jpg, image/*">
-                                    <q-icon name="add" class="absolute-center" size="20px" color="white" />
-                                  </q-file>
-                                </div>
-                              </q-avatar>
-                            </div>
-                          </div>
                         </div>
-                      </div>
+                      </q-scroll-area>
                     </q-card>
 
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mt-md">
-                      <q-input v-model="password" label="Contraseña" outlined dense
-                        error-message="Ingrese una contraseña válida, mínimo 6 caracteres"
-                        :error="$v.password.$error" @blur="$v.password.$touch()" @input="cambioClave = true"/>
+                  <div class="row justify-center items-center">
+                    <div class="column">
+                      <div class="column shadow-3 justify-center items-center q-ma-sm q-ml-sm" style="height:100px;border-radius:12px;width:140px">
+                        <div class="text-center text-primary q-mb-sm" style="text-decoration: underline">Agregar Imagen</div>
+                        <q-avatar size="50px">
+                          <div style="z-index:1">
+                            <q-file borderless v-model="tiendaFiles" class="button-camera" @input="addImg()" accept=".jpg, image/*">
+                              <q-icon name="add" class="absolute-center" size="20px" color="white" />
+                            </q-file>
+                          </div>
+                        </q-avatar>
+                      </div>
                     </div>
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                      <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined dense
-                        error-message="Las contraseñas deben ser iguales"
-                        :error="$v.repeatPassword.$error"
-                        @blur="$v.repeatPassword.$touch()"
-                      />
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                      <q-input v-model="form2.full_name" label="Nombre de la Empresa" outlined dense
-                        error-message="Ingrese el nombre de la Empresa"
-                        :error="$v.form2.full_name.$error" @blur="$v.form.full_name.$touch()"
-                        @input="cambioSoloClave = false"
-                      />
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                      <q-select v-model="form2.country" label="País" outlined dense :options="['Colombia', 'Chile']" error-message="Ingrese su País" :error="$v.form.country.$error" @blur="$v.form.country.$touch()" @input="cambioSoloClave = false" />
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                        <q-input :disable="form2.country ? false : true" v-model="form2.run_dni" :label="form2.country === 'Chile' ? 'Ingrese RUN' : form2.country === 'Colombia' ? 'Ingrese DNI' : 'Debes seleccionar un país'" outlined dense
-                          error-message="Ingrese RUN O DNI"
-                          :error="$v.form2.run_dni.$error" @blur="$v.form2.run_dni.$touch()"
-                          @input="cambioSoloClave = false"
-                        />
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                      <q-input v-model="form2.direccion" label="Dirección" outlined dense
-                        error-message="Ingrese su Dirección"
-                        :error="$v.form2.direccion.$error" @blur="$v.form2.direccion.$touch()"
-                        @input="cambioSoloClave = false"
-                      />
-                    </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                      <q-input v-model="form2.phone" type="tel" label="Telefono" outlined dense
-                        error-message="Ingrese el número de su Teléfono"
-                        :error="$v.form2.phone.$error" @blur="$v.form2.phone.$touch()" @input="cambioSoloClave = false" />
-
-                    </div>
-
-                     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-                        <q-toggle
-                          v-model="form2.delivery"
-                          label="Activar delivery"
-                          icon="delivery_dining"
-                          @input="cambioSoloClave = false"
-                        />
-                     </div>
-
-                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mt-md">
-                      <q-select outlined v-model="form2.dias" :options="options_dias" label="Días laborables" multiple emit-value map-options
-                        error-message="Ingrese los días laborables de la empresa"
-                        :error="$v.dias.$error" @blur="$v.dias.$touch()"
-                       >
-                        <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-                          <q-item
-                            v-bind="itemProps"
-                            v-on="itemEvents"
-                          >
-                            <q-item-section>
-                              <q-item-label v-html="opt.label" ></q-item-label>
-                            </q-item-section>
-                            <q-item-section side>
-                              <q-checkbox :value="selected" @input="toggleOption(opt)" />
-                            </q-item-section>
-                          </q-item>
-                        </template>
-                      </q-select>
                   </div>
-                    <div class="text-subtitle2 q-mt-sm">Horario</div>
-                    <div class="q-gutter-sm row justify-between">
-                      <q-input label="Hora de inicio" class="col-5" v-model="form2.hora_inicio" mask="time" :rules="['time']"
-                        error-message="Ingrese la hora de inicio laboral"
-                        :error="$v.form2.hora_inicio.$error" @blur="$v.form2.hora_inicio.$touch()" @input="cambioSoloClave = false" >
-                        <template v-slot:append>
-                          <q-icon name="access_time" class="cursor-pointer">
-                            <q-popup-proxy transition-show="scale" transition-hide="scale">
-                              <q-time v-model="form2.hora_inicio" @input="cambioSoloClave = false">
-                                <div class="row items-center justify-end">
-                                  <q-btn v-close-popup label="Close" color="primary" flat />
-                                </div>
-                              </q-time>
-                            </q-popup-proxy>
-                          </q-icon>
-                        </template>
-                      </q-input>
-
-                      <q-input label="Hora de cierre" class="col-5" v-model="form2.hora_fin" mask="time" :rules="['time']"
-                        error-message="Ingrese la hora de cierre laboral"
-                        :error="$v.form2.hora_fin.$error" @blur="$v.form2.hora_fin.$touch()" @input="cambioSoloClave = false">
-                        <template v-slot:append>
-                          <q-icon name="access_time" class="cursor-pointer">
-                            <q-popup-proxy transition-show="scale" transition-hide="scale">
-                              <q-time v-model="form2.hora_fin" @input="cambioSoloClave = false">
-                                <div class="row items-center justify-end">
-                                  <q-btn v-close-popup label="Close" color="primary" flat />
-                                </div>
-                              </q-time>
-                            </q-popup-proxy>
-                          </q-icon>
-                        </template>
-                      </q-input>
-
-                    </div>
                 </div>
-              <div class="row justify-center q-pa-sm">
-                  <q-btn color="primary" label="Guardar Cambios" @click="notifi = true, id = form2._id , estatus = rol"/>
+              </q-card>
+
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mt-md">
+                <q-input v-model="password" label="Contraseña" outlined dense
+                  error-message="Ingrese una contraseña válida, mínimo 6 caracteres"
+                  :error="$v.password.$error" @blur="$v.password.$touch()" @input="cambioClave = true">
+                  <template v-slot:before>
+                    <q-icon name="vpn_key" color="primary" />
+                  </template>
+                </q-input>
               </div>
-           </q-card>
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined dense
+                  error-message="Las contraseñas deben ser iguales"
+                  :error="$v.repeatPassword.$error"
+                  @blur="$v.repeatPassword.$touch()">
+                  <template v-slot:before>
+                    <q-icon name="vpn_key" color="primary" />
+                  </template>
+                </q-input>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <q-input v-model="form2.name" label="Ingrese el Nombre de la tienda" outlined dense
+                  error-message="Ingrese el Nombre de la tienda"
+                  :error="$v.form2.name.$error" @blur="$v.form.name.$touch()"
+                  @input="cambioSoloClave = false">
+                  <template v-slot:before>
+                    <q-icon name="person" color="primary" />
+                  </template>
+                </q-input>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <q-select v-model="selectPais" label="País" outlined dense :options="paises" option-value="_id" option-label="pais" emit-value map-options error-message="Ingrese su País" :error="$v.selectPais.$error" @blur="$v.selectPais.$touch()" @input="cambioSoloClave = false, ciudad = ''">
+                  <template v-slot:before>
+                    <q-icon name="public" color="primary" />
+                  </template>
+                </q-select>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <q-select outlined dense v-model="ciudad" :options="optionCiudad" option-value="_id" option-label="ciudad" emit-value map-options error-message="Ingrese su Ciudad" :error="$v.ciudad.$error" @blur="$v.ciudad.$touch()" @input="cambioSoloClave = false">
+                  <template v-slot:before>
+                    <q-icon name="location_city" color="primary" />
+                  </template>
+                </q-select>
+              </div>
+
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <q-input v-model="form2.dni" label="Numero indentificador de la empresa" outlined dense
+                  error-message="Ingrese su Numero indentificador de la empresa"
+                  :error="$v.form2.dni.$error" @blur="$v.form2.dni.$touch()"
+                  @input="cambioSoloClave = false">
+                  <template v-slot:before>
+                    <q-icon name="payment" color="primary" />
+                  </template>
+                </q-input>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="q-pl-lg text-black text-caption"> servicios de la Tienda</div>
+                <q-select
+                  outlined
+                  option-value="id"
+                  option-label="name"
+                  v-model="form2.servicios"
+                  :options="servicios"
+                  label="Selecciona las servicios"
+                  multiple
+                  @input="cambioSoloClave = false"
+                  emit-value
+                  map-options>
+                      <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
+                        <q-item
+                          v-bind="itemProps"
+                          v-on="itemEvents"
+                        >
+                          <q-item-section>
+                            <q-item-label v-html="opt.name" ></q-item-label>
+                          </q-item-section>
+                          <q-item-section side>
+                            <q-checkbox :value="selected" @input="toggleOption(opt)" />
+                          </q-item-section>
+                        </q-item>
+                      </template>
+                    <template v-slot:before>
+                      <q-icon name="design_services" color="primary" />
+                    </template>
+                  </q-select>
+              </div>
+            <div v-if="hoteleriacampo" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <div class="q-pl-lg text-black text-caption"> País</div>
+            <q-select outlined dense filled v-model="pais2" :options="paises" option-value="_id" option-label="pais" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false, ciudad2 = ''">
+            <template v-slot:before>
+              <q-icon name="public" color="primary" />
+            </template>
+          </q-select>
+          <div class="q-pl-lg text-black text-caption"> ¿Donde daras Alojamiento?</div>
+            <q-select outlined dense filled v-model="ciudad2" :options="optionCiudad2" option-value="_id" option-label="ciudad" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false">
+            <template v-slot:before>
+              <q-icon name="location_city" color="primary" />
+            </template>
+          </q-select>
+          <div class="q-pl-lg text-black text-caption"> ¿A quien les ofreceras espacios?</div>
+          <q-select outlined dense filled v-model="hoteleria.espacio" :options="espacio" option-value="label" option-label="label" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false">
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+            <div class="q-pl-lg text-black text-caption"> Donde esta ubicado</div>
+            <q-select outlined dense filled v-model="hoteleria.ubicacion" :options="ubicacion" option-value="label" option-label="label" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false">
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+            <div class="q-pl-lg text-black text-caption"> ¿Esta pensado especialmente para tus hospedadores?</div>
+            <q-select outlined dense filled v-model="hoteleria.pensado" :options="pensado" option-value="label" option-label="label" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false">
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+            <div class="q-pl-lg text-black text-caption"> Presto servicios por parte de</div>
+            <q-select outlined dense filled v-model="hoteleria.presto" :options="presto" option-value="label" option-label="label" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false">
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+            <div class="q-pl-lg text-black text-caption"> Cantidad de huespedes</div>
+            <q-input type="number" v-model="hoteleria.huespedes" dense outlined filled @input="cambiohotel = true, cambioSoloClave = false">
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg q-mt-md text-black text-caption"> donde esta tu alojamiento</div>
+              <div class="q-pl-lg q-mt-sm text-black text-caption"> Direccion</div>
+              <q-input v-model="hoteleria.alojamiento.direccion" dense outlined filled @input="cambiohotel = true, cambioSoloClave = false">
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Apartamento o numero</div>
+              <q-input v-model="hoteleria.alojamiento.apartamento" dense outlined filled @input="cambiohotel = true, cambioSoloClave = false">
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Ciudad</div>
+              <q-input class="q-mt-sm" v-model="hoteleria.alojamiento.ciudad" outlined filled dense @input="cambiohotel = true, cambioSoloClave = false">
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Estado</div>
+              <q-input class="q-mt-sm" v-model="hoteleria.alojamiento.estado" outlined filled dense @input="cambiohotel = true, cambioSoloClave = false">
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Codigo postal</div>
+              <q-input type="number" v-model="hoteleria.alojamiento.codigo" dense outlined filled @input="cambiohotel = true, cambioSoloClave = false">
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Servicios que ofrece</div>
+              <q-select outlined dense filled multiple v-model="hoteleria.ofrece" :options="ofrece" option-value="label" option-label="label" emit-value map-options @input="cambiohotel = true, cambioSoloClave = false">
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+            </div>
+          </div>
+          <div class="full-width q-mb-xl">
+            <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
+          </div>
+        <div class="row justify-center q-pa-sm">
+            <q-btn color="primary" label="Guardar Cambios" @click="notifi = true, id = form2._id , estatus = rol"/>
+        </div>
+      </q-card>
     </div>
     <q-dialog v-model="notifi" >
       <q-card style="width: 300px">
         <q-card-section>
           <div class="row justify-center text-center items-center">
             <div v-if="estatus === 3" class="text-h6">¡Atención!
-              <div v-if="this.cambioSoloClave === false" class="text-caption row justify-center items-center">Ha modificado campos distintos al de "contraseña", su cuenta entrará en estado de revisión hasta ser aprobada por el administrador.</div>
+              <div v-if="this.cambioSoloClave === false" class="text-caption row justify-center items-center">Ha modificado distintos campos por lo cual su cuenta entrará en estado de revisión hasta ser aprobada por el administrador.</div>
               <div v-if="this.cambioSoloClave === true" class="text-caption row justify-center items-center">¿Estas seguro de Actualizar los datos?</div>
             </div>
               <div v-if="estatus === 2" class="text-h6">¿Estas seguro de Actualizar los datos?</div>
@@ -274,11 +333,20 @@
   </div>
 </template>
 <script>
+import GoogleMap from '../components/GoogleMap'
 import { required, maxLength, minLength, sameAs } from 'vuelidate/lib/validators'
 import env from '../env'
 export default {
+  components: {
+    GoogleMap
+  },
   data () {
     return {
+      center: { lat: -33.4504117, lng: -70.6707553 },
+      paises: [],
+      ciudad: '',
+      servicios2: [],
+      servicios: [],
       nameImgBorrar: '',
       datosusuario: false,
       datosproveedor: false,
@@ -291,51 +359,77 @@ export default {
       perfilFile: null,
       imgPerfil: '',
       baseu: '',
+      hoteleria: {},
       baseu2: '',
       usuario: {},
       rol: null,
       dias: [],
       tiendaFiles: [],
+      selectPais: '',
       imgTienda: [],
       estatus: 8,
       var: false,
       id: '',
+      ciudad2: '',
+      pais2: '',
       cambioSoloClave: true,
+      cambiohotel: false,
       cambioClave: false,
-      options_dias: [
+      espacio: [
         {
-          label: 'Lunes',
-          value: 1
+          label: 'Perros'
         },
         {
-          label: 'Martes',
-          value: 2
+          label: 'Gatos'
         },
         {
-          label: 'Miércoles',
-          value: 3
+          label: 'Ambos'
+        }
+      ],
+      ofrece: [
+        {
+          label: 'Alimentacion'
         },
         {
-          label: 'Jueves',
-          value: 4
+          label: 'Paseo'
         },
         {
-          label: 'Viernes',
-          value: 5
+          label: 'Peluquero'
+        }
+      ],
+      pensado: [
+        {
+          label: 'Si, solo esta habilitado para hospedaje'
         },
         {
-          label: 'Sábado',
-          value: 6
+          label: 'No, vivo yo o alguien en el espacio'
+        }
+      ],
+      presto: [
+        {
+          label: 'Soy una persona natural'
         },
         {
-          label: 'Domingo',
-          value: 0
+          label: 'Soy una empresa'
+        }
+      ],
+      ubicacion: [
+        {
+          label: 'Espacio compartido por Tipo: Tu mascota se alojara en un espacio compartido con otras mascotas de su mismo TIPO'
+        },
+        {
+          label: 'Espacio compartido: Tu mascota se alojara en un espacio compartido con otros perros y gatos'
+        },
+        {
+          label: 'Espacio Privado: Espacio habilitado para una sola mascota'
         }
       ]
     }
   },
   mounted () {
     this.getUser()
+    this.obtenerDatos()
+    this.getPaises()
     this.baseu = env.apiUrl + '/perfil_img/'
     this.baseu2 = env.apiUrl + '/tienda_img/'
     console.log(this.cambioSoloClave, 'cambio solo clave')
@@ -344,42 +438,85 @@ export default {
   validations () {
     return {
       form: {
-        full_name: { required, maxLength: maxLength(40) },
-        last_name: { required },
+        name: { required, maxLength: maxLength(40) },
         country: { required },
         direccion: { required },
-        run_dni: { required },
+        dni: { required },
         phone: { required }
       },
       form2: {
-        full_name: { required, maxLength: maxLength(40) },
-        country: { required },
-        direccion: { required },
-        run_dni: { required },
-        phone: { required },
-        hora_inicio: { required },
-        hora_fin: { required }
+        name: { required, maxLength: maxLength(40) },
+        dni: { required }
       },
       repeatPassword: { sameAsPassword: sameAs('password') },
       password: { required, maxLength: maxLength(256), minLength: minLength(6) },
       perfilFile: { required },
-      dias: { required }
+      ciudad: { required },
+      selectPais: { required }
+    }
+  },
+  computed: {
+    hoteleriacampo () {
+      const indexBuscar = this.form2.servicios.find(v => v === 1)
+      if (indexBuscar === 1) {
+        return true
+      } else {
+        return false
+      }
+    },
+    optionCiudad () {
+      const p = this.paises.find(v => v._id === this.selectPais)
+      if (p) {
+        return p.ciudades
+      } else {
+        return []
+      }
+    },
+    optionCiudad2 () {
+      const p = this.paises.find(v => v._id === this.pais2)
+      if (p) {
+        return p.ciudades
+      } else {
+        return []
+      }
     }
   },
   methods: {
-    getUser () {
-      this.$api.get('user_info').then(v => {
+    async getUser () {
+      await this.$api.get('user_info').then(v => {
         if (v) {
           this.rol = v.roles[0]
         }
         if (this.rol === 3) {
           this.datosproveedor = true
           this.form2 = v
+          this.ciudad2 = this.form2.hoteleria.ciudad_id
+          this.pais2 = this.form2.hoteleria.pais_id
+          this.center = this.form2.ubicacion
           this.espejo = v
+          this.selectPais = this.form2.pais_id
+          this.ciudad = this.form2.ciudad_id
+          if (this.hoteleriacampo) {
+            this.hoteleria = this.form2.hoteleria
+          } else {
+            this.hoteleria = {
+              alojamiento: {}
+            }
+          }
+
+          console.log(this.form2, 'datos del usuario')
+          console.log(this.hoteleria, 'datos hotel')
         }
         if (this.rol === 2) {
           this.form = v
           this.datosusuario = true
+        }
+      })
+    },
+    obtenerDatos () {
+      this.$api.get('servicios').then(res => {
+        if (res) {
+          this.servicios = res
         }
       })
     },
@@ -420,8 +557,20 @@ export default {
     },
 
     modificar_datosproveedor () {
-      this.form2.cambioSoloClave = this.cambioSoloClave
+      this.form2.pais_id = this.selectPais
+      this.form2.ciudad_id = this.ciudad
+      console.log(this.ciudad2, this.pais2, 'vwewewewewewe')
+      if (this.hoteleriacampo) {
+        this.form2.hoteleria = this.hoteleria
+        this.form2.hoteleria.ciudad_id = this.ciudad2
+        this.form2.hoteleria.pais_id = this.pais2
+      } else {
+        delete this.form2.hoteleria
+      }
       this.form2.cambioClave = this.cambioClave
+      this.form2.cambioSoloClave = this.cambioSoloClave
+      this.form2.cambiohotel = this.cambiohotel
+      console.log('datos nuevos', this.form2)
       this.$v.form2.$touch()
       if (this.password) {
         if (!this.$v.form2.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error) {
@@ -445,6 +594,7 @@ export default {
         if (!this.password) {
           if (!this.$v.form2.$error) {
             this.$api.put('datosnew/' + this.id, this.form2).then(res => {
+              console.log(res, 'resssss')
               if (res) {
                 this.$q.notify({
                   message: 'Datos Modificados con exito',
@@ -493,6 +643,14 @@ export default {
         this.form2.tiendaFiles = res.tiendaFiles
       })
     },
+    getBounds (bounds, center) {
+      console.log(center, 'center')
+    },
+    handleNewPlace (place, coordinates) {
+      console.log('handleNewPlace', coordinates, place, this.form, 'from')
+      this.form2.ubicacion = coordinates
+      this.form2.place = place
+    },
     async perfil_img () {
       console.log('add perfil img', this.perfilFile)
       if (this.perfilFile) {
@@ -510,6 +668,13 @@ export default {
         })
         location.reload()
       }
+    },
+    async getPaises () {
+      await this.$api.get('pais').then(res => {
+        if (res) {
+          this.paises = res
+        }
+      })
     }
   }
 }
@@ -520,11 +685,6 @@ export default {
   border-left: 6px solid $primary;
   background-color: rgba(202, 202, 202, 0.474);
   border-radius: 12px;
-}
-.estilo-titulos {
-  background-color: #fff599;
-  width: 250px;
-  border-radius: 12px
 }
 .button-camera {
   text-decoration: none;
