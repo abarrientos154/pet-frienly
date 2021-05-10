@@ -1,72 +1,43 @@
 <template>
-  <div class="q-pa-sm row justify-center">
-    <div class="col" style="max-width: 500px; min-width: 300px;">
-      <q-card class="q-mb-md shadow-11" style="border-radius: 15px;">
-        <!-- <q-img :src="imgProd + form.images[0].src"  style="height: 300px;"/> -->
-        <div class="row justify-between bg-secondary">
-          <div class="col-3">
-            <q-scroll-area style="height: 250px;" class="q-ma-sm">
-              <div class="column no-wrap" style="width: 100%">
-                <q-card v-for="(img, index) in form.images" class="bg-secondary q-mt-xs q-mr-sm" style="border-radius:12px;" :key="index">
-                  <q-img :src="imgProd + img.src" @click="mostrarimg(index)" spinner-color="white" style="height: 100px; width: 100%" />
-                </q-card>
-              </div>
-            </q-scroll-area>
+  <div class="column justify-between">
+    <div class="q-pa-md row">
+      <div class="q-mr-md col-2 column items-center">
+        <q-avatar rounded v-for="(img, index) in form.images" :key="index" class="q-mb-sm" @click="mostrarimg(index)" style="height: 75px; width: 100%; border-radius: 15px;">
+          <q-img style="height: 100%;" :src="imgProd + img.src"/>
+        </q-avatar>
+      </div>
+
+      <div class="col column items-center">
+        <q-avatar rounded style="height: 350px; width: 100%; border-radius: 15px;" class="q-mb-md">
+          <q-img style="height: 100%;" :src="imgProd + form.images[selecImg].src"/>
+        </q-avatar>
+
+        <div class="column full-width">
+          <div class="q-mb-sm row justify-between items-center">
+            <div class="text-h6">{{form.name}}</div>
+            <q-btn round flat dense class="q-mr-xs" color="primary" icon="store" style="height: 30px;width:30px" @click="rol === 2 ? $router.push('/tienda/' + infoProv._id) : $router.push('/descripcionusuario/' + infoProv._id)"/>
           </div>
-          <div class="q-pa-sm col column items-center">
-            <q-img :src="imgProd + form.images[selecImg].src" style="width: 100%; height: 250px; border-radius:12px;">
-              <div class="row justify-center" style="width: 100%;">
-                <div class="q-pl-xs q-pt-xs text-weight-bolder text-h6">{{form.name}}</div>
-              </div>
-            </q-img>
+          <div class="text-grey q-mb-lg">Disponible - {{form.cantidad}} Unidades</div>
+          <div class="row q-mb-lg">
+            <div class="text-h4 text-primary">$ {{form.precio}}</div>
           </div>
-        </div>
-        <q-separator />
-        <q-card-section class="bg-orange-2" style="height: 35%;">
-          <div class="q-mb-sm column items-center">
-            <q-item-label class="text-grey text-subtitle2">Precio: {{form.precio}}$ C/u</q-item-label>
-            <q-item-label class="text-grey text-subtitle2">Cantidad: {{form.cantidad}}</q-item-label>
-          </div>
-          <div>
-            <div class="text-subtitle2">Descripción:</div>
-            <q-scroll-area style="height: 75px;">
-              <div>{{form.descripcion}}</div>
-            </q-scroll-area>
-          </div>
-          <div v-if="rol === 2" class="row justify-center">
-            <q-btn flat dense class="bg-primary text-white">
-              <div class="row items-center justify-center" style="width:100%">
-                <q-icon class="col-1 q-ma-sm" name="add_shopping_cart" color="blak" style="font-size: 20px;"/>
-                <div class="q-pl-xs q-pt-xs text-subtitle2">Comprar</div>
-              </div>
-            </q-btn>
-          </div>
-        </q-card-section>
-      </q-card>
-      <q-card class="bg-orange-2 shadow-11" style="border-radius: 15px; max-width: 500px; min-width: 300px;">
-        <div class="row justify-between">
-          <div class="col-4" style="width: 100px; height: 110px; border-radius: 15px">
-            <q-img :src="imgProv + infoProv._id" style="width: 100px; height: 110px; border-radius: 15px"/>
-          </div>
-          <div class="col-6 q-py-sm justify-center column">
-            <q-scroll-area class="q-ml-sm" horizontal style="height: 20px; width:100%">
-              <div class="text-subtitle2 text-weight-bolder">{{infoProv.name}}</div>
-            </q-scroll-area>
-            <div class="q-ml-sm">{{infoProv.email}}</div>
-            <div class="q-ml-sm items-center row text-grey">
-              <q-icon class="col-1" name="place" />
-              <q-scroll-area class="col" style="height: 20px">
-                <div class="text-subtitle2" style="font-size: 12px">{{infoProv.place}}</div>
-              </q-scroll-area>
+          <div class="text-grey q-mb-lg">{{form.descripcion}}</div>
+          <!-- <div class="row justify-center">
+            <div class="q-mr-xs text-h6 q-pr-sm">Cantidad</div>
+            <div class="q-mr-xs">
+              <q-input v-model.number="cantidad" borderless class="q-pr-sm" type="number" dense style="width: 50px" min="0"/>
             </div>
-          </div>
-          <div class="col-2 column justify-center">
-            <q-btn round flat color="primary" icon="store" @click="rol === 2 ? $router.push('/tienda/' + infoProv._id) : $router.push('/descripcionusuario/' + infoProv._id)"/>
-          </div>
+            <div class="q-pr-xs">
+              <q-btn round flat dense class="q-mr-xs" color="primary" icon="add" style="height: 30px;width:30px" @click="cantidad++"/>
+              <q-btn round flat dense class="q-mr-xs" color="primary" icon="remove" style="height: 30px;width:30px" @click="cantidad--"/>
+            </div>
+          </div> -->
         </div>
-      </q-card>
-      <div style="height: 100px;"></div>
+      </div>
     </div>
+    <!-- <div class="row justify-center q-ma-md">
+      <q-btn class="full-width" color="primary" text-color="white" rounded label="Agregar al carro" @click="agregar()" no-caps/>
+    </div> -->
   </div>
 </template>
 
@@ -78,6 +49,7 @@ export default {
       id: this.$route.params.id,
       rol: 0,
       form: {},
+      cantidad: 1,
       infoProv: {},
       imgProd: '',
       imgProv: '',

@@ -107,11 +107,11 @@
         </template>
       </q-input>
     </div>
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn round icon="shopping_bag" color="primary" size="20px">
         <q-badge color="red" label="2" floating/>
       </q-btn>
-    </q-page-sticky>
+    </q-page-sticky> -->
   </div>
 </template>
 
