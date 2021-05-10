@@ -41,7 +41,7 @@
             <div class="text-h6">Advertencia!</div>
           </q-card-section>
           <q-card-section class="q-pt-none">
-            Antes de salir de la tienda o recargar la página, debe efectuar la compra de los productos seleccionados, de lo contrario la lista de productos se renovará y se perderán los datos ingresados.
+            Antes de salir de la tienda o recargar la página, debe efectuar la compra de los productos seleccionados. De lo contrario, la lista de productos se renovará y se perderán los datos ingresados.
           </q-card-section>
           <q-card-actions align="right">
             <q-btn flat label="OK" color="primary" v-close-popup />
