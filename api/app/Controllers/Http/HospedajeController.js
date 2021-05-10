@@ -25,9 +25,10 @@ class HospedajeController {
    */
   async index ({ request, response, view }) {
     let datos = (await Hospedaje.query().where({}).with('datos_proveedor').fetch()).toJSON()
-    let filter = datos.filter(v => v.datos_proveedor.estatus === 1)
+    let filter = datos.filter(v => v.datos_proveedor.estatusHotel === 1)
     response.send(filter)
   }
+
 
   async hospedajeByProveedor ({ request, response, params }) {
     let datos = (await Hospedaje.query().where({ proveedor_id: params.proveedor_id }).fetch()).toJSON()

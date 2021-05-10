@@ -70,7 +70,6 @@ export default {
         // obtener direccion del marcador a traves de coordenadas
         var geocoder = new this.google.maps.Geocoder()
         geocoder.geocode({ location: this.marker.getPosition() }, function (results, status) {
-          console.log('aaaaaaaaaaaaaa')
           if (status === 'OK') {
             if (results[0]) {
               vm.place = results[0].formatted_address

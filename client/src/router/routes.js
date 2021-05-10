@@ -9,7 +9,9 @@ const routes = [
       { path: '/inicio_administrador', component: () => import('pages/admin/Inicio.vue') },
       { path: '/proveedores', component: () => import('pages/admin/Proveedores.vue') },
       { path: '/proveedores_pendientes', component: () => import('pages/admin/Pendientes.vue') },
+      { path: '/Hoteleria_pendientes', component: () => import('pages/admin/Hoteleriapendiente.vue') },
       { path: '/descripcionusuario/:id', component: () => import('pages/admin/DescripcionUsuario.vue') },
+      { path: '/descripcionhotel/:id', component: () => import('pages/admin/DescripcionHotel.vue') },
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/productos', component: () => import('pages/proveedor/Productos.vue') },

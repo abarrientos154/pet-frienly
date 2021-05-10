@@ -6,7 +6,7 @@
         <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/>
         <div class="text-black">{{page}}</div>
         <div>
-          <q-avatar rounded v-if="rol != 1" class="bg-secondary" icon="person" style="border-radius: 10px"></q-avatar>
+          <q-avatar rounded v-if="rol != 1" class="bg-secondary" icon="person" style="border-radius: 10px" @click="rol !== 1 ? $router.push('/Datos') : ''"></q-avatar>
         </div>
       </q-toolbar>
     </q-header>
@@ -62,6 +62,12 @@ export default {
           icon: 'list',
           label: 'Proveedores',
           ruta: '/proveedores',
+          permission: 1
+        },
+        {
+          icon: 'location_city',
+          label: 'Hoteleria',
+          ruta: '/Hoteleria_pendientes',
           permission: 1
         },
         {
@@ -137,7 +143,7 @@ export default {
     },
     getUser () {
       if (localStorage.TRI_SESSION_INFO) {
-        this.$api.get('user_info').then(v => {
+        this.$api.get('user_logueado').then(v => {
           if (v) {
             this.rol = v.roles[0]
             if (this.rol === 1) {

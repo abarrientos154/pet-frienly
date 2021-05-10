@@ -129,6 +129,94 @@
           </template>
           </q-select>
       </div>
+        <div v-if="hoteleriacampo" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <q-card class="q-pa-sm bg-grey-4">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
+          <div class="q-pl-lg text-black text-caption"> País</div>
+          <q-select outlined dense filled v-model="pais" :options="paises" option-value="ciudades" option-label="pais" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="public" color="primary" />
+            </template>
+          </q-select>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
+          <div class="q-pl-lg text-black text-caption"> ¿Donde daras Alojamiento?</div>
+          <q-select outlined dense filled v-model="hoteleria.ciudad_id" :options="pais" option-value="_id" option-label="ciudad" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="location_city" color="primary" />
+            </template>
+          </q-select>
+        </div>
+        <div class="q-pl-lg text-black text-caption"> ¿A quien les ofreceras espacios?</div>
+          <q-select outlined dense filled v-model="hoteleria.espacio" :options="espacio" option-value="label" option-label="label" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+          <div class="q-pl-lg text-black text-caption"> ¿Donde esta ubicado?</div>
+          <q-select outlined dense filled v-model="hoteleria.ubicacion" :options="ubicacion" option-value="label" option-label="label" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+          <div class="q-pl-lg text-black text-caption"> ¿Esta pensado especialmente para tus hospedadores?</div>
+          <q-select outlined dense filled v-model="hoteleria.pensado" :options="pensado" option-value="label" option-label="label" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+          <div class="q-pl-lg text-black text-caption"> Presto servicios por parte de</div>
+          <q-select outlined dense filled v-model="hoteleria.presto" :options="presto" option-value="label" option-label="label" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+          <div class="q-pl-lg text-black text-caption"> Cantidad de huespedes</div>
+              <q-input type="number" v-model="hoteleria.huespedes" dense outlined filled>
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> donde esta tu alojamiento</div>
+              <div class="q-pl-lg q-mt-sm text-black text-caption"> Direccion</div>
+              <q-input v-model="alojamiento.direccion" dense outlined filled>
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Apartamento o numero</div>
+              <q-input v-model="alojamiento.apartamento" dense outlined filled>
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Ciudad</div>
+              <q-input v-model="alojamiento.ciudad" dense outlined filled>
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Estado</div>
+              <q-input v-model="alojamiento.estado" dense outlined filled>
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Codigo postal</div>
+              <q-input type="number" v-model="alojamiento.codigo" dense outlined filled>
+                <template v-slot:before>
+                  <q-icon name="pets" color="primary" />
+                </template>
+              </q-input>
+              <div class="q-pl-lg text-black text-caption"> Servicios que ofrece</div>
+          <q-select outlined dense filled multiple v-model="hoteleria.ofrece" :options="ofrece" option-value="label" option-label="label" emit-value map-options>
+            <template v-slot:before>
+              <q-icon name="pets" color="primary" />
+            </template>
+          </q-select>
+
+      </q-card>
+        </div>
 
       <div class="full-width q-mb-xl">
         <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
@@ -159,6 +247,8 @@ export default {
   data () {
     return {
       type: 1,
+      hoteleria: {},
+      alojamiento: {},
       center: { lat: -33.4504117, lng: -70.6707553 },
       perfilFile: null,
       tiendaFiles: [],
@@ -174,7 +264,58 @@ export default {
       aparecer: false,
       mostrar: false,
       paises: [],
-      selectPais: []
+      pais: [],
+      selectPais: [],
+      espacio: [
+        {
+          label: 'Perros'
+        },
+        {
+          label: 'Gatos'
+        },
+        {
+          label: 'Ambos'
+        }
+      ],
+      ofrece: [
+        {
+          label: 'Alimentacion'
+        },
+        {
+          label: 'Paseo'
+        },
+        {
+          label: 'Peluquero'
+        }
+      ],
+      pensado: [
+        {
+          label: 'Si, solo esta habilitado para hospedaje'
+        },
+        {
+          label: 'No, vivo yo o alguien en el espacio'
+        }
+      ],
+      presto: [
+        {
+          label: 'Soy una persona natural'
+        },
+        {
+          label: 'Soy una empresa'
+        }
+      ],
+      ubicacion: [
+        {
+          label: 'Espacio compartido por Tipo: Tu mascota se alojara en un espacio compartido con otras mascotas de su mismo TIPO'
+        },
+        {
+          label: 'Espacio compartido: Tu mascota se alojara en un espacio compartido con otros perros y gatos'
+        },
+        {
+          label: 'Espacio Privado: Espacio habilitado para una sola mascota'
+        }
+      ]
+
     }
   },
   validations () {
@@ -196,6 +337,17 @@ export default {
     this.getPaises()
     this.obtenerDatos()
     this.baseu = env.apiUrl
+  },
+  computed: {
+    hoteleriacampo () {
+      console.log(this.servicios2, 'servicios')
+      const indexBuscar = this.servicios2.find(v => v === 1)
+      if (indexBuscar === 1) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
     ...mapMutations('generals', ['login']),
@@ -223,6 +375,11 @@ export default {
     async registrarse () {
       this.$v.$touch()
       this.$v.servicios2.$touch()
+      if (this.hoteleriacampo) {
+        this.form.hoteleria = this.hoteleria
+        this.form.hoteleria.alojamiento = this.alojamiento
+        this.form.hoteleria.pais_id = this.pais[0].pais_id
+      }
       this.form.servicios = this.servicios2
       this.form.pais_id = this.selectPais[0].pais_id
       console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos)

@@ -62,15 +62,17 @@ addPrefixToGroup(
     Route.get('hospedaje/:id', 'HospedajeController.show')
   })
 );
-
 addPrefixToGroup(
   Route.group(() => {
     // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo") // metodo para obtener informacion del usuario que esta logueado
+    Route.get("user_logueado", "UserController.userLogueado")
     Route.get("all_user", "UserController.allUser") // metodo para obtener informacion del usuario que esta logueado
     Route.post("user_enable/:id", "UserController.userEnable") // metodo para bloquear o desbloquear usuarios
     Route.post("user_by_status", "UserController.userByStatus") // metodo para obtener proveedores pendientes
+    Route.post("user_by_statushotel", "UserController.userByStatushotel")
     Route.put("update_status/:id", "UserController.userStatus") // metodo para bloquear o desbloquear usuarios
+    Route.put("update_statushotel/:id", "UserController.userStatushotel")
     Route.put('datosnew/:id', 'UserController.updatedata')
 
     Route.post('mascota', 'MascotaController.store')
@@ -90,6 +92,9 @@ addPrefixToGroup(
     Route.get('hospedaje_by_proveedor/:proveedor_id', 'HospedajeController.hospedajeByProveedor')
     Route.delete('hospedaje/:id', 'HospedajeController.destroy')
     Route.post('hospedaje_filtrado', 'HospedajeController.hospedajeFiltrado')
+    Route.post('perfil_imagen', 'UploadController.newimagenById')
+    Route.post("subir_archivo_proveedor" ,'UploadController.subirimgtiendaById')
+    Route.get("eliminar_imagen_tienda/:id" ,'UploadController.eliminarigmtiendaById')
 
   }).middleware("auth")
 );

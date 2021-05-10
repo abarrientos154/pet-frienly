@@ -10,6 +10,10 @@ class User extends Model {
   static get fillable() {
     return ['email','password','fechaNac']
   }
+  static get fillablePerfil() {
+    return ['email','password','ciudad_id', 'dni', 'name' , 'hoteleria' , 'pais_id' , 'servicios',
+    'ubicacion', 'place', 'cambioSoloClave', 'cambioClave' , 'cambiohotel']
+  }
   static fieldValidationRules() {
     const rulesUser = {
       email: 'required|email',
