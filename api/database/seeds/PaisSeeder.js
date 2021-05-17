@@ -17,12 +17,14 @@ const paisData = [
   {
     id: 1,
     _id: '60652fc0c547bd0ec7b69ab6',
-    pais: 'Chile'
+    name: 'Chile',
+    ubicacion: { lat: -35.675147, lng: -71.542969 }
   },
   {
     id: 2,
     _id: '60652fc1c547bd0ec7b69ab7',
-    pais: 'Colombia'
+    name: 'Colombia',
+    ubicacion: { lat: 4.570868, lng: -74.297333 }
   }
 
 ]
@@ -33,8 +35,8 @@ class PaisSeeder {
       if (!pais) {
         await Pais.create(paisData[i])
       } else {
-        pais.id = paisData[i].id
-        pais.pais = paisData[i].pais
+        pais.name = paisData[i].name
+        pais.ubicacion =paisData[i].ubicacion
         await pais.save()
       }
     }

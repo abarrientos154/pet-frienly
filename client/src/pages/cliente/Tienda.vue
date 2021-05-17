@@ -1,65 +1,149 @@
 <template>
   <div>
-    <div v-if="carro == false" class="column justify-between">
-      <div class="q-pa-md row">
-        <div class="q-mr-md col-2 column items-center">
-          <q-avatar rounded class="q-mb-sm" v-for="(img, index) in data.tiendaFiles" :key="index" @click="mostrarimg(index)" style="height: 75px; width: 100%; border-radius: 15px;">
-            <q-img style="height: 100%;" :src="baseuTienda + img"/>
-          </q-avatar>
+    <div v-if="carro == false">
+      <div>
+        <div>
+          <q-carousel animated arrows navigation infinite v-model="carrusel" style="height: 250px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px">
+            <q-carousel-slide :name="0" :img-src="baseu + perfile" />
+            <q-carousel-slide v-for="(img, index) in data.tiendaFiles" :key="index" :name="index + 1" :img-src="baseuTienda + img" />
+          </q-carousel>
+
+          <div class="q-pa-md">
+            <div class="text-h5 q-mb-xs">{{data.name}}</div>
+            <div class="row text-grey q-mb-xs">
+              <q-icon name="place" size="20px"/>
+              <div>{{data.place ? data.place : 'Pais, Ciudad'}}</div>
+            </div>
+            <div class="q-gutter-y-md row q-mb-xs">
+              <q-rating
+                v-model="ratingModel"
+                size="20px"
+                icon="star"
+              />
+              <div class="q-pa-sm text-green-9 text-bold">{{"("}}{{this.ratingModel}}{{")"}}</div>
+            </div>
+            <div class="text-h6 q-mb-xs">Nuestra tienda</div>
+            <div class="text-grey-7 text-subtitle">{{ lorem }}</div>
+          </div>
         </div>
 
-        <div class="col column items-center">
-          <q-avatar rounded style="height: 350px; width: 100%; border-radius: 15px;" class="q-mb-md" @click="perfilimg = true">
-            <q-img style="height: 100%;" :src="perfilimg ? baseu + perfile : baseuTienda + data.tiendaFiles[selecimg]"/>
-          </q-avatar>
+        <div v-if="misProd.length > 0">
+          <div class="q-pa-md text-h6">Ultimos productos agregados</div>
 
-          <div class="full-width column items-center">
-            <div class="text-h5 text-center">{{data.name}}</div>
-            <div class="items-center row text-grey-8">
-              <q-icon class="col-1" name="email" />
-              <div class="text-subtitle2 col" style="font-size: 12px">{{data.email}}</div>
+          <q-scroll-area horizontal class="q-mb-sm" style="height: 250px; width:100%">
+            <div class="row no-wrap" style="width: 100%">
+              <q-card v-for="(item, index) in misProd" :key="index" class="q-mb-md q-mx-sm col no-wrap" style="width: 160px; height: 230px; border-radius: 12px;">
+                <q-img :src="baseuProd + item.images[0]" style="height: 100%;">
+                  <q-btn class="absolute-top-right q-ma-sm" round :icon="item.llevar ? 'dangerous' : 'shopping_bag'" color="primary" size="15px" @click="llevarProd(index)"/>
+                  <div class="absolute-bottom" @click="$router.push('/descripcionproducto/'+item._id)">
+                    <div class="text-caption text-weight-bolder">{{item.name}}</div>
+                    <div class="text-primary text-weight-bolder">${{item.precio}}</div>
+                  </div>
+                </q-img>
+              </q-card>
             </div>
-            <div class="items-center row text-grey-8">
-              <q-icon class="col-1" name="payment" />
-              <div class="text-subtitle2 col" style="font-size: 12px">{{data.dni}}</div>
-            </div>
-            <div class="items-center row text-grey-8 q-mb-md">
-              <q-icon class="col-1" name="room" />
-              <div class="text-subtitle2 col" style="font-size: 12px">{{data.place}}</div>
-            </div>
+          </q-scroll-area>
 
-            <div v-if="data.roles" class="full-width">
-              <div class="text-subtitle1 text-center">{{rol === 3 ? 'Mis Productos' : ''}}</div>
-              <listado-de-sugerencia :data="misDatos" :direccion="false" :ruta="data.roles[0] !== 3 ? 'proveedor' : 'cliente'" @llevarProductos="productos = $event" class="q-mt-xs"/>
+          <div class="q-pa-md text-h6">Todos los productos</div>
+
+          <q-list class="row justify-center" v-if="misProd.length <= 6">
+            <q-card v-for="(item, index) in misProd" :key="index" class="q-mb-md q-mx-sm" style="width: 160px; height: 230px; border-radius: 12px;">
+              <q-img :src="baseuProd + item.images[0]" style="height: 100%;">
+                <q-btn class="absolute-top-right q-ma-sm" round :icon="item.llevar ? 'dangerous' : 'shopping_bag'" color="primary" size="15px" @click="llevarProd(index)"/>
+                <div class="absolute-bottom"  @click="$router.push('/descripcionproducto/'+item._id)">
+                  <div class="text-caption text-weight-bolder">{{item.name}}</div>
+                  <div class="text-primary text-weight-bolder">${{item.precio}}</div>
+                </div>
+              </q-img>
+            </q-card>
+          </q-list>
+
+          <div v-else>
+            <q-list v-if="ver == false" class="row justify-center">
+              <div v-for="index in 6" :key="index" class="row justify-center col-xs-6 col-sm-3 col-md-3 col-lg-3 q-pb-md q-px-sm">
+                <q-card style="width: 160px; height: 230px; border-radius: 12px;">
+                  <q-img :src="baseuProd + misProd[index - 1].images[0]" style="height: 100%;">
+                    <q-btn class="absolute-top-right q-ma-sm" round :icon="misProd[index - 1].llevar ? 'dangerous' : 'shopping_bag'" color="primary" size="15px" @click="llevarProd(index - 1)"/>
+                    <div class="absolute-bottom"  @click="$router.push('/descripcionproducto/'+misProd[index - 1]._id)">
+                      <div class="text-caption text-weight-bolder">{{misProd[index - 1].name}}</div>
+                      <div class="text-primary text-weight-bolder">${{misProd[index - 1].precio}}</div>
+                    </div>
+                  </q-img>
+                </q-card>
+              </div>
+            </q-list>
+            <q-scroll-area v-else class="q-mb-sm" style="height: 750px;">
+              <q-list class="row justify-center">
+                <div v-for="(item, index) in misProd" :key="index" class="row justify-center col-xs-6 col-sm-3 col-md-3 col-lg-3 q-pb-md q-px-sm">
+                  <q-card style="width: 160px; height: 230px; border-radius: 12px;">
+                    <q-img :src="baseuProd + item.images[0]" style="height: 100%;">
+                      <q-btn class="absolute-top-right q-ma-sm" round :icon="item.llevar ? 'dangerous' : 'shopping_bag'" color="primary" size="15px" @click="llevarProd(index)"/>
+                      <div class="absolute-bottom" @click="$router.push('/descripcionproducto/'+item._id)">
+                        <div class="text-caption text-weight-bolder">{{item.name}}</div>
+                        <div class="text-primary text-weight-bolder">${{item.precio}}</div>
+                      </div>
+                    </q-img>
+                  </q-card>
+                </div>
+              </q-list>
+            </q-scroll-area>
+            <div class="row justify-center q-ma-md">
+              <q-btn class="q-pa-sm" color="primary" text-color="white" rounded :label="ver ? 'Ver menos' : 'Ver más'" @click="ver = !ver" style="width: 60%" no-caps/>
             </div>
           </div>
         </div>
+
+        <div class="q-pa-md q-mb-md" v-if="misEspacios.length > 0">
+          <div class="q-mb-sm text-h6">Nuestros espacios</div>
+          <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
+            <q-card v-for="(hospedaje, index) in misEspacios" :key="index" class="q-mb-md q-mx-sm col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+              <q-img :src="hospedaje.images[0] ? baseuHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" style="height: 175px;">
+                <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
+              </q-img>
+              <div class="row justify-end" style="margin-top: -55px">
+                <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_car" size="50px" style="border-radius: 15px;"/>
+                <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="pool" size="50px" style="border-radius: 15px;"/>
+                <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_walk" size="50px" style="border-radius: 15px;"/>
+              </div>
+              <q-card-section class="row justify-between">
+                <div>
+                  <div class="text-subtitle2" style="font-size: 13px">{{hospedaje.name}}</div>
+                  <div class="items-center row text-grey">
+                      <q-icon name="place" />
+                      <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
+                  </div>
+                </div>
+                <q-btn no-caps flat dense rounded @click="$router.push('/descripcion_hospedaje/' + hospedaje._id)" class="bg-primary text-white q-pa-sm">${{hospedaje.price}} por noche</q-btn>
+              </q-card-section>
+            </q-card>
+          </q-list>
+        </div>
       </div>
+
       <q-dialog v-model="alert">
         <q-card>
           <q-card-section>
             <div class="text-h6">Advertencia!</div>
           </q-card-section>
-          <q-card-section class="q-pt-none">
-            Antes de salir de la tienda o recargar la página, debe efectuar la compra de los productos seleccionados. De lo contrario, la lista de productos se renovará y se perderán los datos ingresados.
-          </q-card-section>
+          <q-card-section class="q-pt-none">{{ loremAlert }}</q-card-section>
           <q-card-actions align="right">
             <q-btn flat label="OK" color="primary" v-close-popup />
           </q-card-actions>
         </q-card>
       </q-dialog>
-      <q-page-sticky position="bottom-left">
-        <q-btn round class="q-ma-md" icon="shopping_cart" color="primary" size="20px" @click="carrocompras()">
-          <q-badge v-if="productos.length > 0" color="red" :label="productos.length" floating/>
+
+      <q-page-sticky position="bottom-right" v-if="misProd.length > 0">
+        <q-btn round class="q-ma-md" icon="shopping_bag" color="primary" size="20px" @click="carrocompras()">
+          <q-badge v-if="productosSelec.length > 0" color="red" :label="productosSelec.length" floating/>
         </q-btn>
       </q-page-sticky>
     </div>
 
     <div v-else>
-      <div v-if="productos.length > 0">
+      <div v-if="productosSelec.length > 0">
         <div>
           <q-list class="column items-center q-pa-md">
-            <div v-for="(item, index) in productos" :key="index" class="row justify-between full-width q-mb-md no-wrap">
+            <div v-for="(item, index) in productosSelec" :key="index" class="row justify-between full-width q-mb-md no-wrap">
               <div class="row no-wrap">
                 <div class="row no-wrap">
                   <div>
@@ -118,32 +202,27 @@
 </template>
 
 <script>
-import ListadoDeSugerencia from '../../components/ListadoDeSugerencia.vue'
 import env from '../../env'
 export default {
-  components: { ListadoDeSugerencia },
   data () {
     return {
       id: this.$route.params.id,
       baseu: '',
       baseuTienda: '',
       baseuProd: '',
+      baseuHospedaje: '',
       perfile: '',
+      carrusel: 0,
       rol: null,
-      today: null,
-      now: null,
       data: {},
-      misDatos: [],
-      img: '',
-      estado: false,
-      dialogStado: false,
-      ratingPerfil: 0,
-      perfilimg: true,
-      selecimg: 0,
+      misProd: [],
+      ver: false,
+      misEspacios: [],
+      ratingModel: 3,
+      lorem: '¡Descubre diferentes lugares, playas, hoteles y principales zonas turísticas en Mejillones para planificar de manera más organizada y divertida tu viaje! Consigue ofertas exclusivas, gestiona tus reservas y revisa la opinión de otros viajeros.',
+      loremAlert: 'Antes de salir de la tienda o recargar la página, debe efectuar la compra de los productos seleccionados. De lo contrario, la lista de productos se renovará y se perderán los datos ingresados.',
+      productosSelec: [],
       carro: false,
-      productos: [],
-      cantidad: 1,
-      seleccionado: true,
       articulos: 0,
       valor: 0,
       comision: 0,
@@ -155,10 +234,6 @@ export default {
     this.getInfo()
   },
   methods: {
-    verImg (img) {
-      this.baseu = env.apiUrl + 'tienda_img/'
-      this.perfile = img
-    },
     getInfo () {
       this.$api.get('user_by_id/' + this.id).then(v => {
         this.data = v
@@ -169,20 +244,44 @@ export default {
         this.baseuTienda = env.apiUrl + 'tienda_img/'
         if (this.rol === 3) {
           this.getProduct()
+          this.getEspacios()
         }
       })
     },
     getProduct () {
       this.$api.get('producto_by_proveedor/' + this.id).then(v => {
         if (v) {
-          this.misDatos = v
+          this.misProd = v
           this.baseuProd = env.apiUrl + 'productos_img/'
         }
       })
     },
-    mostrarimg (ind) {
-      this.perfilimg = false
-      this.selecimg = ind
+    getEspacios () {
+      this.$api.get('hospedaje_by_proveedor/' + this.id).then(v => {
+        if (v) {
+          this.misEspacios = v
+          console.log(this.misEspacios)
+          this.baseuHospedaje = env.apiUrl + 'hospedajes_img'
+        }
+      })
+    },
+    llevarProd (ind) {
+      if (this.misProd[ind].llevar) {
+        this.misProd[ind].llevar = !this.misProd[ind].llevar
+        if (this.misProd[ind].llevar === true) {
+          this.misProd[ind].llevarCant = 1
+          this.misProd[ind].cantidad = this.misProd[ind].cantidad - this.misProd[ind].llevarCant
+        } else {
+          this.misProd[ind].llevarCant = 0
+          this.misProd[ind].cantidad = this.misProd[ind].cantidad + 1
+        }
+        this.productosSelec = this.misProd.filter(v => v.llevar)
+      } else {
+        this.misProd[ind].llevar = true
+        this.misProd[ind].llevarCant = 1
+        this.misProd[ind].cantidad = this.misProd[ind].cantidad - this.misProd[ind].llevarCant
+        this.productosSelec = this.misProd.filter(v => v.llevar)
+      }
     },
     carrocompras () {
       this.carro = !this.carro
@@ -218,7 +317,7 @@ export default {
       this.valor = 0
       this.comision = 0
       this.total = 0
-      this.checProd = this.productos.filter(v => v.llevar)
+      this.checProd = this.productosSelec.filter(v => v.llevar)
       for (const i of this.checProd) {
         this.articulos = this.articulos + i.llevarCant
         for (let j = 0; j < i.llevarCant; j++) {

@@ -15,7 +15,7 @@
         <div class="column full-width">
           <div class="q-mb-sm row justify-between items-center">
             <div class="text-h6">{{form.name}}</div>
-            <q-btn round flat dense class="q-mr-xs" color="primary" icon="store" style="height: 30px;width:30px" @click="rol === 2 ? $router.push('/tienda/' + infoProv._id) : $router.push('/descripcionusuario/' + infoProv._id)"/>
+            <q-btn round flat dense class="q-mr-xs" color="primary" icon="store" style="height: 30px;width:30px" @click="$router.push('/tienda/' + infoProv._id)"/>
           </div>
           <div class="text-grey q-mb-lg">Disponible - {{form.cantidad}} Unidades</div>
           <div class="row q-mb-lg">
@@ -47,7 +47,6 @@ export default {
   data () {
     return {
       id: this.$route.params.id,
-      rol: 0,
       form: {},
       cantidad: 1,
       infoProv: {},
@@ -61,11 +60,6 @@ export default {
   },
   methods: {
     cargarProducto () {
-      this.$api.get('user_info').then(res => {
-        if (res) {
-          this.rol = res.roles[0]
-        }
-      })
       this.$api.get('producto/' + this.id).then(res => {
         if (res) {
           this.form = res

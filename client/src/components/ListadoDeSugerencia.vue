@@ -13,7 +13,7 @@
               <div class="q-ml-sm">Precio: {{item.precio}}$</div>
             </div>
             <div class="col-2 column justify-center">
-              <q-btn round flat :icon="item.llevar ? 'dangerous' : 'add_shopping_cart'" :color="item.llevar ? 'red' : 'primary'" @click="llevarProd(index)"/>
+              <!-- <q-btn round flat :icon="item.llevar ? 'dangerous' : 'add_shopping_cart'" :color="item.llevar ? 'red' : 'primary'" @click="llevarProd(index)"/> -->
             </div>
           </div>
         </q-card>

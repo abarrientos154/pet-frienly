@@ -16,28 +16,33 @@ const Ciudad = use("App/Models/Ciudad")
 const ciudadData = [
   {
     id: 1,
-    ciudad: 'Antofagasta',
-    pais_id: '60652fc0c547bd0ec7b69ab6'
+    pais_id: '60652fc0c547bd0ec7b69ab6',
+    name: 'Antofagasta',
+    ubicacion: { lat: -23.65236, lng: -70.3954 }
   },
   {
     id: 2,
-    ciudad: 'Santiago',
-    pais_id: '60652fc0c547bd0ec7b69ab6'
+    pais_id: '60652fc0c547bd0ec7b69ab6',
+    name: 'Santiago',
+    ubicacion: { lat: -33.45694, lng: -70.64827 }
   },
   {
     id: 3,
-    ciudad: 'Concepcion',
-    pais_id: '60652fc0c547bd0ec7b69ab6'
+    pais_id: '60652fc0c547bd0ec7b69ab6',
+    name: 'Concepcion',
+    ubicacion: { lat: -36.82699, lng: -73.04977 }
   },
   {
     id: 4,
-    ciudad: 'Cali',
-    pais_id: '60652fc1c547bd0ec7b69ab7'
+    pais_id: '60652fc1c547bd0ec7b69ab7',
+    name: 'Cali',
+    ubicacion: { lat: 3.43722, lng: -76.5225 }
   },
   {
     id: 5,
-    ciudad: 'Bogota',
-    pais_id: '60652fc1c547bd0ec7b69ab7'
+    pais_id: '60652fc1c547bd0ec7b69ab7',
+    name: 'Bogota',
+    ubicacion: { lat: 4.60971, lng: -74.08175 }
   }
 
 ]
@@ -49,8 +54,9 @@ class CiudadSeeder {
       if (!ciudad) {
         await Ciudad.create(ciudadData[i])
       } else {
-        ciudad.ciudad = ciudadData[i].ciudad
         ciudad.pais_id = ciudadData[i].pais_id
+        ciudad.name = ciudadData[i].name
+        ciudad.ubicacion = ciudadData[i].ubicacion
         await ciudad.save()
       }
     }

@@ -17,6 +17,10 @@ class CiudadController {
     let datos = await Ciudad.all()
     response.send(datos)
   }
+  async ciudadById({ params, response }) {
+    const ciudad = await Ciudad.find(params.id)
+    response.send(ciudad)
+  }
 }
 
 module.exports = CiudadController

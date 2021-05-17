@@ -5,11 +5,12 @@ const Model = use('Model')
 
 class Pais extends Model {
     static get fillable() {
-        return ['pais']
+        return ['name',"ubicacion"]
     }
     static fieldValidationRules() {
         const rules = {
-          pais: "required|string"
+          name: "required|string",
+          ubicacion:"required"
         }
         return rules
     }

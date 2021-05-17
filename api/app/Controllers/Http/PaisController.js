@@ -17,6 +17,10 @@ class PaisController {
     let datos = (await Pais.query().with('ciudades').fetch()).toJSON()
     response.send(datos)
   }
+  async paisById({ params, response }) {
+    const pais = await Pais.find(params.id)
+    response.send(pais)
+  }
 }
 
 module.exports = PaisController

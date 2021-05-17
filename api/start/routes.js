@@ -41,7 +41,9 @@ addPrefixToGroup(
     Route.post("register", "UserController.register")
     Route.post("register_proveedor", "UserController.registerProveedor")
     Route.get("pais", "PaisController.index")
+    Route.get("pais_by_id/:id", "PaisController.paisById")
     Route.get("ciudades", "CiudadController.index")
+    Route.get("ciudad_by_id/:id", "CiudadController.ciudadById")
     Route.get("habitacion_type", "HabitacionController.index")
     Route.get("validate_email/:email", "UserController.validateEmail")
 

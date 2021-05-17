@@ -6,7 +6,7 @@
       ref="autocomp"
       for="input"
       class="col-xs-12 col-sm-6 col-md-6 col-lg-6"
-      v-model="place"
+      v-model="place_default"
       placeholder="Ingrese Direccion"
       stack-label
       borderless
@@ -34,7 +34,7 @@ export default {
   computed: {
     google: gmapApi
   },
-  props: ['center', 'zoom', 'type', 'withoutDirection'],
+  props: ['place_default', 'center', 'zoom', 'type', 'withoutDirection'],
   data () {
     return {
       directionsService: {},

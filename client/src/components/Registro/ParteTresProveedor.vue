@@ -64,7 +64,7 @@
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <div class="q-pl-lg text-black text-caption"> Nombre de la tienda</div>
             <q-input v-model="form.name" outlined filled
-              dense error-message="Ingrese un nombre válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
+              dense error-message="Ingrese un nombre válido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()">
               <template v-slot:before>
                 <q-icon name="person" color="primary" />
               </template>
@@ -73,7 +73,7 @@
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
             <div class="q-pl-lg text-black text-caption"> Numero indentificador de la empresa</div>
             <q-input v-model="form.dni" outlined filled
-              dense error-message="Ingrese un dni válido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()">
+              dense error-message="Ingrese un dni válido" :error="$v.form.dni.$error" @blur="$v.form.dni.$touch()">
               <template v-slot:before>
                 <q-icon name="payment" color="primary" />
               </template>
@@ -81,7 +81,7 @@
           </div>
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
         <div class="q-pl-lg text-black text-caption"> País</div>
-        <q-select outlined dense filled v-model="selectPais" :options="paises" option-value="ciudades" option-label="pais" emit-value map-options>
+        <q-select outlined dense filled v-model="selectPais" :options="paises" @input="ubicarPais()" option-value="ciudades" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.form.pais_id.$error" @blur="$v.form.pais_id.$touch()">
           <template v-slot:before>
             <q-icon name="public" color="primary" />
           </template>
@@ -89,7 +89,7 @@
       </div>
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-mb-md">
         <div class="q-pl-lg text-black text-caption"> Ciudad</div>
-        <q-select outlined dense filled v-model="form.ciudad_id" :options="selectPais" option-value="_id" option-label="ciudad" emit-value map-options>
+        <q-select outlined dense filled v-model="form.ciudad_id" :options="selectPais" @input="ubicarCiudad()" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.form.ciudad_id.$error" @blur="$v.form.ciudad_id.$touch()">
           <template v-slot:before>
             <q-icon name="location_city" color="primary" />
           </template>
@@ -98,6 +98,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
           <div class="q-pl-lg text-black text-caption"> servicios de la Tienda</div>
           <q-select
+            dense
             outlined
             filled
             option-value="id"
@@ -219,7 +220,7 @@
         </div>
 
       <div class="full-width q-mb-xl">
-        <google-map :center="center" :zoom="10" @getBounds="getBounds" @newPlace="handleNewPlace" :withoutDirection="false" />
+        <google-map :place_default="place" :center="center" :zoom="zoom" @getBounds="getBounds" @newPlace="handleNewPlace2" :withoutDirection="false" />
       </div>
       <div class="column items-center justify-center full-width">
         <q-checkbox v-model="terminos" size="xs" label="Acepto Terminos y condiciones de uso" />
@@ -249,6 +250,7 @@ export default {
       type: 1,
       hoteleria: {},
       alojamiento: {},
+      zoom: 10,
       center: { lat: -33.4504117, lng: -70.6707553 },
       perfilFile: null,
       tiendaFiles: [],
@@ -266,6 +268,9 @@ export default {
       paises: [],
       pais: [],
       selectPais: [],
+      location: {},
+      location2: {},
+      place: '',
       espacio: [
         {
           label: 'Perros'
@@ -325,7 +330,8 @@ export default {
         name: { required },
         pais_id: { required },
         ciudad_id: { required },
-        email: { required, email }
+        email: { required, email },
+        location_default: { required }
       },
       perfilFile: { required },
       servicios2: { required },
@@ -381,7 +387,6 @@ export default {
         this.form.hoteleria.pais_id = this.pais[0].pais_id
       }
       this.form.servicios = this.servicios2
-      this.form.pais_id = this.selectPais[0].pais_id
       console.log(this.$v.form.$error, this.$v.password.$error, this.$v.repeatPassword.$error, this.$v.perfilFile.$error, this.terminos)
       if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terminos && !this.$v.servicios2.$error) {
         this.form.password = this.password
@@ -421,8 +426,17 @@ export default {
     },
     handleNewPlace (place, coordinates) {
       console.log('handleNewPlace', coordinates, place, this.form, 'from')
-      this.form.ubicacion = coordinates
-      this.form.place = place
+      this.location.coordinates = coordinates
+      this.location.place = place
+      this.form.location_default = this.location
+      this.direction()
+    },
+    handleNewPlace2 (place, coordinates) {
+      console.log('handleNewPlace', coordinates, place, this.form, 'from')
+      this.location2.coordinates = coordinates
+      this.location2.place = place
+      this.form.location_assistant = this.location2
+      this.direction()
     },
     loguear () {
       this.$api.post('login', this.form).then(res => {
@@ -442,16 +456,39 @@ export default {
         this.$q.loading.hide()
       })
     },
-    savePais (pais) {
-      console.log(pais)
-      this.form.pais = pais
-    },
     getPaises () {
       this.$api.get('pais').then(res => {
         if (res) {
           this.paises = res
         }
       })
+    },
+    ubicarPais () {
+      this.$api.get('pais_by_id/' + this.selectPais[0].pais_id).then(res => {
+        if (res) {
+          this.form.pais_id = res._id
+          this.center = res.ubicacion
+          this.zoom = 7
+          this.handleNewPlace(res.name, res.ubicacion)
+        }
+      })
+    },
+    ubicarCiudad () {
+      this.$api.get('ciudad_by_id/' + this.form.ciudad_id).then(res => {
+        if (res) {
+          var place = res.name + ', ' + this.location.place
+          this.center = res.ubicacion
+          this.zoom = 9
+          this.handleNewPlace(place, res.ubicacion)
+        }
+      })
+    },
+    direction () {
+      if (this.location2.place) {
+        this.place = this.location2.place
+      } else if (this.location.place) {
+        this.place = this.location.place
+      }
     }
   }
 }
