@@ -1,4 +1,3 @@
-
 const routes = [
   {
     path: '/index',
@@ -39,6 +38,8 @@ const routes = [
   },
   { path: '/login', component: () => import('pages/Login.vue') },
   { path: '/registro', component: () => import('pages/Registro.vue') },
+  { path: '/tipo_usuario', component: () => import('pages/TipoCliente.vue') },
+  { path: '/proveedor/registro', component: () => import('pages/proveedor/Registro.vue') },
   {
     path: '/',
     redirect: '/inicio_cliente'
