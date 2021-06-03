@@ -19,7 +19,7 @@
          </div>
          <div style="text-align: left; padding-top: 20px">
            Fecha de Nacimiento
-           <q-input type="date" filled v-model="form.fecha"  dense placeholder="Nombre del representante legal"/>
+           <q-input type="date" filled v-model="form.fecha_nac"  dense placeholder="Nombre del representante legal"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
            Telefono de Contacto
@@ -27,7 +27,7 @@
          </div>
          <div style="text-align: left; padding-top: 20px">
            Correo de contacto
-           <q-input filled v-model="form.nombre"  dense placeholder="micorreo@petfriendly.com "/>
+           <q-input filled v-model="form.correo"  dense placeholder="micorreo@petfriendly.com "/>
          </div>
          <div style="text-align: left; padding-top: 30px">
            Imágenes de documento de identificacion
@@ -90,19 +90,19 @@
           </div>
          <div style="text-align: left; padding-top: 20px">
            Nombre de tienda
-           <q-input filled v-model="form.nombre_tienda"  dense placeholder="Nombre comercial"/>
+           <q-input filled v-model="form2.nombre"  dense placeholder="Nombre comercial"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
            Correo de contacto tienda
-           <q-input filled v-model="form.correo_tienda"  dense placeholder="micorreo@petfriendly.com "/>
+           <q-input filled v-model="form2.correo"  dense placeholder="micorreo@petfriendly.com "/>
          </div>
          <div style="text-align: left; padding-top: 20px">
            Telefono de Contacto tienda
-           <q-input type="tel" filled v-model="form.telefono_tienda"  dense placeholder="+34543234"/>
+           <q-input type="tel" filled v-model="form2.telefono"  dense placeholder="+34543234"/>
          </div>
          <div style="text-align: left; padding-top: 20px; width: 100%;">
            Descripción
-           <q-input type="textarea" filled v-model="form.descripcion_tienda"/>
+           <q-input type="textarea" filled v-model="form2.descripcion"/>
          </div>
           <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 60px" @click="slide=3"/>
         </div>
@@ -117,22 +117,22 @@
         </q-img>
          <div style="text-align: left; padding-top: 20px">
           País
-          <q-select dense filled v-model="form.pais" :options="paises" option-value="ciudades" option-label="name" label="Selecciona el país donde vas a trabajar"/>
+          <q-select dense filled v-model="form2.pais" :options="paises" option-value="ciudades" option-label="name" label="Selecciona el país donde vas a trabajar"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
           Ciudad
-          <q-select dense filled v-model="form.region" :options="paises" option-value="ciudades" option-label="name" label="Selecciona la región donde vas a trabajar"/>
+          <q-select dense filled v-model="form2.region" :options="paises" option-value="ciudades" option-label="name" label="Selecciona la región donde vas a trabajar"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
            Dirección
-           <q-input filled v-model="form.direccion"  dense placeholder="Escriba la dirección fisica de la tienda"/>
+           <q-input filled v-model="form2.direccion"  dense placeholder="Escriba la dirección fisica de la tienda"/>
          </div>
          <div class="col row">
           <div style="text-align: left; padding-top: 20px" class="col-6">
             Horario de Apertura
           </div>
           <div style="text-align: left; padding-top: 20px" class="col-6">
-            <q-input type="time" filled v-model="form.hora_inicio"  dense/>
+            <q-input type="time" filled v-model="form2.hora_inicio"  dense/>
           </div>
          </div>
          <div class="col row">
@@ -140,15 +140,15 @@
             Horario de cierre
           </div>
           <div style="text-align: left; padding-top: 20px" class="col-6">
-            <q-input type="time" filled v-model="form.hora_cierre" dense/>
+            <q-input type="time" filled v-model="form2.hora_cierre" dense/>
           </div>
          </div>
-          <div><q-checkbox v-model="form.despachosReg" size="xs" label="Despachos a regiones" style="padding-top: 20px"/></div>
-          <div><q-checkbox v-model="form.delivery" size="xs" label="Delivery" style="padding-top: 20px"/></div>
+          <div><q-checkbox v-model="form2.despachosReg" size="xs" label="Despachos a regiones" style="padding-top: 20px"/></div>
+          <div><q-checkbox v-model="form2.delivery" size="xs" label="Delivery" style="padding-top: 20px"/></div>
           <div class="col row" style="padding-left: 50px; font-size: 9px">
             <div class="col-6">Valor del delivery</div>
-            <div class="col-6"><q-input type="number" filled v-model="form.deliveryM" prefix="$" dense placeholder="1000"/></div>
-            <q-checkbox v-model="form.deliveryG" size="xs" label="Delivery Gratis" style="padding-top: 20px"/>
+            <div class="col-6"><q-input type="number" filled v-model="form2.deliveryM" prefix="$" dense placeholder="1000"/></div>
+            <q-checkbox v-model="form2.deliveryG" size="xs" label="Delivery Gratis" style="padding-top: 20px"/>
           </div>
           <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 60px" @click="slide=4"/>
         </div>
@@ -160,8 +160,9 @@
 export default {
   data () {
     return {
-      slide: 3,
+      slide: 1,
       form: {},
+      form2: {},
       files: [],
       perfilFile: [],
       imgPerfil: '',
