@@ -19,6 +19,15 @@
           <div class="text-subtitle1">app. Desde paseos hasta alojamiento.</div>
       </div>
       </q-carousel-slide>
+      <q-carousel-slide :name="3" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax1.jpg">
+        <q-btn flat round color="primary" icon="arrow_forward_ios" class="fixed-right"  to="/hospedador/registro"/>
+        <div class="absolute-bottom custom-caption">
+          <div class="text-h4" color="white">Quiero ser un proveedor</div>
+          <div class="text-h4" color="white">de espacios</div>
+          <div class="text-subtitle1">tienes espacios para alojar mascotas?</div>
+          <div class="text-subtitle1">PetFriendly es tu lugar</div>
+        </div>
+      </q-carousel-slide>
       <template v-slot:control>
         <q-carousel-control
           position="bottom-left"
