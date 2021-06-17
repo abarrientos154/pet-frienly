@@ -40,10 +40,12 @@ addPrefixToGroup(
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
     Route.post("register_proveedor", "UserController.registerProveedor")
+    Route.post("register_client", "UserController.registerClient")
     Route.get("pais", "PaisController.index")
     Route.get("pais_by_id/:id", "PaisController.paisById")
     Route.get("ciudades", "CiudadController.index")
     Route.get("ciudad_by_id/:id", "CiudadController.ciudadById")
+    Route.get("cityByCountry/:id", "CiudadController.cityByCountry")
     Route.get("habitacion_type", "HabitacionController.index")
     Route.get("validate_email/:email", "UserController.validateEmail")
 
@@ -52,21 +54,21 @@ addPrefixToGroup(
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
-
+    
     Route.post("user_by_rol", "UserController.userByRol") // metodo para obtener usuarios segun el rol
     Route.get("user_by_id/:id", "UserController.userById") // metodo para obtener informacion del usuario por id del mismo
-
+    
     Route.get('producto', 'ProductoController.index')
     Route.get('producto/:id', 'ProductoController.show')
     Route.get('producto_by_proveedor/:proveedor_id', 'ProductoController.productoByProveedor')
-
+    
     Route.get('hospedaje', 'HospedajeController.index')
     Route.get('hospedaje/:id', 'HospedajeController.show')
   })
-);
-addPrefixToGroup(
-  Route.group(() => {
-    // Insertar rutas con protección de autenticación aquí
+  );
+  addPrefixToGroup(
+    Route.group(() => {
+      // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo") // metodo para obtener informacion del usuario que esta logueado
     Route.get("user_logueado", "UserController.userLogueado")
     Route.get("all_user", "UserController.allUser") // metodo para obtener informacion del usuario que esta logueado
@@ -76,19 +78,19 @@ addPrefixToGroup(
     Route.put("update_status/:id", "UserController.userStatus") // metodo para bloquear o desbloquear usuarios
     Route.put("update_statushotel/:id", "UserController.userStatushotel")
     Route.put('datosnew/:id', 'UserController.updatedata')
-
-    Route.post('mascota', 'MascotaController.store')
+    
     Route.get('mascota', 'MascotaController.index')
+    Route.post('mascota', 'MascotaController.store')
     Route.get('mascota_by_user_id/:user_id', 'MascotaController.mascotaByUserId')
     Route.get('mascota/:id', 'MascotaController.show')
     Route.put('mascota/:id', 'MascotaController.update')
     Route.delete('mascota/:id', 'MascotaController.destroy')
-
+    
     Route.post('producto', 'UploadController.registrarProducto')
     Route.put('producto/:id', 'ProductoController.update')
     Route.delete('producto/:id', 'ProductoController.destroy')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')
-
+    
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')
     Route.get('hospedaje_by_proveedor/:proveedor_id', 'HospedajeController.hospedajeByProveedor')

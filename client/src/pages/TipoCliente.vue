@@ -6,17 +6,17 @@
         <div class="absolute-bottom custom-caption">
           <div class="text-h4" color="white">Quiero ser un</div>
           <div class="text-h4" color="white">proveedor</div>
-          <div class="text-subtitle1">tienes una tienda de mascotas o espacios</div>
+          <div class="text-subtitle1">Tienes una tienda de mascotas o espacios</div>
           <div class="text-subtitle1">para alojar mascotas? PetFriendly es tu lugar</div>
       </div>
       </q-carousel-slide>
       <q-carousel-slide :name="2" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <q-btn flat round color="primary" icon="arrow_forward_ios" class="fixed-right" />
+        <q-btn flat round color="primary" icon="arrow_forward_ios" class="fixed-right" to="/cliente/registro" />
         <div class="absolute-bottom custom-caption">
-          <div class="text-h4" color="white">Quiero ser un</div>
-          <div class="text-h4" color="white">proveedor</div>
-          <div class="text-subtitle1">tienes una tienda de mascotas o espacios</div>
-          <div class="text-subtitle1">para alojar mascotas? PetFriendly es tu lugar</div>
+          <div class="text-h4" color="white">Quiero un producto o</div>
+          <div class="text-h4" color="white">servicio</div>
+          <div class="text-subtitle1">Todo lo que tu mascota necesita en una sola</div>
+          <div class="text-subtitle1">app. Desde paseos hasta alojamiento.</div>
       </div>
       </q-carousel-slide>
       <template v-slot:control>

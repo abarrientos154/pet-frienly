@@ -40,6 +40,7 @@ const routes = [
   { path: '/registro', component: () => import('pages/Registro.vue') },
   { path: '/tipo_usuario', component: () => import('pages/TipoCliente.vue') },
   { path: '/proveedor/registro', component: () => import('pages/proveedor/Registro.vue') },
+  { path: '/cliente/registro', component: () => import('pages/cliente/Registro.vue') },
   {
     path: '/',
     redirect: '/inicio_cliente'

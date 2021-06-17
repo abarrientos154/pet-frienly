@@ -5,16 +5,18 @@ const Model = use('Model')
 
 class Mascota extends Model {
   static get fillable() {
-    return ['name', 'race', 'age', 'vaccines', 'diseases', 'personal_descripcion']
+    return ['name', 'race', 'age', 'vaccines', 'diseases', 'descripcion', 'type', 'size', ]
   }
   static fieldValidationRules() {
     const rules = {
       name: "required|string",
       race: "required|string",
-      age: "required|string",
-      vaccines: "required|string",
-      diseases: "required|string",
-      personal_description: "required|string"
+      type: "required|string",
+      size: "required|string",
+      // age: "required|string",
+      // vaccines: "required|string",
+      // diseases: "required|string",
+      description: "required|string"
     }
     return rules
   }
