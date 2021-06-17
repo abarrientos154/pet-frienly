@@ -17,21 +17,27 @@ const roleData = [
   {
     id: 1,
     name: 'Super Admin',
-    description: 'Rol de Súper Administrador de TRILLOS',
+    description: 'Rol de Súper Administrador de PETFRIENLY',
     permissions: [1]
   },
   {
     id: 2,
     name: 'Cliente',
-    description: 'Rol de Cliente de TRILLOS',
+    description: 'Rol de Cliente de PETFRIENLY',
     permissions: [1]
   },
   {
     id: 3,
     name: 'Proveedor',
-    description: 'Rol de Proveedor de TRILLOS',
+    description: 'Rol de Proveedor de PETFRIENLY',
     permissions: [1]
   },
+  {
+    id: 4,
+    name: 'Hospedador',
+    description: 'Rol de Hospedador de PETFRIENLY',
+    permissions: [1]
+  }
   
 ]
 

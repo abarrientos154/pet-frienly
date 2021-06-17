@@ -147,6 +147,53 @@ class UserController {
       }
     }
 
+  async registerHospedador({ request, response }) {
+    var dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
+    console.log(dat, 'DATA')
+    const validation = await validate(dat, User.fieldValidationRulesProveedor())
+    if (validation.fails()) {
+      response.unprocessableEntity(validation.messages())
+    } else if (((await User.where({email: dat.email}).fetch()).toJSON()).length) {
+      response.unprocessableEntity([{
+        message: 'Correo ya registrado en el sistema!'
+      }])
+    } else {
+      let codeFile = randomize('Aa0', 30)
+      const profilePic = request.file('PFiles', {
+        types: ['image']
+      })
+      if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/hospedejeFiles'), {
+          name: codeFile,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const image = { name: profilePic.fileName }
+      let body = dat
+      const rol = 4 // Rol hospedador
+      body.estatus = 0 // Estatus para verificacion del Proveedor
+      body.roles = [rol]
+      body.hospedajeFile = image
+      const user = await User.create(body)
+      const profilePic2 = request.file('RLFiles', {
+        types: ['image']
+      })
+      if (Helpers.appRoot('storage/uploads/perfil')) {
+        await profilePic2.move(Helpers.appRoot('storage/uploads/perfil'), {
+          name: user._id.toString(),
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const data = { name: profilePic.fileName }
+      response.send(user)
+    }
+  }
+
   async validateEmail({ request, response, params }) {
     if (((await User.where({email: params.email}).fetch()).toJSON()).length) {
       response.unprocessableEntity([{

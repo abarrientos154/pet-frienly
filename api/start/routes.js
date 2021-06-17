@@ -40,6 +40,7 @@ addPrefixToGroup(
     Route.post("login", "UserController.login");
     Route.post("register", "UserController.register")
     Route.post("register_proveedor", "UserController.registerProveedor")
+    Route.post("register_hospedador", "UserController.registerHospedador")
     Route.get("pais", "PaisController.index")
     Route.get("pais_by_id/:id", "PaisController.paisById")
     Route.get("ciudades", "CiudadController.index")
