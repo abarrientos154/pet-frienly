@@ -196,6 +196,11 @@ export default {
       if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terms) {
         this.form.password = this.password
         this.slide = 2
+      } else {
+        this.$q.notify({
+          message: 'Debes ingresar todos los datos requeridos',
+          color: 'negative'
+        })
       }
     },
     nextTwo () {
@@ -208,9 +213,15 @@ export default {
           password: this.form.password
         }
         this.slide = 3
+      } else {
+        this.$q.notify({
+          message: 'Debes ingresar todos los datos requeridos',
+          color: 'negative'
+        })
       }
     },
     async finish () {
+      this.$q.loading.show()
       this.$v.formThree.$touch()
       if (!this.$v.formThree.$error) {
         console.log('this.form :>> ', this.form)
@@ -224,7 +235,14 @@ export default {
           }
         })
         await this.savePet()
+        this.$q.loading.hide()
         this.slide = 4
+      } else {
+        this.$q.notify({
+          message: 'Debes ingresar todos los datos requeridos',
+          color: 'negative'
+        })
+        this.$q.loading.hide()
       }
     },
     async savePet () {
