@@ -21,6 +21,10 @@ class CiudadController {
     const ciudad = await Ciudad.find(params.id)
     response.send(ciudad)
   }
+  async cityByCountry({ params, response }) {
+    const cities = (await Ciudad.where({pais_id: params.id}).fetch()).toJSON()
+    response.send(cities)
+  }
 }
 
 module.exports = CiudadController

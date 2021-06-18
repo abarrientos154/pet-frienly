@@ -146,6 +146,37 @@ class UserController {
         response.send(user)
       }
     }
+  async registerClient({ request, response }) {
+      let dat = request.only(['dat'])
+      dat = JSON.parse(dat.dat)
+      console.log(dat, 'data')
+      const validation = await validate(dat, User.fieldValidationRulesProveedor())
+      if (validation.fails()) {
+        response.unprocessableEntity(validation.messages())
+      } else if (((await User.where({email: dat.email}).fetch()).toJSON()).length) {
+        response.unprocessableEntity([{
+          message: 'Correo ya registrado en el sistema!'
+        }])
+      } else {
+        let body = dat
+        const rol = 2 // Rol Cliente
+        body.roles = [rol]
+        const user = await User.create(body)
+        const profilePic = request.file('perfilFile', {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/perfil')) {
+          await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
+            name: user._id.toString(),
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        const data = { name: profilePic.fileName }
+        response.send(user)
+      }
+    }
 
   async registerHospedador({ request, response }) {
     var dat = request.only(['dat'])

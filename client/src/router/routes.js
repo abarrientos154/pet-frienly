@@ -40,6 +40,7 @@ const routes = [
   },
   { path: '/login', component: () => import('pages/Login.vue') },
   { path: '/registro', component: () => import('pages/Registro.vue') },
+  { path: '/cliente/registro', component: () => import('pages/cliente/Registro.vue') },
   { path: '/tipo_usuario', component: () => import('pages/registro/TipoCliente.vue') },
   { path: '/proveedor/registro', component: () => import('pages/registro/RegistroTienda.vue') },
   { path: '/hospedador/registro', component: () => import('pages/registro/RegistroHospedador.vue') },
