@@ -288,7 +288,7 @@
             </div>
           </div>
           <div class="column items-center q-mt-xl">
-            <q-btn color="primary" class="q-pa-xs" label="Guardar" style="width: 60%; border-radius: 4px" no-caps/>
+            <q-btn color="primary" class="q-pa-xs" label="Guardar" style="width: 60%; border-radius: 4px" no-caps @click="slide = 4"/>
           </div>
         </div>
       </q-carousel-slide>

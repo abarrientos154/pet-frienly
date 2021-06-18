@@ -23,6 +23,9 @@ const routes = [
       { path: '/descripcion_hospedaje/:id', component: () => import('pages/proveedor/DescripcionHospedaje.vue') },
       // Hospedador
       { path: '/home_hospedador', component: () => import('pages/hospedador/Home.vue') },
+      { path: '/new_space', component: () => import('pages/hospedador/Spaces.vue') },
+      { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },
+      { path: '/orders', component: () => import('pages/hospedador/Orders.vue') },
       // Cliente
       { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue') },
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue') },
