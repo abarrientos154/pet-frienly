@@ -97,7 +97,7 @@
 export default {
   data () {
     return {
-      lorem: '',
+      lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
       user: {},
       cityUser: {},
