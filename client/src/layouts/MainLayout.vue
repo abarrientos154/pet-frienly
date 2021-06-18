@@ -2,16 +2,16 @@
   <q-layout view="lHh Lpr lFf">
 
     <q-header>
-      <q-toolbar class="bg-white row justify-between">
-        <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/>
-        <div class="text-black">{{page}}</div>
-        <div>
+      <q-toolbar class="bg-primary row justify-center">
+        <!-- <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/> -->
+        <div class="text-white text-h6" v-if="rol === 4">Tu espacio</div>
+        <!-- <div>
           <q-avatar rounded v-if="rol != 1" class="bg-secondary" icon="person" style="border-radius: 10px" @click="rol !== 1 ? $router.push('/Datos') : ''"></q-avatar>
-        </div>
+        </div> -->
       </q-toolbar>
     </q-header>
 
-    <q-drawer v-if="drawer === true" v-model="drawer" :width="200" :breakpoint="500" overlay bordered content-class="bg-white">
+    <!-- <q-drawer v-if="drawer === true" v-model="drawer" :width="200" :breakpoint="500" overlay bordered content-class="bg-white">
       <q-separator/>
       <q-scroll-area class="fit">
         <q-list v-if="rol != null">
@@ -31,12 +31,18 @@
           <q-btn label="Iniciar Sesión" color="primary" @click="$router.push('/login')" no-caps/>
         </div>
       </q-scroll-area>
-    </q-drawer>
+    </q-drawer> -->
 
     <q-page-container>
       <router-view />
     </q-page-container>
 
+    <q-footer elevated>
+      <div class="bg-primary full-width row" v-if="rol != null">
+        <q-btn round flat stack dense no-caps v-for="(item, index) in menu" :key="index" class="col text-italic q-py-xs" :icon="item.icon" :label="item.label" color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : $router.push(item.ruta)"/>
+      </div>
+      <q-btn v-else class="full-width q-pa-sm" label="Iniciar Sesión" color="primary" @click="$router.push('/login')" no-caps/>
+    </q-footer>
   </q-layout>
 </template>
 
@@ -54,7 +60,7 @@ export default {
       admin: [
         {
           icon: 'home',
-          label: 'Inicio',
+          label: 'home',
           ruta: '/inicio_administrador',
           permission: 1
         },
@@ -71,8 +77,8 @@ export default {
           permission: 1
         },
         {
-          icon: 'logout',
-          label: 'Cerrar Sesión',
+          icon: 'power_settings_new',
+          label: 'Salir',
           ruta: '',
           permission: 1
         }
@@ -80,7 +86,7 @@ export default {
       cliente: [
         {
           icon: 'home',
-          label: 'Inicio',
+          label: 'home',
           ruta: '/inicio_cliente',
           permission: 1
         },
@@ -91,8 +97,8 @@ export default {
           permission: 1
         },
         {
-          icon: 'logout',
-          label: 'Cerrar Sesión',
+          icon: 'power_settings_new',
+          label: 'Salir',
           ruta: '',
           permission: 1
         }
@@ -100,7 +106,7 @@ export default {
       proveedor: [
         {
           icon: 'home',
-          label: 'Inicio',
+          label: 'home',
           ruta: '/inicio_proveedor',
           permission: 1
         },
@@ -117,10 +123,37 @@ export default {
           permission: 1
         },
         {
-          icon: 'logout',
-          label: 'Cerrar Sesión',
+          icon: 'power_settings_new',
+          label: 'Salir',
           ruta: '',
           permission: 1
+        }
+      ],
+      hospedador: [
+        {
+          icon: 'home',
+          label: 'home',
+          ruta: '/home_hospedador'
+        },
+        {
+          icon: 'store',
+          label: 'Espacios',
+          ruta: '/new_space'
+        },
+        {
+          icon: 'description',
+          label: 'Reportes',
+          ruta: '/reports'
+        },
+        {
+          icon: 'assignment',
+          label: 'Pedidos',
+          ruta: '/orders'
+        },
+        {
+          icon: 'power_settings_new',
+          label: 'Salir',
+          ruta: ''
         }
       ]
     }
@@ -155,7 +188,11 @@ export default {
                 if (this.rol === 3) {
                   this.menu = this.proveedor
                 } else {
-                  console.log(this.rol)
+                  if (this.rol === 4) {
+                    this.menu = this.hospedador
+                  } else {
+                    console.log(this.rol)
+                  }
                 }
               }
             }
@@ -164,13 +201,6 @@ export default {
           }
         })
       }
-    },
-    clickmenu () {
-      this.drawer = !this.drawer
-    },
-    ruta (item) {
-      this.$router.push(item.ruta)
-      this.page = item.label
     }
   }
 }
