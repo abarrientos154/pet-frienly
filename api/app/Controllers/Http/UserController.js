@@ -159,37 +159,54 @@ class UserController {
         message: 'Correo ya registrado en el sistema!'
       }])
     } else {
+      let images = []
+      for (let i = 0; i < 2; i++) {
+        let codeFile = randomize('Aa0', 30)
+        const profilePic = request.file('IFiles' + i, {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/identificacionFiles')) {
+          await profilePic.move(Helpers.appRoot('storage/uploads/identificacionFiles'), {
+            name: codeFile,
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        images.push(profilePic.fileName)
+      }
       let codeFile = randomize('Aa0', 30)
-      const profilePic = request.file('PFiles', {
+      const profilePic2 = request.file('PFiles', {
         types: ['image']
       })
-      if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/hospedejeFiles'), {
+      if (Helpers.appRoot('storage/uploads/hospedejeFiles')) {
+        await profilePic2.move(Helpers.appRoot('storage/uploads/hospedejeFiles'), {
           name: codeFile,
           overwrite: true
         })
       } else {
         mkdirp.sync(`${__dirname}/storage/Excel`)
       }
-      const image = { name: profilePic.fileName }
+      const image = { name: profilePic2.fileName }
       let body = dat
       const rol = 4 // Rol hospedador
-      body.estatus = 0 // Estatus para verificacion del Proveedor
+      body.status = 0 // Estatus para verificacion del Proveedor
       body.roles = [rol]
-      body.hospedajeFile = image
+      body.spaceFile = image
+      body.identificationFiles = images
       const user = await User.create(body)
-      const profilePic2 = request.file('RLFiles', {
+      const profilePic3 = request.file('RLFiles', {
         types: ['image']
       })
       if (Helpers.appRoot('storage/uploads/perfil')) {
-        await profilePic2.move(Helpers.appRoot('storage/uploads/perfil'), {
+        await profilePic3.move(Helpers.appRoot('storage/uploads/perfil'), {
           name: user._id.toString(),
           overwrite: true
         })
       } else {
         mkdirp.sync(`${__dirname}/storage/Excel`)
       }
-      const data = { name: profilePic.fileName }
+      const data = { name: profilePic3.fileName }
       response.send(user)
     }
   }

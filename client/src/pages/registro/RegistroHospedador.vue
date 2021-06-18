@@ -27,7 +27,7 @@
               </div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
                 <div class="text-caption">Fecha de nacimiento</div>
-                <q-input filled v-model="form.birth"  dense placeholder="DD-MM-AAAA" error-message="Este campo es requerido" :error="$v.form.birth.$error" @blur="$v.form.birth.$touch()"/>
+                <q-input filled type="date" v-model="form.birth" dense error-message="Este campo es requerido" :error="$v.form.birth.$error" @blur="$v.form.birth.$touch()"/>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
                 <div class="text-caption">Telefono de contacto</div>
@@ -41,27 +41,33 @@
             <div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
                 <div class="text-caption">Contraseña</div>
-                <q-input  v-model="password" label="Contraseña" outlined dense filled error-message="Ingrese una contraseña válida, mínimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()"/>
+                <q-input :type="ver ? 'text' : 'password'" v-model="password" placeholder="Contraseña" outlined dense filled error-message="Ingrese una contraseña válida, mínimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
+                  <template v-slot:append>
+                    <q-icon :name="ver ? 'visibility_off' : 'visibility'" class="cursor-pointer q-pa-sm" color="primary" @click="ver = !ver" />
+                  </template>
+                </q-input>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
                 <div class="text-caption">Repite Contraseña</div>
-                <q-input v-model="repeatPassword" label="Repita su Contraseña" outlined dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()"/>
+                <q-input :type="ver ? 'text' : 'password'" v-model="repeatPassword" placeholder="Repita su Contraseña" outlined dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()"/>
               </div>
             </div>
             <div>
               <div class="text-caption">Imágenes de documento de identificación</div>
               <div style="width: 50%;" class="q-pr-xs q-mb-sm">
                 <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
-                  <q-file  borderless :disable="espacioImg.length < 2 ? false : true" v-model="img" class="button-camera" @input="espacio_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
+                  <q-file  borderless :disable="IImg.length < 2 ? false : true" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
                   <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
                 </q-avatar>
               </div>
               <div class="row">
                 <q-avatar class="q-mr-sm bg-secondary col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="''"/>
+                  <q-img style="height: 100%;" :src="identificacionImg.length ? identificacionImg[0] : ''"/>
+                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
                 </q-avatar>
                 <q-avatar class="bg-secondary col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="''"/>
+                  <q-img style="height: 100%;" :src="identificacionImg.length > 1 ? identificacionImg[1] : ''"/>
+                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
                 </q-avatar>
               </div>
             </div>
@@ -94,19 +100,19 @@
           <div class="q-mb-lg">
             <div class="q-mb-md">
               <div class="text-caption">Nombre de espacios</div>
-              <q-input  v-model="formMySpace.name" label="Nombré comercial" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$error" @blur="$v.formMySpace.name.$touch()"/>
+              <q-input  v-model="formMySpace.name" placeholder="Nombré comercial" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$error" @blur="$v.formMySpace.name.$touch()"/>
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Correo de contacto tienda</div>
-              <q-input  v-model="formMySpace.email" label="micorreo@petfriendly.com" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.email.$error" @blur="$v.formMySpace.email.$touch()"/>
+              <q-input  v-model="formMySpace.email" placeholder="micorreo@petfriendly.com" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.email.$error" @blur="$v.formMySpace.email.$touch()"/>
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Telefono de contacto tienda</div>
-              <q-input  v-model="formMySpace.phone" label="+5695331583" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$phone" @blur="$v.formMySpace.phone.$touch()"/>
+              <q-input  v-model="formMySpace.phone" placeholder="+5695331583" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$phone" @blur="$v.formMySpace.phone.$touch()"/>
             </div>
             <div>
               <div class="text-caption">Descripción</div>
-              <q-input filled outlined label="Mi espacio es..." v-model="formMySpace.description" type="textarea" error-message="Este campo es requerido" :error="$v.formMySpace.description.$error" @blur="$v.formMySpace.description.$touch()"/>
+              <q-input filled outlined placeholder="Mi espacio es..." v-model="formMySpace.description" type="textarea" error-message="Este campo es requerido" :error="$v.formMySpace.description.$error" @blur="$v.formMySpace.description.$touch()"/>
             </div>
           </div>
 
@@ -129,15 +135,15 @@
           <div>
             <div class="q-mb-md">
               <div class="text-caption">País</div>
-              <q-select outlined dense filled label="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais[0].pais_id" option-value="ciudades" option-label="name" emit-value map-options/>
+              <q-select outlined dense filled placeholder="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais[0].pais_id" option-value="ciudades" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.pais_id.$error" @blur="$v.formMySpace.pais_id.$touch()"/>
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Ciudad</div>
-              <q-select outlined dense filled label="Seleccione la región a la que pertenece" v-model="formMySpace.ciudad_id" :options="selectPais" option-value="_id" option-label="name" emit-value map-options/>
+              <q-select outlined dense filled placeholder="Seleccione la región a la que pertenece" v-model="formMySpace.ciudad_id" :options="selectPais" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.ciudad_id.$error" @blur="$v.formMySpace.ciudad_id.$touch()"/>
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Dirección</div>
-              <q-input  v-model="formMySpace.direction" label="Escriba la direccion fisica del espacio" outlined dense filled/>
+              <q-input  v-model="formMySpace.direction" placeholder="Escriba la direccion fisica del espacio" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.direction.$error" @blur="$v.formMySpace.direction.$touch()"/>
             </div>
           </div>
 
@@ -145,19 +151,19 @@
             <div class="row items-center q-mb-md">
               <div class="text-subtitle1 col">Horario de apertura</div>
               <div class="col column">
-                <q-input type="time" filled v-model="formMySpace.hora_inicio"  dense/>
+                <q-input type="time" filled v-model="formMySpace.hora_inicio" dense error-message="Este campo es requerido" :error="$v.formMySpace.hora_inicio.$error" @blur="$v.formMySpace.hora_inicio.$touch()"/>
               </div>
             </div>
             <div class="row items-center q-mb-md">
               <div class="text-subtitle1 col">Horario de cierre</div>
               <div class="col column">
-                <q-input type="time" filled v-model="formMySpace.hora_cierre"  dense/>
+                <q-input type="time" filled v-model="formMySpace.hora_cierre" dense error-message="Este campo es requerido" :error="$v.formMySpace.hora_cierre.$error" @blur="$v.formMySpace.hora_cierre.$touch()"/>
               </div>
             </div>
           </div>
 
           <div class="column items-center">
-            <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="siguiente()" no-caps/>
+            <q-btn rounded class="q-pa-sm" color="primary" label="Registrar" style="width: 70%;" @click="registrarse()" no-caps/>
           </div>
         </div>
       </q-carousel-slide>
@@ -173,7 +179,7 @@
             </div>
             <div class="column items-center q-mt-xl">
               <q-btn rounded color="primary" label="Nuevo" class="q-pa-xs q-mb-sm" style="width: 60%;" @click="slide = 5" no-caps/>
-              <div class="text-subtitle1 text-white" @click="registrarse()">Omitir para ir a tu espacio.</div>
+              <div class="text-subtitle1 text-white" @click="$router.push('/home_hospedador')">Omitir para ir a tu espacio.</div>
             </div>
           </div>
         </div>
@@ -232,10 +238,7 @@
               <div class="text-subtitle1 text-bold">Selecciona los servicios que incluye</div>
               <q-select dense filled option-value="id" option-label="name" v-model="servicios2" :options="servicios" label="Servicios" multiple emit-value map-options>
                 <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-                  <q-item
-                    v-bind="itemProps"
-                    v-on="itemEvents"
-                  >
+                  <q-item v-bind="itemProps" v-on="itemEvents">
                     <q-item-section>
                       <q-item-label v-html="opt.name" ></q-item-label>
                     </q-item-section>
@@ -285,7 +288,7 @@
             </div>
           </div>
           <div class="column items-center q-mt-xl">
-            <q-btn color="primary" class="q-pa-xs" label="Guardar" style="width: 60%; border-radius: 4px" @click="registrarse()" no-caps/>
+            <q-btn color="primary" class="q-pa-xs" label="Guardar" style="width: 60%; border-radius: 4px" no-caps/>
           </div>
         </div>
       </q-carousel-slide>
@@ -295,6 +298,7 @@
 
 <script>
 import { required, maxLength, email, sameAs, minLength } from 'vuelidate/lib/validators'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -306,6 +310,8 @@ export default {
       repeatPassword: '',
       representImg: '',
       RLImg: {},
+      identificacionImg: [],
+      IImg: [],
       perfilImg: '',
       PImg: {},
       paises: [],
@@ -319,7 +325,8 @@ export default {
       mascotas2: [],
       type: '',
       terminos: false,
-      aparecer: false
+      aparecer: false,
+      ver: false
     }
   },
   validations: {
@@ -342,16 +349,17 @@ export default {
       hora_cierre: { required }
     },
     RLImg: { required },
+    IImg: { required, minLength: minLength(2) },
     PImg: { required },
     password: { required, maxLength: maxLength(256), minLength: minLength(6) },
     repeatPassword: { sameAsPassword: sameAs('password') }
   },
   mounted () {
-    this.form.roles = 4
     this.getServicios()
     this.getPaises()
   },
   methods: {
+    ...mapMutations('generals', ['login']),
     getServicios () {
       this.$api.get('servicios').then(res => {
         if (res) {
@@ -368,9 +376,13 @@ export default {
       })
     },
     siguiente () {
-      this.$v.$touch()
       if (this.slide === 1) {
-        if (!this.$v.RLImg.$error && !this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && this.terminos) {
+        this.$v.RLImg.$touch()
+        this.$v.IImg.$touch()
+        this.$v.form.$touch()
+        this.$v.password.$touch()
+        this.$v.repeatPassword.$touch()
+        if (!this.$v.RLImg.$error && !this.$v.IImg.$error && !this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && this.terminos) {
           this.slide = 2
         } else {
           this.$q.notify({
@@ -379,25 +391,19 @@ export default {
           })
           this.aparecer = true
         }
-      } else if (this.slide === 2 || this.slide === 3) {
-        if (this.slide === 2) {
-          if (!this.$v.PImg.$error && !this.$v.formMySpace.name.$error && !this.$v.formMySpace.email.$error && !this.$v.formMySpace.phone.$error && !this.$v.formMySpace.description.$error) {
-            this.slide = 3
-          } else {
-            this.$q.notify({
-              message: 'Debe ingresar todos los datos correspondientes para continuar',
-              color: 'negative'
-            })
-          }
+      } else if (this.slide === 2) {
+        this.$v.PImg.$touch()
+        this.$v.formMySpace.name.$touch()
+        this.$v.formMySpace.email.$touch()
+        this.$v.formMySpace.phone.$touch()
+        this.$v.formMySpace.description.$touch()
+        if (!this.$v.PImg.$error && !this.$v.formMySpace.name.$error && !this.$v.formMySpace.email.$error && !this.$v.formMySpace.phone.$error && !this.$v.formMySpace.description.$error) {
+          this.slide = 3
         } else {
-          if (!this.$v.formMySpace.pais_id.$error && !this.$v.formMySpace.ciudad_id.$error && !this.$v.formMySpace.direction.$error && !this.$v.formMySpace.hora_inicio.$error && !this.$v.formMySpace.hora_cierre.$error) {
-            this.slide = 4
-          } else {
-            this.$q.notify({
-              message: 'Debe ingresar todos los datos correspondientes para continuar',
-              color: 'negative'
-            })
-          }
+          this.$q.notify({
+            message: 'Debe ingresar todos los datos correspondientes para continuar',
+            color: 'negative'
+          })
         }
       }
     },
@@ -411,6 +417,11 @@ export default {
       this.perfilImg = URL.createObjectURL(this.img)
       this.img = null
     },
+    identificacion_img () {
+      this.IImg.push(this.img)
+      this.identificacionImg.push(URL.createObjectURL(this.img))
+      this.img = null
+    },
     espacio_img () {
       this.espacioImg.push(this.img)
       this.mostrarImg.push(URL.createObjectURL(this.img))
@@ -419,6 +430,9 @@ export default {
     registrarse () {
       this.$v.$touch()
       if (!this.$v.form.$error && !this.$v.formMySpace.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.RLImg.$error && !this.$v.PImg.$error && this.terminos) {
+        this.$q.loading.show({
+          message: 'Registrando...'
+        })
         this.form.my_space = this.formMySpace
         this.form.password = this.password
         console.log(this.form)
@@ -427,6 +441,9 @@ export default {
         var files2 = []
         files[0] = this.RLImg
         files2[0] = this.PImg
+        for (let i = 0; i < this.IImg.length; i++) {
+          formData.append('IFiles' + i, this.IImg[i])
+        }
         formData.append('RLFiles', files[0])
         formData.append('PFiles', files2[0])
         formData.append('dat', JSON.stringify(this.form))
@@ -440,6 +457,8 @@ export default {
               message: 'Ya formas parte de PeT, Bienvenido',
               color: 'positive'
             })
+            this.loguear()
+            this.$q.loading.hide()
           }
         })
       } else {
@@ -449,6 +468,20 @@ export default {
         })
         this.aparecer = true
       }
+    },
+    loguear () {
+      this.$api.post('login', this.form).then(res => {
+        if (res) { // Se debe ejecutar una mutacion que modifique el state con sessionInfo
+          const user = res.TRI_SESSION_INFO.roles[0]
+          if (user === 4) {
+            this.login(res)
+            this.slide = 4
+          }
+        } else {
+          console.log('error de ususario')
+          // this.loading = false
+        }
+      })
     }
   }
 }
