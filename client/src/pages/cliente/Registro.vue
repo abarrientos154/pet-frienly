@@ -128,8 +128,10 @@
         <div class="absolute-bottom custom-caption">
           <div class="text-h4" color="white">¡Tu mascota ha sido</div>
           <div class="text-h4" color="white">creada con exito!</div>
-      </div>
-      <!-- <q-btn class="justify-end" color="primary" label="Ir al Inicio" style="width: 100%; margin-top: 20px; border-radius: 10px"/> -->
+        </div>
+        <div class="absolute-bottom custom-captionTwo row justify-center">
+          <q-btn class="q-mx-xl" color="primary" label="Ir al Inicio" style="width: 100%; margin-top: 20px; border-radius: 10px" to="/inicio_cliente"/>
+        </div>
       </q-carousel-slide>
     </q-carousel>
   </div>
@@ -335,4 +337,10 @@ export default {
   background-color: rgba(0, 0, 0, .3);
   margin-bottom: 40%;
 }
+.custom-captionTwo {
+  text-align: center;
+  padding: 12px;
+  color: white;
+  background-color: rgba(0, 0, 0, .3);
+  }
 </style>
