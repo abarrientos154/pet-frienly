@@ -3,10 +3,10 @@
     <div class="row q-pa-sm">
       <div class="col q-mr-sm" style="max-width: 250px;">
         <q-avatar rounded style="height: 100px; width: 100%;" class="bg-secondary q-my-xs">
-          <q-img style="height: 100%;" :src="''"/>
+          <q-img style="height: 100%;" :src="baseu + user.spaceFile.name"/>
         </q-avatar>
         <div class="row justify-between">
-          <q-rating v-model="ratingModel" color="orange-8" size="18px" icon="star"/>
+          <q-rating v-model="ratingModel" color="grey" color-selected="orange-8" readonly size="18px"/>
           <div class="q-pa-sm text-green-9 text-bold">{{"("}}{{this.ratingModel}}{{")"}}</div>
         </div>
       </div>
@@ -51,10 +51,14 @@
                   <q-img style="height: 100%;" :src="''"/>
                 </q-avatar>
               </q-card-section>
-              <div class="q-py-md q-py-md column">
+              <div class="q-py-md q-pr-md col column">
                 <div class="text-subtitle3 text-bold">Titulo del comentario</div>
-                <div class=" col text-caption text-grey-6">{{lorem}}</div>
-                <q-rating max="5" size="15px" v-model="rating" color="orange-8" icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
+                <div class="col">
+                  <q-scroll-area style="height: 55px;">
+                    <div class="text-caption text-grey-6 text-italic">{{lorem}}</div>
+                  </q-scroll-area>
+                </div>
+                <q-rating max="5" size="15px" v-model="rating" color="grey" color-selected="orange-8" readonly/>
               </div>
             </q-card-section>
           </q-card>
@@ -94,6 +98,7 @@
 </template>
 
 <script>
+import env from '../../env'
 export default {
   data () {
     return {
@@ -114,16 +119,14 @@ export default {
       this.$api.get('user_logueado').then(res => {
         if (res) {
           this.user = res
-          this.getCityUser()
+          this.baseu = env.apiUrl + 'espacio_img/'
           console.log(this.user)
-        }
-      })
-    },
-    getCityUser () {
-      this.$api.get('ciudad_by_id/' + this.user.my_space.ciudad_id).then(res => {
-        if (res) {
-          this.cityUser = res
-          console.log(this.cityUser)
+          this.$api.get('ciudad_by_id/' + this.user.my_space.ciudad_id).then(res => {
+            if (res) {
+              this.cityUser = res
+              console.log(this.cityUser)
+            }
+          })
         }
       })
     }

@@ -390,6 +390,11 @@ class UploadController {
     response.download(Helpers.appRoot('storage/uploads/tiendaFiles/' + params.file))
   }
 
+  async getFileByDirectoryEspacioDescanso ({ params, request, response }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/hospedajeFiles') + `/${dir}`)
+  }
+
   async getFileByDirectoryTienda ({ params, request, response }) {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/tiendaFiles') + `/${dir}`)

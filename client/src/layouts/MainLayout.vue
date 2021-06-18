@@ -4,7 +4,7 @@
     <q-header>
       <q-toolbar class="bg-primary row justify-center">
         <!-- <q-btn round dense flat icon="menu" color="primary" @click="clickmenu ()"/> -->
-        <div class="text-white text-h6" v-if="rol === 4">Tu espacio</div>
+        <div class="text-white text-h6">{{rol === null ? page : rol === 4 ? page === 'Home' ? 'Tu espacio' : page : ''}}</div>
         <!-- <div>
           <q-avatar rounded v-if="rol != 1" class="bg-secondary" icon="person" style="border-radius: 10px" @click="rol !== 1 ? $router.push('/Datos') : ''"></q-avatar>
         </div> -->
@@ -39,7 +39,7 @@
 
     <q-footer elevated>
       <div class="bg-primary full-width row" v-if="rol != null">
-        <q-btn round flat stack dense no-caps v-for="(item, index) in menu" :key="index" class="col text-italic q-py-xs" :icon="item.icon" :label="item.label" color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : $router.push(item.ruta)"/>
+        <q-btn round flat stack dense no-caps v-for="(item, index) in menu" :key="index" class="col text-italic q-py-xs" :icon="item.icon" color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : ruta(item)"><div style="font-size: 10px">{{item.label}}</div></q-btn>
       </div>
       <q-btn v-else class="full-width q-pa-sm" label="Iniciar Sesión" color="primary" @click="$router.push('/login')" no-caps/>
     </q-footer>
@@ -56,59 +56,51 @@ export default {
       rol: null,
       drawer: false,
       menu: [],
-      page: 'Inicio',
+      page: 'Bienvenido',
       admin: [
         {
           icon: 'home',
-          label: 'home',
-          ruta: '/inicio_administrador',
-          permission: 1
+          label: 'Home',
+          ruta: '/inicio_administrador'
         },
         {
           icon: 'list',
           label: 'Proveedores',
-          ruta: '/proveedores',
-          permission: 1
+          ruta: '/proveedores'
         },
         {
           icon: 'location_city',
           label: 'Hoteleria',
-          ruta: '/Hoteleria_pendientes',
-          permission: 1
+          ruta: '/Hoteleria_pendientes'
         },
         {
           icon: 'power_settings_new',
           label: 'Salir',
-          ruta: '',
-          permission: 1
+          ruta: ''
         }
       ],
       cliente: [
         {
           icon: 'home',
-          label: 'home',
-          ruta: '/inicio_cliente',
-          permission: 1
+          label: 'Home',
+          ruta: '/inicio_cliente'
         },
         {
           icon: 'pets',
           label: 'Mascotas',
-          ruta: '/mascotas',
-          permission: 1
+          ruta: '/mascotas'
         },
         {
           icon: 'power_settings_new',
           label: 'Salir',
-          ruta: '',
-          permission: 1
+          ruta: ''
         }
       ],
       proveedor: [
         {
           icon: 'home',
-          label: 'home',
-          ruta: '/inicio_proveedor',
-          permission: 1
+          label: 'Home',
+          ruta: '/inicio_proveedor'
         },
         {
           icon: 'list',
@@ -119,25 +111,23 @@ export default {
         {
           icon: 'apartment',
           label: 'Hospedaje',
-          ruta: '/hospedajes',
-          permission: 1
+          ruta: '/hospedajes'
         },
         {
           icon: 'power_settings_new',
           label: 'Salir',
-          ruta: '',
-          permission: 1
+          ruta: ''
         }
       ],
       hospedador: [
         {
           icon: 'home',
-          label: 'home',
+          label: 'Home',
           ruta: '/home_hospedador'
         },
         {
           icon: 'store',
-          label: 'Espacios',
+          label: 'Nuevo Espacio',
           ruta: '/new_space'
         },
         {
@@ -201,6 +191,10 @@ export default {
           }
         })
       }
+    },
+    ruta (itm) {
+      this.$router.push(itm.ruta)
+      this.page = itm.label
     }
   }
 }

@@ -211,7 +211,7 @@ class UserController {
         types: ['image']
       })
       if (Helpers.appRoot('storage/uploads/hospedejeFiles')) {
-        await profilePic2.move(Helpers.appRoot('storage/uploads/hospedejeFiles'), {
+        await profilePic2.move(Helpers.appRoot('storage/uploads/hospedajeFiles'), {
           name: codeFile,
           overwrite: true
         })
