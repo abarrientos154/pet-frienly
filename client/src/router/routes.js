@@ -50,11 +50,11 @@ const routes = [
   { path: '/hospedador/registro', component: () => import('pages/registro/RegistroHospedador.vue') },
   {
     path: '/',
-    redirect: '/inicio_cliente'
+    redirect: '/login'
   },
   {
     path: '*',
-    redirect: '/inicio_cliente'
+    redirect: '/login'
   },
 
   // Always leave this as last one,
