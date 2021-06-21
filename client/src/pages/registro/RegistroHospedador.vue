@@ -192,7 +192,7 @@
 
           <div class="q-pa-md">
             <div class="text-subtitle1">Carga las fotos de tu espacio de descanso</div>
-            <div class="text-subtitle1 text-grey text-italic">Puedes cargar hasta 3 fotos</div>
+            <div :class="$v.espacioImg.$error ? 'text-subtitle1 text-italic text-negative' : 'text-subtitle1 text-grey text-italic'">{{$v.espacioImg.$error ? 'Debes cargar minimo una foto' : 'Puedes cargar hasta 3 fotos'}}</div>
             <div class="row">
               <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-secondary q-my-xs q-mr-xs">
                 <q-file  borderless :disable="espacioImg.length < 3 ? false : true" v-model="img" class="button-camera" @input="espacio_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
@@ -212,12 +212,12 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
               <div class="text-subtitle1 text-bold">Nombre para tu espacio</div>
               <div class="text-subtitle1 text-grey text-italic">Solo 25 caracteres</div>
-              <q-input dense filled v-model="formEspacio.name" placeholder="Nombre espacio"/>
+              <q-input dense filled v-model="formEspacio.name" placeholder="Nombre espacio" error-message="Este campo es requerido" :error="$v.formEspacio.name.$error" @blur="$v.formEspacio.name.$touch()"/>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
               <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu espacio?</div>
               <div class="text-subtitle1 text-grey text-italic">Escoger perro, gato o ambos</div>
-              <q-select dense filled option-value="name" option-label="name" v-model="mascotas2" :options="mascotas" label="tipos de mascotas" multiple emit-value map-options>
+              <q-select dense filled option-value="name" option-label="name" v-model="mascotas2" :options="mascotas" @input="formEspacio.pet_type = mascotas2" placeholder="tipos de mascotas" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.pet_type.$error" @blur="$v.formEspacio.pet_type.$touch()">
                 <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
                   <q-item v-bind="itemProps" v-on="itemEvents">
                     <q-item-section>
@@ -232,11 +232,11 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
               <div class="text-subtitle1 text-bold">Tamaño de las mascotas que recives</div>
-              <q-select dense filled label="Tamaños" v-model="formEspacio.petSize" :options="['Pequeño', 'Mediano', 'Grande']"/>
+              <q-select dense filled placeholder="Tamaños" v-model="formEspacio.petSize" :options="['Pequeño', 'Mediano', 'Grande']" error-message="Este campo es requerido" :error="$v.formEspacio.petSize.$error" @blur="$v.formEspacio.petSize.$touch()"/>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
               <div class="text-subtitle1 text-bold">Selecciona los servicios que incluye</div>
-              <q-select dense filled option-value="id" option-label="name" v-model="servicios2" :options="servicios" label="Servicios" multiple emit-value map-options>
+              <q-select dense filled option-value="_id" option-label="name" v-model="servicios2" :options="servicios" @input="formEspacio.services = servicios2" placeholder="Servicios" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.services.$error" @blur="$v.formEspacio.services.$touch()">
                 <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
                   <q-item v-bind="itemProps" v-on="itemEvents">
                     <q-item-section>
@@ -254,7 +254,7 @@
           <div>
             <div class="text-subtitle1 text-bold">Descripción del espacio</div>
             <div class="text-subtitle1 text-grey text-italic">Solo 80 caracteres</div>
-            <q-input filled outlined label="Mi espacio es..." v-model="formEspacio.description" type="textarea"/>
+            <q-input filled outlined placeholder="Mi espacio es..." v-model="formEspacio.description" type="textarea" error-message="Este campo es requerido" :error="$v.formEspacio.description.$error" @blur="$v.formEspacio.description.$touch()"/>
           </div>
 
           <div>
@@ -262,33 +262,33 @@
               <div class="text-subtitle1 text-bold col">Valor por noche</div>
               <div class=" col column">
                 <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Ingresa el costo por noche</div>
-                <q-input prefix="$" filled color="primary" v-model.number="formEspacio.price" type="number" dense :rules="[val => val > 0]" min="0"/>
+                <q-input prefix="$" filled color="primary" v-model.number="formEspacio.price" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.formEspacio.price.$error" @blur="$v.formEspacio.price.$touch()"/>
               </div>
             </div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold col">Cantidad de huéspedes</div>
               <div class=" col column">
                 <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de huéspedes</div>
-                <q-input filled color="primary" v-model.number="formEspacio.guests" type="number" dense :rules="[val => val > 0]" min="0"/>
+                <q-input filled color="primary" v-model.number="formEspacio.guests" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.formEspacio.guests.$error" @blur="$v.formEspacio.guests.$touch()"/>
               </div>
             </div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold col">Metros cuadrados</div>
               <div class=" col column">
                 <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
-                <q-input filled color="primary" v-model.number="formEspacio.meters" type="number" dense :rules="[val => val > 0]" min="0"/>
+                <q-input filled color="primary" v-model.number="formEspacio.dimensions" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.formEspacio.dimensions.$error" @blur="$v.formEspacio.dimensions.$touch()"/>
               </div>
             </div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold col">Espacio compartido</div>
               <div class=" col column">
                 <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Seleccione el tipo de espacio</div>
-                <q-select dense filled v-model="type" :options="['si', 'no']" @input="type === 'si' ? formEspacio.type = true : formEspacio.type = false"/>
+                <q-select dense filled v-model="type" :options="['Si', 'No']" @input="type === 'Si' ? formEspacio.shared = true : formEspacio.shared = false"  error-message="Este campo es requerido" :error="$v.formEspacio.shared.$error" @blur="$v.formEspacio.shared.$touch()"/>
               </div>
             </div>
           </div>
           <div class="column items-center q-mt-xl">
-            <q-btn color="primary" class="q-pa-xs" label="Guardar" style="width: 60%; border-radius: 4px" no-caps @click="slide = 4"/>
+            <q-btn color="primary" class="q-pa-xs" label="Guardar" style="width: 60%; border-radius: 4px" @click="guardar()" no-caps/>
           </div>
         </div>
       </q-carousel-slide>
@@ -348,6 +348,18 @@ export default {
       hora_inicio: { required },
       hora_cierre: { required }
     },
+    formEspacio: {
+      name: { required, maxLength: maxLength(25) },
+      pet_type: { required },
+      petSize: { required },
+      services: { required },
+      description: { required, maxLength: maxLength(80) },
+      price: { required },
+      guests: { required },
+      dimensions: { required },
+      shared: { required }
+    },
+    espacioImg: { required, minLength: minLength(1) },
     RLImg: { required },
     IImg: { required, minLength: minLength(2) },
     PImg: { required },
@@ -428,7 +440,13 @@ export default {
       this.img = null
     },
     registrarse () {
-      this.$v.$touch()
+      this.$v.RLImg.$touch()
+      this.$v.IImg.$touch()
+      this.$v.form.$touch()
+      this.$v.password.$touch()
+      this.$v.repeatPassword.$touch()
+      this.$v.PImg.$touch()
+      this.$v.formMySpace.$touch()
       if (!this.$v.form.$error && !this.$v.formMySpace.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.RLImg.$error && !this.$v.PImg.$error && this.terminos) {
         this.$q.loading.show({
           message: 'Registrando...'
@@ -482,6 +500,47 @@ export default {
           // this.loading = false
         }
       })
+    },
+    guardar () {
+      this.$v.$touch()
+      console.log(this.formEspacio)
+      if (!this.$v.espacioImg.$error && !this.$v.formEspacio.$error) {
+        console.log('sin fallo')
+        this.$q.loading.show({
+          message: 'Subiendo Espacio de Descanso, Por Favor Espere...'
+        })
+        var formData = new FormData()
+        var cantidadArchivos = this.espacioImg.length
+        for (const j in this.espacioImg) {
+          formData.append('files_' + j, this.espacioImg[j])
+        }
+        this.formEspacio.cantidadArchivos = cantidadArchivos
+        formData.append('dat', JSON.stringify(this.formEspacio))
+        this.$api.post('hospedaje', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Espacio de Descanso agregado con exito',
+              color: 'positive'
+            })
+            this.$q.loading.hide()
+            this.slide = 4
+            this.formEspacio = {}
+            this.espacioImg = []
+            this.mostrarImg = []
+            this.mascotas2 = []
+            this.servicios2 = []
+          }
+        })
+      } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos correspondientes',
+          color: 'negative'
+        })
+      }
     }
   }
 }

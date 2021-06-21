@@ -24,9 +24,9 @@ class HospedajeController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
-    let datos = (await Hospedaje.query().where({}).with('datos_proveedor').fetch()).toJSON()
-    let filter = datos.filter(v => v.datos_proveedor.estatusHotel === 1)
-    response.send(filter)
+    let datos = (await Hospedaje.query().where({}).with('datos_hospedador').fetch()).toJSON()
+    // let filter = datos.filter(v => v.datos_proveedor.estatusHotel === 1)
+    response.send(datos)
   }
 
 
