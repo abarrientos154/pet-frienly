@@ -135,7 +135,7 @@
           <div class="text-h4" color="white">creada con exito!</div>
         </div>
         <div class="absolute-bottom custom-captionTwo row justify-center">
-          <q-btn class="q-mx-xl" color="primary" label="Ir al Inicio" style="width: 100%; margin-top: 20px; border-radius: 10px" to="/inicio_cliente"/>
+          <q-btn class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%; margin-top: 20px; border-radius: 10px" to="/inicio_cliente"/>
         </div>
       </q-carousel-slide>
     </q-carousel>
@@ -147,7 +147,7 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      slide: 3,
+      slide: 1,
       form: {},
       formTwo: {},
       formThree: {},
