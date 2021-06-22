@@ -123,7 +123,7 @@ export default {
         {
           icon: 'home',
           label: 'Home',
-          ruta: '/home_hospedador'
+          ruta: '/inicio_hospedador'
         },
         {
           icon: 'store',

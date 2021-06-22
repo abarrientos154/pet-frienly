@@ -22,7 +22,7 @@ const routes = [
       { path: '/editar_hospedaje/:id', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
       { path: '/descripcion_hospedaje/:id', component: () => import('pages/proveedor/DescripcionHospedaje.vue') },
       // Hospedador
-      { path: '/home_hospedador', component: () => import('pages/hospedador/Home.vue') },
+      { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
       { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
       { path: '/new_space', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },
@@ -43,11 +43,10 @@ const routes = [
     ]
   },
   { path: '/login', component: () => import('pages/Login.vue') },
-  { path: '/registro', component: () => import('pages/Registro.vue') },
-  { path: '/cliente/registro', component: () => import('pages/cliente/Registro.vue') },
-  { path: '/tipo_usuario', component: () => import('pages/registro/TipoCliente.vue') },
-  { path: '/proveedor/registro', component: () => import('pages/registro/RegistroTienda.vue') },
-  { path: '/hospedador/registro', component: () => import('pages/registro/RegistroHospedador.vue') },
+  { path: '/registro', component: () => import('pages/registro/TipoRegistro.vue') },
+  { path: '/registro/cliente', component: () => import('pages/cliente/Registro.vue') },
+  { path: '/registro/proveedor', component: () => import('pages/registro/RegistroTienda.vue') },
+  { path: '/registro/hospedador', component: () => import('pages/registro/RegistroHospedador.vue') },
   {
     path: '/',
     redirect: '/login'
