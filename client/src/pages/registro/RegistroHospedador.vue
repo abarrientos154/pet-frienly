@@ -476,8 +476,8 @@ export default {
               color: 'positive'
             })
             this.loguear()
-            this.$q.loading.hide()
           }
+          this.$q.loading.hide()
         })
       } else {
         this.$q.notify({
@@ -526,7 +526,6 @@ export default {
               message: 'Espacio de Descanso agregado con exito',
               color: 'positive'
             })
-            this.$q.loading.hide()
             this.slide = 4
             this.formEspacio = {}
             this.espacioImg = []
@@ -534,6 +533,7 @@ export default {
             this.mascotas2 = []
             this.servicios2 = []
           }
+          this.$q.loading.hide()
         })
       } else {
         this.$q.notify({

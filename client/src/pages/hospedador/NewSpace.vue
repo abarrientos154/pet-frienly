@@ -175,9 +175,9 @@ export default {
               message: 'Espacio de Descanso agregado con exito',
               color: 'positive'
             })
-            this.$q.loading.hide()
             this.$router.push('/home_hospedador')
           }
+          this.$q.loading.hide()
         })
       } else {
         this.$q.notify({
