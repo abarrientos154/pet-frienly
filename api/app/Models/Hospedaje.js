@@ -13,12 +13,12 @@ class Hospedaje extends Model {
       description: "required|string",
       price: "required|number",
       dimensions: "required|number",
-      pet_type: "required|string"
+      pet_type: "required"
     }
     return rules
   }
-  datos_proveedor () {
-    return this.hasOne('App/Models/User', 'proveedor_id', '_id')
+  datos_hospedador () {
+    return this.hasOne('App/Models/User', 'hospedador_id', '_id')
 }
 }
 

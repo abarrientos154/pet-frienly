@@ -23,7 +23,8 @@ const routes = [
       { path: '/descripcion_hospedaje/:id', component: () => import('pages/proveedor/DescripcionHospedaje.vue') },
       // Hospedador
       { path: '/home_hospedador', component: () => import('pages/hospedador/Home.vue') },
-      { path: '/new_space', component: () => import('pages/hospedador/Spaces.vue') },
+      { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
+      { path: '/new_space', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },
       { path: '/orders', component: () => import('pages/hospedador/Orders.vue') },
       // Cliente
@@ -49,11 +50,11 @@ const routes = [
   { path: '/hospedador/registro', component: () => import('pages/registro/RegistroHospedador.vue') },
   {
     path: '/',
-    redirect: '/inicio_cliente'
+    redirect: '/login'
   },
   {
     path: '*',
-    redirect: '/inicio_cliente'
+    redirect: '/login'
   },
 
   // Always leave this as last one,

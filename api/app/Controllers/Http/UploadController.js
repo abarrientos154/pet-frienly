@@ -63,7 +63,7 @@ class UploadController {
       if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
         for (let i = 0; i < dat.cantidadArchivos; i++) {
           let codeFile = randomize('Aa0', 30)
-          const profilePic = request.file('files_' + (i + 1), {
+          const profilePic = request.file('files_' + i, {
             types: ['image']
           })
           if (Helpers.appRoot('storage/uploads/hospedajes')) {
@@ -77,7 +77,7 @@ class UploadController {
           images.push(profilePic.fileName)
         }
       }
-      dat.proveedor_id = user._id.toString()
+      dat.hospedador_id = user._id.toString()
       delete dat.cantidadArchivos
       dat.images = images
       let guardar = await Hospedaje.create(dat)

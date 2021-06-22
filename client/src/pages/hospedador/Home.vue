@@ -68,9 +68,9 @@
 
     <div>
       <div class="text-subtitle1 text-bold q-mb-md">Conoce los espacios disponibles</div>
-      <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="index in ver" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-          <q-img class="bg-secondary" :src="''" style="height: 175px;">
+      <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;" v-if="hospedajes.length <= 3">
+        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+          <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
           <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
@@ -80,18 +80,62 @@
           </div>
           <q-card-section class="row justify-between">
             <div>
-              <div class="text-subtitle2" style="font-size: 13px">Nombre del alojamiento</div>
+              <div class="text-subtitle2" style="font-size: 13px">{{item.name}}</div>
               <div class="items-center row text-grey">
                   <q-icon name="place" />
                   <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
               </div>
             </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">$12.000 por noche</q-btn>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm" @click="$router.push('/description_space/' + item._id)">${{item.price}} por noche</q-btn>
+          </q-card-section>
+        </q-card>
+      </q-list>
+      <q-list v-else-if="ver" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
+        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+          <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
+            <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
+          </q-img>
+          <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
+            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_car" size="50px" style="border-radius: 10px;"/>
+            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="pool" size="50px" style="border-radius: 10px;"/>
+            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_walk" size="50px" style="border-radius: 10px;"/>
+          </div>
+          <q-card-section class="row justify-between">
+            <div>
+              <div class="text-subtitle2" style="font-size: 13px">{{item.name}}</div>
+              <div class="items-center row text-grey">
+                  <q-icon name="place" />
+                  <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
+              </div>
+            </div>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm" @click="$router.push('/description_space/' + item._id)">${{item.price}} por noche</q-btn>
+          </q-card-section>
+        </q-card>
+      </q-list>
+      <q-list v-else class="q-mb-md row justify-center" style="width: 100%; height: auto;">
+        <q-card v-for="index in 3" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+          <q-img class="bg-secondary" :src="baseuHospedador + hospedajes[index - 1].images[0]" style="height: 175px;">
+            <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
+          </q-img>
+          <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
+            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_car" size="50px" style="border-radius: 10px;"/>
+            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="pool" size="50px" style="border-radius: 10px;"/>
+            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_walk" size="50px" style="border-radius: 10px;"/>
+          </div>
+          <q-card-section class="row justify-between">
+            <div>
+              <div class="text-subtitle2" style="font-size: 13px">{{hospedajes[index - 1].name}}</div>
+              <div class="items-center row text-grey">
+                  <q-icon name="place" />
+                  <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
+              </div>
+            </div>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm" @click="$router.push('/description_space/' + hospedajes[index - 1]._id)">${{hospedajes[index - 1].price}} por noche</q-btn>
           </q-card-section>
         </q-card>
       </q-list>
       <div class="column items-center q-mb-xl">
-        <q-btn class="q-pa-sm" color="primary" :label="ver === 6 ? 'Ver menos' : 'Ver más'" style="width: 70%;" @click="ver === 6 ? ver = 3 : ver = 6" no-caps/>
+        <q-btn class="q-pa-sm" v-if="hospedajes.length > 3" color="primary" :label="ver ? 'Ver menos' : 'Ver más'" style="width: 70%;" @click="ver = !ver" no-caps/>
       </div>
     </div>
   </div>
@@ -104,15 +148,18 @@ export default {
     return {
       lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
+      baseuHospedador: '',
       user: {},
       cityUser: {},
       ratingModel: 4,
       rating: 4,
-      ver: 3
+      ver: false,
+      hospedajes: []
     }
   },
   mounted () {
     this.getUser()
+    this.getHospedajes()
   },
   methods: {
     getUser () {
@@ -127,6 +174,15 @@ export default {
               console.log(this.cityUser)
             }
           })
+        }
+      })
+    },
+    getHospedajes () {
+      this.$api.get('hospedaje').then(res => {
+        if (res) {
+          this.hospedajes = res
+          this.baseuHospedador = env.apiUrl + 'hospedajes_img/'
+          console.log(this.hospedajes)
         }
       })
     }

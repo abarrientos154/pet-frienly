@@ -27,7 +27,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
         <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu espacio?</div>
         <div class="text-subtitle1 text-grey text-italic">Escoger perro, gato o ambos</div>
-        <q-select dense filled option-value="name" option-label="name" v-model="mascotas2" :options="mascotas" @input="form.petType = mascotas2" placeholder="tipos de mascotas" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.form.petType.$error" @blur="$v.form.petType.$touch()">
+        <q-select dense filled option-value="name" option-label="name" v-model="mascotas2" :options="mascotas" @input="form.pet_type = mascotas2" placeholder="tipos de mascotas" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.form.pet_type.$error" @blur="$v.form.pet_type.$touch()">
           <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
             <q-item v-bind="itemProps" v-on="itemEvents">
               <q-item-section>
@@ -86,14 +86,14 @@
         <div class="text-subtitle1 text-bold col">Metros cuadrados</div>
         <div class=" col column">
           <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
-          <q-input filled color="primary" v-model.number="form.meters" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.meters.$error" @blur="$v.form.meters.$touch()"/>
+          <q-input filled color="primary" v-model.number="form.dimensions" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.dimensions.$error" @blur="$v.form.dimensions.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">Espacio compartido</div>
         <div class=" col column">
           <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Seleccione el tipo de espacio</div>
-          <q-select dense filled v-model="type" :options="['si', 'no']" @input="type === 'si' ? form.shared = true : form.shared = false"  error-message="Este campo es requerido" :error="$v.form.shared.$error" @blur="$v.form.shared.$touch()"/>
+          <q-select dense filled v-model="type" :options="['Si', 'No']" @input="type === 'Si' ? form.shared = true : form.shared = false"  error-message="Este campo es requerido" :error="$v.form.shared.$error" @blur="$v.form.shared.$touch()"/>
         </div>
       </div>
     </div>
@@ -122,13 +122,13 @@ export default {
   validations: {
     form: {
       name: { required, maxLength: maxLength(25) },
-      petType: { required },
+      pet_type: { required },
       petSize: { required },
       services: { required },
       description: { required, maxLength: maxLength(80) },
       price: { required },
       guests: { required },
-      meters: { required },
+      dimensions: { required },
       shared: { required }
     },
     espacioImg: { required, minLength: minLength(1) }
@@ -153,6 +153,46 @@ export default {
     guardar () {
       this.$v.$touch()
       console.log(this.form)
+      if (!this.$v.espacioImg.$error && !this.$v.form.$error) {
+        console.log('sin fallo')
+        this.$q.loading.show({
+          message: 'Subiendo Espacio de Descanso, Por Favor Espere...'
+        })
+        var formData = new FormData()
+        var cantidadArchivos = this.espacioImg.length
+        for (const j in this.espacioImg) {
+          formData.append('files_' + j, this.espacioImg[j])
+        }
+        this.form.cantidadArchivos = cantidadArchivos
+        formData.append('dat', JSON.stringify(this.form))
+        this.$api.post('hospedaje', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Espacio de Descanso agregado con exito',
+              color: 'positive'
+            })
+            this.$router.push('/home_hospedador')
+          }
+          this.$q.loading.hide()
+        })
+      } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos correspondientes',
+          color: 'negative'
+        })
+      }
+    },
+    getUser () {
+      this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.user = res
+          console.log(this.user)
+        }
+      })
     }
   }
 }
