@@ -4,21 +4,27 @@
     </q-card>
     <div class="q-mx-xl">
       <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
-      <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">El amor es una palabra de cuatro patas</div>
-      <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">¿Qué es lo que buscas?</div>
+      <div class="q-mb-md q-mx-sm text-weight-bolder">El amor es una palabra de cuatro patas</div>
+      <div class="q-mb-md q-mx-sm text-weight-bolder">¿Qué es lo que buscas?
+      <div class="text-overline">Selecciona Hospedaje o Tienda</div>
       <div class="row q-mx-sm q-mb-sm">
-        <q-select outlined dense filled v-model="search.service" :options="services" option-value="value" option-label="name" emit-value map-options label="Selecciona Hospedaje o Tienda" class="shadow-4 col q-mr-sm">
+        <q-select outlined dense filled v-model="search.service" :options="services" option-value="value" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
         </q-select>
       </div>
-      <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">¿Para quién lo buscas?</div>
+      </div>
+      <div class="q-mb-md q-mx-sm text-weight-bolder">¿Para quién lo buscas?
+      <div class="text-overline">Selecciona perro gato o ambos</div>
       <div class="row q-mx-sm q-mb-sm">
-        <q-select outlined dense filled v-model="search.petType" :options="petType" option-value="value" option-label="name" emit-value map-options label="Selecciona perro gato o ambos" class="shadow-4 col q-mr-sm">
+        <q-select outlined dense filled v-model="search.petType" :options="petType" option-value="value" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
         </q-select>
       </div>
-      <div class="q-mb-md q-mx-sm text-secondary text-weight-bolder">¿Donde estas buscando?</div>
+      </div>
+      <div class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
+      <div class="text-overline">Selecciona tu ciudad</div>
       <div class="row q-mx-sm q-mb-sm">
-        <q-select outlined dense filled v-model="search.city" :options="cities" option-value="_id" option-label="name" emit-value map-options label="Selecciona tu ciudad" class="shadow-4 col q-mr-sm">
+        <q-select outlined dense filled v-model="search.city" :options="cities" option-value="_id" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
         </q-select>
+      </div>
       </div>
       <div class="row justify-center q-my-lg">
         <q-btn color="primary" label="Buscar" style="width: 70%; heigth 40px; border-radius: 10px"/>
