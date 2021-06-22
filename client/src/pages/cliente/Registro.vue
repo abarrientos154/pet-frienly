@@ -78,8 +78,8 @@
           <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
           <div class="text-h4" color="black" style="text-align: center">Cuentanos de tu mascota</div>
          <div style="text-align: left; padding-top: 20px">
-          Fotos de tu mascota
-          <div class="text-subtitle2">Puede cargar hasta 3 fotos</div>
+          <div class="text-subtitle2 q-ml-md">Fotos de tu mascota</div>
+          <div class="text-overline q-ml-md">Puede cargar hasta 3 fotos</div>
           <div class="row justify-around q-my-md">
             <q-avatar square size="80px">
               <img :src="files[0] ? petImg[0] : 'petnoimg.png'" style="width: 150%">
@@ -102,23 +102,28 @@
           </div>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           Nombre de mascota
+           <div class="text-subtitle2 q-ml-md">Nombre de mascota</div>
+           <div class="text-overline q-ml-md">Solo 25 caracteres</div>
            <q-input filled v-model="formThree.name"  dense placeholder="Nombre Mascota" error-message="Requerido" :error="$v.formThree.name.$error" @blur="$v.formThree.name.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           ¿Qué tipo de mascota tienes?
+           <div class="text-subtitle2 q-ml-md">¿Qué tipo de mascota tienes?</div>
+           <div class="text-overline q-ml-md">Selecciona el tipo de mascota</div>
            <q-input filled v-model="formThree.type"  dense placeholder="Escoja un tipo" error-message="Requerido" :error="$v.formThree.type.$error" @blur="$v.formThree.type.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           Raza
+           <div class="text-subtitle2 q-ml-md">Raza</div>
+           <div class="text-overline q-ml-md">¿Qué raza es tu mascota?</div>
            <q-input type="tel" filled v-model="formThree.race"  dense placeholder="Escoja una raza" error-message="Requerido" :error="$v.formThree.race.$error" @blur="$v.formThree.race.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           Tamaño
+           <div class="text-subtitle2 q-ml-md">Tamaño</div>
+           <div class="text-overline q-ml-md">Tamaño de tu mascota</div>
            <q-input type="tel" filled v-model="formThree.size"  dense placeholder="indique el tamaño" error-message="Requerido" :error="$v.formThree.size.$error" @blur="$v.formThree.size.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px; width: 100%;">
-           Descripción
+           <div class="text-subtitle2 q-ml-md">Descripción</div>
+           <div class="text-overline q-ml-md">Hasta 100 caracteres</div>
            <q-input type="textarea" filled v-model="formThree.description" error-message="Requerido" :error="$v.formThree.description.$error" @blur="$v.formThree.description.$touch()"/>
          </div>
          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="finish()"/>
@@ -142,7 +147,7 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      slide: 2,
+      slide: 3,
       form: {},
       formTwo: {},
       formThree: {},
@@ -172,11 +177,11 @@ export default {
       address: { required }
     },
     formThree: {
-      name: { required },
+      name: { required, maxLength: maxLength(25) },
       type: { required },
       race: { required },
       size: { required },
-      description: { required }
+      description: { required, maxLength: maxLength(100) }
     },
     repeatPassword: { sameAsPassword: sameAs('password') },
     password: { required, maxLength: maxLength(256), minLength: minLength(6) },
