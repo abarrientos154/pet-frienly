@@ -5,7 +5,9 @@
         <div class="q-pa-lg">
         <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
           <div class="column items-center justify-center q-mb-md" style="padding-top: 20px">
-            <q-checkbox v-model="terms" size="xs" label="Acepto Terminos y condiciones de uso" />
+            <q-checkbox v-model="terms" size="xs" label="">
+              <div class="text-caption">Acepto Terminos y condiciones de uso</div>
+            </q-checkbox>
             <div class="text-negative text-h7" v-if="!terms && appear"> Debe Aceptar los terminos </div>
           </div>
           <div class="row justify-center">
@@ -17,37 +19,33 @@
             </q-avatar>
           </div>
           <div class="text-h4" color="black" style="text-align: center">¿Eres fanatico de las mascotas?</div>
-         <div style="text-align: left; padding-top: 20px">
-           Nombre de Usuario
-           <q-input filled v-model="form.name" dense placeholder="Nombre de usuario" error-message="Requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
+         <div class="q-mx-xl">
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Nombre de Usuario</div>
+             <q-input filled v-model="form.name" dense placeholder="Nombre de usuario" error-message="Requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
+           </div>
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Correo Electrónico</div>
+             <q-input filled v-model="form.email"  dense placeholder="Correo Electrónico" error-message="Requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
+           </div>
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Número de Teléfono</div>
+             <q-input filled v-model="form.phone"  dense placeholder="+34543234" error-message="Requerido" :error="$v.form.phone.$error" @blur="$v.form.phone.$touch()"/>
+           </div>
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Contraseña</div>
+             <q-input :type="isPwd ? 'password' : 'text'" dense v-model="password" filled
+                  error-message="ingrese una contraseña valida, minimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
+                </q-input>
+           </div>
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Repite contraseña</div>
+                <q-input :type="isPwd ? 'password' : 'text'" dense v-model="repeatPassword" filled
+                  error-message="ingrese una contraseña valida, minimo 6 caracteres" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()">
+                </q-input>
+           </div>
          </div>
-         <div style="text-align: left; padding-top: 20px">
-           Correo Electrónico
-           <q-input filled v-model="form.email"  dense placeholder="Correo Electrónico" error-message="Requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
-         </div>
-         <div style="text-align: left; padding-top: 20px">
-           Número de Teléfono
-           <q-input filled v-model="form.phone"  dense placeholder="+34543234" error-message="Requerido" :error="$v.form.phone.$error" @blur="$v.form.phone.$touch()"/>
-         </div>
-         <div style="text-align: left; padding-top: 20px">
-           Contraseña
-           <q-input :type="isPwd ? 'password' : 'text'" dense v-model="password" filled
-                error-message="ingrese una contraseña valida, minimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
-                <template v-slot:append>
-                  <q-icon :name="isPwd ? 'visibility' : 'visibility_off'" class="cursor-pointer q-pa-sm" color="primary" @click="isPwd = !isPwd" />
-                </template>
-              </q-input>
-         </div>
-         <div style="text-align: left; padding-top: 20px">
-           Repite contraseña
-              <q-input :type="isPwd ? 'password' : 'text'" dense v-model="repeatPassword" filled
-                error-message="ingrese una contraseña valida, minimo 6 caracteres" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()">
-                <template v-slot:append>
-                  <q-icon :name="isPwd ? 'visibility' : 'visibility_off'" class="cursor-pointer q-pa-sm" color="primary" @click="isPwd = !isPwd" />
-                </template>
-              </q-input>
-         </div>
-          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="next()"/>
+          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="next()" class="q-py-sm"/>
         </div>
       </q-carousel-slide>
       <q-carousel-slide :name="2" class="q-pa-none">
@@ -55,21 +53,23 @@
           <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
           <div class="text-h4" color="black" style="text-align: center">Información de despacho</div>
          <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
-         <div style="text-align: left; padding-top: 20px">
-           Pais
-           <q-select outlined dense filled v-model="formTwo.country_id" :options="countries" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formTwo.country_id.$error" @blur="$v.formTwo.country_id.$touch()" @input="getCitiesById(formTwo.country_id)" label="Escoja un pais">
-           </q-select>
+         <div class="q-mx-xl">
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Pais</div>
+             <q-select outlined dense filled v-model="formTwo.country_id" :options="countries" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formTwo.country_id.$error" @blur="$v.formTwo.country_id.$touch()" @input="getCitiesById(formTwo.country_id)" label="Escoja un pais">
+             </q-select>
+           </div>
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Ciudad</div>
+             <q-select outlined dense filled v-model="formTwo.city_id" :options="cities" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formTwo.city_id.$error" @blur="$v.formTwo.city_id.$touch()" label="Escoja una ciudad">
+            </q-select>
+           </div>
+           <div style="text-align: left; padding-top: 20px">
+             <div class="text-caption q-ml-md">Dirección</div>
+             <q-input type="tel" filled v-model="formTwo.address"  dense placeholder="Ingrese su dirección" error-message="Requerido" :error="$v.formTwo.address.$error" @blur="$v.formTwo.address.$touch()"/>
+           </div>
          </div>
-         <div style="text-align: left; padding-top: 20px">
-           Ciudad
-           <q-select outlined dense filled v-model="formTwo.city_id" :options="cities" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formTwo.city_id.$error" @blur="$v.formTwo.city_id.$touch()" label="Escoja una ciudad">
-          </q-select>
-         </div>
-         <div style="text-align: left; padding-top: 20px">
-           Dirección
-           <q-input type="tel" filled v-model="formTwo.address"  dense placeholder="Ingrese su dirección" error-message="Requerido" :error="$v.formTwo.address.$error" @blur="$v.formTwo.address.$touch()"/>
-         </div>
-          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="nextTwo()"/>
+          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="nextTwo()" class="q-py-sm"/>
         </div>
       </q-carousel-slide>
       <q-carousel-slide :name="3" class="q-pa-none">
@@ -78,8 +78,8 @@
           <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
           <div class="text-h4" color="black" style="text-align: center">Cuentanos de tu mascota</div>
          <div style="text-align: left; padding-top: 20px">
-          Fotos de tu mascota
-          <div class="text-subtitle2">Puede cargar hasta 3 fotos</div>
+          <div class="text-subtitle2 q-ml-md">Fotos de tu mascota</div>
+          <div class="text-overline q-ml-md">Puede cargar hasta 3 fotos</div>
           <div class="row justify-around q-my-md">
             <q-avatar square size="80px">
               <img :src="files[0] ? petImg[0] : 'petnoimg.png'" style="width: 150%">
@@ -102,23 +102,28 @@
           </div>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           Nombre de mascota
+           <div class="text-subtitle2 q-ml-md">Nombre de mascota</div>
+           <div class="text-overline q-ml-md">Solo 25 caracteres</div>
            <q-input filled v-model="formThree.name"  dense placeholder="Nombre Mascota" error-message="Requerido" :error="$v.formThree.name.$error" @blur="$v.formThree.name.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           ¿Qué tipo de mascota tienes?
+           <div class="text-subtitle2 q-ml-md">¿Qué tipo de mascota tienes?</div>
+           <div class="text-overline q-ml-md">Selecciona el tipo de mascota</div>
            <q-input filled v-model="formThree.type"  dense placeholder="Escoja un tipo" error-message="Requerido" :error="$v.formThree.type.$error" @blur="$v.formThree.type.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           Raza
+           <div class="text-subtitle2 q-ml-md">Raza</div>
+           <div class="text-overline q-ml-md">¿Qué raza es tu mascota?</div>
            <q-input type="tel" filled v-model="formThree.race"  dense placeholder="Escoja una raza" error-message="Requerido" :error="$v.formThree.race.$error" @blur="$v.formThree.race.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px">
-           Tamaño
+           <div class="text-subtitle2 q-ml-md">Tamaño</div>
+           <div class="text-overline q-ml-md">Tamaño de tu mascota</div>
            <q-input type="tel" filled v-model="formThree.size"  dense placeholder="indique el tamaño" error-message="Requerido" :error="$v.formThree.size.$error" @blur="$v.formThree.size.$touch()"/>
          </div>
          <div style="text-align: left; padding-top: 20px; width: 100%;">
-           Descripción
+           <div class="text-subtitle2 q-ml-md">Descripción</div>
+           <div class="text-overline q-ml-md">Hasta 100 caracteres</div>
            <q-input type="textarea" filled v-model="formThree.description" error-message="Requerido" :error="$v.formThree.description.$error" @blur="$v.formThree.description.$touch()"/>
          </div>
          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="finish()"/>
@@ -142,7 +147,7 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      slide: 1,
+      slide: 3,
       form: {},
       formTwo: {},
       formThree: {},
@@ -172,11 +177,11 @@ export default {
       address: { required }
     },
     formThree: {
-      name: { required },
+      name: { required, maxLength: maxLength(25) },
       type: { required },
       race: { required },
       size: { required },
-      description: { required }
+      description: { required, maxLength: maxLength(100) }
     },
     repeatPassword: { sameAsPassword: sameAs('password') },
     password: { required, maxLength: maxLength(256), minLength: minLength(6) },
