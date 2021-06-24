@@ -86,6 +86,11 @@ export default {
           ruta: '/inicio_cliente'
         },
         {
+          icon: 'store',
+          label: 'Tiendas',
+          ruta: '/tiendas'
+        },
+        {
           icon: 'pets',
           label: 'Mascotas',
           ruta: '/mascotas'

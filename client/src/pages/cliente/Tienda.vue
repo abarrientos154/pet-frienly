@@ -227,11 +227,11 @@ export default {
       valor: 0,
       comision: 0,
       total: 0,
-      alert: true
+      alert: false
     }
   },
   mounted () {
-    this.getInfo()
+    // this.getInfo()
   },
   methods: {
     getInfo () {

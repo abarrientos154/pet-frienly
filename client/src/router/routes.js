@@ -35,6 +35,7 @@ const routes = [
       { path: '/descripcionmascota/:id', component: () => import('pages/cliente/DescripcionMascota.vue') },
       { path: '/descripcionalojamiento/:id', component: () => import('pages/cliente/VerAlojamiento.vue') },
       { path: '/tienda/:id', component: () => import('pages/cliente/Tienda.vue') },
+      { path: '/tiendas', component: () => import('pages/cliente/Tiendas.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
       { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       // Generales
