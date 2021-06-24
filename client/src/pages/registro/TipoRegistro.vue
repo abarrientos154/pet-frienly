@@ -7,7 +7,7 @@
           <div class="text-h4" color="white">proveedor</div>
           <div class="text-subtitle1">Tienes una tienda de mascotas o espacios</div>
           <div class="text-subtitle1">para alojar mascotas? PetFriendly es tu lugar</div>
-        <q-btn flat color="primary" icon="arrow_forward_ios" class="fixed-right" to="/proveedor/registro" />
+        <q-btn flat color="primary" icon="arrow_forward_ios" class="fixed-right" to="/registro/proveedor" />
       </div>
       </q-carousel-slide>
       <q-carousel-slide :name="2" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
@@ -16,7 +16,7 @@
           <div class="text-h4" color="white">servicio</div>
           <div class="text-subtitle1">Todo lo que tu mascota necesita en una sola</div>
           <div class="text-subtitle1">app. Desde paseos hasta alojamiento.</div>
-        <q-btn flat color="primary" icon="arrow_forward_ios" class="fixed-right" to="/cliente/registro" />
+        <q-btn flat color="primary" icon="arrow_forward_ios" class="fixed-right" to="/registro/cliente" />
       </div>
       </q-carousel-slide>
       <q-carousel-slide :name="3" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax1.jpg">
@@ -27,7 +27,7 @@
           <div class="text-subtitle1">PetFriendly es tu lugar</div>
         <q-btn flat color="primary" icon="arrow_forward_ios" class="fixed-right"  to="/hospedador/registro"/>
         </div>
-        <q-btn flat color="primary" icon="arrow_forward_ios" class="absolute-right"  to="/hospedador/registro"/>
+        <q-btn flat color="primary" icon="arrow_forward_ios" class="absolute-right"  to="/registro/hospedador"/>
       </q-carousel-slide>
       <template v-slot:control>
         <q-carousel-control

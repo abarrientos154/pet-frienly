@@ -179,7 +179,7 @@
             </div>
             <div class="column items-center q-mt-xl">
               <q-btn rounded color="primary" label="Nuevo" class="q-pa-xs q-mb-sm" style="width: 60%;" @click="slide = 5" no-caps/>
-              <div class="text-subtitle1 text-white" @click="$router.push('/home_hospedador')">Omitir para ir a tu espacio.</div>
+              <div class="text-subtitle1 text-white" @click="$router.push('/inicio_hospedador')">Omitir para ir a tu espacio.</div>
             </div>
           </div>
         </div>

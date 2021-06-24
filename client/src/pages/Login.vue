@@ -43,7 +43,7 @@
               <div class="row justify-center">
                 <div class="row">
                   <div class="text-black text-h9">Aun no tienes cuenta?</div>
-                  <div class="text-secondary q-ml-sm text-bold text-h9" style="cursor:pointer" @click="$router.push('/tipo_usuario')">Registrate.</div>
+                  <div class="text-secondary q-ml-sm text-bold text-h9" style="cursor:pointer" @click="$router.push('/registro')">Registrate.</div>
                 </div>
                </div>
               <div class="colunm justify-center q-pa-sm">
@@ -107,7 +107,7 @@ export default {
             } else if (this.user.roles[0] === 3) {
               this.$router.push('/inicio_proveedor')
             } else if (this.user.roles[0] === 4) {
-              this.$router.push('/home_hospedador')
+              this.$router.push('/inicio_hospedador')
             }
           } else {
             console.log('error de ususario')
