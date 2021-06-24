@@ -3,6 +3,7 @@
 const Servicio = use("App/Models/Servicio")
 const TiendaServicio = use("App/Models/TiendaServicio")
 const Helpers = use('Helpers')
+const mkdirp = use('mkdirp')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */

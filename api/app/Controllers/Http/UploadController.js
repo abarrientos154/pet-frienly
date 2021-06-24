@@ -30,7 +30,7 @@ class UploadController {
       if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
         for (let i = 0; i < dat.cantidadArchivos; i++) {
           let codeFile = randomize('Aa0', 30)
-          const profilePic = request.file('files_' + (i + 1), {
+          const profilePic = request.file('files_' + i, {
             types: ['image']
           })
           if (Helpers.appRoot('storage/uploads/productos')) {
@@ -261,6 +261,46 @@ class UploadController {
     console.log (buscarInd, 'POSICION BUSCAIND')
     await proveedor.save()
     response.send(proveedor)
+  }
+
+  async subirImgProducto ({ response, params, request }) {
+    let codeFile = randomize('Aa0', 30)
+    var profilePic = request.file('files', {
+    })
+    if (profilePic) {
+      if (Helpers.appRoot('storage/uploads/productos')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
+          name: codeFile,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        let producto = await Producto.find(params.producto_id)
+        if (producto.images) {
+          producto.images.push(codeFile)
+        } else {
+          producto.images = []
+          producto.images.push(codeFile)
+        }
+        await producto.save()
+        response.send(producto)
+      }
+    }
+  }
+
+  async eliminarImgProducto ({ params, response }) {
+    const dir = params.file
+    await fs.unlinkSync(Helpers.appRoot(`storage/uploads/productos/${dir}`))
+    let producto = await Producto.find(params.producto_id)
+    let i = producto.images.indexOf(dir)
+    producto.images.splice(i, 1)
+    await producto.save()
+    response.send(producto)
   }
 
   /**

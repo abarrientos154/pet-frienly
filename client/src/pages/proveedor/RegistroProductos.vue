@@ -1,17 +1,21 @@
 <template>
-  <div class="q-pa-lg">
-    <div class="q-pa-md">
+<div class="window-height">
+  <q-btn class="q-mt-lg" flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
+  <div class="q-px-lg q-pb-lg">
+    <div class="q-px-md">
       <div class="text-subtitle1">Carga las fotos de tu producto</div>
       <div class="text-caption text-grey-10 text-italic">Puedes cargar hasta 3 fotos</div>
       <div class="row">
         <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-grey q-my-xs q-mr-xs">
-          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" class="button-camera" @input="producto_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
+          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" class="button-camera" @input="!edit ? producto_img() : add_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
           <q-icon name="backup" class="absolute-center" size="50px" color="white" />
         </q-avatar>
         <q-scroll-area horizontal class="col" style="height: 110px;">
           <div class="row no-wrap" style="width: 100%;">
             <q-avatar class="q-ma-xs" rounded v-for="(item, index) in mostrarImg" :key="index" style="height: 100px; width: 100px; border-radius: 15px;">
-              <q-img style="height: 100%;" :src="item"/>
+              <q-img style="height: 100%;" :src="item">
+                <q-btn @click="!edit ? borrarImg(index, 1) : eliminarImg(imgs[index])" flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+              </q-img>
             </q-avatar>
           </div>
         </q-scroll-area>
@@ -23,7 +27,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
         <div class="text-subtitle1 text-bold">Escoje el nombre de tu producto</div>
         <div class="text-caption text-grey-10 text-italic">Solo 25 caracteres</div>
-        <q-input dense maxlength="30" filled v-model="form.name" placeholder="Nombre espacio" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
+        <q-input dense maxlength="30" filled v-model="form.name" placeholder="Mi nombre de producto" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
         <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu producto?</div>
@@ -65,7 +69,7 @@
     <div>
       <div class="text-subtitle1 text-bold">Descripción del producto</div>
       <div class="text-caption text-grey-10 text-italic">Solo 80 caracteres</div>
-      <q-input maxlength="90" filled outlined placeholder="Mi producto hace..." v-model="form.description" type="textarea" error-message="Este campo es requerido" :error="$v.form.description.$error" @blur="$v.form.description.$touch()"/>
+      <q-input maxlength="90" filled outlined placeholder="Mi producto hace..." v-model="form.descripcion" type="textarea" error-message="Este campo es requerido" :error="$v.form.descripcion.$error" @blur="$v.form.descripcion.$touch()"/>
     </div>
 
     <div>
@@ -94,6 +98,7 @@
       <q-btn color="primary" class="q-pa-xs" label="Crear producto" style="width: 60%; border-radius: 4px" @click="!edit ? guardar() : actualizar()" no-caps/>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -118,95 +123,93 @@ export default {
     form: {
       name: { required },
       destinatario: { required },
-      description: { required },
+      descripcion: { required },
       price: { required },
-      cantidad: { required },
-      oferta_price: { required },
-      fecha_termino: { required },
-      hora_termino: { required }
+      cantidad: { required }
     },
     categoria: { required },
     imgs: { required, minLength: minLength(1) }
   },
   mounted () {
-    this.baseu = env.apiUrl + 'hospedajes_img'
+    this.baseu = env.apiUrl + '/producto_files/'
     if (this.$route.params.id) {
       this.edit = true
       this.id = this.$route.params.id
-      this.$api.get('producto/' + this.id).then(res => {
+      this.getProducto(this.id)
+    }
+    this.getCategorias()
+  },
+  methods: {
+    getProducto (id) {
+      this.$api.get('producto/' + id).then(res => {
         if (res) {
           this.form = res
           this.categoria = res.categoria
+          this.imgs = res.images
+          this.mostrarImg = []
+          for (let i = 0; i < this.imgs.length; i++) {
+            this.mostrarImg.push(this.baseu + this.imgs[i])
+          }
         }
       }).catch(error => {
         console.log(error)
       })
-    }
-    /* this.getCategorias() */
-  },
-  methods: {
+    },
     getCategorias () {
       this.$api.get('categorias').then(res => {
         if (res) {
-          this.categirias = res
+          this.categorias = res
         }
       })
     },
-    producto_img () {
-      this.imgs.push(this.img)
-      this.mostrarImg.push(URL.createObjectURL(this.img))
-      this.img = null
-    },
     guardar () {
       this.$v.$touch()
-      console.log(this.form)
-      if (!this.$v.imgs.$error && !this.$v.form.$error) {
-        console.log('sin fallo')
+      if (!this.$v.imgs.$error && !this.$v.form.$error && !this.$v.categoria.$error) {
         this.$q.loading.show({
-          message: 'Subiendo Espacio de Descanso, Por Favor Espere...'
+          message: 'Agregando producto, Por Favor Espere...'
         })
         var formData = new FormData()
         var cantidadArchivos = this.imgs.length
-        for (const j in this.imgs) {
-          formData.append('files_' + j, this.imgs[j])
+        for (let i = 0; i < cantidadArchivos; i++) {
+          formData.append('files_' + i, this.imgs[i])
         }
         this.form.cantidadArchivos = cantidadArchivos
+        this.form.categoria_id = this.categoria._id
         formData.append('dat', JSON.stringify(this.form))
-        this.$api.post('hospedaje', formData, {
+        this.$api.post('producto', formData, {
           headers: {
             'Content-Type': undefined
           }
         }).then((res) => {
           if (res) {
             this.$q.notify({
-              message: 'Espacio de Descanso agregado con exito',
+              message: 'Producto agregado con exito',
               color: 'positive'
             })
-            this.$router.push('/inicio_hospedador')
+            this.$q.loading.hide()
+            this.$router.go(-1)
           }
           this.$q.loading.hide()
         })
       } else {
         this.$q.notify({
-          message: 'Debe ingresar todos los datos correspondientes',
+          message: 'Debe ingresar todos los datos requeridos',
           color: 'negative'
         })
       }
     },
     async actualizar () {
-      this.$v.servicio.$touch()
+      this.$v.categoria.$touch()
       this.$v.form.$touch()
-      if (!this.$v.servicio.$error && !this.$v.form.$error) {
-        this.form.servicio_id = this.servicio._id
+      if (!this.$v.categoria.$error && !this.$v.form.$error) {
+        this.form.categoria_id = this.categoria._id
         this.$q.loading.show({
-          message: 'Actualizando servicio, por favor espere...'
+          message: 'Actualizando producto, por favor espere...'
         })
-        var formData = new FormData()
-        formData.append('dat', JSON.stringify(this.form))
         await this.$api.put('edit_servicio/' + this.id, this.form).then(res => {
           if (res) {
             this.$q.notify({
-              message: 'Servicio actualizado correctamente',
+              message: 'Producto actualizado correctamente',
               positive: 'positive'
             })
             this.$q.loading.hide()
@@ -221,6 +224,47 @@ export default {
           color: 'negative'
         })
       }
+    },
+    producto_img () {
+      this.imgs.push(this.img)
+      this.mostrarImg.push(URL.createObjectURL(this.img))
+      this.img = null
+    },
+    async add_img () {
+      this.$q.loading.show()
+      if (this.img) {
+        var formData = new FormData()
+        formData.append('files', this.img)
+        await this.$api.post('subir_archivo_producto/' + this.id, formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          this.imgs = res.images
+          this.mostrarImg = []
+          for (let i = 0; i < this.imgs.length; i++) {
+            this.mostrarImg.push(this.baseu + this.imgs[i])
+          }
+          this.$q.loading.hide()
+        })
+      }
+    },
+    borrarImg (index, val) {
+      this.imgs.splice(index, val)
+      this.mostrarImg.splice(index, val)
+    },
+    eliminarImg (nameFile) {
+      this.$q.loading.show()
+      this.$api.delete('eliminar_archivo_producto/' + nameFile + '/' + this.id).then(res => {
+        if (res) {
+          this.imgs = res.images
+          this.mostrarImg = []
+          for (let i = 0; i < this.imgs.length; i++) {
+            this.mostrarImg.push(this.baseu + this.imgs[i])
+          }
+          this.$q.loading.hide()
+        }
+      })
     }
   }
 }

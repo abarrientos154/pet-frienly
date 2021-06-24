@@ -1,5 +1,9 @@
 <template>
   <div>
+    <q-header elevated class="bg-primary row justify-center items-center" style="width:100%; height:60px">
+      <div class="text-white text-subtitle1 text-center">Nombre de la tienda</div>
+    </q-header>
+
     <div class="q-mb-md">
       <q-carousel animated arrows navigation infinite class="img" v-model="carrusel">
         <q-carousel-slide :name="0" :img-src="baseu + form._id" />

@@ -3,7 +3,7 @@
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
-          <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
+          <q-btn flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
           <div class="q-mb-lg text-center text-h5 text-grey-8">Representante Legal</div>
 
           <div class="column items-center q-mb-lg">
@@ -90,7 +90,7 @@
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
-          <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
+          <q-btn flat round color="primary" icon="arrow_back" @click="slide = 1"/>
           <div class="q-mb-lg text-center text-h5 text-grey-8">Datos de tienda</div>
 
           <div class="column items-center justify-center">
@@ -136,7 +136,7 @@
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div class="q-pa-lg">
-          <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 2"/>
+          <q-btn flat round color="primary" icon="arrow_back" @click="slide = 2"/>
           <div class="q-mb-lg text-center text-h5 text-grey-8">Dirección del local</div>
           <div class="row justify-center">
             <q-img

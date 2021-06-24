@@ -88,9 +88,12 @@ addPrefixToGroup(
     Route.delete('mascota/:id', 'MascotaController.destroy')
     
     Route.post('producto', 'UploadController.registrarProducto')
+    Route.get('categorias', 'ProductoController.categorias')
     Route.put('producto/:id', 'ProductoController.update')
     Route.delete('producto/:id', 'ProductoController.destroy')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')
+    Route.post("subir_archivo_producto/:producto_id", "UploadController.subirImgProducto")
+    Route.delete("eliminar_archivo_producto/:file/:producto_id", "UploadController.eliminarImgProducto")
     
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')

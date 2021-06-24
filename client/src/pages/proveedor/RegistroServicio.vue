@@ -1,6 +1,6 @@
 <template>
   <div class="window-height">
-    <q-btn class="q-mt-lg" flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
+    <q-btn class="q-mt-lg" flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
     <div class="column items-center">
       <div class="q-mb-md text-center text-h5 text-grey-8">Selecciona tus servicios</div>
 
@@ -192,8 +192,6 @@ export default {
         this.$q.loading.show({
           message: 'Actualizando servicio, por favor espere...'
         })
-        var formData = new FormData()
-        formData.append('dat', JSON.stringify(this.form))
         await this.$api.put('edit_servicio/' + this.id, this.form).then(res => {
           if (res) {
             this.$q.notify({
