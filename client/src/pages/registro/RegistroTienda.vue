@@ -3,6 +3,7 @@
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
+          <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
           <div class="q-mb-lg text-center text-h5 text-grey-8">Representante Legal</div>
 
           <div class="column items-center q-mb-lg">
@@ -61,8 +62,9 @@
               <div class="text-caption q-mb-sm">Imágenes de documento de identificación</div>
               <div style="width: 50%;" class="q-mb-sm">
                 <q-avatar rounded style="width: 100%;" class="bg-primary">
-                  <q-file borderless :disable="identificacion.length < 2 ? false : true" v-model="imgI" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;"/>
-                  <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
+                  <q-file borderless :disable="identificacion.length < 2 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
+                    <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
+                  </q-file>
                 </q-avatar>
               </div>
               <div class="row">
@@ -77,7 +79,7 @@
               </div>
           </div>
           <div class="column items-center justify-center" style="padding-top: 20px">
-            <q-checkbox v-model="terminos" size="xs" label="Acepto Terminos y condiciones de uso" />
+            <q-checkbox v-model="terminos" size="xs" :class="textColor" label="Acepto Terminos y condiciones de uso" @input="!terminos ? textColor = 'text-red' : textColor = 'text-black'" />
           </div>
           <div class="row justify-center q-mt-lg">
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
@@ -88,6 +90,7 @@
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
+          <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
           <div class="q-mb-lg text-center text-h5 text-grey-8">Datos de tienda</div>
 
           <div class="column items-center justify-center">
@@ -133,6 +136,7 @@
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div class="q-pa-lg">
+          <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 2"/>
           <div class="q-mb-lg text-center text-h5 text-grey-8">Dirección del local</div>
           <div class="row justify-center">
             <q-img
@@ -144,7 +148,7 @@
           <div class="q-mt-md">
             País
             <q-select filled dense color="black" v-model="pais" :options="paises" label="Selecciona el país donde vas a trabajar" map-options
-              error-message="requerido" :error="$v.pais.$error" @blur="$v.pais.$touch()" @input="ciudades = pais.ciudades"
+              error-message="requerido" :error="$v.pais.$error" @blur="$v.pais.$touch()" @input="ciudades = pais.ciudades, ciudad = null, $v.ciudad.$reset()"
               option-label="name" >
                 <template v-slot:no-option>
                   <q-item>
@@ -235,15 +239,16 @@ export default {
       imgR: null,
       imgI: null,
       imgP: null,
+      pais: null,
+      ciudad: null,
       terminos: false,
       ver: false,
       slide: 1,
+      textColor: 'text-black',
       imgRepresentante: '',
       imgPerfil: '',
       password: '',
       repeatPassword: '',
-      pais: {},
-      ciudad: {},
       form: {},
       formTienda: {
         despachoReg: false,
@@ -293,7 +298,10 @@ export default {
         this.$v.password.$touch()
         this.$v.repeatPassword.$touch()
         this.$v.images_ident.$touch()
-        if (!this.$v.form.$error && !this.$v.imgR.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.images_ident.$error) {
+        if (!this.terminos) {
+          this.textColor = 'text-red'
+        }
+        if (!this.$v.form.$error && !this.$v.imgR.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.images_ident.$error && this.terminos) {
           this.slide = 2
         }
       } else {
@@ -317,6 +325,8 @@ export default {
         this.$q.loading.show({
           message: 'Registrando...'
         })
+        this.formTienda.country_id = this.pais._id
+        this.formTienda.city_id = this.ciudad._id
         this.form.password = this.password
         this.form.tienda = this.formTienda
         var formData = new FormData()

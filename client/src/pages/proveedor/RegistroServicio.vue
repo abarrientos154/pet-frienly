@@ -1,12 +1,13 @@
 <template>
   <div class="window-height">
+    <q-btn class="q-mt-lg" flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
     <div class="column items-center">
-      <div class="q-my-lg text-center text-h5 text-grey-8">Selección tus servicios</div>
+      <div class="q-mb-md text-center text-h5 text-grey-8">Selecciona tus servicios</div>
 
       <div class="column items-center q-mb-lg" style="width:100%">
         <q-avatar rounded style="height: 200px; width: 80%; border-radius: 25px;" class="row justify-center">
           <q-img style="height: 100%; width: 100%" :src="imgServicio != '' ? imgServicio : 'noimg.png'">
-            <q-file borderless v-model="img" @input="servicio_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
+            <q-file borderless v-model="img" @input="!edit ? servicio_img() : edit_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
             @blur="$v.img.$touch()">
               <div class="absolute-center column items-center" style="width:100%">
                 <q-icon name="image" size="75px" color="white" />
@@ -21,8 +22,8 @@
         <div class="row">
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-px-xs">
             <div class="q-mb-xs text-black text-caption">¿Qué servicio quieres ofrecer?</div>
-            <q-select borderless dense color="black" v-model="form.servicio" :options="servicios" label="Selecciona el servicio que deseas ofrecer" map-options
-              error-message="requerido" :error="$v.form.servicio.$error" @blur="$v.form.servicio.$touch()"
+            <q-select filled dense color="black" v-model="servicio" :options="servicios" label="Selecciona el servicio que deseas ofrecer" map-options
+              error-message="requerido" :error="$v.servicio.$error" @blur="$v.servicio.$touch()"
               option-label="name" >
                 <template v-slot:no-option>
                   <q-item>
@@ -43,12 +44,19 @@
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-px-xs">
             <div class="q-mb-xs text-black text-caption">¿Quién podra adquirir estos servicios?</div>
-            <q-input filled v-model.number="form.destinatario" type="number" dense
-            :error="$v.form.destinatario.$error" error-message="Este campo es requerido"  @blur="$v.form.destinatario.$touch()" lazy-rules :rules="[ val => val > 0 && val <= 1000 ]"/>
+            <q-select filled dense color="black" v-model="form.destinatario" :options="mascotas" label="Selecciona el tipo de mascota" map-options
+              error-message="requerido" :error="$v.form.destinatario.$error" @blur="$v.form.destinatario.$touch()"
+              >
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
+                  </q-item>
+                </template>
+            </q-select>
           </div>
           <div class="col-12 q-px-xs">
             <div class="q-mb-xs text-black text-caption">Descripción del servicio que vas a ofrecer</div>
-            <q-input filled outlined v-model="form.description" type="textarea"
+            <q-input filled outlined maxlength="380" v-model="form.description" type="textarea" placeholder="Describe tu servicio en no más de 350 caracteres"
             :error="$v.form.description.$error" error-message="Este campo es requerido"  @blur="$v.form.description.$touch()"/>
           </div>
           <div class="col-12 q-px-xs row justify-between">
@@ -58,21 +66,6 @@
           </div>
         </div>
         <div>
-          <!-- <div class="col q-mb-md q-px-xs">
-            <div class="q-mb-xs text-black text-caption">Tipos de habitaciones</div>
-            <q-select dense outlined filled option-value="_id" option-label="name" v-model="tiposHabtSelect" :options="tiposHabt" multiple emit-value map-options>
-              <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-                <q-item v-bind="itemProps" v-on="itemEvents">
-                  <q-item-section>
-                    <q-item-label v-html="opt.name" ></q-item-label>
-                  </q-item-section>
-                  <q-item-section side>
-                    <q-checkbox :value="selected" @input="toggleOption(opt)" />
-                  </q-item-section>
-                </q-item>
-              </template>
-            </q-select>
-          </div> -->
         </div>
       </div>
       <div class="row justify-center q-ma-md" style="width: 70%">
@@ -89,21 +82,25 @@ export default {
   data () {
     return {
       img: null,
+      servicio: null,
+      destinatario: null,
       edit: false,
       imgServicio: '',
       id: '',
+      baseu: '',
       user: {},
       form: {},
-      servicios: []
+      servicios: [],
+      mascotas: ['Perros', 'Gatos', 'Ambos']
     }
   },
   validations: {
     form: {
-      servicio: { required },
       destinatario: { required },
       description: { required },
       price: { required }
     },
+    servicio: { required },
     img: { required }
   },
   mounted () {
@@ -111,9 +108,10 @@ export default {
     if (this.$route.params.id) {
       this.edit = true
       this.id = this.$route.params.id
-      this.$api.get('hospedaje/' + this.id).then(res => {
+      this.$api.get('servicio/' + this.id).then(res => {
         if (res) {
           this.form = res
+          this.servicio = res.servicio
         }
       }).catch(error => {
         console.log(error)
@@ -133,25 +131,51 @@ export default {
       var im = this.img
       this.imgServicio = URL.createObjectURL(im)
     },
+    async edit_img () {
+      this.$q.loading.show()
+      if (this.img) {
+        var formData = new FormData()
+        formData.append('files', this.img)
+        await this.$api.post('subir_img_servicio/' + this.id, formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Foto actualizada',
+              color: 'positive'
+            })
+            this.$q.loading.hide()
+            location.reload()
+          }
+          this.$q.loading.hide()
+        })
+      }
+    },
     async agregar () {
-      this.$v.$touch()
-      if (!this.$v.form.$error) {
+      this.$v.img.$touch()
+      this.$v.servicio.$touch()
+      this.$v.form.$touch()
+      if (!this.$v.img.$error && !this.$v.servicio.$error && !this.$v.form.$error) {
         this.$q.loading.show({
           message: 'Agregando servicio, por favor espere'
         })
+        this.form.servicio_id = this.servicio._id
         var formData = new FormData()
+        formData.append('files', this.img)
         formData.append('dat', JSON.stringify(this.form))
-        await this.$api.post('hospedaje', formData, {
+        await this.$api.post('crear_servicio', formData, {
           headers: {
             'Content-Type': undefined
           }
         }).then((res) => {
           this.$q.notify({
             message: 'Servicio agregado con éxito',
-            color: 'primary'
+            color: 'positive'
           })
           this.$q.loading.hide()
-          // this.$router.push('/hospedajes')
+          this.$router.go(-1)
         })
       } else {
         this.$q.notify({
@@ -161,24 +185,26 @@ export default {
       }
     },
     async actualizar () {
+      this.$v.servicio.$touch()
       this.$v.form.$touch()
-      if (!this.$v.form.$error) {
+      if (!this.$v.servicio.$error && !this.$v.form.$error) {
+        this.form.servicio_id = this.servicio._id
         this.$q.loading.show({
           message: 'Actualizando servicio, por favor espere...'
         })
         var formData = new FormData()
         formData.append('dat', JSON.stringify(this.form))
-        await this.$api.put('hospedaje/' + this.id, formData, {
-          headers: {
-            'Content-Type': undefined
+        await this.$api.put('edit_servicio/' + this.id, this.form).then(res => {
+          if (res) {
+            this.$q.notify({
+              message: 'Servicio actualizado correctamente',
+              positive: 'positive'
+            })
+            this.$q.loading.hide()
+            this.$router.go(-1)
+          } else {
+            this.$q.loading.hide()
           }
-        }).then((res) => {
-          this.$q.notify({
-            message: 'Servicio actualizado con éxito',
-            color: 'primary'
-          })
-          this.$q.loading.hide()
-          // this.$router.push('/hospedajes')
         })
       } else {
         this.$q.notify({
@@ -187,6 +213,36 @@ export default {
         })
       }
     }
+    /* eliminarProducto (id) {
+      this.$q.dialog({
+        title: '¡Atención!',
+        message: '¿Seguro desea eliminar este producto?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show({
+          message: 'Eliminando producto'
+        })
+        this.$api.delete('producto/' + id).then(res => {
+          if (res) {
+            this.$q.loading.hide()
+            this.$q.notify({
+              message: 'Eliminado Correctamente',
+              color: 'positive'
+            })
+            this.getProductosByProveedor(this.id_tienda)
+          } else {
+            this.$q.loading.hide()
+            this.$q.notify({
+              message: 'Hubo un error',
+              color: 'negative'
+            })
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    } */
   }
 }
 </script>

@@ -101,5 +101,11 @@ addPrefixToGroup(
     Route.post("subir_archivo_proveedor" ,'UploadController.subirimgtiendaById')
     Route.get("eliminar_imagen_tienda/:id" ,'UploadController.eliminarigmtiendaById')
 
+    Route.get("servicio/:id", "ServicioController.show")
+    Route.post("crear_servicio", "ServicioController.create")
+    Route.put("edit_servicio/:id", "ServicioController.update")
+    Route.delete("servicio/:id", "ServicioController.destroy")
+    Route.post("subir_img_servicio/:servicio_id", "UploadController.subirImgServicio")
+
   }).middleware("auth")
 );

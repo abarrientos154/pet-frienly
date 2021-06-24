@@ -92,6 +92,27 @@ class UploadController {
     return fileName
   }
 
+  /* async subirImgServicio ({ response, params, request }) {
+    let id = params.producto_id
+    var profilePic = request.file('perfil', {})
+    if (profilePic) {
+      if (Helpers.appRoot('storage/uploads/productos')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
+          name: id,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        response.send(true)
+      }
+    }
+  } */
+
    async subirimgtienda ({ request, response, auth }) {
     let codeFile = randomize('Aa0', 30)
     let user = await auth.getUser()

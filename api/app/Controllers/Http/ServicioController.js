@@ -1,6 +1,8 @@
 'use strict'
 
 const Servicio = use("App/Models/Servicio")
+const TiendaServicio = use("App/Models/TiendaServicio")
+const Helpers = use('Helpers')
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
@@ -24,6 +26,12 @@ class ServicioController {
     response.send(datos)
   }
 
+  async misServicios ({ response, auth }) {
+    let user = await auth.getUser()
+    let servicios = (await TiendaServicio.query().where({ tienda_id: user._id.toString()}).with('servicio').fetch()).toJSON()
+    response.send(servicios)
+  }
+
   /**
    * Render a form to be used for creating a new servicio.
    * GET servicios/create
@@ -33,7 +41,26 @@ class ServicioController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create ({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
+    dat.tienda_id = user._id
+    let servicio = await TiendaServicio.create(dat)
+
+    const profilePic = request.file('files', {})
+    if (Helpers.appRoot('storage/uploads/servicios')) {
+      await profilePic.move(Helpers.appRoot('storage/uploads/servicios'), {
+        name: servicio._id.toString(),
+        overwrite: true
+      })
+    } else {
+      mkdirp.sync(`${__dirname}/storage/Excel`)
+    }
+    if (!profilePic.moved()) {
+      return profilePic.error()
+    }
+    response.send(servicio)
   }
 
   /**
@@ -57,6 +84,8 @@ class ServicioController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    let servicio = (await TiendaServicio.query().where({ _id: params.id}).with('servicio').first()).toJSON()
+    response.send(servicio)
   }
 
   /**
@@ -80,6 +109,9 @@ class ServicioController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    let body = request.only(TiendaServicio.fillable())
+    await TiendaServicio.query().where('_id', params.id).update(body)
+    response.send(body)
   }
 
   /**
@@ -91,6 +123,9 @@ class ServicioController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    let servicio = await TiendaServicio.find(params.id)
+    servicio.delete()
+    response.send(servicio)
   }
 }
 
