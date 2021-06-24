@@ -27,7 +27,7 @@
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
         <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu espacio?</div>
         <div class="text-subtitle1 text-grey text-italic">Escoger perro, gato o ambos</div>
-        <q-select dense filled option-value="name" option-label="name" v-model="form.pet_type" :options="mascotas" placeholder="tipos de mascotas" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.form.pet_type.$error" @blur="$v.form.pet_type.$touch()"/>
+        <q-select dense filled option-value="name" option-label="name" v-model="form.pet_type" :options="mascotas" placeholder="tipos de mascotas" emit-value map-options error-message="Este campo es requerido" :error="$v.form.pet_type.$error" @blur="$v.form.pet_type.$touch()"/>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
         <div class="text-subtitle1 text-bold">Tamaño de las mascotas que recives</div>
