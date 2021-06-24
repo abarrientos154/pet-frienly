@@ -7,7 +7,7 @@
         style="height: 330px;"
       >
         <div class="row no-wrap q-py-xs q-px-md q-gutter-md">
-          <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index" @click="$router.push('/tienda/123')">
+          <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
             <q-card style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md"/>
             </q-card>
@@ -31,7 +31,7 @@
       </div>
       <div class="row">
         <div class="row justify-center q-py-xl q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 8" :key="index" @click="$router.push('/tienda/123')">
+          <q-card style="border-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 8" :key="index">
             <q-card style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md"/>
             </q-card>
