@@ -16,33 +16,73 @@ const Ciudad = use("App/Models/Ciudad")
 const ciudadData = [
   {
     id: 1,
-    pais_id: '60652fc0c547bd0ec7b69ab6',
-    name: 'Antofagasta',
-    ubicacion: { lat: -23.65236, lng: -70.3954 }
+    pais_id: 1,
+    name: 'Antofagasta'
   },
   {
     id: 2,
-    pais_id: '60652fc0c547bd0ec7b69ab6',
-    name: 'Santiago',
-    ubicacion: { lat: -33.45694, lng: -70.64827 }
+    pais_id: 1,
+    name: 'Concepcion'
   },
   {
     id: 3,
-    pais_id: '60652fc0c547bd0ec7b69ab6',
-    name: 'Concepcion',
-    ubicacion: { lat: -36.82699, lng: -73.04977 }
+    pais_id: 1,
+    name: 'Santiago'
   },
   {
     id: 4,
-    pais_id: '60652fc1c547bd0ec7b69ab7',
-    name: 'Cali',
-    ubicacion: { lat: 3.43722, lng: -76.5225 }
+    pais_id: 1,
+    name: 'Viña del mar'
   },
   {
     id: 5,
-    pais_id: '60652fc1c547bd0ec7b69ab7',
-    name: 'Bogota',
-    ubicacion: { lat: 4.60971, lng: -74.08175 }
+    pais_id: 2,
+    name: 'Cali'
+  },
+  {
+    id: 6,
+    pais_id: 2,
+    name: 'Cartagena'
+  },
+  {
+    id: 7,
+    pais_id: 2,
+    name: 'Cúcuta'
+  },
+  {
+    id: 8,
+    pais_id: 2,
+    name: 'Barranquilla'
+  },
+  {
+    id: 9,
+    pais_id: 2,
+    name: 'Bogotá'
+  },
+  {
+    id: 10,
+    pais_id: 2,
+    name: 'Bucaramanga'
+  },
+  {
+    id: 11,
+    pais_id: 2,
+    name: 'Medellín'
+  },
+  {
+    id: 12,
+    pais_id: 2,
+    name: 'Pereira'
+  },
+  {
+    id: 13,
+    pais_id: 2,
+    name: 'Santamarta'
+  },
+  {
+    id: 14,
+    pais_id: 2,
+    name: 'Villavicencio'
   }
 
 ]
@@ -56,7 +96,6 @@ class CiudadSeeder {
       } else {
         ciudad.pais_id = ciudadData[i].pais_id
         ciudad.name = ciudadData[i].name
-        ciudad.ubicacion = ciudadData[i].ubicacion
         await ciudad.save()
       }
     }

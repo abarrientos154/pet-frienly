@@ -14,13 +14,9 @@ const routes = [
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/productos', component: () => import('pages/proveedor/Productos.vue') },
-      { path: '/registroproductos', component: () => import('pages/proveedor/RegistroProductos.vue') },
-      { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
       { path: '/descripcion_producto/:id', component: () => import('pages/proveedor/DescripcionProducto.vue') },
-      { path: '/hospedajes', component: () => import('pages/proveedor/Hospedaje.vue') },
-      { path: '/registrohospedaje', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
-      { path: '/editar_hospedaje/:id', component: () => import('pages/proveedor/RegistroHospedaje.vue') },
-      { path: '/descripcion_hospedaje/:id', component: () => import('pages/proveedor/DescripcionHospedaje.vue') },
+      { path: '/servicios', component: () => import('pages/proveedor/Servicios.vue') },
+      { path: '/descripcion_servicio/:id', component: () => import('pages/proveedor/DescripcionServicio.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
       { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
@@ -35,6 +31,7 @@ const routes = [
       { path: '/descripcionmascota/:id', component: () => import('pages/cliente/DescripcionMascota.vue') },
       { path: '/descripcionalojamiento/:id', component: () => import('pages/cliente/VerAlojamiento.vue') },
       { path: '/tienda/:id', component: () => import('pages/cliente/Tienda.vue') },
+      { path: '/tiendas', component: () => import('pages/cliente/Tiendas.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
       { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       // Generales
@@ -47,6 +44,13 @@ const routes = [
   { path: '/registro/cliente', component: () => import('pages/registro/RegistroCliente.vue') },
   { path: '/registro/proveedor', component: () => import('pages/registro/RegistroTienda.vue') },
   { path: '/registro/hospedador', component: () => import('pages/registro/RegistroHospedador.vue') },
+
+  { path: '/servicios_productos', component: () => import('pages/proveedor/FinRegister.vue') },
+  { path: '/registro_servicio', component: () => import('pages/proveedor/RegistroServicio.vue') },
+  { path: '/editar_servicio/:id', component: () => import('pages/proveedor/RegistroServicio.vue') },
+  { path: '/registro_producto', component: () => import('pages/proveedor/RegistroProductos.vue') },
+  { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
+
   {
     path: '/',
     redirect: '/login'

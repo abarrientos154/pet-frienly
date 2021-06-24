@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class Mascota extends Model {
   static get fillable() {
-    return ['name', 'race', 'age', 'vaccines', 'diseases', 'descripcion', 'type', 'size', ]
+    return ['name', 'race', 'age', 'vaccines', 'diseases', 'descripcion', 'type', 'size', 'birthdate' ]
   }
   static fieldValidationRules() {
     const rules = {
@@ -13,7 +13,7 @@ class Mascota extends Model {
       race: "required|string",
       type: "required|string",
       size: "required|string",
-      // age: "required|string",
+      age: "required|number",
       // vaccines: "required|string",
       // diseases: "required|string",
       description: "required|string"
