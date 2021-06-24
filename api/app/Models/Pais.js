@@ -15,10 +15,10 @@ class Pais extends Model {
         return rules
     }
     ciudades () {
-        return this.hasMany("App/Models/Ciudad", "_id", "pais_id")
+        return this.hasMany("App/Models/Ciudad", "id", "pais_id")
     }
     static get objectIDpais () {
-        return ["pais_id", "_id"];
+        return ["_id"];
     }
 }
 

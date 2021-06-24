@@ -19,7 +19,7 @@ class Ciudad extends Model {
         return this.belongsTo("App/Models/Pais", "pais_id", "_id")
     }
     static get objectIDs () {
-        return ["_id", "pais_id"];
+        return ["_id"];
     }
     static get objectIDcity () {
         return ["ciudad_id", "_id"];
