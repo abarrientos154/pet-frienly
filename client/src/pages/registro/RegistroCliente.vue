@@ -144,12 +144,23 @@
          <div class="q-my-md">
            <div>Nombre de mascota</div>
            <div class="text-overline q-ml-md">Solo 25 caracteres</div>
-           <q-input filled v-model="formThree.name"  dense placeholder="Nombre Mascota" error-message="Requerido" :error="$v.formThree.name.$error" @blur="$v.formThree.name.$touch()"/>
+           <q-input filled v-model="formThree.name"  dense error-message="Requerido" :error="$v.formThree.name.$error" @blur="$v.formThree.name.$touch()"/>
+         </div>
+         <div class="q-my-md">
+           <div>Edad</div>
+           <div class="text-overline q-ml-md">¿Cuántos años tiene tu mascota?</div>
+           <q-input type="number" min="0" filled v-model.number="formThree.age"  dense error-message="Requerido" :error="$v.formThree.age.$error" @blur="$v.formThree.age.$touch()"/>
+         </div>
+         <div class="q-my-md">
+           <div>Fecha de nacimiento</div>
+           <div class="text-overline q-ml-md">¿Cuándo nacio tu mascota?</div>
+           <q-input type="date" filled v-model="formThree.birthdate"  dense error-message="Requerido" :error="$v.formThree.birthdate.$error" @blur="$v.formThree.birthdate.$touch()"/>
          </div>
          <div>
            <div>¿Qué tipo de mascota tienes?</div>
            <div class="text-overline q-ml-md">Selecciona el tipo de mascota</div>
-           <q-input filled v-model="formThree.type"  dense placeholder="Escoja un tipo" error-message="Requerido" :error="$v.formThree.type.$error" @blur="$v.formThree.type.$touch()"/>
+           <q-select filled v-model="formThree.type"  dense placeholder="Escoja un tipo" error-message="Requerido" :error="$v.formThree.type.$error" @blur="$v.formThree.type.$touch()" option-value="value" option-label="name" emit-value map-options :options="petType" @input="getSize(formThree.type)">
+          </q-select>
          </div>
          <div>
            <div>Raza</div>
@@ -159,7 +170,8 @@
          <div>
            <div>Tamaño</div>
            <div class="text-overline q-ml-md">Tamaño de tu mascota</div>
-           <q-input type="tel" filled v-model="formThree.size"  dense placeholder="indique el tamaño" error-message="Requerido" :error="$v.formThree.size.$error" @blur="$v.formThree.size.$touch()"/>
+           <q-select filled v-model="formThree.size"  dense placeholder="indique el tamaño" error-message="Requerido" :error="$v.formThree.size.$error" @blur="$v.formThree.size.$touch()" option-value="value" option-label="name" emit-value map-options :options="sizes">
+          </q-select>
          </div>
          <div>
            <div>Descripción</div>
@@ -204,7 +216,22 @@ export default {
       password: '',
       repeatPassword: '',
       appear: false,
-      formLogin: null
+      formLogin: null,
+      sizeDog: [
+        { name: 'Pequeño', value: 1 },
+        { name: 'Mediano', value: 2 },
+        { name: 'Intermedio', value: 3 },
+        { name: 'Grande', value: 4 }
+      ],
+      sizeCat: [
+        { name: 'Pequeño', value: 1 },
+        { name: 'Grande', value: 4 }
+      ],
+      petType: [
+        { name: 'Perro', value: 1 },
+        { name: 'Gato', value: 2 }
+      ],
+      sizes: []
     }
   },
   validations: {
@@ -220,6 +247,8 @@ export default {
     city: { required },
     formThree: {
       name: { required, maxLength: maxLength(25) },
+      age: { required },
+      birthdate: { required },
       type: { required },
       race: { required },
       size: { required },
@@ -234,6 +263,13 @@ export default {
   },
   methods: {
     ...mapMutations('generals', ['login']),
+    getSize (value) {
+      if (value === 1) {
+        this.sizes = [...this.sizeDog]
+      } else if (value === 2) {
+        this.sizes = [...this.sizeCat]
+      }
+    },
     next () {
       this.$v.form.$touch()
       this.$v.repeatPassword.$touch()
