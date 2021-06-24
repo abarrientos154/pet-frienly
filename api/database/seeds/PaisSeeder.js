@@ -16,13 +16,11 @@ const Pais = use("App/Models/Pais")
 const paisData = [
   {
     id: 1,
-    _id: '60652fc0c547bd0ec7b69ab6',
     name: 'Chile',
     ubicacion: { lat: -35.675147, lng: -71.542969 }
   },
   {
     id: 2,
-    _id: '60652fc1c547bd0ec7b69ab7',
     name: 'Colombia',
     ubicacion: { lat: 4.570868, lng: -74.297333 }
   }

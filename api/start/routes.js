@@ -38,7 +38,6 @@ addPrefixToGroup(
     // Insertar rutas sin protección de autenticación aquí
     Route.get("servicios", "ServicioController.index")
     Route.post("login", "UserController.login");
-    Route.post("register", "UserController.register")
     Route.post("register_proveedor", "UserController.registerProveedor")
     Route.post("register_client", "UserController.registerClient")
     Route.post("register_hospedador", "UserController.registerHospedador")

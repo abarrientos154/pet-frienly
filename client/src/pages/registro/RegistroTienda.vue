@@ -6,17 +6,14 @@
           <div class="q-mb-lg text-center text-h5 text-grey-8">Representante Legal</div>
 
           <div class="column items-center q-mb-lg">
-            <q-avatar rounded style="height: 200px; width: 90%; border-radius: 25px;" class="bg-grey row justify-center">
-              <q-img style="height: 100%;" :src="imgRepresentante != '' ? imgRepresentante : ''">
+            <q-avatar rounded style="height: 200px; width: 90%; border-radius: 25px;" class="row justify-center">
+              <q-img style="height:100%; width:100%" :src="imgRepresentante != '' ? imgRepresentante : 'noimg.png'">
                 <q-file borderless v-model="imgR" @input="representante_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
                 @blur="$v.imgR.$touch()">
-                  <div class="absolute-center column items-center" style="width:100%">
-                    <q-icon name="image" size="75px" color="white" />
-                    <div :class="$v.imgR.$error ? 'text-negative text-subtitle2 text-center' : 'text-white text-subtitle2 text-center'"> IMG <br> Representante legal </div>
-                  </div>
                 </q-file>
               </q-img>
             </q-avatar>
+            <div :class="$v.imgR.$error ? 'text-negative text-subtitle2 text-center' : 'text-grey-8 text-subtitle2 text-center'"> IMG Representante legal </div>
           </div>
 
           <div class="q-mt-sm">
@@ -26,7 +23,7 @@
           </div>
           <div>
             Apellidos
-            <q-input filled v-model="form.last_name"  dense placeholder="Coloca aambos apellidos"
+            <q-input filled v-model="form.last_name"  dense placeholder="Coloca ambos apellidos"
             error-message="Este campo es requerido" :error="$v.form.last_name.$error" @blur="$v.form.last_name.$touch()"/>
           </div>
           <div>
@@ -84,7 +81,7 @@
           </div>
           <div class="row justify-center q-mt-lg">
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
-            @click="siguiente1()"/>
+            @click="siguiente(1)"/>
           </div>
         </div>
       </q-carousel-slide>
@@ -129,7 +126,7 @@
          </div>
           <div class="row justify-center q-mt-lg">
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
-            @click="siguiente2()"/>
+            @click="siguiente(2)"/>
           </div>
         </div>
       </q-carousel-slide>
@@ -146,13 +143,47 @@
           </div>
           <div class="q-mt-md">
             País
-            <q-select dense filled v-model="formTienda.pais_id" :options="paises" option-value="ciudades" option-label="name" label="Selecciona el país donde vas a trabajar"
-            error-message="Este campo es requerido" :error="$v.formTienda.pais_id.$error" @blur="$v.formTienda.pais_id.$touch()"/>
+            <q-select filled dense color="black" v-model="pais" :options="paises" label="Selecciona el país donde vas a trabajar" map-options
+              error-message="requerido" :error="$v.pais.$error" @blur="$v.pais.$touch()" @input="ciudades = pais.ciudades"
+              option-label="name" >
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
+                  </q-item>
+                </template>
+                <template v-slot:option="scope">
+                  <q-item
+                    v-bind="scope.itemProps"
+                    v-on="scope.itemEvents"
+                  >
+                    <q-item-section>
+                      <q-item-label v-html="scope.opt.name" />
+                    </q-item-section>
+                  </q-item>
+                </template>
+            </q-select>
           </div>
           <div>
             Ciudad
-            <q-select dense filled v-model="formTienda.region_id" :options="paises" option-value="ciudades" option-label="name" label="Selecciona la región donde vas a trabajar"
-            error-message="Este campo es requerido" :error="$v.formTienda.region_id.$error" @blur="$v.formTienda.region_id.$touch()"/>
+            <q-select filled dense color="black" v-model="ciudad" :options="ciudades" label="Selecciona la región donde vas a trabajar" map-options
+              error-message="requerido" :error="$v.ciudad.$error" @blur="$v.ciudad.$touch()"
+              option-label="name" >
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey text-italic">Selecciona un país</q-item-section>
+                  </q-item>
+                </template>
+                <template v-slot:option="scope">
+                  <q-item
+                    v-bind="scope.itemProps"
+                    v-on="scope.itemEvents"
+                  >
+                    <q-item-section>
+                      <q-item-label v-html="scope.opt.name" />
+                    </q-item-section>
+                  </q-item>
+                </template>
+            </q-select>
           </div>
           <div>
             Dirección
@@ -187,7 +218,7 @@
             <q-checkbox v-model="formTienda.deliveryGratis" size="xs" label="Delivery Gratis"/>
           </div>
           <div class="row justify-center q-mt-lg">
-            <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
+            <q-btn no-caps rounded color="primary" label="Finalizar" class="q-py-xs" style="width: 90%;"
             @click="finalizar()"/>
           </div>
         </div>
@@ -197,6 +228,7 @@
 </template>
 <script>
 import { required, maxLength, email, sameAs, minLength } from 'vuelidate/lib/validators'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -210,6 +242,8 @@ export default {
       imgPerfil: '',
       password: '',
       repeatPassword: '',
+      pais: {},
+      ciudad: {},
       form: {},
       formTienda: {
         despachoReg: false,
@@ -218,6 +252,7 @@ export default {
       },
       identificacion: [],
       paises: [],
+      ciudades: [],
       images_ident: []
     }
   },
@@ -234,43 +269,104 @@ export default {
       email: { required, email },
       phone: { required },
       descripcion: { required },
-      pais_id: { required },
-      region_id: { required },
       direccion: { required },
       hora_inicio: { required },
       hora_cierre: { required }
     },
     imgR: { required },
     imgP: { required },
+    pais: { required },
+    ciudad: { required },
     images_ident: { required, minLength: minLength(2) },
     password: { required, maxLength: maxLength(256), minLength: minLength(6) },
     repeatPassword: { sameAsPassword: sameAs('password') }
   },
+  mounted () {
+    this.getPaisesCiudades()
+  },
   methods: {
-    siguiente1 () {
-      this.$v.form.$touch()
-      this.$v.imgR.$touch()
-      this.$v.password.$touch()
-      this.$v.repeatPassword.$touch()
-      this.$v.images_ident.$touch()
-      /* if (!this.$v.imgR.$error) */
-      this.slide = 2
-    },
-    siguiente2 () {
-      this.$v.imgP.$touch()
-      this.$v.formTienda.name.$touch()
-      this.$v.formTienda.email.$touch()
-      this.$v.formTienda.phone.$touch()
-      this.$v.formTienda.descripcion.$touch()
-      /* if (!this.$v.imgR.$error) */
-      this.slide = 3
+    ...mapMutations('generals', ['login']),
+    siguiente (val) {
+      if (val === 1) {
+        this.$v.form.$touch()
+        this.$v.imgR.$touch()
+        this.$v.password.$touch()
+        this.$v.repeatPassword.$touch()
+        this.$v.images_ident.$touch()
+        if (!this.$v.form.$error && !this.$v.imgR.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.images_ident.$error) {
+          this.slide = 2
+        }
+      } else {
+        this.$v.imgP.$touch()
+        this.$v.formTienda.name.$touch()
+        this.$v.formTienda.email.$touch()
+        this.$v.formTienda.phone.$touch()
+        this.$v.formTienda.descripcion.$touch()
+        if (!this.$v.imgP.$error && !this.$v.formTienda.name.$error && !this.$v.formTienda.email.$error && !this.$v.formTienda.phone.$error && !this.$v.formTienda.descripcion.$error) {
+          this.slide = 3
+        }
+      }
     },
     finalizar () {
-      this.$v.formTienda.pais_id.$touch()
-      this.$v.formTienda.region_id.$touch()
+      this.$v.pais.$touch()
+      this.$v.ciudad.$touch()
       this.$v.formTienda.direccion.$touch()
       this.$v.formTienda.hora_inicio.$touch()
       this.$v.formTienda.hora_cierre.$touch()
+      if (!this.$v.pais.$error && !this.$v.ciudad.$error && !this.$v.formTienda.direccion.$error && !this.$v.formTienda.hora_inicio.$error && !this.$v.formTienda.hora_cierre.$error) {
+        this.$q.loading.show({
+          message: 'Registrando...'
+        })
+        this.form.password = this.password
+        this.form.tienda = this.formTienda
+        var formData = new FormData()
+        for (let i = 0; i < this.images_ident.length; i++) {
+          formData.append('IFiles' + i, this.images_ident[i])
+        }
+        formData.append('RFiles', this.imgR)
+        formData.append('PFiles', this.imgP)
+        formData.append('dat', JSON.stringify(this.form))
+        this.$api.post('register_proveedor', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then(res => {
+          if (res) {
+            this.$q.notify({
+              message: 'Ya formas parte de PetFriendly, Bienvenido',
+              color: 'positive'
+            })
+            this.loguear()
+          }
+          this.$q.loading.hide()
+        })
+      } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos requeridos',
+          color: 'negative'
+        })
+      }
+    },
+    loguear () {
+      this.$api.post('login', this.form).then(res => {
+        if (res) { // Se debe ejecutar una mutacion que modifique el state con sessionInfo
+          const user = res.TRI_SESSION_INFO.roles[0]
+          if (user === 3) {
+            this.login(res)
+            this.$router.push('/servicios_productos')
+          }
+        } else {
+          console.log('error de ususario')
+          // this.loading = false
+        }
+      })
+    },
+    getPaisesCiudades () {
+      this.$api.get('pais').then(res => {
+        if (res) {
+          this.paises = res
+        }
+      })
     },
     representante_img () {
       var im = this.imgR
