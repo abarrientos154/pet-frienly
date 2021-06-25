@@ -5,12 +5,12 @@ const Model = use('Model')
 
 class Producto extends Model {
   static get fillable() {
-    return ['name','descripcion','cantidad','precio']
+    return ['name','descripcion','cantidad','price', 'destinatario', 'categoria_id', 'oferta', 'oferta_price', 'fecha_termino']
   }
   static fieldValidationRules() {
     const rules = {
       name: "required|string",
-      precio: "required|number",
+      price: "required|number",
       descripcion: "required|string",
       cantidad: "required|number"
     }

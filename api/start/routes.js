@@ -56,6 +56,7 @@ addPrefixToGroup(
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
+    Route.get('servicio_img/:file', 'UploadController.getFileByDirectoryServicio')
     
     Route.post("user_by_rol", "UserController.userByRol") // metodo para obtener usuarios segun el rol
     Route.get("user_by_id/:id", "UserController.userById") // metodo para obtener informacion del usuario por id del mismo
@@ -73,6 +74,7 @@ addPrefixToGroup(
       // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo") // metodo para obtener informacion del usuario que esta logueado
     Route.get("user_logueado", "UserController.userLogueado")
+    Route.get("tienda_by_id/:id", "UserController.tiendaById")
     Route.get("all_user", "UserController.allUser") // metodo para obtener informacion del usuario que esta logueado
     Route.post("user_enable/:id", "UserController.userEnable") // metodo para bloquear o desbloquear usuarios
     Route.post("user_by_status", "UserController.userByStatus") // metodo para obtener proveedores pendientes
@@ -90,9 +92,12 @@ addPrefixToGroup(
     Route.delete('mascota/:id', 'MascotaController.destroy')
     
     Route.post('producto', 'UploadController.registrarProducto')
+    Route.get('categorias', 'ProductoController.categorias')
     Route.put('producto/:id', 'ProductoController.update')
     Route.delete('producto/:id', 'ProductoController.destroy')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')
+    Route.post("subir_archivo_producto/:producto_id", "UploadController.subirImgProducto")
+    Route.delete("eliminar_archivo_producto/:file/:producto_id", "UploadController.eliminarImgProducto")
     
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')
@@ -102,6 +107,12 @@ addPrefixToGroup(
     Route.post('perfil_imagen', 'UploadController.newimagenById')
     Route.post("subir_archivo_proveedor" ,'UploadController.subirimgtiendaById')
     Route.get("eliminar_imagen_tienda/:id" ,'UploadController.eliminarigmtiendaById')
+
+    Route.get("servicio/:id", "ServicioController.show")
+    Route.post("crear_servicio", "ServicioController.create")
+    Route.put("edit_servicio/:id", "ServicioController.update")
+    Route.delete("servicio/:id", "ServicioController.destroy")
+    Route.post("subir_img_servicio/:servicio_id", "UploadController.subirImgServicio")
 
   }).middleware("auth")
 );

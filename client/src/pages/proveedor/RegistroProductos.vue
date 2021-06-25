@@ -1,329 +1,271 @@
 <template>
-  <div class="column justify-between">
-    <div class="q-pa-md row">
-      <div v-if="imgProducto && edit" class="q-mr-md col-2 column items-center">
-        <q-avatar rounded v-for="(item, index) in botones" :key="index" :class="item.select ? 'seleccionado q-mb-sm':'bg-orange-1 q-mb-sm'" @click="seleccionar(index)" style="height: 75px; width: 100%; border-radius: 15px;">
-          <q-img style="height: 100%;" :src="cargarPhoto(index)"/>
-          <q-icon :name="item.src ? 'mode_edit' : 'add'" class="absolute-center" size="30px" color="black" />
+<div class="window-height">
+  <q-btn class="q-mt-lg" flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
+  <div class="q-px-lg q-pb-lg">
+    <div class="q-px-md">
+      <div class="text-subtitle1">Carga las fotos de tu producto</div>
+      <div class="text-caption text-grey-10 text-italic">Puedes cargar hasta 3 fotos</div>
+      <div class="row">
+        <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-grey q-my-xs q-mr-xs">
+          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" class="button-camera" @input="!edit ? producto_img() : add_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
+          <q-icon name="backup" class="absolute-center" size="50px" color="white" />
         </q-avatar>
-      </div>
-
-      <div v-else class="q-mr-md col-2 column items-center">
-        <q-avatar rounded v-for="(item, index) in botones" :key="index" :class="item.select ? 'seleccionado q-mb-sm':'bg-orange-1 q-mb-sm'" @click="seleccionar(index)" style="height: 75px; width: 100%; border-radius: 15px;">
-          <q-img style="height: 100%;" :src="cargarImagen(index)"/>
-          <q-icon :name="item.file ? 'mode_edit' : 'add'" class="absolute-center" size="30px" color="black" />
-        </q-avatar>
-      </div>
-
-      <div class="col column items-center">
-        <q-avatar rounded style="height: 350px; width: 100%; border-radius: 15px;" :class="mostrarImg !=  null ? 'q-mb-md':'bg-secondary q-mb-md'">
-          <q-img style="height: 100%;" :src="mostrarImg !=  null ? mostrarImg : ''">
-            <q-file borderless v-model="productoFile" class="q-ma-sm button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
-            <q-icon :name="mostrarImg !=  null ? 'mode_edit' : 'add_a_photo'" class="absolute-top-right q-ma-sm" size="30px" color="black" />
-          </q-img>
-        </q-avatar>
-
-        <div class="column full-width">
-          <div v-if="edit && editNameCant === false" class="row">
-            <div class="text-h6">{{form.name}}</div>
-            <div>
-              <q-btn round flat dense class="q-mr-xs" icon="mode_edit" style="height: 30px;width:30px" @click="editNameCant = !editNameCant"/>
-            </div>
+        <q-scroll-area horizontal class="col" style="height: 110px;">
+          <div class="row no-wrap" style="width: 100%;">
+            <q-avatar class="q-ma-xs" rounded v-for="(item, index) in mostrarImg" :key="index" style="height: 100px; width: 100px; border-radius: 15px;">
+              <q-img style="height: 100%;" :src="item">
+                <q-btn @click="!edit ? borrarImg(index, 1) : eliminarImg(imgs[index])" flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+              </q-img>
+            </q-avatar>
           </div>
-          <div v-if="edit && editNameCant === false" class="text-grey q-mb-lg">Disponible - {{form.cantidad}} Unidades</div>
-          <q-input filled v-if="editNameCant || edit === false" v-model="form.name"  label="Nombre del producto" dense :error="$v.form.name.$error" error-message="Este campo es requerido"  @blur="$v.form.name.$touch()">
-            <template v-slot:append>
-              <q-icon name="mode_edit" />
+        </q-scroll-area>
+      </div>
+      <div v-if="$v.imgs.$error" class="text-red">Debes cargar por lo menos 1 imagen</div>
+    </div>
+
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div class="text-subtitle1 text-bold">Escoje el nombre de tu producto</div>
+        <div class="text-caption text-grey-10 text-italic">Solo 25 caracteres</div>
+        <q-input dense maxlength="30" filled v-model="form.name" placeholder="Mi nombre de producto" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu producto?</div>
+        <div class="text-caption text-grey-10 text-italic">Escoge perro, gato o ambos</div>
+        <q-select filled dense color="black" v-model="form.destinatario" :options="mascotas" label="Selecciona el tipo de mascota" map-options
+          error-message="requerido" :error="$v.form.destinatario.$error" @blur="$v.form.destinatario.$touch()"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
+              </q-item>
             </template>
-          </q-input>
+        </q-select>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
+        <div class="text-subtitle1 text-bold">Selecciona la categoria</div>
+        <q-select filled dense color="black" v-model="categoria" :options="categorias" map-options
+          error-message="requerido" :error="$v.categoria.$error" @blur="$v.categoria.$touch()"
+          option-label="name" >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
+              </q-item>
+            </template>
+            <template v-slot:option="scope">
+              <q-item
+                v-bind="scope.itemProps"
+                v-on="scope.itemEvents"
+              >
+                <q-item-section>
+                  <q-item-label v-html="scope.opt.name" />
+                </q-item-section>
+              </q-item>
+            </template>
+        </q-select>
+      </div>
+    </div>
 
-          <div v-if="edit && editprecio === false" class="row q-mb-lg">
-            <div class="text-h4 text-primary">$ {{form.precio}}</div>
-            <div>
-              <q-btn round flat dense class="q-mr-xs" icon="mode_edit" style="height: 30px;width:30px" @click="editprecio = !editprecio"/>
-            </div>
-          </div>
-          <q-input v-if="editprecio || edit === false" prefix="$" filled label="Precio" color="primary" v-model.number="form.precio" type="number" dense :error="$v.form.precio.$error" error-message="Este campo es requerido"  @blur="$v.form.precio.$touch()" :rules="[val => val > 0]" min="0"/>
+    <div>
+      <div class="text-subtitle1 text-bold">Descripción del producto</div>
+      <div class="text-caption text-grey-10 text-italic">Solo 80 caracteres</div>
+      <q-input maxlength="90" filled outlined placeholder="Mi producto hace..." v-model="form.descripcion" type="textarea" error-message="Este campo es requerido" :error="$v.form.descripcion.$error" @blur="$v.form.descripcion.$touch()"/>
+    </div>
 
-          <div class="row justify-between">
-            <div class="text-h6">Descripcion</div>
-            <div v-if="edit && editdescripcion === false">
-              <q-btn round flat dense class="q-mr-xs" icon="mode_edit" style="height: 30px;width:30px" @click="editdescripcion = !editdescripcion"/>
-            </div>
-          </div>
-          <div v-if="edit && editdescripcion === false" class="text-grey">{{form.descripcion}}</div>
-          <q-input filled outlined v-if="editdescripcion || edit === false" v-model="form.descripcion" type="textarea" :error="$v.form.descripcion.$error" error-message="Este campo es requerido"  @blur="$v.form.descripcion.$touch()"/>
-
-          <div v-if="editNameCant || edit === false" class="row items-center justify-center">
-            <div class="q-mr-xs text-h6 q-pr-sm">Cantidad</div>
-            <div class="q-mr-xs q-mt-lg">
-              <q-input v-model.number="form.cantidad" borderless class="q-pr-sm" type="number" dense :error="$v.form.cantidad.$error" error-message=""  @blur="$v.form.cantidad.$touch()" style="width: 50px" min="0"/>
-            </div>
-            <div class="q-pr-xs">
-              <q-btn round flat dense class="q-mr-xs" color="primary" icon="add" style="height: 30px;width:30px" @click="form.cantidad++"/>
-              <q-btn round flat dense class="q-mr-xs" color="primary" icon="remove" style="height: 30px;width:30px" @click="resta()"/>
-            </div>
-          </div>
+    <div>
+      <div class="row items-center">
+        <div class="text-subtitle1 text-bold col">Precio</div>
+        <div class=" col column">
+          <q-input prefix="$" filled color="primary" v-model.number="form.price" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.price.$error" @blur="$v.form.price.$touch()"/>
         </div>
       </div>
+      <div class="row items-center">
+        <div class="text-subtitle1 text-bold col">Control Stock</div>
+        <div class=" col column">
+          <div class="text-caption text-grey-10 text-italic">Cantidad de productos</div>
+          <q-input filled color="primary" v-model.number="form.cantidad" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.cantidad.$error" @blur="$v.form.cantidad.$touch()"/>
+        </div>
+      </div>
+      <!-- <div class="row items-center">
+        <div class="text-subtitle1 text-bold col">Precio oferta</div>
+        <div class=" col column">
+          <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
+          <q-input filled color="primary" v-model.number="form.dimensions" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.dimensions.$error" @blur="$v.form.dimensions.$touch()"/>
+        </div>
+      </div> -->
     </div>
-    <div class="row justify-center q-ma-md">
-      <q-btn class="full-width" color="primary" text-color="white" rounded :label="edit ? 'Actualizar' : 'Guardar'" @click="!edit ? agregar() : actualizarProducto()" no-caps/>
+    <div class="column items-center q-mt-xl">
+      <q-btn color="primary" class="q-pa-xs" label="Crear producto" style="width: 60%; border-radius: 4px" @click="!edit ? guardar() : actualizar()" no-caps/>
     </div>
   </div>
+</div>
 </template>
 
 <script>
-import { required, minLength, maxLength } from 'vuelidate/lib/validators'
+import { required, minLength } from 'vuelidate/lib/validators'
 import env from '../../env'
 export default {
   data () {
     return {
-      imgProducto: [],
-      mostrarImg: null,
-      id: '',
-      productoFile: null,
+      img: null,
+      categoria: null,
       edit: false,
-      editNameCant: false,
-      editprecio: false,
-      editdescripcion: false,
-      editImg: false,
-      form: {
-        cantidad: 0
-      },
-      file: null,
-      imgPro: null,
-      botones: [
-        {
-          file: null,
-          src: '',
-          select: true
-        },
-        {
-          file: null,
-          src: '',
-          select: false
-        },
-        {
-          file: null,
-          src: '',
-          select: false
-        },
-        {
-          file: null,
-          src: '',
-          select: false
-        },
-        {
-          file: null,
-          src: '',
-          select: false
-        }
-      ]
+      baseu: '',
+      id: '',
+      form: {},
+      imgs: [],
+      mostrarImg: [],
+      categorias: [],
+      mascotas: ['Perros', 'Gatos', 'Ambos']
     }
   },
   validations: {
     form: {
-      name: { required, minLength: minLength(3), maxLength: maxLength(50) },
+      name: { required },
+      destinatario: { required },
       descripcion: { required },
-      cantidad: { required, minLength: minLength(1), maxLength: maxLength(20) },
-      precio: { required, minLength: minLength(1) }
+      price: { required },
+      cantidad: { required }
     },
-    file: { required }
+    categoria: { required },
+    imgs: { required, minLength: minLength(1) }
   },
   mounted () {
-    this.baseu = env.apiUrl + 'productos_img'
+    this.baseu = env.apiUrl + '/producto_files/'
     if (this.$route.params.id) {
       this.edit = true
-      this.editImg = true
       this.id = this.$route.params.id
-      this.$api.get('producto/' + this.id).then(res => {
+      this.getProducto(this.id)
+    }
+    this.getCategorias()
+  },
+  methods: {
+    getProducto (id) {
+      this.$api.get('producto/' + id).then(res => {
         if (res) {
           this.form = res
-          this.imgsTraidas()
-          // this.imgPro = env.apiUrl + '/productos_img/' + this.form.fileName
+          this.categoria = res.categoria
+          this.imgs = res.images
+          this.mostrarImg = []
+          for (let i = 0; i < this.imgs.length; i++) {
+            this.mostrarImg.push(this.baseu + this.imgs[i])
+          }
         }
       }).catch(error => {
         console.log(error)
       })
-    }
-    console.log(this.botones)
-  },
-  methods: {
-    async convertImg (img) {
-      try {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader()
-          reader.readAsDataURL(img)
-          reader.onload = () => resolve(reader.result)
-          reader.onerror = error => reject(error)
-        })
-      } catch (error) {
-        console.log(error)
-      }
     },
-    imgsTraidas () {
-      console.log('imgtraidas')
-      for (let i = 0; i < this.form.images.length; i++) {
-        var cc = ''
-        cc = this.baseu + '/' + this.form.images[i].src
-        console.log(cc)
-        this.botones[i].src = cc
-        console.log(this.botones)
-        this.imgProducto.push(cc)
-      }
-      if (this.botones[0].src !== '') {
-        this.mostrarImg = this.botones[0].src
-      }
-      this.editImg = true
-      console.log(this.editImg)
-    },
-    cargarImagen (ind) {
-      if (this.botones[ind].file) {
-        console.log(this.botones[ind].file)
-        return URL.createObjectURL(this.botones[ind].file)
-      }
-    },
-    cargarPhoto (ind) {
-      if (this.botones[ind].src !== '') {
-        return this.botones[ind].src
-      }
-    },
-
-    async perfil_img () {
-      const indexSelect = this.botones.findIndex(v => v.select)
-      // this.botones[indexSelect].file = this.productoFile
-      this.botones[indexSelect] = { file: this.productoFile, src: await this.convertImg(this.productoFile), select: true }
-      this.mostrarImg = URL.createObjectURL(this.productoFile)
-      // this.mostrarImg = URL.createObjectURL(this.productoFile)
-      this.productoFile = null
-    },
-    seleccionar (ind) {
-      console.log('select')
-      const data = this.botones
-      const indexSelect = data.findIndex(v => v.select)
-      data[indexSelect].select = false
-      data[ind].select = true
-      this.botones = data
-      console.log(data[ind])
-      if (data[ind].src !== '') {
-        if (this.edit && this.editImg) {
-          console.log('edit')
-          this.mostrarImg = data[ind].src
-        } else {
-          console.log('noedit')
-          this.mostrarImg = (data[ind].src)
-          // this.mostrarImg = URL.createObjectURL(data[ind].file)
+    getCategorias () {
+      this.$api.get('categorias').then(res => {
+        if (res) {
+          this.categorias = res
         }
-      } else {
-        this.mostrarImg = null
-      }
+      })
     },
-    changeFile () {
-      if (this.file) { this.imgPro = URL.createObjectURL(this.file) }
-    },
-    resta () {
-      if (this.form.cantidad > 0) {
-        this.form.cantidad = this.form.cantidad - 1
-      }
-    },
-    async agregar () {
-      console.log('guardar')
+    guardar () {
       this.$v.$touch()
-      if (!this.$v.form.$error && this.form.cantidad > 0) {
+      if (!this.$v.imgs.$error && !this.$v.form.$error && !this.$v.categoria.$error) {
         this.$q.loading.show({
-          message: 'Subiendo Producto, Por Favor Espere...'
+          message: 'Agregando producto, Por Favor Espere...'
         })
         var formData = new FormData()
-        var cantidadArchivos = 0
-        for (const j in this.botones) {
-          if (this.botones[j].file) {
-            cantidadArchivos++
-            formData.append('files_' + cantidadArchivos, this.botones[j].file)
-          }
+        var cantidadArchivos = this.imgs.length
+        for (let i = 0; i < cantidadArchivos; i++) {
+          formData.append('files_' + i, this.imgs[i])
         }
         this.form.cantidadArchivos = cantidadArchivos
+        this.form.categoria_id = this.categoria._id
         formData.append('dat', JSON.stringify(this.form))
-        await this.$api.post('producto', formData, {
+        this.$api.post('producto', formData, {
           headers: {
             'Content-Type': undefined
           }
         }).then((res) => {
-          this.$q.notify({
-            message: 'Producto agregado con exito',
-            color: 'primary'
-          })
+          if (res) {
+            this.$q.notify({
+              message: 'Producto agregado con exito',
+              color: 'positive'
+            })
+            this.$q.loading.hide()
+            this.$router.go(-1)
+          }
           this.$q.loading.hide()
-          this.$router.push('/productos')
+        })
+      } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos requeridos',
+          color: 'negative'
         })
       }
     },
-    async actualizarProducto () {
-      console.log(this.botones)
+    async actualizar () {
+      this.$v.categoria.$touch()
       this.$v.form.$touch()
-      if (!this.$v.form.$error) {
+      if (!this.$v.categoria.$error && !this.$v.form.$error) {
+        this.form.categoria_id = this.categoria._id
         this.$q.loading.show({
-          message: 'Actualizando Producto, Por Favor Espere...'
+          message: 'Actualizando producto, por favor espere...'
         })
-        var formData = new FormData()
-        /* if (this.file) {
-          this.form.buscar_file = true
-          formData.append('files', this.file)
-        } else {
-          this.form.buscar_file = false
-        } */
-        var cantidadArchivos = 0
-        var index = []
-        for (var j in this.botones) {
-          if (this.botones[j].file !== null) {
-            index.push(j)
-            // this.botones[j].file.index = j
-            console.log(j)
-            cantidadArchivos++
-            formData.append('files_' + cantidadArchivos, this.botones[j].file)
+        await this.$api.put('edit_servicio/' + this.id, this.form).then(res => {
+          if (res) {
+            this.$q.notify({
+              message: 'Producto actualizado correctamente',
+              positive: 'positive'
+            })
+            this.$q.loading.hide()
+            this.$router.go(-1)
+          } else {
+            this.$q.loading.hide()
           }
-          /* if (this.botones[j].file) {
-            console.log(j)
-            cantidadArchivos++
-            formData.append('files_' + cantidadArchivos, this.botones[j].file)
-          } */
-        }
-        this.form.index = index
-        this.form.cantidadArchivos = cantidadArchivos
-        formData.append('dat', JSON.stringify(this.form))
-        await this.$api.put('producto/' + this.id, formData, {
+        })
+      } else {
+        this.$q.notify({
+          message: 'Debe ingresar todos los datos requeridos',
+          color: 'negative'
+        })
+      }
+    },
+    producto_img () {
+      this.imgs.push(this.img)
+      this.mostrarImg.push(URL.createObjectURL(this.img))
+      this.img = null
+    },
+    async add_img () {
+      this.$q.loading.show()
+      if (this.img) {
+        var formData = new FormData()
+        formData.append('files', this.img)
+        await this.$api.post('subir_archivo_producto/' + this.id, formData, {
           headers: {
             'Content-Type': undefined
           }
         }).then((res) => {
-          this.$q.notify({
-            message: 'Producto agregado con exito',
-            color: 'primary'
-          })
+          this.imgs = res.images
+          this.mostrarImg = []
+          for (let i = 0; i < this.imgs.length; i++) {
+            this.mostrarImg.push(this.baseu + this.imgs[i])
+          }
           this.$q.loading.hide()
-          this.$router.push('/productos')
         })
       }
+    },
+    borrarImg (index, val) {
+      this.imgs.splice(index, val)
+      this.mostrarImg.splice(index, val)
+    },
+    eliminarImg (nameFile) {
+      this.$q.loading.show()
+      this.$api.delete('eliminar_archivo_producto/' + nameFile + '/' + this.id).then(res => {
+        if (res) {
+          this.imgs = res.images
+          this.mostrarImg = []
+          for (let i = 0; i < this.imgs.length; i++) {
+            this.mostrarImg.push(this.baseu + this.imgs[i])
+          }
+          this.$q.loading.hide()
+        }
+      })
     }
   }
 }
 </script>
-
-<style scoped lang="scss">
-.button-camera {
-  text-decoration: none;
-  padding: 10px;
-  font-weight: 540;
-  font-size: 0px;
-  color: white;
-  height:40px;
-  width:40px
-}
-.seleccionado {
-  border-radius: 15px;
-  background: $grey-5;
-}
-.dimension {
-  min-width: 200px;
-}
-</style>
