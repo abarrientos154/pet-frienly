@@ -1,45 +1,66 @@
 <template>
   <div>
     <q-header elevated class="bg-primary row justify-center items-center" style="width:100%; height:60px">
-      <div class="text-white text-subtitle1 text-center">Nombre de la tienda</div>
+      <div class="text-white text-subtitle1 text-center">{{tienda.name}}</div>
     </q-header>
 
-    <div class="q-mb-md">
-      <q-carousel animated arrows navigation infinite class="img" v-model="carrusel">
-        <q-carousel-slide :name="0" :img-src="baseu + form._id" />
-        <q-carousel-slide v-for="(img, index) in form.tiendaFiles" :key="index" :name="index + 1" :img-src="baseuTienda + img" />
-      </q-carousel>
-
-      <div class="row items-center justify-between q-pa-md">
-        <div>
-          <div class="text-h5">{{form.name}}</div>
-          <div class="row text-grey">
-            <q-icon name="place" size="20px"/>
-            <div>{{form.place ? form.place : 'Pais, Ciudad'}}</div>
-          </div>
-          <div class="q-gutter-y-md row">
-            <q-rating
-              v-model="ratingModel"
-              size="20px"
-              icon="star"
-            />
-          <div class="q-pa-sm text-green-9 text-bold">{{"("}}{{this.ratingModel}}{{")"}}</div>
-          </div>
+    <div class="row q-pa-sm">
+      <div class="col-6">
+        <q-img style="height: 100%; width: 100%" :src="baseuTienda + tienda.perfil"/>
+        <div class="q-gutter-y-md row">
+          <q-rating
+            v-model="tienda.calificacion"
+            color="orange"
+            readonly
+            size="25px"
+            icon="star"
+          />
+        <div class="q-pa-sm text-green-9 text-bold">({{tienda.calificacion ? tienda.calificacion : 0}})</div>
         </div>
-        <q-btn color="primary" icon="send" label="Hablar" style="border-radius: 10px" no-caps/>
+      </div>
+      <div class="col-6 q-pl-sm">
+        <div class="text-bold text-subtitle1">Bienvenido</div>
+        <div>descripcion</div>
       </div>
     </div>
 
-    <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 100px" ref="first">
-      <q-tabs v-model="tabSer" dense class="text-grey-10" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab v-for="(item, index) in form.formatSer" :key="index" no-caps>
-          <q-img :src="item.icons" spinner-color="white" style="height: 60px; width: 70px"/>
-          <div class="column items-center justify-center">
-            <div class="text-caption text-bold">{{item.name}}</div>
+    <div class="q-pa-sm q-mt-md">
+      <div class="text-h6">Servicios ofrecidos</div>
+      <q-scroll-area
+          v-if="tienda.servicios && tienda.servicios.length"
+          horizontal
+          style="height: 160px;"
+        >
+          <div class="row no-wrap q-py-sm q-px-md q-gutter-md">
+            <q-card style="border-radius: 50px; width:140px; height:140px" clickable v-ripple v-for="(item, index) in tienda.servicios" :key="index">
+              <q-img :src="baseuServicios + item._id" style="height: 100%; width: 100%; border-radius: 50px" >
+                <div class="full-width text-center absolute-bottom">{{item.servicio.name}}</div>
+              </q-img>
+            </q-card>
           </div>
-        </q-tab>
-      </q-tabs>
-    </q-scroll-area>
+      </q-scroll-area>
+    </div>
+
+    <!-- <div>
+      <div class="text-subtitle1 text-bold">Informacion</div>
+      <div class="row">
+        <div class="col q-mx-md">
+          <div class="text-subtitle3 text-bold text-grey-6">Ciudad</div>
+          <div class="text-caption text-grey-6">{{cityUser.name}}</div>
+          <div class="text-subtitle3 text-bold text-grey-6">Direccion</div>
+          <div class="text-caption text-grey-6">{{user.my_space.direction}}</div>
+          <div class="text-subtitle3 text-bold text-grey-6">Correo de contacto</div>
+          <div class="text-caption text-grey-6">{{user.my_space.email}}</div>
+        </div>
+        <div class="col q-mx-md">
+          <div class="text-subtitle3 text-bold text-grey-6">Horarios de atencóon</div>
+          <div class="text-caption text-grey-6">Apertura {{user.my_space.hora_inicio}}</div>
+          <div class="text-caption text-grey-6">Cierre {{user.my_space.hora_cierre}}</div>
+          <div class="text-subtitle3 text-bold text-grey-6">Telefono de contacto</div>
+          <div class="text-caption text-grey-6">{{user.my_space.phone}}</div>
+        </div>
+      </div>
+    </div> -->
 
     <div class="q-pa-sm q-mb-sm">
       <div class="text-h6">Nuestra tienda</div>
@@ -132,6 +153,9 @@ export default {
   },
   data () {
     return {
+      id: '',
+      user: {},
+      tienda: {},
       form: {},
       carrusel: 0,
       text: '',
@@ -145,7 +169,7 @@ export default {
       baseu: '',
       baseuTienda: '',
       baseuproductos: '',
-      baseuHospedaje: '',
+      baseuServicios: '',
       hospedajes: [],
       thumbStyle: {
         borderRadius: '5px',
@@ -160,17 +184,32 @@ export default {
     this.baseu = env.apiUrl + 'perfil_img/'
     this.baseuTienda = env.apiUrl + 'tienda_img/'
     this.baseuproductos = env.apiUrl + 'productos_img/'
-    this.baseuHospedaje = env.apiUrl + 'hospedajes_img'
+    this.baseuServicios = env.apiUrl + 'servicio_img/'
+    if (this.$route.params.id) {
+      this.id = this.$route.params.id
+      this.getTienda(this.id)
+    }
     this.obtener_productos()
     this.obtener_hospedajes()
   },
   methods: {
     getUser () {
-      this.$api.get('user_info').then(v => {
+      this.$api.get('user_logueado').then(v => {
         if (v) {
-          this.rol = v.roles[0]
+          this.user = v
           this.form = v
-          console.log(this.form, 'usuario')
+          if (this.user.roles[0] === 3) {
+            this.getTienda(this.user._id)
+          }
+          console.log('usuario', this.user)
+        }
+      })
+    },
+    getTienda (id) {
+      this.$api.get('tienda_by_id/' + id).then(v => {
+        if (v) {
+          this.tienda = v.tienda
+          console.log('tienda', this.tienda)
         }
       })
     },

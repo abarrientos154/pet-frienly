@@ -13,9 +13,8 @@ const routes = [
       { path: '/descripcionhotel/:id', component: () => import('pages/admin/DescripcionHotel.vue') },
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
-      { path: '/productos', component: () => import('pages/proveedor/Productos.vue') },
+      { path: '/tienda/:id', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/descripcion_producto/:id', component: () => import('pages/proveedor/DescripcionProducto.vue') },
-      { path: '/servicios', component: () => import('pages/proveedor/Servicios.vue') },
       { path: '/descripcion_servicio/:id', component: () => import('pages/proveedor/DescripcionServicio.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },

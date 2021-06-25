@@ -55,6 +55,7 @@ addPrefixToGroup(
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
+    Route.get('servicio_img/:file', 'UploadController.getFileByDirectoryServicio')
     
     Route.post("user_by_rol", "UserController.userByRol") // metodo para obtener usuarios segun el rol
     Route.get("user_by_id/:id", "UserController.userById") // metodo para obtener informacion del usuario por id del mismo
@@ -72,6 +73,7 @@ addPrefixToGroup(
       // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo") // metodo para obtener informacion del usuario que esta logueado
     Route.get("user_logueado", "UserController.userLogueado")
+    Route.get("tienda_by_id/:id", "UserController.tiendaById")
     Route.get("all_user", "UserController.allUser") // metodo para obtener informacion del usuario que esta logueado
     Route.post("user_enable/:id", "UserController.userEnable") // metodo para bloquear o desbloquear usuarios
     Route.post("user_by_status", "UserController.userByStatus") // metodo para obtener proveedores pendientes

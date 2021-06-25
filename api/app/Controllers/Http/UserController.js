@@ -6,6 +6,7 @@ const fs = require('fs')
 var randomize = require('randomatic');
 const User = use("App/Models/User")
 const Servicio = use("App/Models/Servicio")
+const TiendaServicio = use("App/Models/TiendaServicio")
 const Role = use("App/Models/Role")
 const { validate } = use("Validator")
 const Paises = use("App/Models/Pais")
@@ -100,6 +101,7 @@ class UserController {
         body.roles = [3]
         body.images_ident = images_ident
         body.tienda.perfil = perfil
+        body.tienda.calificacion = 0
         const user = await User.create(body)
 
         const profilePic3 = request.file('RFiles', {
@@ -279,6 +281,13 @@ class UserController {
     }
     user.hoteleria.paisName = pais
     user.hoteleria.ciudadName = ciudad
+    response.send(user)
+  }
+
+  async tiendaById({ params, response }) {
+    const user = (await User.query().where({_id: params.id}).first()).toJSON()
+    let servicios = (await TiendaServicio.query().where({tienda_id: params.id}).with('servicio').fetch()).toJSON()
+    user.tienda.servicios = servicios
     response.send(user)
   }
 
