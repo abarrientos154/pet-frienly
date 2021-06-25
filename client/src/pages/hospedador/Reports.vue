@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-lg">
+    <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
+      <div class="text-white text-h6 text-center">Estadisticas y reportes</div>
+    </q-header>
     <q-card class="q-mb-xl bg-primary" style="width: 100%; height: 150px; border-radius: 12px;">
       <div class="absolute-bottom full-width text-white column items-end q-pa-md">
         <div class="text-h6">Ventas del dia</div>

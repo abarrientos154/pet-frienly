@@ -1,5 +1,9 @@
 <template>
   <div class="q-pa-lg">
+    <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
+      <div class="text-white text-h6 text-center">Nuevo espacio</div>
+    </q-header>
+
     <div class="q-pa-md">
       <div class="text-subtitle1">Carga las fotos de tu espacio de descanso</div>
       <div :class="$v.espacioImg.$error ? 'text-subtitle1 text-italic text-negative' : 'text-subtitle1 text-grey text-italic'">{{$v.espacioImg.$error ? 'Debes cargar minimo una foto' : 'Puedes cargar hasta 3 fotos'}}</div>

@@ -1,5 +1,9 @@
 <template>
   <div class="q-pa-sm">
+    <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
+      <div class="text-white text-h6 text-center">Tu espacio</div>
+    </q-header>
+
     <div class="row q-pa-sm">
       <div class="col q-mr-sm" style="max-width: 250px;">
         <q-avatar rounded style="height: 100px; width: 100%;" class="bg-secondary q-my-xs">

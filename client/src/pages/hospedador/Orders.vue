@@ -1,5 +1,8 @@
 <template>
   <div class="q-pa-sm">
+    <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
+      <div class="text-white text-h6 text-center">Tus arriendos</div>
+    </q-header>
     <div class="q-mb-xl">
       <div class="text-subtitle1 text-bold">Arriendos en curso</div>
       <div class="q-mb-sm text-caption text-grey-6 text-italic">Ordena los arriendos por fechas para ver su disponibilidad</div>
