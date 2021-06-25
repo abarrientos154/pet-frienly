@@ -287,6 +287,8 @@ class UserController {
   async tiendaById({ params, response }) {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()
     let servicios = (await TiendaServicio.query().where({tienda_id: params.id}).with('servicio').fetch()).toJSON()
+    let country = await Paises.find(user.tienda.country_id)
+    let city = await Paises.find(user.tienda.country_id)
     user.tienda.servicios = servicios
     response.send(user)
   }
