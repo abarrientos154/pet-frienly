@@ -215,6 +215,78 @@ class UserController {
     }
   }
 
+  async editHospedador({ request, response }) {
+    var dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
+    console.log(dat, 'DATA')
+    const validation = await validate(dat, User.fieldValidationRulesProveedor())
+    if (validation.fails()) {
+      response.unprocessableEntity(validation.messages())
+    } else {
+      let images = dat.identificationFiles
+      if (dat.IImg) {
+        for (let i = 0; i < 2; i++) {
+          let codeFile = randomize('Aa0', 30)
+          const profilePic = request.file('IFiles' + i, {
+            types: ['image']
+          })
+          if (Helpers.appRoot('storage/uploads/identificacionFiles')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/identificacionFiles'), {
+              name: codeFile,
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+          images.push(profilePic.fileName)
+        }
+      }
+      let image = dat.spaceFile
+      if (dat.PImg) {
+        let codeFile = randomize('Aa0', 30)
+        const profilePic2 = request.file('PFiles', {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/hospedejeFiles')) {
+          await profilePic2.move(Helpers.appRoot('storage/uploads/hospedajeFiles'), {
+            name: codeFile,
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        image = { name: profilePic2.fileName }
+      }
+      let body = dat
+      let contraseña = body.password
+      body.spaceFile = image
+      body.identificationFiles = images
+      const editarcontraseña = await User.find(body._id)
+      editarcontraseña.password = contraseña
+      await editarcontraseña.save()
+      if (body.RLImg) {
+        const profilePic3 = request.file('RLFiles', {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/perfil')) {
+          await profilePic3.move(Helpers.appRoot('storage/uploads/perfil'), {
+            name: body._id.toString(),
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        const data = { name: profilePic3.fileName }
+      }
+      delete body.RLImg
+      delete body.PImg
+      delete body.IImg
+      delete body.password
+      const user = await User.where('_id', body._id).update(body)
+      response.send(user)
+    }
+  }
+
   async validateEmail({ request, response, params }) {
     if (((await User.where({email: params.email}).fetch()).toJSON()).length) {
       response.unprocessableEntity([{
