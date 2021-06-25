@@ -135,11 +135,11 @@
           <div>
             <div class="q-mb-md">
               <div class="text-caption">País</div>
-              <q-select outlined dense filled placeholder="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais[0].pais_id" option-value="ciudades" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.pais_id.$error" @blur="$v.formMySpace.pais_id.$touch()"/>
+              <q-select outlined dense filled placeholder="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais._id, ciudades = selectPais.ciudades, selectCiudad = null" option-label="name" map-options error-message="Este campo es requerido" :error="$v.selectPais.$error" @blur="$v.selectPais.$touch()"/>
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Ciudad</div>
-              <q-select outlined dense filled placeholder="Seleccione la región a la que pertenece" v-model="formMySpace.ciudad_id" :options="selectPais" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.ciudad_id.$error" @blur="$v.formMySpace.ciudad_id.$touch()"/>
+              <q-select outlined dense filled placeholder="Seleccione la región a la que pertenece" v-model="selectCiudad" :options="ciudades" @input="formMySpace.ciudad_id = selectCiudad._id" option-label="name" map-options error-message="Este campo es requerido" :error="$v.selectCiudad.$error" @blur="$v.selectCiudad.$touch()"/>
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Dirección</div>
@@ -315,7 +315,9 @@ export default {
       perfilImg: '',
       PImg: {},
       paises: [],
-      selectPais: [],
+      ciudades: [],
+      selectPais: null,
+      selectCiudad: null,
       img: null,
       espacioImg: [],
       mostrarImg: [],
@@ -342,12 +344,12 @@ export default {
       email: { required, email },
       phone: { required },
       description: { required },
-      pais_id: { required },
-      ciudad_id: { required },
       direction: { required },
       hora_inicio: { required },
       hora_cierre: { required }
     },
+    selectPais: { required },
+    selectCiudad: { required },
     formEspacio: {
       name: { required, maxLength: maxLength(25) },
       pet_type: { required },
@@ -446,8 +448,10 @@ export default {
       this.$v.password.$touch()
       this.$v.repeatPassword.$touch()
       this.$v.PImg.$touch()
+      this.$v.selectPais.$touch()
+      this.$v.selectCiudad.$touch()
       this.$v.formMySpace.$touch()
-      if (!this.$v.form.$error && !this.$v.formMySpace.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.RLImg.$error && !this.$v.PImg.$error && this.terminos) {
+      if (!this.$v.form.$error && !this.$v.formMySpace.$error && !this.$v.selectPais.$error && !this.$v.selectCiudad.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.RLImg.$error && !this.$v.PImg.$error && this.terminos) {
         this.$q.loading.show({
           message: 'Registrando...'
         })
