@@ -19,6 +19,7 @@ const routes = [
       { path: '/descripcion_servicio/:id', component: () => import('pages/proveedor/DescripcionServicio.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
+      { path: '/edit_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
       { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
       { path: '/new_space', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },

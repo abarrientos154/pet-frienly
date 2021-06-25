@@ -52,6 +52,7 @@ addPrefixToGroup(
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
     Route.get('tienda_img/:file', 'UploadController.getFileByDirectoryTienda')
     Route.get('espacio_img/:file', 'UploadController.getFileByDirectoryEspacioDescanso')
+    Route.get('identificacion_img/:file', 'UploadController.getFileByDirectoryIdentificacion')
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
@@ -78,6 +79,7 @@ addPrefixToGroup(
     Route.post("user_by_statushotel", "UserController.userByStatushotel")
     Route.put("update_status/:id", "UserController.userStatus") // metodo para bloquear o desbloquear usuarios
     Route.put("update_statushotel/:id", "UserController.userStatushotel")
+    Route.post("update_hospedador", "UserController.editHospedador")
     Route.put('datosnew/:id', 'UserController.updatedata')
     
     Route.get('mascota', 'MascotaController.index')

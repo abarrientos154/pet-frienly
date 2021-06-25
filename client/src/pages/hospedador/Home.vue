@@ -15,7 +15,7 @@
         <q-scroll-area class="q-mb-sm" style="height: 75px;">
           <div class="text-caption">{{user.my_space.description}}</div>
         </q-scroll-area>
-        <q-btn class="full-width" label="Editar perfil" color="primary" no-caps/>
+        <q-btn class="full-width" label="Editar perfil" color="primary" @click="$router.push('/edit_hospedador')" no-caps/>
       </div>
     </div>
 
