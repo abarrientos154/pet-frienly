@@ -1,13 +1,19 @@
 <template>
-<div class="window-height">
-  <q-btn class="q-mt-lg" flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-  <div class="q-px-lg q-pb-lg">
+<q-layout view="lHh Lpr lFf">
+  <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+    <div class="col-1">
+      <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+    </div>
+    <div class="col-10 text-white text-subtitle1 text-center">{{edit ? 'Editar producto' : 'Nuevo producto'}}</div>
+  </q-header>
+
+  <div class="q-px-lg q-py-lg q-mt-xl">
     <div class="q-px-md">
       <div class="text-subtitle1">Carga las fotos de tu producto</div>
       <div class="text-caption text-grey-10 text-italic">Puedes cargar hasta 3 fotos</div>
       <div class="row">
         <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-grey q-my-xs q-mr-xs">
-          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" class="button-camera" @input="!edit ? producto_img() : add_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
+          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" @input="!edit ? producto_img() : add_img()" accept=".jpg, image/*" style="font-size: 0px; width: 100%; height: 100%;"/>
           <q-icon name="backup" class="absolute-center" size="50px" color="white" />
         </q-avatar>
         <q-scroll-area horizontal class="col" style="height: 110px;">
@@ -86,23 +92,26 @@
           <q-input filled color="primary" v-model.number="form.cantidad" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.cantidad.$error" @blur="$v.form.cantidad.$touch()"/>
         </div>
       </div>
-      <!-- <div class="row items-center">
-        <div class="text-subtitle1 text-bold col">Precio oferta</div>
+      <q-checkbox v-model="form.oferta" size="xs" label="Oferta" />
+      <div v-if="form.oferta" class="row items-start q-mt-md">
+        <div class="text-subtitle1 text-bold col q-mt-lg">Precio oferta</div>
         <div class=" col column">
-          <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
-          <q-input filled color="primary" v-model.number="form.dimensions" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.dimensions.$error" @blur="$v.form.dimensions.$touch()"/>
+          <div class="text-caption text-grey-10 text-italic">Introduce el precio oferta</div>
+          <q-input prefix="$" filled dense color="primary" v-model.number="form.oferta_price" type="number" error-message="Este campo es requerido" :error="$v.form.oferta_price.$error" @blur="$v.form.oferta_price.$touch()"/>
+          <div class="text-caption text-grey-10 text-italic">Fecha de término</div>
+          <q-input filled dense color="primary" v-model="form.fecha_termino" type="date" error-message="Este campo es requerido" :error="$v.form.fecha_termino.$error" @blur="$v.form.fecha_termino.$touch()"/>
         </div>
-      </div> -->
+      </div>
     </div>
     <div class="column items-center q-mt-xl">
-      <q-btn color="primary" class="q-pa-xs" label="Crear producto" style="width: 60%; border-radius: 4px" @click="!edit ? guardar() : actualizar()" no-caps/>
+      <q-btn color="primary" class="q-pa-xs" :label="!edit ? 'Crear producto' : 'Guardar cambios'" style="width: 60%; border-radius: 4px" @click="!edit ? guardar() : actualizar()" no-caps/>
     </div>
   </div>
-</div>
+</q-layout>
 </template>
 
 <script>
-import { required, minLength } from 'vuelidate/lib/validators'
+import { required, minLength, requiredIf } from 'vuelidate/lib/validators'
 import env from '../../env'
 export default {
   data () {
@@ -112,7 +121,9 @@ export default {
       edit: false,
       baseu: '',
       id: '',
-      form: {},
+      form: {
+        oferta: false
+      },
       imgs: [],
       mostrarImg: [],
       categorias: [],
@@ -125,13 +136,15 @@ export default {
       destinatario: { required },
       descripcion: { required },
       price: { required },
-      cantidad: { required }
+      cantidad: { required },
+      oferta_price: { required: requiredIf(function () { return this.form.oferta }) },
+      fecha_termino: { required: requiredIf(function () { return this.form.oferta }) }
     },
     categoria: { required },
     imgs: { required, minLength: minLength(1) }
   },
   mounted () {
-    this.baseu = env.apiUrl + '/producto_files/'
+    this.baseu = env.apiUrl + 'productos_img/'
     if (this.$route.params.id) {
       this.edit = true
       this.id = this.$route.params.id
@@ -144,6 +157,7 @@ export default {
       this.$api.get('producto/' + id).then(res => {
         if (res) {
           this.form = res
+          console.log(res)
           this.categoria = res.categoria
           this.imgs = res.images
           this.mostrarImg = []
@@ -206,7 +220,7 @@ export default {
         this.$q.loading.show({
           message: 'Actualizando producto, por favor espere...'
         })
-        await this.$api.put('edit_servicio/' + this.id, this.form).then(res => {
+        await this.$api.put('producto/' + this.id, this.form).then(res => {
           if (res) {
             this.$q.notify({
               message: 'Producto actualizado correctamente',
@@ -254,17 +268,37 @@ export default {
       this.mostrarImg.splice(index, val)
     },
     eliminarImg (nameFile) {
-      this.$q.loading.show()
-      this.$api.delete('eliminar_archivo_producto/' + nameFile + '/' + this.id).then(res => {
-        if (res) {
-          this.imgs = res.images
-          this.mostrarImg = []
-          for (let i = 0; i < this.imgs.length; i++) {
-            this.mostrarImg.push(this.baseu + this.imgs[i])
-          }
-          this.$q.loading.hide()
-        }
-      })
+      if (this.imgs.length > 1) {
+        this.$q.dialog({
+          title: 'Confirma',
+          message: '¿Seguro desea eliminar esta imagen?',
+          cancel: true,
+          persistent: true
+        }).onOk(() => {
+          this.$q.loading.show({
+            message: 'Eliminando imagen'
+          })
+          this.$api.delete('eliminar_archivo_producto/' + nameFile + '/' + this.id).then(res => {
+            if (res) {
+              this.imgs = res.images
+              this.mostrarImg = []
+              for (let i = 0; i < this.imgs.length; i++) {
+                this.mostrarImg.push(this.baseu + this.imgs[i])
+              }
+              this.$q.loading.hide()
+            }
+          })
+        }).onCancel(() => {
+          // console.log('>>>> Cancel')
+        })
+      } else {
+        this.$q.dialog({
+          title: '¡Atención!',
+          message: 'Debes tener por lo menos 1 imagen del producto',
+          cancel: false,
+          persistent: false
+        }).onOk(() => {})
+      }
     }
   }
 }

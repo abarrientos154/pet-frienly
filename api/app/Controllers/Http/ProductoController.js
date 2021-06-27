@@ -4,6 +4,7 @@ const Categoria = use("App/Models/Categoria")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
+const moment = require("moment")
 const fs = require('fs')
 var randomize = require('randomatic');
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -31,10 +32,14 @@ class ProductoController {
 
   async productoByProveedor ({ request, response, params }) {
     let datos = (await Producto.query().where({proveedor_id: params.proveedor_id}).fetch()).toJSON()
-    for (let i in datos) {
-      datos[i].filename = datos[i].images[0]
-    }
-    console.log(datos, 'datos');
+    datos.forEach(async v => {
+      if (v.oferta) {
+        if (moment(v.fecha_termino) < moment()) {
+          v.oferta = false
+          await Producto.query().where({_id: v._id}).update(v)
+        }
+      }
+    });
     response.send(datos)
   }
 
@@ -85,11 +90,7 @@ class ProductoController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
-    let producto = (await Producto.find(params.id)).toJSON()
-    producto.images = producto.images.map(ele => {
-      return { src: ele }
-    })
-    console.log(producto)
+    let producto = (await Producto.query().where({_id: params.id}).with('categoria').first()).toJSON()
     response.send(producto)
   }
 
@@ -120,7 +121,7 @@ class ProductoController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response, auth }) {
-    let body = request.only(Producto.fillable())
+    let body = request.only(Producto.fillable)
     await Producto.query().where('_id', params.id).update(body)
     response.send(body)
   }

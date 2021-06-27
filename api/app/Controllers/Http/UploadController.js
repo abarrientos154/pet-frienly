@@ -92,12 +92,12 @@ class UploadController {
     return fileName
   }
 
-  /* async subirImgServicio ({ response, params, request }) {
-    let id = params.producto_id
-    var profilePic = request.file('perfil', {})
+  async subirImgServicio ({ response, params, request }) {
+    let id = params.servicio_id
+    var profilePic = request.file('files', {})
     if (profilePic) {
-      if (Helpers.appRoot('storage/uploads/productos')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
+      if (Helpers.appRoot('storage/uploads/servicios')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/servicios'), {
           name: id,
           overwrite: true
         })
@@ -111,7 +111,7 @@ class UploadController {
         response.send(true)
       }
     }
-  } */
+  }
 
    async subirimgtienda ({ request, response, auth }) {
     let codeFile = randomize('Aa0', 30)
