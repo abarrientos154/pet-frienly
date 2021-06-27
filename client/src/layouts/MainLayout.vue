@@ -79,13 +79,13 @@ export default {
         {
           icon: 'assignment',
           label: 'Pedidos',
-          ruta: '/productos',
+          ruta: '/pedidos',
           permission: 1
         },
         {
           icon: 'description',
           label: 'Estadísticas',
-          ruta: '/hospedajes'
+          ruta: '/estadisticas_resportes'
         },
         {
           icon: 'power_settings_new',

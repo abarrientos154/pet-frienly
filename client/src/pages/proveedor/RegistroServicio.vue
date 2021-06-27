@@ -1,7 +1,13 @@
 <template>
-  <div class="window-height">
-    <q-btn class="q-mt-lg" flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-    <div class="column items-center">
+<q-layout view="lHh Lpr lFf">
+  <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+    <div class="col-1">
+      <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+    </div>
+    <div class="col-10 text-white text-subtitle1 text-center">{{edit ? 'Editar servicio' : 'Nuevo servicio'}}</div>
+  </q-header>
+
+    <div class="column items-center q-mt-xl q-pt-md">
       <div class="q-mb-md text-center text-h5 text-grey-8">Selecciona tus servicios</div>
 
       <div class="column items-center q-mb-lg" style="width:100%">
@@ -72,7 +78,7 @@
         <q-btn class="q-py-xs" color="primary" rounded :label="edit ? 'Actualizar' : 'Guardar'" @click="!edit ? agregar() : actualizar()" style="width: 100%" no-caps/>
       </div>
     </div>
-  </div>
+</q-layout>
 </template>
 
 <script>
@@ -104,22 +110,26 @@ export default {
     img: { required }
   },
   mounted () {
-    this.baseu = env.apiUrl + 'hospedajes_img'
+    this.baseu = env.apiUrl + 'servicio_img/'
     if (this.$route.params.id) {
       this.edit = true
       this.id = this.$route.params.id
-      this.$api.get('servicio/' + this.id).then(res => {
-        if (res) {
-          this.form = res
-          this.servicio = res.servicio
-        }
-      }).catch(error => {
-        console.log(error)
-      })
+      this.getServicio()
     }
     this.getServicios()
   },
   methods: {
+    async getServicio () {
+      await this.$api.get('servicio/' + this.id).then(res => {
+        if (res) {
+          this.form = res
+          this.servicio = res.servicio
+          this.imgServicio = this.baseu + res._id
+        }
+      }).catch(error => {
+        console.log(error)
+      })
+    },
     getServicios () {
       this.$api.get('servicios').then(res => {
         if (res) {
@@ -146,6 +156,7 @@ export default {
               message: 'Foto actualizada',
               color: 'positive'
             })
+            this.imgServicio = this.baseu + this.id
             this.$q.loading.hide()
             location.reload()
           }
@@ -211,55 +222,6 @@ export default {
         })
       }
     }
-    /* eliminarProducto (id) {
-      this.$q.dialog({
-        title: '¡Atención!',
-        message: '¿Seguro desea eliminar este producto?',
-        cancel: true,
-        persistent: true
-      }).onOk(() => {
-        this.$q.loading.show({
-          message: 'Eliminando producto'
-        })
-        this.$api.delete('producto/' + id).then(res => {
-          if (res) {
-            this.$q.loading.hide()
-            this.$q.notify({
-              message: 'Eliminado Correctamente',
-              color: 'positive'
-            })
-            this.getProductosByProveedor(this.id_tienda)
-          } else {
-            this.$q.loading.hide()
-            this.$q.notify({
-              message: 'Hubo un error',
-              color: 'negative'
-            })
-          }
-        })
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      })
-    } */
   }
 }
 </script>
-
-<style scoped lang="scss">
-.button-camera {
-  text-decoration: none;
-  padding: 10px;
-  font-weight: 540;
-  font-size: 0px;
-  color: white;
-  height:40px;
-  width:40px
-}
-.seleccionado {
-  border-radius: 5px;
-  background: $grey-5;
-}
-.dimension {
-  min-width: 200px;
-}
-</style>

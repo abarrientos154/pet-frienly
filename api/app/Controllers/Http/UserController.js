@@ -360,8 +360,10 @@ class UserController {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()
     let servicios = (await TiendaServicio.query().where({tienda_id: params.id}).with('servicio').fetch()).toJSON()
     let country = await Paises.find(user.tienda.country_id)
-    let city = await Paises.find(user.tienda.country_id)
+    let city = await Ciudad.find(user.tienda.city_id)
     user.tienda.servicios = servicios
+    user.tienda.country = country
+    user.tienda.city = city
     response.send(user)
   }
 
