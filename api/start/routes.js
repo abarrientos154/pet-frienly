@@ -101,7 +101,7 @@ addPrefixToGroup(
     
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')
-    Route.get('hospedaje_by_proveedor/:proveedor_id', 'HospedajeController.hospedajeByProveedor')
+    Route.get('hospedaje_by_hospedador/:hospedador_id', 'HospedajeController.hospedajeByHospedador')
     Route.delete('hospedaje/:id', 'HospedajeController.destroy')
     Route.post('hospedaje_filtrado', 'HospedajeController.hospedajeFiltrado')
     Route.post('perfil_imagen', 'UploadController.newimagenById')

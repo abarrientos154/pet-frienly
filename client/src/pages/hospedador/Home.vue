@@ -19,7 +19,7 @@
         <q-scroll-area class="q-mb-sm" style="height: 75px;">
           <div class="text-caption">{{user.my_space.description}}</div>
         </q-scroll-area>
-        <q-btn class="full-width" label="Editar perfil" color="primary" @click="$router.push('/edit_hospedador')" no-caps/>
+        <q-btn v-if="!logueado" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/edit_hospedador')" no-caps/>
       </div>
     </div>
 
@@ -73,7 +73,7 @@
     <div>
       <div class="text-subtitle1 text-bold q-mb-md">Conoce los espacios disponibles</div>
       <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;" v-if="hospedajes.length <= 3">
-        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;" @click="$router.push('/description_space/' + item._id)">
           <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
@@ -90,12 +90,12 @@
                   <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
               </div>
             </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm" @click="$router.push('/description_space/' + item._id)">${{item.price}} por noche</q-btn>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{item.price}} por noche</q-btn>
           </q-card-section>
         </q-card>
       </q-list>
       <q-list v-else-if="ver" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;"  @click="$router.push('/description_space/' + item._id)">
           <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
@@ -112,12 +112,12 @@
                   <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
               </div>
             </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm" @click="$router.push('/description_space/' + item._id)">${{item.price}} por noche</q-btn>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{item.price}} por noche</q-btn>
           </q-card-section>
         </q-card>
       </q-list>
       <q-list v-else class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="index in 3" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+        <q-card v-for="index in 3" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;"  @click="$router.push('/description_space/' + hospedajes[index - 1]._id)">
           <q-img class="bg-secondary" :src="baseuHospedador + hospedajes[index - 1].images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
@@ -134,7 +134,7 @@
                   <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
               </div>
             </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm" @click="$router.push('/description_space/' + hospedajes[index - 1]._id)">${{hospedajes[index - 1].price}} por noche</q-btn>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{hospedajes[index - 1].price}} por noche</q-btn>
           </q-card-section>
         </q-card>
       </q-list>
@@ -150,6 +150,8 @@ import env from '../../env'
 export default {
   data () {
     return {
+      id: '',
+      logueado: true,
       lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
       baseuHospedador: '',
@@ -162,27 +164,44 @@ export default {
     }
   },
   mounted () {
+    this.baseu = env.apiUrl + 'espacio_img/'
     this.getUser()
-    this.getHospedajes()
   },
   methods: {
     getUser () {
-      this.$api.get('user_logueado').then(res => {
+      if (this.$route.params.id) {
+        this.id = this.$route.params.id
+        this.logueado = false
+        this.$api.get('user_by_id/' + this.id).then(res => {
+          if (res) {
+            this.user = res
+            console.log(this.user)
+            this.ciudadUser()
+            this.getHospedajes()
+          }
+        })
+      } else {
+        this.$api.get('user_logueado').then(res => {
+          if (res) {
+            this.logueado = true
+            this.user = res
+            console.log(this.user)
+            this.ciudadUser()
+            this.getHospedajes()
+          }
+        })
+      }
+    },
+    ciudadUser () {
+      this.$api.get('ciudad_by_id/' + this.user.my_space.ciudad_id).then(res => {
         if (res) {
-          this.user = res
-          this.baseu = env.apiUrl + 'espacio_img/'
-          console.log(this.user)
-          this.$api.get('ciudad_by_id/' + this.user.my_space.ciudad_id).then(res => {
-            if (res) {
-              this.cityUser = res
-              console.log(this.cityUser)
-            }
-          })
+          this.cityUser = res
+          console.log(this.cityUser)
         }
       })
     },
     getHospedajes () {
-      this.$api.get('hospedaje').then(res => {
+      this.$api.get('hospedaje_by_hospedador/' + this.user._id).then(res => {
         if (res) {
           this.hospedajes = res
           this.baseuHospedador = env.apiUrl + 'hospedajes_img/'

@@ -19,7 +19,6 @@ const routes = [
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
       { path: '/edit_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
-      { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
       { path: '/new_space', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },
       { path: '/orders', component: () => import('pages/hospedador/Orders.vue') },
@@ -51,6 +50,8 @@ const routes = [
   { path: '/registro_producto', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
 
+  { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
+  { path: '/edit_space/:id', component: () => import('pages/hospedador/EditSpace.vue') },
   {
     path: '/',
     redirect: '/login'
