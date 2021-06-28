@@ -63,8 +63,8 @@
            <div>
              <div>Pais</div>
              <q-select filled dense color="black" v-model="country" :options="countries" label="Escoja un pais" map-options
-              error-message="requerido" :error="$v.country.$error" @blur="$v.country.$touch()" @input="cities = country.ciudades, city = null"
-              option-label="name" >
+              error-message="requerido" :error="$v.country.$error" @blur="$v.country.$touch()" @input="getCitiesById(country._id)"
+              option-label="name" option-value="_id" >
                 <template v-slot:no-option>
                   <q-item>
                     <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
@@ -86,7 +86,7 @@
              <div>Ciudad</div>
              <q-select filled dense color="black" v-model="city" :options="cities" label="Escoja una ciudad" map-options
               error-message="requerido" :error="$v.city.$error" @blur="$v.city.$touch()"
-              option-label="name" >
+              option-label="name" option-value="_id">
                 <template v-slot:no-option>
                   <q-item>
                     <q-item-section class="text-grey text-italic">Selecciona un país</q-item-section>
@@ -199,7 +199,7 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      slide: 1,
+      slide: 2,
       form: {},
       formTwo: {},
       formThree: {},
@@ -386,6 +386,7 @@ export default {
       })
     },
     async getCitiesById (id) {
+      console.log('id :>> ', id)
       await this.$api.get('cityByCountry/' + id).then(res => {
         if (res) {
           this.cities = res

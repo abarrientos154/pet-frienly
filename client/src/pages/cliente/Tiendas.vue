@@ -1,5 +1,8 @@
 <template>
   <div style="max-width: 100%">
+    <q-header elevated class="bg-primary row justify-center items-center" style="width:100%; height:60px">
+      <div class="text-white text-subtitle1 text-center">Todas las tiendas</div>
+    </q-header>
     <div class="q-mb-md q-mx-sm q-mt-md text-h5 text-weight-bold">Tiendas mejor calificadas</div>
     <div class="q-mb-md q-mx-sm text-overline">Las tiendas mejor calificadas en tu ciudad</div>
     <q-scroll-area

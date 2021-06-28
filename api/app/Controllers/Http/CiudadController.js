@@ -5,6 +5,7 @@ const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 const fs = require('fs')
+var ObjectId = require('mongodb').ObjectId;
 // var randomize = require('randomatic');
 const User = use("App/Models/User")
 
@@ -22,7 +23,8 @@ class CiudadController {
     response.send(ciudad)
   }
   async cityByCountry({ params, response }) {
-    const cities = (await Ciudad.where({pais_id: params.id}).fetch()).toJSON()
+    const id = new ObjectId(params.id)
+    const cities = (await Ciudad.where({pais_id: id}).fetch()).toJSON()
     response.send(cities)
   }
 }
