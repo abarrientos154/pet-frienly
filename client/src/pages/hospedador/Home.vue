@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
-      <div class="text-white text-h6 text-center">Tu espacio</div>
+      <div class="text-white text-h6 text-center">{{rol === 4 ? 'Tu espacio' : hospedador.my_space.name}}</div>
     </q-header>
 
     <div class="row q-pa-sm">
@@ -132,6 +132,7 @@ export default {
           this.rol = res.roles[0]
           if (this.rol === 4) {
             this.hospedador = res
+            console.log(this.hospedador)
             this.ciudadUser()
             this.getHospedajes()
           } else if (this.rol === 2) {
@@ -148,7 +149,7 @@ export default {
       this.$api.get('user_by_id/' + this.id).then(res => {
         if (res) {
           this.hospedador = res
-          console.log(this.user)
+          console.log(this.hospedador)
           this.ciudadUser()
           this.getHospedajes()
         }
