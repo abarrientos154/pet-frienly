@@ -1,23 +1,28 @@
 <template>
-  <div>
+  <q-layout view="lHh Lpr lFf">
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+        <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+        </div>
+        <div class="col-10 text-white text-subtitle1 text-center">Mi perfil</div>
+    </q-header>
+
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
-          <q-btn flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-          <div class="q-mb-lg text-center text-h5 text-grey-8">Representante Legal</div>
+          <div class="q-mb-md text-center text-h5 text-grey-8 q-mt-xl">Representante Legal</div>
 
           <div class="column items-center q-mb-lg">
             <q-avatar rounded style="height: 200px; width: 90%; border-radius: 25px;" class="row justify-center">
-              <q-img style="height:100%; width:100%" :src="imgRepresentante != '' ? imgRepresentante : 'noimg.png'">
-                <q-file borderless v-model="imgR" @input="representante_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
-                @blur="$v.imgR.$touch()">
-                  <div v-if="imgRepresentante != ''" class="absolute-center column items-center">
-                    <q-icon name="cloud_upload" size="75px" color="white" />
-                  </div>
+              <q-img style="height:100%; width:100%" :src="imgRepresentante">
+                <q-file borderless v-model="imgR" @input="representante_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
+                    <div class="absolute-center column items-center">
+                        <q-icon name="cloud_upload" size="75px" color="white" />
+                    </div>
                 </q-file>
               </q-img>
             </q-avatar>
-            <div :class="$v.imgR.$error ? 'text-negative text-subtitle2 text-center' : 'text-grey-8 text-subtitle2 text-center'"> IMG Representante legal </div>
+            <div class="text-grey-8 text-subtitle2 text-center"> IMG Representante legal </div>
           </div>
 
           <div class="q-mt-sm">
@@ -42,24 +47,8 @@
           </div>
           <div>
             Correo de contacto
-            <q-input filled v-model="form.email"  dense placeholder="micorreo@petfriendly.com"
-            error-message="Este campo es requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
-          </div>
-          <div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <div>Contraseña</div>
-                <q-input :type="ver ? 'text' : 'password'" v-model="password" placeholder="Contraseña" outlined dense
-                filled error-message="Ingrese una contraseña válida, mínimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
-                  <template v-slot:append>
-                    <q-icon :name="ver ? 'visibility_off' : 'visibility'" class="cursor-pointer q-pa-sm" color="primary" @click="ver = !ver" />
-                  </template>
-                </q-input>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <div>Repite Contraseña</div>
-                <q-input :type="ver ? 'text' : 'password'" v-model="repeatPassword" placeholder="Repita su Contraseña" outlined dense filled
-                error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()"/>
-              </div>
+            <q-input filled readonly v-model="form.email"  dense placeholder="micorreo@petfriendly.com"
+            />
           </div>
           <div>
               <div class="text-caption q-mb-sm">Imágenes de documento de identificación</div>
@@ -72,17 +61,16 @@
               </div>
               <div class="row">
                 <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="identificacion.length ? identificacion[0] : ''"/>
-                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.images_ident.$error">Imagen requerida</div>
+                  <q-img style="height: 100%;" :src="form.images_ident ? baseuIdentidad + form.images_ident[0] : ''">
+                      <q-btn flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+                  </q-img>
                 </q-avatar>
                 <q-avatar class="bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="identificacion.length > 1 ? identificacion[1] : ''"/>
-                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.images_ident.$error">Imagen requerida</div>
+                  <q-img style="height: 100%;" :src="form.images_ident ? baseuIdentidad + form.images_ident[1] : ''">
+                      <q-btn flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+                  </q-img>
                 </q-avatar>
               </div>
-          </div>
-          <div class="column items-center justify-center" style="padding-top: 20px">
-            <q-checkbox v-model="terminos" size="xs" :class="textColor" label="Acepto Terminos y condiciones de uso" @input="!terminos ? textColor = 'text-red' : textColor = 'text-black'" />
           </div>
           <div class="row justify-center q-mt-lg">
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
@@ -93,21 +81,19 @@
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
-          <q-btn flat round color="primary" icon="arrow_back" @click="slide = 1"/>
-          <div class="q-mb-lg text-center text-h5 text-grey-8">Datos de tienda</div>
+          <div class="q-mb-md text-center text-h5 text-grey-8 q-mt-xl">Datos de tienda</div>
 
           <div class="column items-center justify-center">
             <q-avatar rounded style="height: 150px; width: 150px" class="bg-grey row justify-center">
-              <q-img style="height: 100%;" :src="imgPerfil != '' ? imgPerfil : ''">
+              <q-img style="height: 100%;" :src="imgPerfil">
                 <q-file borderless v-model="imgP" @input="perfil_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
-                @blur="$v.imgP.$touch()">
+                >
                   <div class="absolute-center column items-center">
                     <q-icon name="cloud_upload" size="75px" color="white" />
                   </div>
                 </q-file>
               </q-img>
             </q-avatar>
-            <div :class="$v.imgP.$error ? 'text-negative text-center' : 'text-grey-8 text-center'">Carga tu foto de perfil</div>
           </div>
 
          <div class="q-mt-md">
@@ -117,8 +103,8 @@
          </div>
          <div>
            Correo de contacto tienda
-           <q-input filled v-model="formTienda.email"  dense placeholder="micorreo@petfriendly.com "
-           error-message="Este campo es requerido" :error="$v.formTienda.email.$error" @blur="$v.formTienda.email.$touch()"/>
+           <q-input filled readonly v-model="formTienda.email"  dense placeholder="micorreo@petfriendly.com "
+           />
          </div>
          <div>
            Telefono de contacto tienda
@@ -134,13 +120,16 @@
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
             @click="siguiente(2)"/>
           </div>
+         <div class="row justify-center q-mt-sm">
+            <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 90%;"
+            @click="slide = 1"/>
+          </div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div class="q-pa-lg">
-          <q-btn flat round color="primary" icon="arrow_back" @click="slide = 2"/>
-          <div class="q-mb-lg text-center text-h5 text-grey-8">Dirección del local</div>
+          <div class="q-mb-md text-center text-h5 text-grey-8 q-mt-xl">Dirección del local</div>
           <div class="row justify-center">
             <q-img
               src="noimg.png"
@@ -228,14 +217,18 @@
             <q-btn no-caps rounded color="primary" label="Finalizar" class="q-py-xs" style="width: 90%;"
             @click="finalizar()"/>
           </div>
+          <div class="row justify-center q-mt-sm">
+            <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 90%;"
+            @click="slide = 2"/>
+          </div>
         </div>
       </q-carousel-slide>
     </q-carousel>
-  </div>
+  </q-layout>
 </template>
 <script>
-import { required, maxLength, email, sameAs, minLength } from 'vuelidate/lib/validators'
-import { mapMutations } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+import env from '../../env'
 export default {
   data () {
     return {
@@ -244,14 +237,13 @@ export default {
       imgP: null,
       pais: null,
       ciudad: null,
-      terminos: false,
       ver: false,
       slide: 1,
-      textColor: 'text-black',
+      baseuPerfil: '',
+      baseuTienda: '',
+      baseuIdentidad: '',
       imgRepresentante: '',
       imgPerfil: '',
-      password: '',
-      repeatPassword: '',
       form: {},
       formTienda: {
         despachoReg: false,
@@ -269,51 +261,58 @@ export default {
       name: { required },
       last_name: { required },
       birthday: { required },
-      phone: { required },
-      email: { required, email }
+      phone: { required }
     },
     formTienda: {
       name: { required },
-      email: { required, email },
       phone: { required },
       descripcion: { required },
       direccion: { required },
       hora_inicio: { required },
       hora_cierre: { required }
     },
-    imgR: { required },
-    imgP: { required },
     pais: { required },
-    ciudad: { required },
-    images_ident: { required, minLength: minLength(2) },
-    password: { required, maxLength: maxLength(256), minLength: minLength(6) },
-    repeatPassword: { sameAsPassword: sameAs('password') }
+    ciudad: { required }
   },
   mounted () {
+    this.baseuPerfil = env.apiUrl + 'perfil_img/'
+    this.baseuTienda = env.apiUrl + 'tienda_img/'
+    this.baseuIdentidad = env.apiUrl + 'identificacion_img/'
+    this.getUser()
     this.getPaisesCiudades()
   },
   methods: {
-    ...mapMutations('generals', ['login']),
+    async getUser () {
+      await this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.form = res
+          this.imgRepresentante = this.baseuPerfil + this.form._id
+          this.formTienda = res.tienda
+          this.imgPerfil = this.baseuTienda + this.form._id
+          this.pais = this.formTienda.country
+          this.ciudad = this.formTienda.city
+          console.log('user', res)
+        }
+      })
+    },
+    getPaisesCiudades () {
+      this.$api.get('pais').then(res => {
+        if (res) {
+          this.paises = res
+        }
+      })
+    },
     siguiente (val) {
       if (val === 1) {
         this.$v.form.$touch()
-        this.$v.imgR.$touch()
-        this.$v.password.$touch()
-        this.$v.repeatPassword.$touch()
-        this.$v.images_ident.$touch()
-        if (!this.terminos) {
-          this.textColor = 'text-red'
-        }
-        if (!this.$v.form.$error && !this.$v.imgR.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.images_ident.$error && this.terminos) {
+        if (!this.$v.form.$error) {
           this.slide = 2
         }
       } else {
-        this.$v.imgP.$touch()
         this.$v.formTienda.name.$touch()
-        this.$v.formTienda.email.$touch()
         this.$v.formTienda.phone.$touch()
         this.$v.formTienda.descripcion.$touch()
-        if (!this.$v.imgP.$error && !this.$v.formTienda.name.$error && !this.$v.formTienda.email.$error && !this.$v.formTienda.phone.$error && !this.$v.formTienda.descripcion.$error) {
+        if (!this.$v.formTienda.name.$error && !this.$v.formTienda.phone.$error && !this.$v.formTienda.descripcion.$error) {
           this.slide = 3
         }
       }
@@ -326,30 +325,17 @@ export default {
       this.$v.formTienda.hora_cierre.$touch()
       if (!this.$v.pais.$error && !this.$v.ciudad.$error && !this.$v.formTienda.direccion.$error && !this.$v.formTienda.hora_inicio.$error && !this.$v.formTienda.hora_cierre.$error) {
         this.$q.loading.show({
-          message: 'Registrando...'
+          message: 'Guardando...'
         })
         this.formTienda.country_id = this.pais._id
         this.formTienda.city_id = this.ciudad._id
-        this.form.password = this.password
         this.form.tienda = this.formTienda
-        var formData = new FormData()
-        for (let i = 0; i < this.images_ident.length; i++) {
-          formData.append('IFiles' + i, this.images_ident[i])
-        }
-        formData.append('RFiles', this.imgR)
-        formData.append('PFiles', this.imgP)
-        formData.append('dat', JSON.stringify(this.form))
-        this.$api.post('register_proveedor', formData, {
-          headers: {
-            'Content-Type': undefined
-          }
-        }).then(res => {
+        this.$api.post('edit_proveedor', this.form).then(res => {
           if (res) {
             this.$q.notify({
-              message: 'Ya formas parte de PetFriendly, Bienvenido',
+              message: 'Datos guardados correctamente',
               color: 'positive'
             })
-            this.loguear()
             this.$q.loading.hide()
           } else {
             this.$q.loading.hide()
@@ -362,40 +348,58 @@ export default {
         })
       }
     },
-    loguear () {
-      this.$api.post('login', this.form).then(res => {
-        if (res) { // Se debe ejecutar una mutacion que modifique el state con sessionInfo
-          const user = res.TRI_SESSION_INFO.roles[0]
-          if (user === 3) {
-            this.login(res)
-            this.$router.push('/servicios_productos')
+    async representante_img () {
+      this.$q.loading.show()
+      if (this.imgR) {
+        var formData = new FormData()
+        formData.append('files', this.imgR)
+        await this.$api.post('perfil_imagen', formData, {
+          headers: {
+            'Content-Type': undefined
           }
-        } else {
-          console.log('error de ususario')
-          // this.loading = false
-        }
-      })
-    },
-    getPaisesCiudades () {
-      this.$api.get('pais').then(res => {
-        if (res) {
-          this.paises = res
-          console.log(this.paises)
-        }
-      })
-    },
-    representante_img () {
-      var im = this.imgR
-      this.imgRepresentante = URL.createObjectURL(im)
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Foto actualizada',
+              color: 'positive'
+            })
+            location.reload()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
     },
     identificacion_img () {
       this.images_ident.push(this.imgI)
       this.identificacion.push(URL.createObjectURL(this.imgI))
       this.imgI = null
     },
-    perfil_img () {
+    async perfil_img () {
       var im = this.imgP
       this.imgPerfil = URL.createObjectURL(im)
+      this.$q.loading.show()
+      if (this.imgP) {
+        var formData = new FormData()
+        formData.append('files', this.imgP)
+        await this.$api.post('subir_img_tienda_perfil', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Foto actualizada',
+              color: 'positive'
+            })
+            location.reload()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
     }
   }
 }

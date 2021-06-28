@@ -11,7 +11,6 @@
           <q-btn round flat stack dense no-caps class="text-italic q-py-xs" :icon="item.icon" color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : ruta(item)"><div style="font-size: 10px">{{item.label}}</div></q-btn>
         </div>
       </div>
-      <q-btn v-else class="full-width q-pa-sm" label="Iniciar Sesión" color="primary" @click="$router.push('/login')" no-caps/>
     </q-footer>
   </q-layout>
 </template>
