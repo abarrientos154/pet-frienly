@@ -21,6 +21,9 @@
       <div class="col-6 q-pl-sm">
         <div class="text-bold text-subtitle1">Bienvenido</div>
         <div>{{tienda.descripcion}}</div>
+        <div v-if="miTienda">
+          <q-btn label="Editar perfil" color="primary" no-caps style="width: 100%"/>
+        </div>
       </div>
     </div>
 
@@ -208,7 +211,7 @@
       </div>
     </div>
 
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-page-sticky v-if="miTienda" position="bottom-right" :offset="[18, 18]">
       <q-fab color="primary" icon="add" direction="up" vertical-actions-align="right">
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
           color="primary" icon="add_shopping_cart" label="Producto" @click="$router.push('/registro_producto')" />
