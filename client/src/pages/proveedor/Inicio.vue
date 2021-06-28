@@ -6,7 +6,7 @@
 
     <div class="row q-pa-sm">
       <div class="col-6">
-        <q-img style="height: 100%; width: 100%" :src="baseuTienda + tienda.perfil"/>
+        <q-img style="height: 100%; width: 100%" :src="baseuTienda + id"/>
         <div class="q-gutter-y-md row">
           <q-rating
             v-model="tienda.calificacion"
@@ -21,8 +21,8 @@
       <div class="col-6 q-pl-sm">
         <div class="text-bold text-subtitle1">Bienvenido</div>
         <div>{{tienda.descripcion}}</div>
-        <div v-if="miTienda">
-          <q-btn label="Editar perfil" color="primary" no-caps style="width: 100%"/>
+        <div v-if="miTienda" class="q-pt-sm">
+          <q-btn label="Editar perfil" color="primary" no-caps style="width: 100%" to="/editar_proveedor"/>
         </div>
       </div>
     </div>
@@ -65,7 +65,7 @@
           <div class="text-subtitle2 text-grey-8">Despacho a regiones</div>
           <div class="text-caption text-grey-8">{{tienda.despachoReg ? 'Habilitado' : 'Deshabilitado'}}</div>
           <div class="text-subtitle2 text-grey-8">Delivery</div>
-          <div class="text-caption text-grey-8">{{tienda.delivery ? deliveryGratis ? 'Gratuito' : tienda.deliveryValor : 'Deshabilitado'}}</div>
+          <div class="text-caption text-grey-8">{{tienda.delivery ? tienda.deliveryGratis ? 'Gratuito' : tienda.deliveryValor : 'Deshabilitado'}}</div>
         </div>
       </div>
     </div>
@@ -299,6 +299,7 @@ export default {
         if (v) {
           this.user = v
           if (this.user.roles[0] === 3) {
+            this.id = this.user._id
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
           }

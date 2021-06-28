@@ -82,27 +82,24 @@ class UserController {
           images_ident.push(profilePic.fileName)
         }
 
-        let codeFile = randomize('Aa0', 30)
+        let body = dat
+        body.estatus = 0 // Estatus para verificacion del Proveedor
+        body.roles = [3]
+        body.images_ident = images_ident
+        body.tienda.calificacion = 0
+        const user = await User.create(body)
+
         const profilePic2 = request.file('PFiles', {
           types: ['image']
         })
         if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
           await profilePic2.move(Helpers.appRoot('storage/uploads/tiendaFiles'), {
-            name: codeFile,
+            name: user._id.toString(),
             overwrite: true
           })
         } else {
           mkdirp.sync(`${__dirname}/storage/Excel`)
         }
-        let perfil = profilePic2.fileName
-
-        let body = dat
-        body.estatus = 0 // Estatus para verificacion del Proveedor
-        body.roles = [3]
-        body.images_ident = images_ident
-        body.tienda.perfil = perfil
-        body.tienda.calificacion = 0
-        const user = await User.create(body)
 
         const profilePic3 = request.file('RFiles', {
           types: ['image']
@@ -118,7 +115,17 @@ class UserController {
         const data = { name: profilePic3.fileName }
         response.send(user)
       }
-    }
+  }
+
+  async editProveedor({ request, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    let body = request.all()
+    delete body.tienda.country
+    delete body.tienda.city
+    let editar = await User.query().where('_id', user._id).update(body)
+    response.send(editar)
+  }
+
   async registerClient({ request, response }) {
       let dat = request.only(['dat'])
       dat = JSON.parse(dat.dat)
@@ -306,6 +313,12 @@ class UserController {
 
   async userLogueado({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
+    if (user.roles[0] === 3) {
+      let country = await Paises.find(user.tienda.country_id)
+      let city = await Ciudad.find(user.tienda.city_id)
+      user.tienda.country = country
+      user.tienda.city = city
+    }
     response.send(user)
   }
 
