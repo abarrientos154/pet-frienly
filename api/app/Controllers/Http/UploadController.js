@@ -92,12 +92,12 @@ class UploadController {
     return fileName
   }
 
-  /* async subirImgServicio ({ response, params, request }) {
-    let id = params.producto_id
-    var profilePic = request.file('perfil', {})
+  async subirImgServicio ({ response, params, request }) {
+    let id = params.servicio_id
+    var profilePic = request.file('files', {})
     if (profilePic) {
-      if (Helpers.appRoot('storage/uploads/productos')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/productos'), {
+      if (Helpers.appRoot('storage/uploads/servicios')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/servicios'), {
           name: id,
           overwrite: true
         })
@@ -111,19 +111,15 @@ class UploadController {
         response.send(true)
       }
     }
-  } */
+  }
 
-   async subirimgtienda ({ request, response, auth }) {
-    let codeFile = randomize('Aa0', 30)
-    let user = await auth.getUser()
-    var profilePic = request.file('files', {
-      types: ['image'],
-      size: '25mb'
-    })
+  async subirImgPerfil ({ response, params, request }) {
+    let id = params.id
+    var profilePic = request.file('files', {})
     if (profilePic) {
-      if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
-        await profilePic.move(Helpers.appRoot('storage/uploads/tiendaFiles'), {
-          name: codeFile,
+      if (Helpers.appRoot('storage/uploads/perfil')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
+          name: id,
           overwrite: true
         })
       } else {
@@ -133,17 +129,31 @@ class UploadController {
       if (!profilePic.moved()) {
         return profilePic.error()
       } else {
-        let proveedor = await User.find(user._id)
-        if (proveedor.tiendaFiles) {
-          proveedor.tiendaFiles.push(codeFile)
-        } else {
-          proveedor.tiendaFiles = []
-          proveedor.tiendaFiles.push(codeFile)
-        }
-        proveedor.status = 0
-        await proveedor.save()
-        console.log(proveedor, 'proveedor buscar')
-        response.send(proveedor)
+        response.send(true)
+      }
+    }
+  }
+
+   async subirImgTiendaPerfil ({ request, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    var profilePic = request.file('files', {
+      types: ['image'],
+      size: '25mb'
+    })
+    if (profilePic) {
+      if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/tiendaFiles'), {
+          name: user._id.toString(),
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        response.send(true)
       }
     }
   }
@@ -454,6 +464,11 @@ class UploadController {
   async getFileByDirectoryEspacioDescanso ({ params, request, response }) {
     const dir = params.file
     response.download(Helpers.appRoot('storage/uploads/hospedajeFiles') + `/${dir}`)
+  }
+
+  async getFileByDirectoryIdentificacion ({ params, request, response }) {
+    const dir = params.file
+    response.download(Helpers.appRoot('storage/uploads/identificacionFiles') + `/${dir}`)
   }
 
   async getFileByDirectoryTienda ({ params, request, response }) {

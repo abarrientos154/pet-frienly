@@ -82,27 +82,24 @@ class UserController {
           images_ident.push(profilePic.fileName)
         }
 
-        let codeFile = randomize('Aa0', 30)
+        let body = dat
+        body.estatus = 0 // Estatus para verificacion del Proveedor
+        body.roles = [3]
+        body.images_ident = images_ident
+        body.tienda.calificacion = 0
+        const user = await User.create(body)
+
         const profilePic2 = request.file('PFiles', {
           types: ['image']
         })
         if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
           await profilePic2.move(Helpers.appRoot('storage/uploads/tiendaFiles'), {
-            name: codeFile,
+            name: user._id.toString(),
             overwrite: true
           })
         } else {
           mkdirp.sync(`${__dirname}/storage/Excel`)
         }
-        let perfil = profilePic2.fileName
-
-        let body = dat
-        body.estatus = 0 // Estatus para verificacion del Proveedor
-        body.roles = [3]
-        body.images_ident = images_ident
-        body.tienda.perfil = perfil
-        body.tienda.calificacion = 0
-        const user = await User.create(body)
 
         const profilePic3 = request.file('RFiles', {
           types: ['image']
@@ -118,7 +115,17 @@ class UserController {
         const data = { name: profilePic3.fileName }
         response.send(user)
       }
-    }
+  }
+
+  async editProveedor({ request, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    let body = request.all()
+    delete body.tienda.country
+    delete body.tienda.city
+    let editar = await User.query().where('_id', user._id).update(body)
+    response.send(editar)
+  }
+
   async registerClient({ request, response }) {
       let dat = request.only(['dat'])
       dat = JSON.parse(dat.dat)
@@ -215,6 +222,78 @@ class UserController {
     }
   }
 
+  async editHospedador({ request, response }) {
+    var dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
+    console.log(dat, 'DATA')
+    const validation = await validate(dat, User.fieldValidationRulesProveedor())
+    if (validation.fails()) {
+      response.unprocessableEntity(validation.messages())
+    } else {
+      let images = dat.identificationFiles
+      if (dat.IImg) {
+        for (let i = 0; i < 2; i++) {
+          let codeFile = randomize('Aa0', 30)
+          const profilePic = request.file('IFiles' + i, {
+            types: ['image']
+          })
+          if (Helpers.appRoot('storage/uploads/identificacionFiles')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/identificacionFiles'), {
+              name: codeFile,
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+          images.push(profilePic.fileName)
+        }
+      }
+      let image = dat.spaceFile
+      if (dat.PImg) {
+        let codeFile = randomize('Aa0', 30)
+        const profilePic2 = request.file('PFiles', {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/hospedejeFiles')) {
+          await profilePic2.move(Helpers.appRoot('storage/uploads/hospedajeFiles'), {
+            name: codeFile,
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        image = { name: profilePic2.fileName }
+      }
+      let body = dat
+      let contraseña = body.password
+      body.spaceFile = image
+      body.identificationFiles = images
+      const editarcontraseña = await User.find(body._id)
+      editarcontraseña.password = contraseña
+      await editarcontraseña.save()
+      if (body.RLImg) {
+        const profilePic3 = request.file('RLFiles', {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/perfil')) {
+          await profilePic3.move(Helpers.appRoot('storage/uploads/perfil'), {
+            name: body._id.toString(),
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        const data = { name: profilePic3.fileName }
+      }
+      delete body.RLImg
+      delete body.PImg
+      delete body.IImg
+      delete body.password
+      const user = await User.where('_id', body._id).update(body)
+      response.send(user)
+    }
+  }
+
   async validateEmail({ request, response, params }) {
     if (((await User.where({email: params.email}).fetch()).toJSON()).length) {
       response.unprocessableEntity([{
@@ -234,6 +313,12 @@ class UserController {
 
   async userLogueado({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
+    if (user.roles[0] === 3) {
+      let country = await Paises.find(user.tienda.country_id)
+      let city = await Ciudad.find(user.tienda.city_id)
+      user.tienda.country = country
+      user.tienda.city = city
+    }
     response.send(user)
   }
 
@@ -287,7 +372,11 @@ class UserController {
   async tiendaById({ params, response }) {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()
     let servicios = (await TiendaServicio.query().where({tienda_id: params.id}).with('servicio').fetch()).toJSON()
+    let country = await Paises.find(user.tienda.country_id)
+    let city = await Ciudad.find(user.tienda.city_id)
     user.tienda.servicios = servicios
+    user.tienda.country = country
+    user.tienda.city = city
     response.send(user)
   }
 

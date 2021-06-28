@@ -5,7 +5,7 @@ const Model = use('Model')
 
 class TiendaServicio extends Model {
   static fillable () {
-    return ['destinatario', 'servicio_id', 'descripcion', 'price', '_id']
+    return ['destinatario', 'servicio_id', 'description', 'price', '_id']
   }
 
   servicio () {

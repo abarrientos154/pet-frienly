@@ -14,11 +14,11 @@ const routes = [
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/tienda/:id', component: () => import('pages/proveedor/Inicio.vue') },
-      { path: '/descripcion_producto/:id', component: () => import('pages/proveedor/DescripcionProducto.vue') },
-      { path: '/descripcion_servicio/:id', component: () => import('pages/proveedor/DescripcionServicio.vue') },
+      { path: '/pedidos', component: () => import('pages/proveedor/Pedidos.vue') },
+      { path: '/estadisticas_resportes', component: () => import('pages/proveedor/Reportes.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
-      { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
+      { path: '/edit_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
       { path: '/new_space', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },
       { path: '/orders', component: () => import('pages/hospedador/Orders.vue') },
@@ -49,7 +49,10 @@ const routes = [
   { path: '/editar_servicio/:id', component: () => import('pages/proveedor/RegistroServicio.vue') },
   { path: '/registro_producto', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
+  { path: '/editar_proveedor', component: () => import('pages/proveedor/EditarPerfil.vue') },
 
+  { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
+  { path: '/edit_space/:id', component: () => import('pages/hospedador/EditSpace.vue') },
   {
     path: '/',
     redirect: '/login'

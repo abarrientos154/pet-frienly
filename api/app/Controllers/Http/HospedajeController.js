@@ -30,8 +30,8 @@ class HospedajeController {
   }
 
 
-  async hospedajeByProveedor ({ request, response, params }) {
-    let datos = (await Hospedaje.query().where({ proveedor_id: params.proveedor_id }).fetch()).toJSON()
+  async hospedajeByHospedador ({ request, response, params }) {
+    let datos = (await Hospedaje.query().where({ hospedador_id: params.hospedador_id }).with('datos_hospedador').fetch()).toJSON()
     for (let i in datos) {
       datos[i].filename = datos[i].images[0]
     }
@@ -81,9 +81,7 @@ class HospedajeController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view, auth }) {
-    let user = auth.getUser()
-    console.log('user :>> ', user);
-    let hospedaje = (await Hospedaje.with('datos_proveedor').find(params.id)).toJSON()
+    let hospedaje = (await Hospedaje.with('datos_hospedador').find(params.id)).toJSON()
     console.log('hospedaje :>> ', hospedaje);
     hospedaje.images = hospedaje.images.map(ele => {
       return { src: ele }
@@ -186,23 +184,25 @@ class HospedajeController {
    */
   async update ({ params, request, response, auth }) {
     let user = await auth.getUser()
-    console.log('prueba');
     let hospedaje = (await Hospedaje.find(params.id)).toJSON()
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    console.log(dat.cantidadArchivos, 'data archivos')
     const validation = await validate(dat, Hospedaje.fieldValidationRules())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
     } else {
       let images = hospedaje.images
-      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+      if (dat.idx > 0) {
+        for (let i = 0; i < dat.idx; i++) {
+          images.splice(dat.index[i], 1)
+        }
+      }
+      if (dat.cantidadArchivos > 0) {
         for (let i = 0; i < dat.cantidadArchivos; i++) {
           let codeFile = randomize('Aa0', 30)
-          const profilePic = request.file('files_' + (i + 1), {
+          const profilePic = request.file('files_' + i, {
             types: ['image']
           })
-          console.log(profilePic.index, 'ind')
           if (Helpers.appRoot('storage/uploads/hospedajes')) {
             await profilePic.move(Helpers.appRoot('storage/uploads/hospedajes'), {
               name: codeFile,
@@ -211,20 +211,14 @@ class HospedajeController {
           } else {
             mkdirp.sync(`${__dirname}/storage/Excel`)
           }
-          images.splice(dat.index[i], 1, profilePic.fileName)
+          images.push(profilePic.fileName)
         }
-        console.log(dat.images, 'images');
-        /* for (let j of dat.images) {
-          fs.unlink(`storage/uploads/hospedajes/${j.src}`, (err) => {
-            if (err) throw err;
-            console.log(`${j.src} Eliminado por el Cliente`);
-          });
-        } */
-        dat.images = images
       }
-      dat.proveedor_id = user._id.toString()
+      dat.hospedador_id = user._id.toString()
       delete dat.cantidadArchivos
       delete dat.index
+      delete dat.idx
+      dat.images = images
       let modificar = await Hospedaje.where('_id', params.id).update(dat)
       response.send(modificar)
     }

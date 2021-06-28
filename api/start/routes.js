@@ -52,6 +52,7 @@ addPrefixToGroup(
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
     Route.get('tienda_img/:file', 'UploadController.getFileByDirectoryTienda')
     Route.get('espacio_img/:file', 'UploadController.getFileByDirectoryEspacioDescanso')
+    Route.get('identificacion_img/:file', 'UploadController.getFileByDirectoryIdentificacion')
     Route.get('productos_img/:file', 'UploadController.getFileByDirectoryProductos')
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
@@ -80,6 +81,7 @@ addPrefixToGroup(
     Route.post("user_by_statushotel", "UserController.userByStatushotel")
     Route.put("update_status/:id", "UserController.userStatus") // metodo para bloquear o desbloquear usuarios
     Route.put("update_statushotel/:id", "UserController.userStatushotel")
+    Route.post("update_hospedador", "UserController.editHospedador")
     Route.put('datosnew/:id', 'UserController.updatedata')
     
     Route.get('mascota', 'MascotaController.index')
@@ -99,7 +101,7 @@ addPrefixToGroup(
     
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')
-    Route.get('hospedaje_by_proveedor/:proveedor_id', 'HospedajeController.hospedajeByProveedor')
+    Route.get('hospedaje_by_hospedador/:hospedador_id', 'HospedajeController.hospedajeByHospedador')
     Route.delete('hospedaje/:id', 'HospedajeController.destroy')
     Route.post('hospedaje_filtrado', 'HospedajeController.hospedajeFiltrado')
     Route.post('perfil_imagen', 'UploadController.newimagenById')
@@ -111,6 +113,9 @@ addPrefixToGroup(
     Route.put("edit_servicio/:id", "ServicioController.update")
     Route.delete("servicio/:id", "ServicioController.destroy")
     Route.post("subir_img_servicio/:servicio_id", "UploadController.subirImgServicio")
+
+    Route.post("edit_proveedor", "UserController.editProveedor")
+    Route.post("subir_img_tienda_perfil", "UploadController.subirImgTiendaPerfil")
 
   }).middleware("auth")
 );
