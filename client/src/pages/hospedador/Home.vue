@@ -7,7 +7,7 @@
     <div class="row q-pa-sm">
       <div class="col q-mr-sm" style="max-width: 250px;">
         <q-avatar rounded style="height: 100px; width: 100%;" class="bg-secondary q-my-xs">
-          <q-img style="height: 100%;" :src="baseu + user.spaceFile.name"/>
+          <q-img style="height: 100%;" :src="baseu + hospedador.spaceFile.name"/>
         </q-avatar>
         <div class="row justify-between">
           <q-rating v-model="ratingModel" color="grey" color-selected="orange-8" readonly size="18px"/>
@@ -17,9 +17,9 @@
       <div class="col">
         <div class="text-subtitle1 text-bold">Bienvenido</div>
         <q-scroll-area class="q-mb-sm" style="height: 75px;">
-          <div class="text-caption">{{user.my_space.description}}</div>
+          <div class="text-caption">{{hospedador.my_space.description}}</div>
         </q-scroll-area>
-        <q-btn v-if="!logueado" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/edit_hospedador')" no-caps/>
+        <q-btn v-if="rol === 4" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/edit_hospedador')" no-caps/>
       </div>
     </div>
 
@@ -30,16 +30,16 @@
           <div class="text-subtitle3 text-bold text-grey-6">Ciudad</div>
           <div class="text-caption text-grey-6">{{cityUser.name}}</div>
           <div class="text-subtitle3 text-bold text-grey-6">Direccion</div>
-          <div class="text-caption text-grey-6">{{user.my_space.direction}}</div>
+          <div class="text-caption text-grey-6">{{hospedador.my_space.direction}}</div>
           <div class="text-subtitle3 text-bold text-grey-6">Correo de contacto</div>
-          <div class="text-caption text-grey-6">{{user.my_space.email}}</div>
+          <div class="text-caption text-grey-6">{{hospedador.my_space.email}}</div>
         </div>
         <div class="col q-mx-md">
           <div class="text-subtitle3 text-bold text-grey-6">Horarios de atencóon</div>
-          <div class="text-caption text-grey-6">Apertura {{user.my_space.hora_inicio}}</div>
-          <div class="text-caption text-grey-6">Cierre {{user.my_space.hora_cierre}}</div>
+          <div class="text-caption text-grey-6">Apertura {{hospedador.my_space.hora_inicio}}</div>
+          <div class="text-caption text-grey-6">Cierre {{hospedador.my_space.hora_cierre}}</div>
           <div class="text-subtitle3 text-bold text-grey-6">Telefono de contacto</div>
-          <div class="text-caption text-grey-6">{{user.my_space.phone}}</div>
+          <div class="text-caption text-grey-6">{{hospedador.my_space.phone}}</div>
         </div>
       </div>
     </div>
@@ -72,7 +72,7 @@
 
     <div>
       <div class="text-subtitle1 text-bold q-mb-md">Conoce los espacios disponibles</div>
-      <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;" v-if="hospedajes.length <= 3">
+      <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;">
         <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;" @click="$router.push('/description_space/' + item._id)">
           <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
@@ -94,52 +94,8 @@
           </q-card-section>
         </q-card>
       </q-list>
-      <q-list v-else-if="ver" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;"  @click="$router.push('/description_space/' + item._id)">
-          <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
-            <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
-          </q-img>
-          <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_car" size="50px" style="border-radius: 10px;"/>
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="pool" size="50px" style="border-radius: 10px;"/>
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_walk" size="50px" style="border-radius: 10px;"/>
-          </div>
-          <q-card-section class="row justify-between">
-            <div>
-              <div class="text-subtitle2" style="font-size: 13px">{{item.name}}</div>
-              <div class="items-center row text-grey">
-                  <q-icon name="place" />
-                  <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
-              </div>
-            </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{item.price}} por noche</q-btn>
-          </q-card-section>
-        </q-card>
-      </q-list>
-      <q-list v-else class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="index in 3" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;"  @click="$router.push('/description_space/' + hospedajes[index - 1]._id)">
-          <q-img class="bg-secondary" :src="baseuHospedador + hospedajes[index - 1].images[0]" style="height: 175px;">
-            <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
-          </q-img>
-          <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_car" size="50px" style="border-radius: 10px;"/>
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="pool" size="50px" style="border-radius: 10px;"/>
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_walk" size="50px" style="border-radius: 10px;"/>
-          </div>
-          <q-card-section class="row justify-between">
-            <div>
-              <div class="text-subtitle2" style="font-size: 13px">{{hospedajes[index - 1].name}}</div>
-              <div class="items-center row text-grey">
-                  <q-icon name="place" />
-                  <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
-              </div>
-            </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{hospedajes[index - 1].price}} por noche</q-btn>
-          </q-card-section>
-        </q-card>
-      </q-list>
       <div class="column items-center q-mb-xl">
-        <q-btn class="q-pa-sm" v-if="hospedajes.length > 3" color="primary" :label="ver ? 'Ver menos' : 'Ver más'" style="width: 70%;" @click="ver = !ver" no-caps/>
+        <q-btn class="q-pa-sm" v-if="allhospedajes.length > 3" color="primary" :label="ver ? 'Ver menos' : 'Ver más'" style="width: 70%;" @click="verMas()" no-caps/>
       </div>
     </div>
   </div>
@@ -151,7 +107,8 @@ export default {
   data () {
     return {
       id: '',
-      logueado: true,
+      rol: 0,
+      hospedador: {},
       lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
       baseuHospedador: '',
@@ -160,6 +117,7 @@ export default {
       ratingModel: 4,
       rating: 4,
       ver: false,
+      allhospedajes: [],
       hospedajes: []
     }
   },
@@ -169,31 +127,35 @@ export default {
   },
   methods: {
     getUser () {
-      if (this.$route.params.id) {
-        this.id = this.$route.params.id
-        this.logueado = false
-        this.$api.get('user_by_id/' + this.id).then(res => {
-          if (res) {
-            this.user = res
-            console.log(this.user)
+      this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.rol = res.roles[0]
+          if (this.rol === 4) {
+            this.hospedador = res
             this.ciudadUser()
             this.getHospedajes()
-          }
-        })
-      } else {
-        this.$api.get('user_logueado').then(res => {
-          if (res) {
-            this.logueado = true
+          } else if (this.rol === 2) {
             this.user = res
-            console.log(this.user)
-            this.ciudadUser()
-            this.getHospedajes()
+            if (this.$route.params.id) {
+              this.id = this.$route.params.id
+              this.getHospedador()
+            }
           }
-        })
-      }
+        }
+      })
+    },
+    getHospedador () {
+      this.$api.get('user_by_id/' + this.id).then(res => {
+        if (res) {
+          this.hospedador = res
+          console.log(this.user)
+          this.ciudadUser()
+          this.getHospedajes()
+        }
+      })
     },
     ciudadUser () {
-      this.$api.get('ciudad_by_id/' + this.user.my_space.ciudad_id).then(res => {
+      this.$api.get('ciudad_by_id/' + this.hospedador.my_space.ciudad_id).then(res => {
         if (res) {
           this.cityUser = res
           console.log(this.cityUser)
@@ -201,13 +163,22 @@ export default {
       })
     },
     getHospedajes () {
-      this.$api.get('hospedaje_by_hospedador/' + this.user._id).then(res => {
+      this.$api.get('hospedaje_by_hospedador/' + this.hospedador._id).then(res => {
         if (res) {
-          this.hospedajes = res
+          this.allhospedajes = res
+          this.hospedajes = this.allhospedajes.slice(0, 3)
           this.baseuHospedador = env.apiUrl + 'hospedajes_img/'
-          console.log(this.hospedajes)
+          console.log(this.allhospedajes)
         }
       })
+    },
+    verMas () {
+      this.ver = !this.ver
+      if (this.ver) {
+        this.hospedajes = this.allhospedajes
+      } else {
+        this.hospedajes = this.allhospedajes.slice(0, 3)
+      }
     }
   }
 }

@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="row items-center">
-            <q-btn class="col q-pa-sm" color="primary" label="Editar alojamiento" @click="$router.push('/edit_space/' + hospedaje._id)" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Solicitar alojamiento'" @click="rol === 4 ? $router.push('/edit_space/' + hospedaje._id) : ''" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
             <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
           </div>
         </div>
@@ -61,6 +61,8 @@ export default {
   data () {
     return {
       slide: 0,
+      rol: 0,
+      user: {},
       id: '',
       baseu: '',
       hospedaje: {}
@@ -68,8 +70,17 @@ export default {
   },
   mounted () {
     this.getHospedaje()
+    this.getUser()
   },
   methods: {
+    getUser () {
+      this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.rol = res.roles[0]
+          this.user = res
+        }
+      })
+    },
     getHospedaje () {
       if (this.$route.params.id) {
         this.id = this.$route.params.id
