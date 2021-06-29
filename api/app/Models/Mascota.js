@@ -13,10 +13,7 @@ class Mascota extends Model {
       race: "required|string",
       type: "required|string",
       size: "required|string",
-      age: "required|number",
-      // vaccines: "required|string",
-      // diseases: "required|string",
-      description: "required|string"
+      age: "required|number"
     }
     return rules
   }

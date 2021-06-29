@@ -11,11 +11,12 @@
             <div class="text-negative text-h7" v-if="!terms && appear"> Debe Aceptar los terminos </div>
           </div>
           <div class="row justify-center">
-            <q-avatar size="200px">
-              <img :src="perfilFile ? imgPerfil : 'noimg.png'" style="width: 150%">
-                <q-file borderless v-model="perfilFile" class="absolute-center button-subir" @input="changeProfile()" accept=".jpg, image/*" style="z-index:1">
-                  <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
+            <q-avatar size="200px" class="bg-grey row justify-center">
+              <q-img :src="perfilFile ? imgPerfil : ''" style="height: 100%">
+                <q-file borderless v-model="perfilFile" @input="changeProfile()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
+                  <q-icon name="photo_camera" class="absolute-center" size="50px" color="white" />
                 </q-file>
+              </q-img>
             </q-avatar>
           </div>
           <div class="text-center text-h5 text-grey-8">¿Eres fanatico de las mascotas?</div>
@@ -60,50 +61,28 @@
           <div class="text-center text-h5 text-grey-8">Información de despacho</div>
          <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
          <div class="q-mx-xl">
-           <div>
-             <div>Pais</div>
-             <q-select filled dense color="black" v-model="country" :options="countries" label="Escoja un pais" map-options
-              error-message="requerido" :error="$v.country.$error" @blur="$v.country.$touch()" @input="getCitiesById(country._id)"
-              option-label="name" option-value="_id" >
+           <div class="q-mb-md">
+              <div class="text-caption">País</div>
+              <q-select outlined dense filled placeholder="Escoja un pais" v-model="country" :options="countries" @input="cities = country.ciudades, city = null" option-label="name" map-options
+              error-message="Este campo es requerido" :error="$v.country.$error" @blur="$v.country.$touch()">
                 <template v-slot:no-option>
                   <q-item>
                     <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
                   </q-item>
                 </template>
-                <template v-slot:option="scope">
-                  <q-item
-                    v-bind="scope.itemProps"
-                    v-on="scope.itemEvents"
-                  >
-                    <q-item-section>
-                      <q-item-label v-html="scope.opt.name" />
-                    </q-item-section>
-                  </q-item>
-                </template>
-            </q-select>
-           </div>
-           <div>
-             <div>Ciudad</div>
-             <q-select filled dense color="black" v-model="city" :options="cities" label="Escoja una ciudad" map-options
-              error-message="requerido" :error="$v.city.$error" @blur="$v.city.$touch()"
-              option-label="name" option-value="_id">
+              </q-select>
+            </div>
+            <div class="q-mb-md">
+              <div class="text-caption">Ciudad</div>
+              <q-select outlined dense filled placeholder="Escoja una ciudad" v-model="city" :options="cities" option-label="name" map-options
+              error-message="Este campo es requerido" :error="$v.city.$error" @blur="$v.city.$touch()">
                 <template v-slot:no-option>
                   <q-item>
                     <q-item-section class="text-grey text-italic">Selecciona un país</q-item-section>
                   </q-item>
                 </template>
-                <template v-slot:option="scope">
-                  <q-item
-                    v-bind="scope.itemProps"
-                    v-on="scope.itemEvents"
-                  >
-                    <q-item-section>
-                      <q-item-label v-html="scope.opt.name" />
-                    </q-item-section>
-                  </q-item>
-                </template>
-            </q-select>
-           </div>
+              </q-select>
+            </div>
            <div>
              <div>Dirección</div>
              <q-input type="tel" filled v-model="formTwo.address"  dense placeholder="Ingrese su dirección" error-message="Requerido" :error="$v.formTwo.address.$error" @blur="$v.formTwo.address.$touch()"/>
@@ -381,16 +360,7 @@ export default {
       await this.$api.get('pais').then(res => {
         if (res) {
           this.countries = res
-          console.log('countries :>> ', this.countries)
-        }
-      })
-    },
-    async getCitiesById (id) {
-      console.log('id :>> ', id)
-      await this.$api.get('cityByCountry/' + id).then(res => {
-        if (res) {
-          this.cities = res
-          console.log('cities :>> ', this.cities)
+          console.log(this.countries)
         }
       })
     },
