@@ -7,7 +7,7 @@
       <div class="col-10 text-white text-subtitle1 text-center">{{hospedaje.name}}</div>
     </q-header>
 
-      <div>
+      <div class="q-mt-xl q-pt-lg">
         <q-carousel size="sm" v-model="slide" style="height: 200px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px" transition-prev="jump-right" transition-next="jump-left" swipeable animated prev-icon="arrow_left" next-icon="arrow_right" navigation arrows>
           <q-carousel-slide v-for="(img, index) in hospedaje.images" :key="index" :name="index" :img-src="baseu + img.src"/>
         </q-carousel>
@@ -48,7 +48,7 @@
             </div>
           </div>
 
-          <div v-if="rol !== 4">
+          <div v-if="rol === 2">
             <div class="q-my-md">
               <div class="text-overline">Cuando te vas a alojar</div>
               <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
@@ -196,7 +196,7 @@ export default {
           if (res) {
             this.hospedaje = res
             this.baseu = env.apiUrl + 'hospedajes_img/'
-            console.log(this.hospedaje)
+            console.log('hospedaje', this.hospedaje)
           }
         })
       }
