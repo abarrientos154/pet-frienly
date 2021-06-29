@@ -217,26 +217,15 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
               <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu espacio?</div>
               <div class="text-subtitle1 text-grey text-italic">Escoger perro, gato o ambos</div>
-              <q-select dense filled option-value="name" option-label="name" v-model="mascotas2" :options="mascotas" @input="formEspacio.pet_type = mascotas2" placeholder="tipos de mascotas" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.pet_type.$error" @blur="$v.formEspacio.pet_type.$touch()">
-                <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
-                  <q-item v-bind="itemProps" v-on="itemEvents">
-                    <q-item-section>
-                      <q-item-label v-html="opt.name" ></q-item-label>
-                    </q-item-section>
-                    <q-item-section side>
-                      <q-checkbox :value="selected" @input="toggleOption(opt)" />
-                    </q-item-section>
-                  </q-item>
-                </template>
-              </q-select>
+              <q-select dense filled option-value="name" option-label="name" v-model="formEspacio.pet_type" :options="mascotas" placeholder="tipos de mascotas" emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.pet_type.$error" @blur="$v.formEspacio.pet_type.$touch()"/>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
-              <div class="text-subtitle1 text-bold">Tamaño de las mascotas que recives</div>
+              <div class="text-subtitle1 text-bold">Tamaño de las mascotas que recibes</div>
               <q-select dense filled placeholder="Tamaños" v-model="formEspacio.petSize" :options="['Pequeño', 'Mediano', 'Grande']" error-message="Este campo es requerido" :error="$v.formEspacio.petSize.$error" @blur="$v.formEspacio.petSize.$touch()"/>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
               <div class="text-subtitle1 text-bold">Selecciona los servicios que incluye</div>
-              <q-select dense filled option-value="_id" option-label="name" v-model="servicios2" :options="servicios" @input="formEspacio.services = servicios2" placeholder="Servicios" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.services.$error" @blur="$v.formEspacio.services.$touch()">
+              <q-select dense filled option-value="name" option-label="name" v-model="servicios2" :options="servicios" @input="formEspacio.services = servicios2" placeholder="Servicios" multiple emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.services.$error" @blur="$v.formEspacio.services.$touch()">
                 <template v-slot:option="{ itemProps, itemEvents, opt, selected, toggleOption }">
                   <q-item v-bind="itemProps" v-on="itemEvents">
                     <q-item-section>
@@ -248,6 +237,14 @@
                   </q-item>
                 </template>
               </q-select>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="text-subtitle1 text-bold">Donde esta ubicado</div>
+              <q-select dense filled placeholder="Tamaños" option-value="name" option-label="name" v-model="formEspacio.location" :options="location" emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.location.$error" @blur="$v.formEspacio.location.$touch()"/>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="text-subtitle1 text-bold">Estado del espacio</div>
+              <q-select dense filled placeholder="Tamaños" option-value="name" option-label="name" v-model="formEspacio.state" :options="state" emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.state.$error" @blur="$v.formEspacio.state.$touch()"/>
             </div>
           </div>
 
@@ -280,10 +277,10 @@
               </div>
             </div>
             <div class="row items-center">
-              <div class="text-subtitle1 text-bold col">Espacio compartido</div>
+              <div class="text-subtitle1 text-bold col">¿El espacio es Solo para hopedadores?</div>
               <div class=" col column">
                 <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Seleccione el tipo de espacio</div>
-                <q-select dense filled v-model="type" :options="['Si', 'No']" @input="type === 'Si' ? formEspacio.shared = true : formEspacio.shared = false"  error-message="Este campo es requerido" :error="$v.formEspacio.shared.$error" @blur="$v.formEspacio.shared.$touch()"/>
+                <q-select dense filled option-value="enable" option-label="name" v-model="formEspacio.only_pets" :options="only_pets" emit-value map-options error-message="Este campo es requerido" :error="$v.formEspacio.only_pets.$error" @blur="$v.formEspacio.only_pets.$touch()"/>
               </div>
             </div>
           </div>
@@ -321,11 +318,12 @@ export default {
       img: null,
       espacioImg: [],
       mostrarImg: [],
-      servicios: [],
+      servicios: [{ name: 'Paseo de mascota' }],
       servicios2: [],
-      mascotas: [{ name: 'Perros' }, { name: 'Gatos' }],
-      mascotas2: [],
-      type: '',
+      mascotas: [{ name: 'Perros' }, { name: 'Gatos' }, { name: 'Ambos' }],
+      location: [{ name: 'Espacio compartido por tipo', description: 'Tu mascota se aloja en un espacio compartido con otras mascotas de su mismo tipo' }, { name: 'Espacio compartido', description: 'Tu mascota se aloja en un espacio compartido con otros perros y gatos' }, { name: 'Espacio privado', description: 'Espacio habilitado para una sola mascota' }],
+      state: [{ name: 'Disponible' }, { name: 'Ocupado' }, { name: 'Mantención' }],
+      only_pets: [{ name: 'Si', enable: true, description: 'Solo esta habilitado para hospedaje' }, { name: 'No', enable: false, description: 'Vivo yo o alguien mas en el espacio' }],
       terminos: false,
       aparecer: false,
       ver: false
@@ -359,7 +357,9 @@ export default {
       price: { required },
       guests: { required },
       dimensions: { required },
-      shared: { required }
+      only_pets: { required },
+      location: { required },
+      state: { required }
     },
     espacioImg: { required, minLength: minLength(1) },
     RLImg: { required },
@@ -369,19 +369,10 @@ export default {
     repeatPassword: { sameAsPassword: sameAs('password') }
   },
   mounted () {
-    this.getServicios()
     this.getPaises()
   },
   methods: {
     ...mapMutations('generals', ['login']),
-    getServicios () {
-      this.$api.get('servicios').then(res => {
-        if (res) {
-          this.servicios = res
-          console.log(this.servicios)
-        }
-      })
-    },
     getPaises () {
       this.$api.get('pais').then(res => {
         if (res) {
