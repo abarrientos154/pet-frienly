@@ -45,8 +45,34 @@
               <div class="text-subtitle3">Paseo</div>
             </div>
           </div>
+
+          <div v-if="rol !== 4">
+            <div class="q-my-md">
+              <div class="text-overline">Cuando te vas a alojar</div>
+              <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
+              <div class="row justify-around">
+                <q-input type="date" class="col-5" filled v-model="form.fecha_ingreso" dense hint="Fecha de ingreso"
+                error-message="Requerido" :error="$v.form.fecha_ingreso.$error" @blur="$v.form.fecha_ingreso.$touch()"/>
+                <q-input type="date" class="col-5" filled v-model="form.fecha_salida" dense hint="Fecha de salida"
+                error-message="Requerido" :error="$v.form.fecha_salida.$error" @blur="$v.form.fecha_salida.$touch()"/>
+              </div>
+            </div>
+            <div class="q-my-md">
+              <div class="text-overline">Selecciona tu(s) mascota(s)</div>
+              <div class="text-caption">Recuerda que solo podras agregar mascotas que cumplan los requisitos</div>
+              <q-select dense filled v-model="form.mascotas" :options="mascotas" option-label="name" map-options
+              error-message="Este campo es requerido" :error="$v.form.mascotas.$error" @blur="$v.form.mascotas.$touch()">
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey text-italic">No hay mascotas</q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+            </div>
+          </div>
+
           <div class="row items-center">
-            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Solicitar alojamiento'" @click="rol === 4 ? $router.push('/edit_space/' + hospedaje._id) : $router.push('/pago_hospedaje/' + hospedaje._id)" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/edit_space/' + hospedaje._id) : $router.push('/pago_hospedaje/' + hospedaje._id)" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
             <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
           </div>
         </div>
@@ -57,6 +83,7 @@
 
 <script>
 import env from '../../env'
+import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
@@ -65,7 +92,16 @@ export default {
       user: {},
       id: '',
       baseu: '',
-      hospedaje: {}
+      hospedaje: {},
+      form: {},
+      mascotas: []
+    }
+  },
+  validations: {
+    form: {
+      fecha_ingreso: { required },
+      fecha_salida: { required },
+      mascotas: { required }
     }
   },
   mounted () {
