@@ -372,35 +372,33 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog persistent v-model="compraExitosa">
-      <q-card class="q-py-xl" style="width: 100%">
-        <div style="width:100%">
-          <div class="q-mb-md row justify-center">
-            <img src="noimg.png" style="width:100%" />
+    <q-dialog persistent maximized v-model="compraExitosa">
+      <q-card style="width: 100%; height: 100%">
+        <q-img src="noimg.png" style="width:100%; height: 100%">
+          <div class="absolute-bottom q-py-sm full-width">
+            <div class="text-h4 text-white text-bold q-px-sm">Tu pedido ha sido comprado con éxito</div>
+            <div class="text-subtitle1 text-white q-px-sm">Puedes ver tu pedido en tu panel de pedidos</div>
+            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
+              <q-btn no-caps color="primary" label="Volver a tienda" class="q-py-xs" style="width: 60%;"
+                @click="compraExitosa = false"/>
+            </div>
           </div>
-          <div class="text-center text-h6 text-bold">Compra exitosa</div>
-          <div class="text-center text-subtitle1 q-mx-md text-grey-8">Tu compra fue exitosa, recibirás un correo electrónico con los detalles de tu compra</div>
-          <div class="row items-center justify-center q-mt-lg" style="width:100%">
-            <q-btn no-caps label="Ir a Nova Telde" color="primary" size="lg" style="border-radius: 25px; width: 80%"
-            @click="compraExitosa = false" />
-          </div>
-        </div>
+        </q-img>
       </q-card>
     </q-dialog>
 
-    <q-dialog persistent v-model="compraFallo">
-      <q-card class="q-py-xl" style="width: 100%">
-        <div style="width:100%">
-          <div class="q-mb-md row justify-center">
-            <img src="noimg.png" style="width:100%" />
+    <q-dialog persistent maximized v-model="compraFallo">
+      <q-card style="width: 100%; height: 100%">
+        <q-img src="noimg.png" style="width:100%; height: 100%">
+          <div class="absolute-bottom q-py-sm full-width">
+            <div class="text-h4 text-white text-bold q-px-sm">Tu compra ha fallado</div>
+            <div class="text-subtitle1 text-white q-px-sm">Te estamos redireccionando a la tienda</div>
+            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
+              <q-btn no-caps color="primary" label="Volver a tienda" class="q-py-xs" style="width: 60%;"
+                @click="compraFallo = false"/>
+            </div>
           </div>
-          <div class="text-center text-h6 text-bold">Tuvimos problemas con tu pago</div>
-          <div class="text-center text-subtitle1 q-mx-md text-grey-8">Te estamos redireccionando al carro de compra para que verifiques tus datos de transacción</div>
-          <div class="row items-center justify-center q-mt-lg" style="width:100%">
-            <q-btn no-caps label="Aceptar" color="primary" size="lg" style="border-radius: 25px; width: 80%"
-            @click="compraFallo = false" />
-          </div>
-        </div>
+        </q-img>
       </q-card>
     </q-dialog>
   </div>
