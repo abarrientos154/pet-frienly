@@ -104,28 +104,30 @@
         style="height: 330px; width:100%">
         <div class="row no-wrap q-gutter-md" style="width: 100%">
           <q-card v-for="(item, index) in ultimos" :key="index" v-ripple clickable style="width: 200px; height: 300px; border-radius: 20px">
-            <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px">
-              <div class="column justify-between bg-transparent" style="width: 100%; height:100%">
-                <div class="absolute-top row justify-between items-center q-mt-sm" style="width:100%">
-                  <div class="col-8">
-                    <div v-if="!item.oferta" class="bg-primary text-subtitle2 q-px-sm ellipsis"
-                      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                      ${{item.price}}
-                    </div>
-                    <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 q-px-sm ellipsis"
-                      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                      ${{item.oferta_price}}
-                    </div>
+            <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px"
+            @click="accionProducto(item)">
+            </q-img>
+            <div>
+              <div class="absolute absolute-top row justify-between items-center q-mt-sm" style="width:100%">
+                <div class="col-8">
+                  <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
+                    style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
+                    ${{item.price}}
                   </div>
-                  <div class="col-3">
-                    <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
+                  <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
+                    style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
+                    ${{item.oferta_price}}
                   </div>
                 </div>
-                <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
-                  <div class="text-subtitle2 text-center ellipsis q-px-xs">{{item.name}}</div>
+                <div class="col-3">
+                  <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
+                  <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="addCarrito(item)" />
                 </div>
               </div>
-            </q-img>
+              <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
+                <div class="text-subtitle2 text-center text-white ellipsis q-px-xs">{{item.name}}</div>
+              </div>
+            </div>
           </q-card>
         </div>
       </q-scroll-area>
@@ -146,28 +148,30 @@
         <div class="row justify-around q-mt-xs">
           <div class="col-6 row justify-center" v-for="(item, index) in productosFilter" :key="index">
             <q-card v-ripple clickable style="width: 95%; height: 300px; border-radius: 20px">
-              <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px">
-                <div class="column justify-between bg-transparent" style="width: 100%; height:100%">
-                  <div class="absolute-top row justify-between items-center q-mt-sm" style="width:100%">
-                    <div class="col-8">
-                      <div v-if="!item.oferta" class="bg-primary text-subtitle2 q-px-sm ellipsis"
-                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                        ${{item.price}}
-                      </div>
-                      <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 q-px-sm ellipsis"
-                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                        ${{item.oferta_price}}
-                      </div>
+              <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px"
+              @click="accionProducto(item)">
+              </q-img>
+              <div>
+                <div class="absolute absolute-top row justify-between items-center q-mt-sm" style="width:100%">
+                  <div class="col-8">
+                    <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
+                      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
+                      ${{item.price}}
                     </div>
-                    <div class="col-3">
-                      <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
+                    <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
+                      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
+                      ${{item.oferta_price}}
                     </div>
                   </div>
-                  <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
-                    <div class="text-subtitle2 text-center ellipsis q-px-xs">{{item.name}}</div>
+                  <div class="col-3">
+                    <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
+                    <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="addCarrito(item)" />
                   </div>
                 </div>
-              </q-img>
+                <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
+                  <div class="text-subtitle2 text-center text-white ellipsis q-px-xs">{{item.name}}</div>
+                </div>
+              </div>
             </q-card>
           </div>
         </div>
@@ -180,28 +184,30 @@
       <div class="row justify-around">
           <div class="col-6 row justify-center" v-for="(item, index) in productos" :key="index">
             <q-card v-ripple clickable style="width: 95%; height: 300px; border-radius: 20px">
-              <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px">
-                <div class="column justify-between bg-transparent" style="width: 100%; height:100%">
-                  <div class="absolute-top row justify-between items-center q-mt-sm" style="width:100%">
-                    <div class="col-8">
-                      <div v-if="!item.oferta" class="bg-primary text-subtitle2 q-px-sm ellipsis"
-                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                        ${{item.price}}
-                      </div>
-                      <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 q-px-sm ellipsis"
-                        style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                        ${{item.oferta_price}}
-                      </div>
+              <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px"
+              @click="accionProducto(item)">
+              </q-img>
+              <div>
+                <div class="absolute absolute-top row justify-between items-center q-mt-sm" style="width:100%">
+                  <div class="col-8">
+                    <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
+                      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
+                      ${{item.price}}
                     </div>
-                    <div class="col-3">
-                      <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
+                    <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
+                      style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
+                      ${{item.oferta_price}}
                     </div>
                   </div>
-                  <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
-                    <div class="text-subtitle2 text-center ellipsis q-px-xs">{{item.name}}</div>
+                  <div class="col-3">
+                    <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
+                    <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="addCarrito(item)" />
                   </div>
                 </div>
-              </q-img>
+                <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
+                  <div class="text-subtitle2 text-center text-white ellipsis q-px-xs">{{item.name}}</div>
+                </div>
+              </div>
             </q-card>
           </div>
         </div>
@@ -218,6 +224,10 @@
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
           color="primary" icon="add_business" label="Servicio" @click="$router.push('/registro_servicio')" />
       </q-fab>
+    </q-page-sticky>
+
+    <q-page-sticky v-if="miTienda === false" position="bottom-right" :offset="[18, 18]">
+      <q-btn fab icon="shopping_bag" color="primary" @click="verCarrito = true" />
     </q-page-sticky>
 
     <q-dialog v-model="verServicio">
@@ -247,6 +257,152 @@
         </div>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="verProducto" maximized persistent>
+      <q-card style="width:100%;">
+        <q-toolbar class="bg-primary row items-center" style="width:100%; height:60px">
+          <div class="col-1">
+            <q-btn flat round color="white" icon="arrow_back" @click="verProducto = false"/>
+          </div>
+          <div class="col-10 text-white text-subtitle1 text-center">{{producto.name}}</div>
+        </q-toolbar>
+
+        <q-scroll-area style="height: 80%; width: 100%;">
+          <div class="row q-py-lg">
+            <div class="col-4 q-px-sm column items-center">
+              <div class="q-pb-sm" v-for="(item, index) in producto.images" :key="index">
+                <img :src="baseuproductos + item" style="height: 100px; width: 100px; border-radius: 20px"
+                @click="imgProd = item" />
+              </div>
+            </div>
+
+            <div class="col-8 q-pr-md">
+              <div class="row justify-center">
+                <img :src="baseuproductos + imgProd" style="height: 340px; width: 100%; border-radius: 20px" />
+              </div>
+              <div class="q-py-md">
+                <div class="text-h6">{{producto.name}}</div>
+                <div class="text-subtitle1 text-grey-8">Disponible - {{producto.cantidad}} unidades</div>
+                <div class="text-primary text-h5 q-py-md">$ {{producto.price}}</div>
+                <div class="text-h6">Descripción</div>
+                <div class="text-subtitle1 text-grey-8">{{producto.descripcion}}</div>
+              </div>
+            </div>
+          </div>
+        </q-scroll-area>
+
+        <div class="row justify-center q-py-lg">
+          <q-btn v-if="miTienda" class="q-py-sm" no-caps color="primary" label="Editar producto" style="width:80%"
+          @click="$router.push('/editar_producto/' + producto._id)"/>
+          <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
+          @click="addCarrito(producto), verProducto = false"/>
+        </div>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog v-model="verCarrito" maximized persistent>
+      <q-card style="width: 100%">
+        <q-toolbar class="bg-primary row items-center" style="width:100%; height:60px">
+          <div class="col-1">
+            <q-btn flat round color="white" icon="arrow_back" @click="verCarrito = false"/>
+          </div>
+          <div class="col-10 text-white text-subtitle1 text-center">Carro de compra</div>
+        </q-toolbar>
+
+        <q-scroll-area style="height: 65%; width: 100%;">
+          <div class="q-px-md q-pt-xl">
+            <q-list class="q-gutter-md" v-if="carrito.length">
+              <div v-for="(producto, index) in carrito" :key="index">
+                <div class="row items-start justify-start q-ma-xs">
+                  <div class="col-3 q-mr-sm column justify-start items-start">
+                    <img
+                      :src="baseuproductos + producto.image"
+                      spinner-color="white"
+                      style="height: 100px; width: 100%; border-radius: 10px"/>
+                  </div>
+
+                  <div class="col-8 row items-between" style="height: 100px">
+                    <div class="col-12 row justify-between items-strat">
+                      <div class="row no-wrap q-pl-sm col-11">
+                        <div class="text-subtitle1 ellipsis">{{producto.name}} skfg dfgsd fgosdgf sfg sdfg seorg sdfg</div>
+                      </div>
+                      <div class="col-1">
+                        <q-btn flat round no-caps dense color="grey-6" icon="delete"
+                        @click="deleteProdCarrito(index)" />
+                      </div>
+                    </div>
+
+                    <div class="col-12 row justify-between items-end">
+                      <div class="q-ml-sm">
+                        <div class="text-h6 text-primary">${{!producto.oferta ? formatPrice(producto.price) : formatPrice(producto.oferta_price)}} </div>
+                      </div>
+                      <div class="row">
+                        <div>
+                          <q-btn size="12px" dense color="grey" icon="remove" @click="editCantidad(index, false)" />
+                        </div>
+                        <div class="text-primary text-h6 q-px-sm">{{producto.cantidad_compra}}</div>
+                        <div>
+                          <q-btn size="12px" dense color="primary" icon="add" @click="editCantidad(index, true)" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </q-list>
+            <div v-else class="text-center">Agrega productos al carro de compra</div>
+          </div>
+        </q-scroll-area>
+
+        <div class="q-pt-lg q-px-md">
+          <div class="row justify-between" style="width:100%">
+            <div class="text-subtitle1 text-grey-8">Cantidad de artículos</div>
+            <div class="text-subtitle1 text-primary">{{totalProductos}}</div>
+          </div>
+          <q-separator />
+          <div class="row justify-between q-my-lg" style="width:100%">
+            <div class="text-subtitle1 text-grey-8">Precio total</div>
+            <div class="text-h6 text-primary">${{formatPrice(totalCarrito)}}</div>
+          </div>
+        </div>
+
+        <div class="row justify-center q-pb-md" style="width:100%">
+          <q-btn :disable="carrito.length ? false : true" @click="verCarrito = false" no-caps label="Pagar" color="primary" class="q-py-sm" style="width: 80%;" />
+        </div>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog persistent v-model="compraExitosa">
+      <q-card class="q-py-xl" style="width: 100%">
+        <div style="width:100%">
+          <div class="q-mb-md row justify-center">
+            <img src="noimg.png" style="width:100%" />
+          </div>
+          <div class="text-center text-h6 text-bold">Compra exitosa</div>
+          <div class="text-center text-subtitle1 q-mx-md text-grey-8">Tu compra fue exitosa, recibirás un correo electrónico con los detalles de tu compra</div>
+          <div class="row items-center justify-center q-mt-lg" style="width:100%">
+            <q-btn no-caps label="Ir a Nova Telde" color="primary" size="lg" style="border-radius: 25px; width: 80%"
+            @click="compraExitosa = false" />
+          </div>
+        </div>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog persistent v-model="compraFallo">
+      <q-card class="q-py-xl" style="width: 100%">
+        <div style="width:100%">
+          <div class="q-mb-md row justify-center">
+            <img src="noimg.png" style="width:100%" />
+          </div>
+          <div class="text-center text-h6 text-bold">Tuvimos problemas con tu pago</div>
+          <div class="text-center text-subtitle1 q-mx-md text-grey-8">Te estamos redireccionando al carro de compra para que verifiques tus datos de transacción</div>
+          <div class="row items-center justify-center q-mt-lg" style="width:100%">
+            <q-btn no-caps label="Aceptar" color="primary" size="lg" style="border-radius: 25px; width: 80%"
+            @click="compraFallo = false" />
+          </div>
+        </div>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -259,13 +415,18 @@ export default {
     return {
       ver1: false,
       ver2: false,
-      miTienda: false,
+      miTienda: null,
       verServicio: false,
+      verProducto: false,
+      verCarrito: false,
+      compraExitosa: false,
+      compraFallo: false,
       id: '',
       filterSelec: '',
       baseuTienda: '',
       baseuproductos: '',
       baseuServicios: '',
+      imgProd: '',
       text: '',
       rating: 4,
       user: {},
@@ -273,12 +434,38 @@ export default {
         calificacion: 0
       },
       servicio: {},
+      producto: {},
+      carrito: [],
       allProductos: [],
       ultimos: [],
       productos: [],
       allFilter: [],
       productosFilter: [],
       categorias: []
+    }
+  },
+  computed: {
+    totalCarrito () {
+      let total = 0
+      if (this.carrito.length > 0) {
+        for (const i of this.carrito) {
+          if (!i.oferta) {
+            total = total + (i.price * i.cantidad_compra)
+          } else {
+            total = total + (i.oferta_price * i.cantidad_compra)
+          }
+        }
+      }
+      return total
+    },
+    totalProductos () {
+      let total = 0
+      if (this.carrito.length > 0) {
+        for (const i of this.carrito) {
+          total = total + i.cantidad_compra
+        }
+      }
+      return total
     }
   },
   mounted () {
@@ -341,6 +528,11 @@ export default {
         }
       })
     },
+    accionProducto (data) {
+      this.producto = data
+      this.imgProd = data.images[0]
+      this.verProducto = true
+    },
     filtrar (id) {
       this.filterSelec = id
       this.allFilter = this.allProductos.filter(v => v.categoria_id === id)
@@ -362,6 +554,64 @@ export default {
         }
         this.ver2 = !this.ver2
       }
+    },
+    formatPrice (value) {
+      const val = (value / 1).toFixed(0).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    },
+    addCarrito (val) {
+      if (!this.carrito.find(v => v._id === val._id)) {
+        var prod = {
+          _id: val._id,
+          name: val.name,
+          proveedor_id: val.proveedor_id,
+          price: val.price,
+          oferta: val.oferta,
+          cantidad: val.cantidad - 1,
+          cantidad_compra: 1,
+          image: val.images[0]
+        }
+        if (val.oferta) {
+          prod.oferta_price = val.oferta_price
+        }
+        this.carrito.push(prod)
+        prod = {}
+        this.$q.notify({
+          message: 'Añadido al carro de compra',
+          color: 'positive',
+          positive: 'positive'
+        })
+      } else {
+        this.$q.dialog({
+          title: '¡Atención!',
+          message: 'Ya añadiste este producto al carro de compra.'
+        }).onOk(() => {
+
+        })
+      }
+    },
+    editCantidad (index, val) {
+      if (val) {
+        if (this.carrito[index].cantidad > 0) {
+          this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra + 1
+          this.carrito[index].cantidad = this.carrito[index].cantidad - 1
+        } else {
+          this.$q.dialog({
+            title: '¡Atención!',
+            message: 'Este producto se agotó de la tienda.'
+          }).onOk(() => {
+
+          })
+        }
+      } else {
+        if (this.carrito[index].cantidad_compra > 1) {
+          this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra - 1
+          this.carrito[index].cantidad = this.carrito[index].cantidad + 1
+        }
+      }
+    },
+    deleteProdCarrito (index) {
+      this.carrito.splice(index, 1)
     }
   }
 }

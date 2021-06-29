@@ -13,8 +13,9 @@
       <div class="text-caption text-grey-10 text-italic">Puedes cargar hasta 3 fotos</div>
       <div class="row">
         <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-grey q-my-xs q-mr-xs">
-          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" @input="!edit ? producto_img() : add_img()" accept=".jpg, image/*" style="font-size: 0px; width: 100%; height: 100%;"/>
-          <q-icon name="backup" class="absolute-center" size="50px" color="white" />
+          <q-file  borderless :disable="imgs.length < 3 ? false : true" v-model="img" @input="!edit ? producto_img() : add_img()" accept=".jpg, image/*" style="font-size: 0px; width: 100%; height: 100%;">
+            <q-icon name="backup" class="absolute-center" size="50px" color="white" />
+          </q-file>
         </q-avatar>
         <q-scroll-area horizontal class="col" style="height: 110px;">
           <div class="row no-wrap" style="width: 100%;">
