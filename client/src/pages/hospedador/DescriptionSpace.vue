@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="row items-center">
-            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Solicitar alojamiento'" @click="rol === 4 ? $router.push('/edit_space/' + hospedaje._id) : ''" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Solicitar alojamiento'" @click="rol === 4 ? $router.push('/edit_space/' + hospedaje._id) : $router.push('/pago_hospedaje/' + hospedaje._id)" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
             <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
           </div>
         </div>

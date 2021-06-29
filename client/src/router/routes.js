@@ -53,6 +53,8 @@ const routes = [
 
   { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
   { path: '/edit_space/:id', component: () => import('pages/hospedador/EditSpace.vue') },
+
+  { path: '/pago_hospedaje/:id', component: () => import('pages/cliente/PagoHospedaje.vue') },
   {
     path: '/',
     redirect: '/login'
