@@ -3,13 +3,15 @@
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
+          <q-btn flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
           <div class="q-mb-lg text-center text-h5 text-grey-6">Representante Legal</div>
 
           <div class="column items-center q-mb-lg">
-            <q-avatar rounded style="height: 200px; width: 200px; border-radius: 25px;" class="bg-secondary">
+            <q-avatar rounded style="height: 200px; width: 200px; border-radius: 25px;" class="bg-grey">
               <q-img style="height: 100%;" :src="representImg != '' ? representImg : ''">
-                <q-file  borderless v-model="img" class="button-camera" @input="represent_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
-                <q-icon name="image" class="absolute-center" size="75px" color="white" />
+                <q-file  borderless v-model="img" class="button-camera" @input="represent_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                  <q-icon name="image" class="absolute-center" size="75px" color="white" />
+                </q-file>
               </q-img>
             </q-avatar>
             <div class="text-negative" v-if="$v.RLImg.$error"> La imagen es Requerida </div>
@@ -17,29 +19,29 @@
 
           <div class="q-mb-xl">
             <div class="row">
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Nombre</div>
                 <q-input filled v-model="form.name"  dense placeholder="Nombre del representante legal" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Apellidos</div>
                 <q-input filled v-model="form.last_name"  dense placeholder="Coloca ambos apellidos"  error-message="Este campo es requerido" :error="$v.form.last_name.$error" @blur="$v.form.last_name.$touch()"/>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Fecha de nacimiento</div>
                 <q-input filled type="date" v-model="form.birth" dense error-message="Este campo es requerido" :error="$v.form.birth.$error" @blur="$v.form.birth.$touch()"/>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Telefono de contacto</div>
                 <q-input filled v-model="form.phone"  dense placeholder="+5695331583" error-message="Este campo es requerido" :error="$v.form.phone.$error" @blur="$v.form.phone.$touch()"/>
               </div>
             </div>
-            <div class="q-mb-md">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
               <div class="text-caption">Correo de contacto</div>
               <q-input filled v-model="form.email"  dense placeholder="micorreo@petfriendly.com" error-message="Este campo es requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
             </div>
             <div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Contraseña</div>
                 <q-input :type="ver ? 'text' : 'password'" v-model="password" placeholder="Contraseña" outlined dense filled error-message="Ingrese una contraseña válida, mínimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
                   <template v-slot:append>
@@ -47,7 +49,7 @@
                   </template>
                 </q-input>
               </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Repite Contraseña</div>
                 <q-input :type="ver ? 'text' : 'password'" v-model="repeatPassword" placeholder="Repita su Contraseña" outlined dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()"/>
               </div>
@@ -61,11 +63,11 @@
                 </q-avatar>
               </div>
               <div class="row">
-                <q-avatar class="q-mr-sm bg-secondary col" rounded style="height: 50px;">
+                <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
                   <q-img style="height: 100%;" :src="identificacionImg.length ? identificacionImg[0] : ''"/>
                   <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
                 </q-avatar>
-                <q-avatar class="bg-secondary col" rounded style="height: 50px;">
+                <q-avatar class="bg-grey col" rounded style="height: 50px;">
                   <q-img style="height: 100%;" :src="identificacionImg.length > 1 ? identificacionImg[1] : ''"/>
                   <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
                 </q-avatar>
@@ -78,39 +80,41 @@
               <q-checkbox v-model="terminos" size="xs" label="Acepto Terminos y condiciones de uso" />
               <div class="text-negative" v-if="!terminos && aparecer"> Debe Aceptar los terminos </div>
             </div>
-            <q-btn class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%; border-radius: 4px" @click="siguiente()" no-caps/>
+            <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="siguiente()" no-caps/>
           </div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
+          <q-btn flat round color="primary" icon="arrow_back" @click="slide = 1"/>
           <div class="q-mb-lg text-center text-h5 text-grey-6">Datos de espacios</div>
 
           <div class="column items-center q-mb-lg">
-            <q-avatar rounded style="height: 150px; width: 200px;" class="bg-secondary q-mb-sm">
+            <q-avatar rounded style="height: 150px; width: 200px;" class="bg-grey q-mb-sm">
               <q-img style="height: 100%;" :src="perfilImg != '' ? perfilImg : ''">
-                <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
-                <q-icon name="backup" class="absolute-center" size="50px" color="white" />
+                <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                  <q-icon name="backup" class="absolute-center" size="50px" color="white" />
+                </q-file>
               </q-img>
             </q-avatar>
             <div :class="$v.PImg.$error ? 'text-negative' : ''">{{$v.PImg.$error ? 'La imagen es Requerida' : 'Carga tu foto de perfil'}}</div>
           </div>
 
           <div class="q-mb-lg">
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Nombre de espacios</div>
               <q-input  v-model="formMySpace.name" placeholder="Nombré comercial" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$error" @blur="$v.formMySpace.name.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Correo de contacto tienda</div>
               <q-input  v-model="formMySpace.email" placeholder="micorreo@petfriendly.com" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.email.$error" @blur="$v.formMySpace.email.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Telefono de contacto tienda</div>
               <q-input  v-model="formMySpace.phone" placeholder="+5695331583" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$phone" @blur="$v.formMySpace.phone.$touch()"/>
             </div>
-            <div>
+            <div class="q-mt-md">
               <div class="text-caption">Descripción</div>
               <q-input filled outlined placeholder="Mi espacio es..." v-model="formMySpace.description" type="textarea" error-message="Este campo es requerido" :error="$v.formMySpace.description.$error" @blur="$v.formMySpace.description.$touch()"/>
             </div>
@@ -124,6 +128,7 @@
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div class="q-pa-lg">
+          <q-btn flat round color="primary" icon="arrow_back" @click="slide = 2"/>
           <div class="q-mb-lg text-center text-h5 text-grey-6">Datos de espacios</div>
 
           <q-avatar rounded style="height: 250px; width: 100%;" class="bg-secondary q-mb-sm">
@@ -133,15 +138,15 @@
           </q-avatar>
 
           <div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">País</div>
               <q-select outlined dense filled placeholder="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais._id, ciudades = selectPais.ciudades, selectCiudad = null" option-label="name" map-options error-message="Este campo es requerido" :error="$v.selectPais.$error" @blur="$v.selectPais.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Ciudad</div>
               <q-select outlined dense filled placeholder="Seleccione la región a la que pertenece" v-model="selectCiudad" :options="ciudades" @input="formMySpace.ciudad_id = selectCiudad._id" option-label="name" map-options error-message="Este campo es requerido" :error="$v.selectCiudad.$error" @blur="$v.selectCiudad.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Dirección</div>
               <q-input  v-model="formMySpace.direction" placeholder="Escriba la direccion fisica del espacio" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.direction.$error" @blur="$v.formMySpace.direction.$touch()"/>
             </div>
@@ -194,7 +199,7 @@
             <div class="text-subtitle1">Carga las fotos de tu espacio de descanso</div>
             <div :class="$v.espacioImg.$error ? 'text-subtitle1 text-italic text-negative' : 'text-subtitle1 text-grey text-italic'">{{$v.espacioImg.$error ? 'Debes cargar minimo una foto' : 'Puedes cargar hasta 3 fotos'}}</div>
             <div class="row">
-              <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-secondary q-my-xs q-mr-xs">
+              <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-grey q-my-xs q-mr-xs">
                 <q-file  borderless :disable="espacioImg.length < 3 ? false : true" v-model="img" class="button-camera" @input="espacio_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
                 <q-icon name="backup" class="absolute-center" size="50px" color="white" />
               </q-avatar>

@@ -1,7 +1,10 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="bg-primary row justify-between items-center full-width" style="height: 60px">
-      <div class="col text-white text-h6 text-center">Editar espacio</div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+      <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+      </div>
+      <div class="col-10 text-white text-subtitle1 text-center">Editar espacio</div>
     </q-header>
     <q-page-container>
       <div class="q-pa-lg">
