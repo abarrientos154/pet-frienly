@@ -480,7 +480,7 @@ export default {
       verServicio: false,
       verProducto: false,
       verCarrito: false,
-      comprarCarrito: false,
+      comprarCarrito: true,
       compraExitosa: false,
       compraFallo: false,
       id: '',
@@ -551,13 +551,19 @@ export default {
   },
   methods: {
     async getUser () {
-      await this.$api.get('user_logueado').then(v => {
-        if (v) {
-          this.user = v
+      await this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.user = res
           if (this.user.roles[0] === 3) {
             this.id = this.user._id
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
+          } else {
+            this.$api.get('cityByCountry/' + this.user.country_id).then(v => {
+              if (v) {
+                this.ciudades = v
+              }
+            })
           }
         }
       })

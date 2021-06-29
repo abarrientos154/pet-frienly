@@ -1,6 +1,7 @@
 'use strict'
 
 const Ciudad = use("App/Models/Ciudad")
+const Pais = use("App/Models/Pais")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
@@ -23,8 +24,8 @@ class CiudadController {
     response.send(ciudad)
   }
   async cityByCountry({ params, response }) {
-    const id = new ObjectId(params.id)
-    const cities = (await Ciudad.where({pais_id: id}).fetch()).toJSON()
+    const pais = await Pais.find(params.id)
+    const cities = (await Ciudad.where({pais_id: pais.id}).fetch()).toJSON()
     response.send(cities)
   }
 }
