@@ -59,6 +59,11 @@ export default {
           ruta: '/tiendas'
         },
         {
+          icon: 'description',
+          label: 'Descanso',
+          ruta: '/descanso'
+        },
+        {
           icon: 'pets',
           label: 'Mascotas',
           ruta: '/mascotas'
