@@ -51,23 +51,18 @@
             />
           </div>
           <div>
-              <div class="text-caption q-mb-sm">Imágenes de documento de identificación</div>
-              <div style="width: 50%;" class="q-mb-sm">
-                <q-avatar rounded style="width: 100%;" class="bg-primary">
-                  <q-file borderless :disable="identificacion.length < 2 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
-                    <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
-                  </q-file>
-                </q-avatar>
-              </div>
+              <div class="text-caption q-my-md">Imágenes de documento de identificación</div>
               <div class="row">
                 <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
                   <q-img style="height: 100%;" :src="form.images_ident ? baseuIdentidad + form.images_ident[0] : ''">
-                      <q-btn flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+                    <q-file borderless v-model="imgI" @input="identificacion_img(0)" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
+                    </q-file>
                   </q-img>
                 </q-avatar>
                 <q-avatar class="bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="form.images_ident ? baseuIdentidad + form.images_ident[1] : ''">
-                      <q-btn flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+                  <q-img style="height: 100%;" :src="form.images_ident ? baseuIdentidad + form.images_ident[1] : 'noimg.png'">
+                    <q-file borderless v-model="imgI" @input="identificacion_img(1)" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
+                    </q-file>
                   </q-img>
                 </q-avatar>
               </div>
@@ -237,7 +232,6 @@ export default {
       imgP: null,
       pais: null,
       ciudad: null,
-      ver: false,
       slide: 1,
       baseuPerfil: '',
       baseuTienda: '',
@@ -250,10 +244,8 @@ export default {
         delivery: false,
         deliveryGratis: false
       },
-      identificacion: [],
       paises: [],
-      ciudades: [],
-      images_ident: []
+      ciudades: []
     }
   },
   validations: {
@@ -371,14 +363,30 @@ export default {
         })
       }
     },
-    identificacion_img () {
-      this.images_ident.push(this.imgI)
-      this.identificacion.push(URL.createObjectURL(this.imgI))
-      this.imgI = null
+    async identificacion_img (val) {
+      this.$q.loading.show()
+      if (this.imgI) {
+        var formData = new FormData()
+        formData.append('files', this.imgI)
+        await this.$api.post('subir_img_identidad/' + val, formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Foto actualizada',
+              color: 'positive'
+            })
+            location.reload()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
     },
     async perfil_img () {
-      var im = this.imgP
-      this.imgPerfil = URL.createObjectURL(im)
       this.$q.loading.show()
       if (this.imgP) {
         var formData = new FormData()

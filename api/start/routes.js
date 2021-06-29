@@ -116,6 +116,7 @@ addPrefixToGroup(
 
     Route.post("edit_proveedor", "UserController.editProveedor")
     Route.post("subir_img_tienda_perfil", "UploadController.subirImgTiendaPerfil")
+    Route.post("subir_img_identidad/:val", "UploadController.subirImgIdentidad")
 
   }).middleware("auth")
 );

@@ -158,6 +158,35 @@ class UploadController {
     }
   }
 
+  async subirImgIdentidad ({ request, response, auth, params }) {
+    let user = (await auth.getUser()).toJSON()
+    let val = params.val
+    let codeFile = randomize('Aa0', 30)
+    var profilePic = request.file('files', {
+      types: ['image'],
+      size: '25mb'
+    })
+    if (profilePic) {
+      if (Helpers.appRoot('storage/uploads/identificacionFiles')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/identificacionFiles'), {
+          name: codeFile,
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        let identidad = await User.find(user._id)
+        identidad.images_ident[Number(val)] = profilePic.fileName
+        await identidad.save()
+        response.send(identidad)
+      }
+    }
+  }
+
   async subirimgtiendaById ({ request, response, auth }) {
     let codeFile = randomize('Aa0', 30)
     let user = (await auth.getUser()).toJSON()
