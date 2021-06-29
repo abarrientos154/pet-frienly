@@ -157,7 +157,6 @@ export default {
       this.$api.get('producto/' + id).then(res => {
         if (res) {
           this.form = res
-          console.log(res)
           this.categoria = res.categoria
           this.imgs = res.images
           this.mostrarImg = []

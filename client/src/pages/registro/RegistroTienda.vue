@@ -380,7 +380,6 @@ export default {
       this.$api.get('pais').then(res => {
         if (res) {
           this.paises = res
-          console.log(this.paises)
         }
       })
     },

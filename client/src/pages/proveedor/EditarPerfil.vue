@@ -283,7 +283,6 @@ export default {
           this.imgPerfil = this.baseuTienda + this.form._id
           this.pais = this.formTienda.country
           this.ciudad = this.formTienda.city
-          console.log('user', res)
         }
       })
     },
