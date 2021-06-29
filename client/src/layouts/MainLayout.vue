@@ -106,17 +106,17 @@ export default {
         {
           icon: 'store',
           label: 'Nuevo Espacio',
-          ruta: '/new_space'
+          ruta: '/nuevo_espacio'
         },
         {
           icon: 'description',
           label: 'Reportes',
-          ruta: '/reports'
+          ruta: '/reportes'
         },
         {
           icon: 'assignment',
           label: 'Pedidos',
-          ruta: '/orders'
+          ruta: '/pedidos_hospedador'
         },
         {
           icon: 'power_settings_new',
