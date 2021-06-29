@@ -480,7 +480,7 @@ export default {
       verServicio: false,
       verProducto: false,
       verCarrito: false,
-      comprarCarrito: true,
+      comprarCarrito: false,
       compraExitosa: false,
       compraFallo: false,
       id: '',
