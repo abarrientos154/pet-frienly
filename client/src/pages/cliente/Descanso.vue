@@ -5,7 +5,7 @@
     </q-header>
     <div class="column">
       <div class="q-ml-lg q-mt-lg text-h5">Espacios mejor calificados</div>
-      <div class="q-ml-lg text-subtitle2 text-grey">Espacios mejor calificados</div>
+      <div class="q-ml-lg text-subtitle2 text-grey">Espacios mejor calificados en tu ciudad</div>
     </div>
     <q-scroll-area
         horizontal
