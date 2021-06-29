@@ -38,15 +38,23 @@
       </q-input>
       <q-btn dense flat icon="apartment" color="primary" @click="$router.push('/buscar_hospedaje')"/>
     </div> -->
-    <div class="q-mb-md q-mx-sm text-h5">Ultimas tiendas añadidas</div>
+    <div class="q-mb-md q-mx-sm text-h4">Ultimas tiendas añadidas</div>
     <q-scroll-area
         horizontal
         style="height: 330px;"
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-          <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
             <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md"/>
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+              <q-card-section class="q-my-xl"></q-card-section>
+              <q-card-actions class="q-ml-sm">
+                <div class="text-white q-mt-lg">Nombre del alojamiento</div>
+                <div class="row">
+                  <q-icon name="place" class="q-mr-xs text-white"/>
+                  <div class="text-white">Ciudad, Dirección</div>
+                </div>
+              </q-card-actions>
             </q-card>
           </q-card>
         </div>
@@ -83,68 +91,86 @@
         </q-card>
       </div>
     </q-scroll-area> -->
-    <div class="q-mb-md q-mx-sm text-h5">Nuestras tiendas</div>
-    <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
+    <div class="q-mb-md q-mx-sm text-h4">Nuestras tiendas</div>
+    <!-- <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
       <q-tabs v-model="tabSer" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
         <q-tab v-for="(item, index) in servicios" :key="index" :label="item.name" no-caps/>
       </q-tabs>
-    </q-scroll-area>
+    </q-scroll-area> -->
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
             <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md"/>
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+              <q-card-section class="q-my-lg"></q-card-section>
+              <q-card-section>
+                <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
+                <div class="text-white text-subtitle2">Nombre tienda</div>
+                <div class="row">
+                  <q-icon name="place" class="q-mr-xs text-white"/>
+                  <div class="text-subtitle2 text-white">Ciudad / Direccion</div>
+                </div>
+              </q-card-section>
             </q-card>
-            <div class="q-ml-md">
-              <div class="text-subtitle2 q-mb-xs q-mx-sm">Nombre tienda</div>
-              <div class="row">
-                <q-icon name="place" />
-                <div class="text-subtitle2 q-mb-xs q-mx-sm">Ciudad / Direccion</div>
-              </div>
-            </div>
-            <q-rating class="q-mx-sm q-mb-sm" v-model="stars" :max="5" size="25px" />
           </q-card>
         </div>
     </div>
     <div class="row justify-center q-my-lg">
-      <q-btn color="primary" label="Ver más" style="width: 70%; heigth 40px; border-radius: 10px"/>
+      <q-btn no-caps color="primary" label="Ver más" class="q-py-md" style="width: 70%; heigth 40px; border-radius: 6px"/>
     </div>
     <q-card style="height: 250px" class="q-mx-md q-my-md bg-primary"></q-card>
-    <div class="q-mb-md q-mx-sm text-h5">Alojamientos mejores calificados</div>
+    <div class="q-mb-md q-mx-sm text-h4">Ultimos alojamientos</div>
     <q-scroll-area
         horizontal
         style="height: 330px;"
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-          <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md"/>
+          <q-card style="border-radius: 24px; width:230px" clickable >
+            <q-card style="height: 220px; width: 100%" class="bg-primary">
             </q-card>
+            <div class="row justify-center items-center q-ma-md">
+              <q-btn flat label="$12.000 por noche" style="border-radius: 25px" class="text-white q-pa-sm bg-primary"/>
+            </div>
+          </q-card>
+          <q-card style="border-radius: 24px; width:230px" clickable >
+            <q-card style="height: 220px; width: 100%" class="bg-primary">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+            </q-card>
+            <div class="row justify-center items-center q-ma-md">
+              <div class="text-subtitle2 text-grey q-mb-xs q-mx-sm">Nombre Alojamiento</div>
+              <div class="row">
+                <q-icon class="text-grey" name="place" />
+                <div class="text-subtitle2 text-grey q-mb-xs q-mx-sm">Pais / Ciudad</div>
+              </div>
+            </div>
           </q-card>
         </div>
       </q-scroll-area>
-    <div class="q-mb-md q-mx-sm text-h5">Alojamientos</div>
-    <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
+    <div class="q-mb-md q-mx-sm text-h4">Alojamientos</div>
+   <!--  <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
       <q-tabs v-model="tabSer" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
         <q-tab v-for="(item, index) in servicios" :key="index" :label="item.name" no-caps/>
       </q-tabs>
-    </q-scroll-area>
+    </q-scroll-area> -->
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
             <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md"/>
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+              <q-card-section class="q-my-xl"></q-card-section>
+              <q-card-actions class="q-ml-sm">
+                <div class="text-white q-mt-lg">Nombre del alojamiento</div>
+                <div class="row">
+                  <q-icon name="place" class="q-mr-xs text-white"/>
+                  <div class="text-white">Ciudad, Dirección</div>
+                </div>
+              </q-card-actions>
             </q-card>
-            <div class="q-ml-md">
-              <div class="text-subtitle2 q-mb-xs q-mx-sm">Nombre Alojamiento</div>
-              <div class="row">
-                <q-icon name="place" />
-                <div class="text-subtitle2 q-mb-xs q-mx-sm">Ciudad / Direccion</div>
-              </div>
-            </div>
-            <q-rating class="q-mx-sm q-mb-sm" v-model="stars" :max="5" size="25px" />
           </q-card>
         </div>
+    </div>
+    <div class="row justify-center q-my-lg">
+      <q-btn no-caps color="primary" label="Ver más" class="q-py-md" style="width: 70%; heigth 40px; border-radius: 6px"/>
     </div>
     <!-- <div class="q-mb-xs q-mx-sm">Tiendas mejores calificadas</div> -->
    <!--  <q-scroll-area horizontal class="q-mx-sm q-mb-md" :thumb-style="thumbStyle" style="height: 330px;" ref="first">
@@ -192,7 +218,7 @@
         </q-card-section>
       </q-card>
     </q-list> -->
-    <div class="column items-center q-mt-lg" style="height: 250px;">
+    <!-- <div class="column items-center q-mt-lg" style="height: 250px;">
       <div class="text-weight-bolder" style="font-size: 15px">Suscribete a nuestro boletín</div>
       <div style="font-size: 11px">Recibe las mejores ofertas de todos</div>
       <div  class="q-mb-md" style="font-size: 11px">nuestros proveedores</div>
@@ -204,7 +230,7 @@
           <q-btn flat dense icon="send" class="bg-primary" text-color="white" style="height: 100%; width: 50px; margin-right: -12px"/>
         </template>
       </q-input>
-    </div>
+    </div> -->
     <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
       <q-btn round icon="shopping_bag" color="primary" size="20px">
         <q-badge color="red" label="2" floating/>
