@@ -106,17 +106,17 @@ import env from '../../env'
 export default {
   data () {
     return {
-      id: '',
+      ver: false,
+      ratingModel: 4,
+      rating: 4,
       rol: 0,
-      hospedador: {},
+      id: '',
       lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
       baseuHospedador: '',
+      hospedador: {},
       user: {},
       cityUser: {},
-      ratingModel: 4,
-      rating: 4,
-      ver: false,
       allhospedajes: [],
       hospedajes: []
     }
