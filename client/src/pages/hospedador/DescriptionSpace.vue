@@ -1,10 +1,12 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="bg-primary row justify-between items-center full-width" style="height: 60px">
-      <q-btn round flat stack dense no-caps class="absolute-left" icon="arrow_back" color="white" size="md" @click="$router.go(-1)"/>
-      <div class="col text-white text-h6 text-center">{{hospedaje.name}}</div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+      <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+      </div>
+      <div class="col-10 text-white text-subtitle1 text-center">{{hospedaje.name}}</div>
     </q-header>
-    <q-page-container>
+
       <div>
         <q-carousel size="sm" v-model="slide" style="height: 200px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px" transition-prev="jump-right" transition-next="jump-left" swipeable animated prev-icon="arrow_left" next-icon="arrow_right" navigation arrows>
           <q-carousel-slide v-for="(img, index) in hospedaje.images" :key="index" :name="index" :img-src="baseu + img.src"/>
@@ -45,28 +47,133 @@
               <div class="text-subtitle3">Paseo</div>
             </div>
           </div>
+
+          <div v-if="rol !== 4">
+            <div class="q-my-md">
+              <div class="text-overline">Cuando te vas a alojar</div>
+              <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
+              <div class="row justify-around">
+                <q-input type="date" class="col-5" filled v-model="form.fecha_ingreso" dense hint="Fecha de ingreso"
+                error-message="Requerido" :error="$v.form.fecha_ingreso.$error" @blur="$v.form.fecha_ingreso.$touch()"/>
+                <q-input type="date" class="col-5" filled v-model="form.fecha_salida" dense hint="Fecha de salida"
+                error-message="Requerido" :error="$v.form.fecha_salida.$error" @blur="$v.form.fecha_salida.$touch()"/>
+              </div>
+            </div>
+            <div class="q-my-md">
+              <div class="text-overline">Selecciona tu(s) mascota(s)</div>
+              <div class="text-caption">Recuerda que solo podras agregar mascotas que cumplan los requisitos</div>
+              <q-select dense filled v-model="form.mascotas" :options="mascotas" option-label="name" map-options
+              error-message="Este campo es requerido" :error="$v.form.mascotas.$error" @blur="$v.form.mascotas.$touch()">
+                <template v-slot:no-option>
+                  <q-item>
+                    <q-item-section class="text-grey text-italic">No hay mascotas</q-item-section>
+                  </q-item>
+                </template>
+              </q-select>
+            </div>
+          </div>
+
           <div class="row items-center">
-            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Solicitar alojamiento'" @click="rol === 4 ? $router.push('/edit_space/' + hospedaje._id) : $router.push('/pago_hospedaje/' + hospedaje._id)" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reserva = true" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
             <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
           </div>
         </div>
       </div>
-    </q-page-container>
+
+      <q-dialog v-model="reserva" maximized persistent>
+        <q-card style="width:100%;">
+          <q-toolbar class="bg-primary row items-center" style="width:100%; height:60px">
+            <div class="col-1">
+              <q-btn flat round color="white" icon="arrow_back" @click="reserva = false"/>
+            </div>
+            <div class="col-10 text-white text-subtitle1 text-center">Pagar</div>
+          </q-toolbar>
+
+          <div class="column items-center">
+            <div class="q-ma-lg">
+              <q-avatar rounded style="height: 150px; width: 250px;" class="bg-secondary q-mb-sm">
+                <q-img style="height: 100%;" :src="baseu + hospedaje.images[0].src"/>
+              </q-avatar>
+            </div>
+            <q-card class="q-mb-md shadow-6" style="width: 90%; height: auto;">
+              <q-card-section>
+                <div class="text-grey">Nombre del titular</div>
+                <q-input dense v-model="form.name" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
+              </q-card-section>
+              <q-card-section>
+                <div class="text-grey">Numero de tarjeta</div>
+                <q-input dense type="number" v-model.number="form.card" error-message="Este campo es requerido" :error="$v.form.card.$error" @blur="$v.form.card.$touch()"/>
+              </q-card-section>
+              <q-card-section horizontal style="height: 100%;">
+                <q-card-section class="col">
+                  <div class="text-grey">Fecha de expiración</div>
+                  <q-input dense type="date" v-model="form.expiration" error-message="Este campo es requerido" :error="$v.form.expiration.$error" @blur="$v.form.expiration.$touch()"/>
+                </q-card-section>
+                <q-card-section class="col">
+                  <div class="text-grey">CVV</div>
+                  <q-input dense type="number" v-model="form.cvv" error-message="Este campo es requerido" :error="$v.form.cvv.$error" @blur="$v.form.cvv.$touch()"/>
+                </q-card-section>
+              </q-card-section>
+            </q-card>
+            <q-card class="q-mb-lg shadow-6" style="width: 90%; height: auto;">
+              <q-card-section horizontal class="justify-between">
+                <q-card-section>
+                  <div class="text-grey">Precio alojamiento</div>
+                </q-card-section>
+                <q-card-section>
+                  <div>${{hospedaje.price}}</div>
+                </q-card-section>
+              </q-card-section>
+              <q-card-section>
+                <q-input dense type="number" v-model.number="totalPagar" error-message="Debe ingresar el monto exacto" :error="$v.totalPagar.$error" @blur="$v.totalPagar.$touch()"/>
+              </q-card-section>
+              <q-card-section horizontal class="justify-between">
+                <q-card-section>
+                  <div :class="totalPagar != total ? 'text-red' : ''">Total a pagar</div>
+                </q-card-section>
+                <q-card-section>
+                  <div :class="totalPagar != total ? 'text-red' : ''">${{total}}</div>
+                </q-card-section>
+              </q-card-section>
+            </q-card>
+            <q-btn class="q-mb-lg q-pa-sm" color="primary" label="Pagar" @click="pagar()" style="width: 60%; border-radius: 4px" no-caps/>
+          </div>
+        </q-card>
+      </q-dialog>
   </q-layout>
 </template>
 
 <script>
 import env from '../../env'
+import { required } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
+      reserva: false,
+      totalPagar: null,
       slide: 0,
       rol: 0,
+      total: 0,
       user: {},
       id: '',
       baseu: '',
-      hospedaje: {}
+      hospedaje: {},
+      form: {},
+      mascotas: []
     }
+  },
+  validations: {
+    form: {
+      fecha_ingreso: { required },
+      fecha_salida: { required },
+      mascotas: { required },
+      name: { required },
+      card: { required },
+      expiration: { required },
+      cvv: { required }
+    },
+    total: { required },
+    totalPagar: { required }
   },
   mounted () {
     this.getHospedaje()
@@ -78,6 +185,7 @@ export default {
         if (res) {
           this.rol = res.roles[0]
           this.user = res
+          console.log(this.user)
         }
       })
     },

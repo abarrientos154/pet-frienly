@@ -19,7 +19,7 @@
         <q-scroll-area class="q-mb-sm" style="height: 75px;">
           <div class="text-caption">{{hospedador.my_space.description}}</div>
         </q-scroll-area>
-        <q-btn v-if="rol === 4" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/edit_hospedador')" no-caps/>
+        <q-btn v-if="rol === 4" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/editar_hospedador')" no-caps/>
       </div>
     </div>
 
@@ -73,7 +73,7 @@
     <div>
       <div class="text-subtitle1 text-bold q-mb-md">Conoce los espacios disponibles</div>
       <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;" @click="$router.push('/description_space/' + item._id)">
+        <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;" @click="$router.push('/descripcion_espacio/' + item._id)">
           <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
@@ -106,17 +106,17 @@ import env from '../../env'
 export default {
   data () {
     return {
-      id: '',
+      ver: false,
+      ratingModel: 4,
+      rating: 4,
       rol: 0,
-      hospedador: {},
+      id: '',
       lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
       baseuHospedador: '',
+      hospedador: {},
       user: {},
       cityUser: {},
-      ratingModel: 4,
-      rating: 4,
-      ver: false,
       allhospedajes: [],
       hospedajes: []
     }

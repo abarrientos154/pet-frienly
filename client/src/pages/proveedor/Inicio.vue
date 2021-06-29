@@ -254,6 +254,8 @@
         <div class="row justify-center q-my-lg">
           <q-btn v-if="miTienda" class="q-py-xs" no-caps color="primary" label="Editar servicio" style="width:80%"
           @click="$router.push('/editar_servicio/' + servicio._id)"/>
+          <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
+          @click="addCarrito(servicio, true), verServicio = false"/>
         </div>
       </q-card>
     </q-dialog>
@@ -295,7 +297,7 @@
           <q-btn v-if="miTienda" class="q-py-sm" no-caps color="primary" label="Editar producto" style="width:80%"
           @click="$router.push('/editar_producto/' + producto._id)"/>
           <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
-          @click="addCarrito(producto), verProducto = false"/>
+          @click="addCarrito(producto,false), verProducto = false"/>
         </div>
       </q-card>
     </q-dialog>
@@ -316,7 +318,7 @@
                 <div class="row items-start justify-start q-ma-xs">
                   <div class="col-3 q-mr-sm column justify-start items-start">
                     <img
-                      :src="baseuproductos + producto.image"
+                      :src="producto.servicio ? baseuServicios + producto.image : baseuproductos + producto.image"
                       spinner-color="white"
                       style="height: 100px; width: 100%; border-radius: 10px"/>
                   </div>
@@ -324,7 +326,7 @@
                   <div class="col-8 row items-between" style="height: 100px">
                     <div class="col-12 row justify-between items-strat">
                       <div class="row no-wrap q-pl-sm col-11">
-                        <div class="text-subtitle1 ellipsis">{{producto.name}} skfg dfgsd fgosdgf sfg sdfg seorg sdfg</div>
+                        <div class="text-subtitle1 ellipsis">{{producto.name}}</div>
                       </div>
                       <div class="col-1">
                         <q-btn flat round no-caps dense color="grey-6" icon="delete"
@@ -336,7 +338,7 @@
                       <div class="q-ml-sm">
                         <div class="text-h6 text-primary">${{!producto.oferta ? formatPrice(producto.price) : formatPrice(producto.oferta_price)}} </div>
                       </div>
-                      <div class="row">
+                      <div v-if="!producto.servicio" class="row">
                         <div>
                           <q-btn size="12px" dense color="grey" icon="remove" @click="editCantidad(index, false)" />
                         </div>
@@ -345,6 +347,7 @@
                           <q-btn size="12px" dense color="primary" icon="add" @click="editCantidad(index, true)" />
                         </div>
                       </div>
+                      <div v-else class="text-caption">Servicio</div>
                     </div>
                   </div>
                 </div>
@@ -367,7 +370,66 @@
         </div>
 
         <div class="row justify-center q-pb-md" style="width:100%">
-          <q-btn :disable="carrito.length ? false : true" @click="verCarrito = false" no-caps label="Pagar" color="primary" class="q-py-sm" style="width: 80%;" />
+          <q-btn :disable="carrito.length ? false : true" @click="$v.form.$reset(), comprarCarrito = true, verCarrito = false" no-caps label="Pagar" color="primary" class="q-py-sm" style="width: 80%;" />
+        </div>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog persistent maximized v-model="comprarCarrito">
+      <q-card style="width: 100%">
+        <q-toolbar class="bg-primary row items-center" style="width:100%; height:60px">
+          <div class="col-1">
+            <q-btn flat round color="white" icon="arrow_back" @click="verCarrito = true, comprarCarrito = false"/>
+          </div>
+          <div class="col-10 text-white text-subtitle1 text-center">Pagar</div>
+        </q-toolbar>
+        <div class="q-px-md q-pt-xl row items-between" style="height:92%">
+          <div class="col-12">
+            <div class="q-px-sm">
+              <div class="text-h6 text-bold">Dirección de envío</div>
+              <div class="text-subtitle1 text-grey-7">{{user.name + ' ' + user.lastName}}</div>
+              <q-select borderless dense color="black" v-model="form.direccion" :options="ciudades" label="Seleccione dirección" map-options
+                error-message="requerido" :error="$v.form.direccion.$error" @blur="$v.form.direccion.$touch()"
+                option-label="name" >
+                  <template v-slot:no-option>
+                    <q-item>
+                      <q-item-section class="text-grey text-italic">
+                        No hay Resultados
+                      </q-item-section>
+                    </q-item>
+                  </template>
+                  <template v-slot:option="scope">
+                    <q-item
+                      v-bind="scope.itemProps"
+                      v-on="scope.itemEvents"
+                    >
+                      <q-item-section>
+                        <q-item-label v-html="scope.opt.name" />
+                      </q-item-section>
+                    </q-item>
+                  </template>
+              </q-select>
+              <q-separator />
+              <div class="text-h6 text-bold q-my-md">Pedido</div>
+              <div class="row justify-between" style="width:100%">
+                <div class="text-subtitle1 text-grey-8">Cantidad de productos</div>
+                <div class="text-subtitle1 text-primary">{{totalProductos}}</div>
+              </div>
+              <div class="row justify-between items-center q-pt-md" style="width:100%">
+                <div class="text-subtitle1 text-grey-8">Total a pagar</div>
+                <div class="text-h6 text-primary">${{formatPrice(totalCarrito)}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 q-py-lg column justify-end items-end">
+            <div class="row justify-between q-my-lg" style="width:100%">
+              <div class="text-subtitle1 text-grey-8">Precio total</div>
+              <div class="text-h6 text-primary">${{formatPrice(totalCarrito)}}</div>
+            </div>
+            <div class="row justify-center" style="width:100%">
+              <q-btn :disable="carrito.length ? false : true" @click="iniciarCompra()" no-caps label="Pagar ahora" color="primary" class="q-py-sm" style="width: 80%;" />
+            </div>
+          </div>
         </div>
       </q-card>
     </q-dialog>
@@ -406,6 +468,7 @@
 
 <script>
 import env from '../../env'
+import { required } from 'vuelidate/lib/validators'
 export default {
   components: {
   },
@@ -417,6 +480,7 @@ export default {
       verServicio: false,
       verProducto: false,
       verCarrito: false,
+      comprarCarrito: false,
       compraExitosa: false,
       compraFallo: false,
       id: '',
@@ -433,13 +497,20 @@ export default {
       },
       servicio: {},
       producto: {},
+      form: {},
       carrito: [],
+      ciudades: [],
       allProductos: [],
       ultimos: [],
       productos: [],
       allFilter: [],
       productosFilter: [],
       categorias: []
+    }
+  },
+  validations: {
+    form: {
+      direccion: { required }
     }
   },
   computed: {
@@ -480,13 +551,19 @@ export default {
   },
   methods: {
     async getUser () {
-      await this.$api.get('user_logueado').then(v => {
-        if (v) {
-          this.user = v
+      await this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.user = res
           if (this.user.roles[0] === 3) {
             this.id = this.user._id
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
+          } else {
+            this.$api.get('cityByCountry/' + this.user.country_id).then(v => {
+              if (v) {
+                this.ciudades = v
+              }
+            })
           }
         }
       })
@@ -557,20 +634,28 @@ export default {
       const val = (value / 1).toFixed(0).replace('.', ',')
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
-    addCarrito (val) {
+    addCarrito (val, bool) {
       if (!this.carrito.find(v => v._id === val._id)) {
         var prod = {
           _id: val._id,
-          name: val.name,
-          proveedor_id: val.proveedor_id,
           price: val.price,
-          oferta: val.oferta,
-          cantidad: val.cantidad - 1,
-          cantidad_compra: 1,
-          image: val.images[0]
+          cantidad_compra: 1
         }
-        if (val.oferta) {
-          prod.oferta_price = val.oferta_price
+        if (bool) {
+          prod.servicio = true
+          prod.name = val.servicio.name
+          prod.proveedor_id = val.tienda_id
+          prod.oferta = false
+          prod.image = val._id
+        } else {
+          prod.name = val.name
+          prod.proveedor_id = val.proveedor_id
+          prod.oferta = val.oferta
+          prod.cantidad = val.cantidad - 1
+          prod.image = val.images[0]
+          if (val.oferta) {
+            prod.oferta_price = val.oferta_price
+          }
         }
         this.carrito.push(prod)
         prod = {}
@@ -580,9 +665,15 @@ export default {
           positive: 'positive'
         })
       } else {
+        var message = ''
+        if (bool) {
+          message = 'servicio'
+        } else {
+          message = 'producto'
+        }
         this.$q.dialog({
           title: '¡Atención!',
-          message: 'Ya añadiste este producto al carro de compra.'
+          message: 'Ya añadiste este ' + message + ' al carro de compra.'
         }).onOk(() => {
 
         })
@@ -610,6 +701,25 @@ export default {
     },
     deleteProdCarrito (index) {
       this.carrito.splice(index, 1)
+    },
+    async iniciarCompra () {
+      this.$v.form.direccion.$touch()
+      if (!this.$v.form.direccion.$error) {
+        this.form.cliente_id = this.user._id
+        this.form.tienda_id = this.tienda._id
+        this.tienda_name = this.tienda.name
+        this.form.totalValor = this.totalCarrito
+        this.form.totalProductos = this.totalProductos
+        /* this.$api.post('comprar_productos', { dat: this.form, carrito: this.carrito }).then(async res => {
+          if (res) {
+            this.comprarCarrito = false
+            this.compraExitosa = true
+          } else {
+            this.comprarCarrito = false
+            this.compraFallo = true
+          }
+        }) */
+      }
     }
   }
 }

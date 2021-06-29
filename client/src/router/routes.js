@@ -18,10 +18,10 @@ const routes = [
       { path: '/estadisticas_resportes', component: () => import('pages/proveedor/Reportes.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
-      { path: '/edit_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
-      { path: '/new_space', component: () => import('pages/hospedador/NewSpace.vue') },
-      { path: '/reports', component: () => import('pages/hospedador/Reports.vue') },
-      { path: '/orders', component: () => import('pages/hospedador/Orders.vue') },
+      { path: '/editar_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
+      { path: '/nuevo_espacio', component: () => import('pages/hospedador/NewSpace.vue') },
+      { path: '/reportes', component: () => import('pages/hospedador/Reports.vue') },
+      { path: '/pedidos_hospedador', component: () => import('pages/hospedador/Orders.vue') },
       // Cliente
       { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue') },
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue') },
@@ -31,6 +31,7 @@ const routes = [
       { path: '/descripcionalojamiento/:id', component: () => import('pages/cliente/VerAlojamiento.vue') },
       { path: '/tienda/:id', component: () => import('pages/cliente/Tienda.vue') },
       { path: '/tiendas', component: () => import('pages/cliente/Tiendas.vue') },
+      { path: '/descanso', component: () => import('pages/cliente/Descanso.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
       { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       // Generales
@@ -51,10 +52,8 @@ const routes = [
   { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_proveedor', component: () => import('pages/proveedor/EditarPerfil.vue') },
 
-  { path: '/description_space/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
-  { path: '/edit_space/:id', component: () => import('pages/hospedador/EditSpace.vue') },
-
-  { path: '/pago_hospedaje/:id', component: () => import('pages/cliente/PagoHospedaje.vue') },
+  { path: '/descripcion_espacio/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
+  { path: '/editar_espacio/:id', component: () => import('pages/hospedador/EditSpace.vue') },
   {
     path: '/',
     redirect: '/login'
