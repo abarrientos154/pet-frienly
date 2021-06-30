@@ -29,7 +29,20 @@
               </div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Fecha de nacimiento</div>
-                <q-input filled type="date" v-model="form.birth" dense error-message="Este campo es requerido" :error="$v.form.birth.$error" @blur="$v.form.birth.$touch()"/>
+                <q-input filled readonly dense v-model="form.birth" placeholder="dd/mm/aaaa" @click="$refs.qDateProxy.show()"
+                error-message="Este campo es requerido" :error="$v.form.birth.$error" @blur="$v.form.birth.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                        <q-date v-model="form.birth" mask="DD/MM/YYYY">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
               </div>
               <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <div class="text-caption">Telefono de contacto</div>
@@ -156,13 +169,39 @@
             <div class="row items-center q-mb-md">
               <div class="text-subtitle1 col">Horario de apertura</div>
               <div class="col column">
-                <q-input type="time" filled v-model="formMySpace.hora_inicio" dense error-message="Este campo es requerido" :error="$v.formMySpace.hora_inicio.$error" @blur="$v.formMySpace.hora_inicio.$touch()"/>
+                <q-input filled dense readonly v-model="formMySpace.hora_inicio" placeholder="--:--" @click="$refs.qTimeProxy1.show()"
+                error-message="Este campo es requerido" :error="$v.formMySpace.hora_inicio.$error" @blur="$v.formMySpace.hora_inicio.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="access_time" class="cursor-pointer">
+                      <q-popup-proxy ref="qTimeProxy1" transition-show="scale" transition-hide="scale">
+                        <q-time v-model="formMySpace.hora_inicio">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-time>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
               </div>
             </div>
             <div class="row items-center q-mb-md">
               <div class="text-subtitle1 col">Horario de cierre</div>
               <div class="col column">
-                <q-input type="time" filled v-model="formMySpace.hora_cierre" dense error-message="Este campo es requerido" :error="$v.formMySpace.hora_cierre.$error" @blur="$v.formMySpace.hora_cierre.$touch()"/>
+                <q-input filled dense readonly v-model="formMySpace.hora_cierre" placeholder="--:--" @click="$refs.qTimeProxy2.show()"
+                error-message="Este campo es requerido" :error="$v.formMySpace.hora_cierre.$error" @blur="$v.formMySpace.hora_cierre.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="access_time" class="cursor-pointer">
+                      <q-popup-proxy ref="qTimeProxy2" transition-show="scale" transition-hide="scale">
+                        <q-time v-model="formMySpace.hora_cierre">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-time>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
               </div>
             </div>
           </div>
@@ -304,23 +343,26 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      slide: 1,
-      form: {},
-      formMySpace: {},
-      formEspacio: {},
-      password: '',
-      repeatPassword: '',
-      representImg: '',
-      RLImg: {},
-      identificacionImg: [],
-      IImg: [],
-      perfilImg: '',
-      PImg: {},
-      paises: [],
-      ciudades: [],
+      terminos: false,
+      aparecer: false,
+      ver: false,
       selectPais: null,
       selectCiudad: null,
       img: null,
+      slide: 1,
+      password: '',
+      repeatPassword: '',
+      representImg: '',
+      perfilImg: '',
+      form: {},
+      formMySpace: {},
+      formEspacio: {},
+      RLImg: {},
+      PImg: {},
+      identificacionImg: [],
+      IImg: [],
+      paises: [],
+      ciudades: [],
       espacioImg: [],
       mostrarImg: [],
       servicios: [{ name: 'Paseo de mascota' }],
@@ -328,10 +370,7 @@ export default {
       mascotas: [{ name: 'Perros' }, { name: 'Gatos' }, { name: 'Ambos' }],
       location: [{ name: 'Espacio compartido por tipo', description: 'Tu mascota se aloja en un espacio compartido con otras mascotas de su mismo tipo' }, { name: 'Espacio compartido', description: 'Tu mascota se aloja en un espacio compartido con otros perros y gatos' }, { name: 'Espacio privado', description: 'Espacio habilitado para una sola mascota' }],
       state: [{ name: 'Disponible' }, { name: 'Ocupado' }, { name: 'Mantención' }],
-      only_pets: [{ name: 'Si', enable: true, description: 'Solo esta habilitado para hospedaje' }, { name: 'No', enable: false, description: 'Vivo yo o alguien mas en el espacio' }],
-      terminos: false,
-      aparecer: false,
-      ver: false
+      only_pets: [{ name: 'Si', enable: true, description: 'Solo esta habilitado para hospedaje' }, { name: 'No', enable: false, description: 'Vivo yo o alguien mas en el espacio' }]
     }
   },
   validations: {

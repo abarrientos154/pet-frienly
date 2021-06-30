@@ -43,6 +43,7 @@
             </q-card>
           </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 160px;">No hay servicios actualmente</div>
     </div>
 
     <div class="q-pa-sm">
@@ -72,9 +73,9 @@
 
     <div class="q-pa-sm">
       <div class="text-h6">Reseñas de clientes</div>
-      <q-scroll-area horizontal style="height: 150px">
+      <q-scroll-area horizontal style="height: 150px" v-if="reseñas.length">
         <div class="row no-wrap q-gutter-md" style="width: 100%">
-          <q-card class="shadow-6" v-for="index in 3" :key="index" style="width: 300px; height: 125px;">
+          <q-card class="shadow-6" v-for="index in reseñas" :key="index" style="width: 300px; height: 125px;">
             <q-card-section horizontal style="height: 100%;">
               <q-card-section>
                 <q-avatar rounded style="height: 100%; width: 100px; border-radius: 20px;" class="bg-grey">
@@ -94,6 +95,7 @@
           </q-card>
         </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 150px;">No hay reseñas actualmente</div>
     </div>
 
     <div class="q-pa-sm">
@@ -131,6 +133,7 @@
           </q-card>
         </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 330px;">No hay productos actualmente</div>
 
       <div class="text-h6 text-grey-8 text-center q-mb-md">Busca por categoria de productos</div>
       <q-scroll-area
@@ -181,7 +184,7 @@
       </div>
 
       <div class="text-h6 text-grey-8 text-center q-my-md">Todos los productos</div>
-      <div class="row justify-around">
+      <div v-if="productos.length" class="row justify-around">
           <div class="col-6 row justify-center" v-for="(item, index) in productos" :key="index">
             <q-card v-ripple clickable style="width: 95%; height: 300px; border-radius: 20px">
               <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px"
@@ -211,6 +214,7 @@
             </q-card>
           </div>
         </div>
+      <div v-else class="row items-center justify-center" style="height: 150px;">No hay productos actualmente</div>
       <div class="row justify-center q-mt-md">
         <q-btn v-if="allProductos.length > 6" class="q-py-xs" no-caps color="primary" :label="!ver2 ? 'Ver más' : 'Ver menos'" style="width:80%"
         @click="verMas(2)" />
@@ -285,7 +289,7 @@
               <div class="q-py-md">
                 <div class="text-h6">{{producto.name}}</div>
                 <div class="text-subtitle1 text-grey-8">Disponible - {{producto.cantidad}} unidades</div>
-                <div class="text-primary text-h5 q-py-md">$ {{producto.price}}</div>
+                <div class="text-primary text-h5 q-py-md">$ {{producto.oferta ? producto.oferta_price : producto.price}}</div>
                 <div class="text-h6">Descripción</div>
                 <div class="text-subtitle1 text-grey-8">{{producto.descripcion}}</div>
               </div>
@@ -338,7 +342,7 @@
                       <div class="q-ml-sm">
                         <div class="text-h6 text-primary">${{!producto.oferta ? formatPrice(producto.price) : formatPrice(producto.oferta_price)}} </div>
                       </div>
-                      <div v-if="!producto.servicio" class="row">
+                      <div class="row">
                         <div>
                           <q-btn size="12px" dense color="grey" icon="remove" @click="editCantidad(index, false)" />
                         </div>
@@ -347,7 +351,6 @@
                           <q-btn size="12px" dense color="primary" icon="add" @click="editCantidad(index, true)" />
                         </div>
                       </div>
-                      <div v-else class="text-caption">Servicio</div>
                     </div>
                   </div>
                 </div>
@@ -370,7 +373,7 @@
         </div>
 
         <div class="row justify-center q-pb-md" style="width:100%">
-          <q-btn :disable="carrito.length ? false : true" @click="$v.form.$reset(), comprarCarrito = true, verCarrito = false" no-caps label="Pagar" color="primary" class="q-py-sm" style="width: 80%;" />
+          <q-btn :disable="carrito.length ? false : true" @click="$v.direccion.$reset(), comprarCarrito = true, verCarrito = false" no-caps label="Pagar" color="primary" class="q-py-sm" style="width: 80%;" />
         </div>
       </q-card>
     </q-dialog>
@@ -387,9 +390,9 @@
           <div class="col-12">
             <div class="q-px-sm">
               <div class="text-h6 text-bold">Dirección de envío</div>
-              <div class="text-subtitle1 text-grey-7">{{user.name + ' ' + user.lastName}}</div>
-              <q-select borderless dense color="black" v-model="form.direccion" :options="ciudades" label="Seleccione dirección" map-options
-                error-message="requerido" :error="$v.form.direccion.$error" @blur="$v.form.direccion.$touch()"
+              <div class="text-subtitle1 text-grey-7">{{user.name}}</div>
+              <q-select borderless dense color="black" v-model="direccion" :options="ciudades" label="Seleccione dirección" map-options
+                error-message="requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"
                 option-label="name" >
                   <template v-slot:no-option>
                     <q-item>
@@ -498,6 +501,8 @@ export default {
       servicio: {},
       producto: {},
       form: {},
+      direccion: null,
+      reseñas: [1, 2, 3],
       carrito: [],
       ciudades: [],
       allProductos: [],
@@ -509,9 +514,7 @@ export default {
     }
   },
   validations: {
-    form: {
-      direccion: { required }
-    }
+    direccion: { required }
   },
   computed: {
     totalCarrito () {
@@ -635,9 +638,9 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
     addCarrito (val, bool) {
-      if (!this.carrito.find(v => v._id === val._id)) {
+      if (!this.carrito.find(v => v.articulo_id === val._id)) {
         var prod = {
-          _id: val._id,
+          articulo_id: val._id,
           price: val.price,
           cantidad_compra: 1
         }
@@ -680,22 +683,32 @@ export default {
       }
     },
     editCantidad (index, val) {
-      if (val) {
-        if (this.carrito[index].cantidad > 0) {
+      if (this.carrito[index].servicio) {
+        if (val) {
           this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra + 1
-          this.carrito[index].cantidad = this.carrito[index].cantidad - 1
         } else {
-          this.$q.dialog({
-            title: '¡Atención!',
-            message: 'Este producto se agotó de la tienda.'
-          }).onOk(() => {
-
-          })
+          if (this.carrito[index].cantidad_compra > 1) {
+            this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra - 1
+          }
         }
       } else {
-        if (this.carrito[index].cantidad_compra > 1) {
-          this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra - 1
-          this.carrito[index].cantidad = this.carrito[index].cantidad + 1
+        if (val) {
+          if (this.carrito[index].cantidad > 0) {
+            this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra + 1
+            this.carrito[index].cantidad = this.carrito[index].cantidad - 1
+          } else {
+            this.$q.dialog({
+              title: '¡Atención!',
+              message: 'Este producto se agotó de la tienda.'
+            }).onOk(() => {
+
+            })
+          }
+        } else {
+          if (this.carrito[index].cantidad_compra > 1) {
+            this.carrito[index].cantidad_compra = this.carrito[index].cantidad_compra - 1
+            this.carrito[index].cantidad = this.carrito[index].cantidad + 1
+          }
         }
       }
     },
@@ -703,22 +716,31 @@ export default {
       this.carrito.splice(index, 1)
     },
     async iniciarCompra () {
-      this.$v.form.direccion.$touch()
-      if (!this.$v.form.direccion.$error) {
+      this.$v.direccion.$touch()
+      if (!this.$v.direccion.$error) {
+        this.$q.loading.show({
+          message: 'Iniciando compra'
+        })
+        this.form.country_id = this.user.country_id
+        this.form.city_id = this.direccion._id
         this.form.cliente_id = this.user._id
-        this.form.tienda_id = this.tienda._id
-        this.tienda_name = this.tienda.name
+        this.form.tienda_id = this.id
+        this.form.tienda_name = this.tienda.name
         this.form.totalValor = this.totalCarrito
         this.form.totalProductos = this.totalProductos
-        /* this.$api.post('comprar_productos', { dat: this.form, carrito: this.carrito }).then(async res => {
+        this.$api.post('comprar_productos', { dat: this.form, carrito: this.carrito }).then(async res => {
           if (res) {
+            this.carrito = []
+            this.direccion = null
+            this.$q.loading.hide()
             this.comprarCarrito = false
             this.compraExitosa = true
           } else {
+            this.$q.loading.hide()
             this.comprarCarrito = false
             this.compraFallo = true
           }
-        }) */
+        })
       }
     }
   }

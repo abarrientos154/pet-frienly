@@ -18,6 +18,7 @@ const routes = [
       { path: '/estadisticas_resportes', component: () => import('pages/proveedor/Reportes.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
+      { path: '/hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
       { path: '/editar_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
       { path: '/nuevo_espacio', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reportes', component: () => import('pages/hospedador/Reports.vue') },
