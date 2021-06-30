@@ -99,8 +99,6 @@ addPrefixToGroup(
     Route.post("subir_archivo_producto/:producto_id", "UploadController.subirImgProducto")
     Route.delete("eliminar_archivo_producto/:file/:producto_id", "UploadController.eliminarImgProducto")
 
-    Route.post("comprar_productos", "ProductoController.pre_pago_tienda")
-
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')
     Route.get('hospedaje_by_hospedador/:hospedador_id', 'HospedajeController.hospedajeByHospedador')
@@ -119,6 +117,10 @@ addPrefixToGroup(
     Route.post("edit_proveedor", "UserController.editProveedor")
     Route.post("subir_img_tienda_perfil", "UploadController.subirImgTiendaPerfil")
     Route.post("subir_img_identidad/:val", "UploadController.subirImgIdentidad")
+
+    Route.post("comprar_productos", "ProductoController.pre_pago_tienda")
+    Route.get("pedidos", "ProductoController.pedidos")
+    Route.put("pedido_status/:id", "ProductoController.pedidoStatus")
 
   }).middleware("auth")
 );

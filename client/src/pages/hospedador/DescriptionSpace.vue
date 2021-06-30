@@ -218,7 +218,6 @@ export default {
         if (res) {
           this.rol = res.roles[0]
           this.user = res
-          console.log(this.user)
         }
       })
     },

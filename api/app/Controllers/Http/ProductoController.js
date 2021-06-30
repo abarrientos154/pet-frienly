@@ -50,6 +50,26 @@ class ProductoController {
     response.send(categorias)
   }
 
+  async pedidos ({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let data = (await Pedidos.query().where({tienda_id: user._id}).with('productos').fetch()).toJSON()
+    data = data.map(v => {
+      return {
+        ...v,
+        detalles: false,
+        newStatus: '',
+        fecha_compra: moment(v.created_at).format('DD/MM/YYYY')
+      }
+    })
+    response.send(data)
+  }
+
+  async pedidoStatus({ params, request, response }) {
+    let dat = request.all()
+    let modificar = await Pedidos.query().where('_id', params.id).update({status: dat.status})
+    response.send(modificar)
+  }
+
   /**
    * Render a form to be used for creating a new producto.
    * GET productos/create
