@@ -73,9 +73,9 @@
 
     <div class="q-pa-sm">
       <div class="text-h6">Reseñas de clientes</div>
-      <q-scroll-area horizontal style="height: 150px" v-if="reseñas.length">
+      <q-scroll-area horizontal style="height: 150px" v-if="comentarios.length">
         <div class="row no-wrap q-gutter-md" style="width: 100%">
-          <q-card class="shadow-6" v-for="index in reseñas" :key="index" style="width: 300px; height: 125px;">
+          <q-card class="shadow-6" v-for="index in comentarios" :key="index" style="width: 300px; height: 125px;">
             <q-card-section horizontal style="height: 100%;">
               <q-card-section>
                 <q-avatar rounded style="height: 100%; width: 100px; border-radius: 20px;" class="bg-grey">
@@ -502,7 +502,7 @@ export default {
       producto: {},
       form: {},
       direccion: null,
-      reseñas: [1, 2, 3],
+      comentarios: [1, 2, 3],
       carrito: [],
       ciudades: [],
       allProductos: [],

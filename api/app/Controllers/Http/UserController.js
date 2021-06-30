@@ -373,6 +373,15 @@ class UserController {
     response.send(user)
   }
 
+  async hospedajeById({ params, response }) {
+    const user = (await User.query().where({_id: params.id}).first()).toJSON()
+    let country = await Paises.find(user.my_space.pais_id)
+    let city = await Ciudad.find(user.my_space.ciudad_id)
+    user.my_space.country = country
+    user.my_space.city = city
+    response.send(user)
+  }
+
   async userByRol({ request, params, response }) {
     try {
       let rol = request.all()
