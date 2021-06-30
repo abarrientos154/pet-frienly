@@ -53,12 +53,12 @@
               <div class="text-overline">Cuando te vas a alojar</div>
               <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
               <div class="row justify-around">
-                <q-input filled readonly dense v-model="form.fecha_ingreso" class="col-5" placeholder="dd/mm/aaaa" hint="Fecha de ingreso" @click="$refs.qDateProxy1.show()"
+                <q-input filled readonly dense v-model="form.fecha_ingreso" class="col-5" placeholder="aaaa/mm/dd" hint="Fecha de ingreso" @click="$refs.qDateProxy1.show()"
                 error-message="Este campo es requerido" :error="$v.form.fecha_ingreso.$error" @blur="$v.form.fecha_ingreso.$touch()">
                   <template v-slot:append>
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy ref="qDateProxy1" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="form.fecha_ingreso" mask="DD/MM/YYYY">
+                        <q-date v-model="form.fecha_ingreso">
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Cerrar" color="primary" flat />
                           </div>
@@ -67,12 +67,12 @@
                     </q-icon>
                   </template>
                 </q-input>
-                <q-input filled readonly dense v-model="form.fecha_salida" class="col-5" placeholder="dd/mm/aaaa" hint="Fecha de salida" @click="$refs.qDateProxy2.show()"
+                <q-input filled readonly dense v-model="form.fecha_salida" class="col-5" placeholder="aaaa/mm/dd" hint="Fecha de salida" @click="$refs.qDateProxy2.show()"
                 error-message="Este campo es requerido" :error="$v.form.fecha_salida.$error" @blur="$v.form.fecha_salida.$touch()">
                   <template v-slot:append>
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy ref="qDateProxy2" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="form.fecha_salida" mask="DD/MM/YYYY">
+                        <q-date v-model="form.fecha_salida">
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Cerrar" color="primary" flat />
                           </div>
@@ -131,12 +131,12 @@
               <q-card-section horizontal style="height: 100%;">
                 <q-card-section class="col">
                   <div class="text-grey-8">Fecha de expiración</div>
-                  <q-input readonly dense v-model="form.expiration" placeholder="dd/mm/aaaa" @click="$refs.qDateProxy3.show()"
+                  <q-input readonly dense v-model="form.expiration" placeholder="aaaa/mm/dd" @click="$refs.qDateProxy3.show()"
                   error-message="Este campo es requerido" :error="$v.form.expiration.$error" @blur="$v.form.expiration.$touch()">
                     <template v-slot:append>
                       <q-icon name="event" class="cursor-pointer">
                         <q-popup-proxy ref="qDateProxy3" transition-show="scale" transition-hide="scale">
-                          <q-date v-model="form.expiration" mask="DD/MM/YYYY">
+                          <q-date v-model="form.expiration">
                             <div class="row items-center justify-end">
                               <q-btn v-close-popup label="Cerrar" color="primary" flat />
                             </div>
@@ -167,7 +167,7 @@
                   <div class="text-pink-13">Total a pagar</div>
                 </q-card-section>
                 <q-card-section>
-                  <div class="text-pink-13">${{totalPrice(hospedaje.price)}}</div>
+                  <div class="text-pink-13">${{totalPrice}}</div>
                 </q-card-section>
               </q-card-section>
             </q-card>
@@ -208,6 +208,19 @@ export default {
       cvv: { required }
     }
   },
+  computed: {
+    totalPrice () {
+      var total = 0
+      var dias = 0
+      if (this.fechaValida && this.form.fecha_ingreso < this.form.fecha_salida) {
+        dias = moment(this.form.fecha_salida).diff(this.form.fecha_ingreso, 'days')
+      } else if (this.form.fecha_ingreso === this.form.fecha_salida) {
+        dias = 1
+      }
+      total = this.hospedaje.price * dias
+      return total
+    }
+  },
   mounted () {
     this.getHospedaje()
     this.getUser()
@@ -232,17 +245,6 @@ export default {
           }
         })
       }
-    },
-    totalPrice (val) {
-      var total = 0
-      var dias = 0
-      if (this.fechaValida) {
-        dias = moment(this.form.fecha_salida).diff(this.form.fecha_ingreso, 'days') + 1
-      } else {}
-      if (dias > 0) {
-        total = val * dias
-      }
-      return total
     },
     reservar () {
       this.$v.form.fecha_ingreso.$touch()
@@ -272,7 +274,26 @@ export default {
       this.$v.form.expiration.$touch()
       this.$v.form.cvv.$touch()
       if (!this.$v.form.name.$error && !this.$v.form.card.$error && !this.$v.form.expiration.$error && !this.$v.form.cvv.$error) {
-        this.reserva = false
+        this.$q.loading.show({
+          message: 'Iniciando arriendo'
+        })
+        this.form.hospedador_id = this.hospedaje.hospedador_id
+        this.form.hospedaje_id = this.hospedaje._id
+        this.form.image = this.hospedaje.images[0]
+        this.form.cliente_id = this.user.cliente_id
+        this.form.hospedaje_price = this.hospedaje.price
+        this.form.total = this.totalPrice
+        this.$api.post('arrendar_espacio', { dat: this.form }).then(async res => {
+          if (res) {
+            this.form = {}
+            this.$v.form.$reset()
+            this.$q.loading.hide()
+            this.reserva = false
+          } else {
+            this.$q.loading.hide()
+            this.reserva = false
+          }
+        })
       }
     }
   }

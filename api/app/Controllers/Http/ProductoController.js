@@ -2,6 +2,7 @@
 const Producto = use("App/Models/Producto")
 const Categoria = use("App/Models/Categoria")
 const Pedidos = use("App/Models/Pedido")
+const Reservas = use("App/Models/Reserva")
 const Comprados = use("App/Models/Comprado")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
@@ -64,6 +65,19 @@ class ProductoController {
     response.send(data)
   }
 
+  async arriendos ({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let data = (await Reservas.query().where({hospedador_id: user._id}).fetch()).toJSON()
+    data = data.map(v => {
+      return {
+        ...v,
+        detalles: false,
+        fecha_arriendo: moment(v.created_at).format('DD/MM/YYYY')
+      }
+    })
+    response.send(data)
+  }
+
   async pedidoStatus({ params, request, response }) {
     let dat = request.all()
     let modificar = await Pedidos.query().where('_id', params.id).update({status: dat.status})
@@ -95,6 +109,12 @@ class ProductoController {
       delete dat.cantidad
       var producto = await Comprados.create(dat) 
     }
+    response.send(true)
+  }
+
+  async arrendarEspacio ({request, response}) {
+    var data = request.all().dat
+    var arriendo = await Reservas.create(data)
     response.send(true)
   }
 

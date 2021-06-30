@@ -120,7 +120,9 @@ addPrefixToGroup(
     Route.post("subir_img_identidad/:val", "UploadController.subirImgIdentidad")
 
     Route.post("comprar_productos", "ProductoController.pre_pago_tienda")
+    Route.post("arrendar_espacio", "ProductoController.arrendarEspacio")
     Route.get("pedidos", "ProductoController.pedidos")
+    Route.get("arriendos", "ProductoController.arriendos")
     Route.put("pedido_status/:id", "ProductoController.pedidoStatus")
 
   }).middleware("auth")
