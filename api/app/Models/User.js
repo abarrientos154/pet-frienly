@@ -59,11 +59,11 @@ class User extends Model {
   }
 
   paisUser () {
-    return this.hasOne("App/Models/Pais", "pais_id", "_id")
+    return this.hasOne("App/Models/Pais", "country_id", "_id")
   }
 
   ciudadUser () {
-    return this.hasOne("App/Models/Ciudad", "ciudad_id", "_id")
+    return this.hasOne("App/Models/Ciudad", "city_id", "_id")
   }
   // static get objectIDs () { return [ 'country_id','_id', 'city_id' ] }
 }
