@@ -44,18 +44,17 @@
         style="height: 330px;"
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
-              <q-card-section class="q-my-xl"></q-card-section>
-              <q-card-actions class="q-ml-sm">
-                <div class="text-white q-mt-lg">Nombre del alojamiento</div>
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(store, index) in stores" :key="index">
+            <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
+              <div class="q-ml-sm q-mt-xl">
+                <div class="text-white">{{store.tienda.name}}</div>
                 <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-white">Ciudad, Dirección</div>
+                  <div class="text-white col-10">{{store.city}}, {{store.tienda.direccion}}</div>
                 </div>
-              </q-card-actions>
-            </q-card>
+              </div>
+            </q-img>
           </q-card>
         </div>
       </q-scroll-area>
@@ -99,19 +98,19 @@
     </q-scroll-area> -->
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(store, index) in stores" :key="index">
+            <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="bg-primary">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               <q-card-section class="q-my-lg"></q-card-section>
-              <q-card-section>
-                <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white text-subtitle2">Nombre tienda</div>
+              <q-card-section class="q-mt-xl">
+                <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
+                <div class="text-white text-subtitle2">{{store.tienda.name}}</div>
                 <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-subtitle2 text-white">Ciudad / Direccion</div>
+                  <div class="text-subtitle2 text-white">{{store.city}}, {{store.tienda.direccion}}</div>
                 </div>
               </q-card-section>
-            </q-card>
+            </q-img>
           </q-card>
         </div>
     </div>
@@ -146,96 +145,27 @@
           </q-card>
         </div>
       </q-scroll-area>
-    <div class="q-mb-md q-mx-sm text-h4">Alojamientos</div>
-   <!--  <q-scroll-area horizontal class="q-mb-md" :thumb-style="thumbStyle" style="height: 48px;" ref="first">
-      <q-tabs v-model="tabSer" dense class="text-grey" active-color="primary" indicator-color="primary" align="justify" narrow-indicator>
-        <q-tab v-for="(item, index) in servicios" :key="index" :label="item.name" no-caps/>
-      </q-tabs>
-    </q-scroll-area> -->
+    <div class="q-mb-md q-mx-sm text-h4">Hospedadores</div>
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(item, index) in host" :key="index">
+            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               <q-card-section class="q-my-xl"></q-card-section>
-              <q-card-actions class="q-ml-sm">
-                <div class="text-white q-mt-lg">Nombre del alojamiento</div>
-                <div class="row">
+              <div class="q-ml-sm q-mt-xl">
+                <div class="text-white">{{item.name}}</div>
+                <!-- <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-white">Ciudad, Dirección</div>
-                </div>
-              </q-card-actions>
-            </q-card>
+                  <div class="text-white">{{lod.datos_proveedor.ciudad}}, Dirección</div>
+                </div> -->
+              </div>
+            </q-img>
           </q-card>
         </div>
     </div>
     <div class="row justify-center q-my-lg">
       <q-btn no-caps color="primary" label="Ver más" class="q-py-md" style="width: 70%; heigth 40px; border-radius: 6px"/>
     </div>
-    <!-- <div class="q-mb-xs q-mx-sm">Tiendas mejores calificadas</div> -->
-   <!--  <q-scroll-area horizontal class="q-mx-sm q-mb-md" :thumb-style="thumbStyle" style="height: 330px;" ref="first">
-      <div class="row no-wrap" style="width: 100%">
-        <q-card class="q-mt-sm q-mx-sm bordes shadow-11" v-for="(item, index) in tiendas" :key="index" v-ripple style="width: 200px; height: 300px;">
-          <q-card-section style="height: 65%;">
-            <q-img class="absolute-center" :src="imgTienda + item._id" style="width: 90%; height: 90%;"/>
-          </q-card-section>
-          <q-separator />
-          <q-card-section class="bg-orange-2" style="height: 35%;">
-            <div>
-              <q-scroll-area horizontal style="height: 23px; width:100%">
-                <div class="text-subtitle2 text-weight-bolder" style="font-size: 13px">{{item.name}}</div>
-              </q-scroll-area>
-              <div class=</div>
-            </div>"items-center row text-grey">
-                <q-icon class="col-1" name="place" /> -->
-                <!-- <div class="text-subtitle2 col" style="font-size: 12px">{{item.paisUser.name}}, {{item.ciudadUser.name}}</div> -->
-
-            <!-- <div class="items-center row justify-between">
-              <q-rating max="5" size="20px" v-model="rating" color="primary" disable icon="star_border" icon-selected="star" icon-half="star_half" no-dimming />
-              <q-btn round @click="$router.push('/tienda/' + item._id)" icon="keyboard_arrow_right" text-color="primary" color="white" size="10px"/>
-            </div>
-          </q-card-section>
-        </q-card>
-      </div>
-    </q-scroll-area>
-    <div class="q-mx-sm text-h5">Alojamientos</div>
-    <div class="q-mb-md q-mx-sm">Alojamientos mejor catificados</div>
-    <q-list class="q-mb-xl row justify-center" style="width: 100%; height: auto;">
-      <q-card v-for="(hospedaje, index) in hospedajes" :key="index" class="q-mb-md q-mx-sm col no-wrap shadow-11" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-        <q-img @click="seeAccommodation(hospedaje._id)" :src="hospedaje.images[0] ? urlHospedaje + '/' + hospedaje.images[0] : 'noimgpro.png'" style="height: 175px;">
-          <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
-        </q-img>
-        <q-separator />
-        <q-card-section class="row justify-between">
-          <div>
-            <div class="text-subtitle2" style="font-size: 13px">{{hospedaje.name}}</div>
-            <div class="items-center row text-grey">
-                <q-icon name="place" />
-                <div class="text-subtitle2" style="font-size: 12px">{{hospedaje.datos_proveedor.place}}</div>
-            </div>
-          </div>
-          <q-btn no-caps flat dense @click="$router.push('/descripcionalojamiento/' + hospedaje._id)" class="bg-primary text-white" style="width: 100px; border-radius: 10px">${{hospedaje.price}} / noche</q-btn>
-        </q-card-section>
-      </q-card>
-    </q-list> -->
-    <!-- <div class="column items-center q-mt-lg" style="height: 250px;">
-      <div class="text-weight-bolder" style="font-size: 15px">Suscribete a nuestro boletín</div>
-      <div style="font-size: 11px">Recibe las mejores ofertas de todos</div>
-      <div  class="q-mb-md" style="font-size: 11px">nuestros proveedores</div>
-      <q-input outlined label="Tu correo aquí" color-label="secondary">
-        <template v-slot:prepend>
-          <q-icon name="mail_outline"/>
-        </template>
-        <template v-slot:append class="bg-secondary">
-          <q-btn flat dense icon="send" class="bg-primary" text-color="white" style="height: 100%; width: 50px; margin-right: -12px"/>
-        </template>
-      </q-input>
-    </div> -->
-    <!-- <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-btn round icon="shopping_bag" color="primary" size="20px">
-        <q-badge color="red" label="2" floating/>
-      </q-btn>
-    </q-page-sticky> -->
   </div>
 </template>
 
@@ -248,13 +178,14 @@ export default {
     return {
       place: [],
       imgTienda: '',
+      imgProfile: '',
       imgProducto: '',
       tabCat: 'mails',
       tabSer: 'mails',
-      tiendas: [],
+      stores: [],
       productos: [],
       rating: 3,
-      hospedajes: [],
+      host: [],
       urlHospedaje: '',
       servicios: [],
       thumbStyle: {
@@ -277,12 +208,12 @@ export default {
   },
   mounted () {
     this.getCities()
-    this.getTiendas()
+    this.getStore()
     this.getProductos()
-    this.urlHospedaje = env.apiUrl + 'hospedajes_img'
-    this.obtener_hospedajes()
+    this.urlHospedaje = env.apiUrl + 'hospedaje_img'
+    this.getHost()
     this.getServicios()
-    console.log('this.tiendas :>> ', this.tiendas)
+    console.log('this.stores :>> ', this.stores)
   },
   methods: {
     async getCities () {
@@ -296,12 +227,13 @@ export default {
     seeAccommodation (id) {
       this.$router.push('/descripcionalojamiento/' + id)
     },
-    getTiendas () {
+    getStore () {
       this.$api.post('user_by_rol', { rol: [3] }).then(res => {
-        this.imgTienda = env.apiUrl + 'perfil_img/'
+        this.imgTienda = env.apiUrl + 'tienda_img/'
+        console.log('this.imgTienda :>> ', this.imgTienda)
         if (res) {
-          this.tiendas = res
-          console.log(this.tiendas)
+          this.stores = res
+          console.log(this.stores)
         }
       })
     },
@@ -314,11 +246,12 @@ export default {
         }
       })
     },
-    obtener_hospedajes () {
-      this.$api.get('hospedaje').then(res => {
+    getHost () {
+      this.$api.post('user_by_rol', { rol: [4] }).then(res => {
+        this.imgProfile = env.apiUrl + 'perfil_img/'
         if (res) {
-          this.hospedajes = res
-          // console.log(this.hospedajes)
+          this.host = res
+          console.log(this.host)
         }
       })
     },

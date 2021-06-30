@@ -383,9 +383,20 @@ class UserController {
   }
 
   async userByRol({ request, params, response }) {
-    let rol = request.all()
-    const user = (await User.query().where({roles: rol.rol, estatus: 1}).with('paisUser').with('ciudadUser').fetch()).toJSON()
-    response.send(user)
+    try {
+      let rol = request.all()
+      const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
+      if (rol == 3) {
+        for (let i in user) {
+          user[i].city = (await Ciudad.find(user[i].tienda.city_id)).name
+        }
+      }
+      console.log('rol :>> ', rol);
+      console.log('user :>> ', user);
+      response.send(user)
+    } catch (error) {
+      console.error('user by rol: ' + error.name + ':' + error.message)
+    }
   }
 
   async userByStatus({ request, params, response }) {
