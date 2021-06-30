@@ -74,7 +74,7 @@
           </div>
 
           <div class="row items-center">
-            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reserva = true" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
             <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
           </div>
         </div>
@@ -92,47 +92,45 @@
           <div class="column items-center">
             <div class="q-ma-lg">
               <q-avatar rounded style="height: 150px; width: 250px;" class="bg-secondary q-mb-sm">
-                <q-img style="height: 100%;" :src="baseu + hospedaje.images[0].src"/>
+                <q-img style="height: 100%;" :src="hospedaje.images ? baseu + hospedaje.images[0].src : ''"/>
               </q-avatar>
             </div>
             <q-card class="q-mb-md shadow-6" style="width: 90%; height: auto;">
               <q-card-section>
-                <div class="text-grey">Nombre del titular</div>
+                <div class="text-grey-8">Nombre del titular</div>
                 <q-input dense v-model="form.name" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
               </q-card-section>
               <q-card-section>
-                <div class="text-grey">Numero de tarjeta</div>
+                <div class="text-grey-8">Numero de tarjeta</div>
                 <q-input dense type="number" v-model.number="form.card" error-message="Este campo es requerido" :error="$v.form.card.$error" @blur="$v.form.card.$touch()"/>
               </q-card-section>
               <q-card-section horizontal style="height: 100%;">
                 <q-card-section class="col">
-                  <div class="text-grey">Fecha de expiración</div>
+                  <div class="text-grey-8">Fecha de expiración</div>
                   <q-input dense type="date" v-model="form.expiration" error-message="Este campo es requerido" :error="$v.form.expiration.$error" @blur="$v.form.expiration.$touch()"/>
                 </q-card-section>
                 <q-card-section class="col">
-                  <div class="text-grey">CVV</div>
+                  <div class="text-grey-8">CVV</div>
                   <q-input dense type="number" v-model="form.cvv" error-message="Este campo es requerido" :error="$v.form.cvv.$error" @blur="$v.form.cvv.$touch()"/>
                 </q-card-section>
               </q-card-section>
             </q-card>
             <q-card class="q-mb-lg shadow-6" style="width: 90%; height: auto;">
-              <q-card-section horizontal class="justify-between">
+              <q-card-section horizontal class="justify-between q-pb-lg">
                 <q-card-section>
-                  <div class="text-grey">Precio alojamiento</div>
+                  <div class="text-grey-8">Precio alojamiento</div>
                 </q-card-section>
                 <q-card-section>
                   <div>${{hospedaje.price}}</div>
                 </q-card-section>
               </q-card-section>
-              <q-card-section>
-                <q-input dense type="number" v-model.number="totalPagar" error-message="Debe ingresar el monto exacto" :error="$v.totalPagar.$error" @blur="$v.totalPagar.$touch()"/>
-              </q-card-section>
+              <q-separator />
               <q-card-section horizontal class="justify-between">
                 <q-card-section>
-                  <div :class="totalPagar != total ? 'text-red' : ''">Total a pagar</div>
+                  <div class="text-pink-13">Total a pagar</div>
                 </q-card-section>
                 <q-card-section>
-                  <div :class="totalPagar != total ? 'text-red' : ''">${{total}}</div>
+                  <div class="text-pink-13">${{totalPrice(hospedaje.price)}}</div>
                 </q-card-section>
               </q-card-section>
             </q-card>
@@ -146,14 +144,14 @@
 <script>
 import env from '../../env'
 import { required } from 'vuelidate/lib/validators'
+import moment from 'moment'
 export default {
   data () {
     return {
       reserva: false,
-      totalPagar: null,
+      fechaValida: false,
       slide: 0,
       rol: 0,
-      total: 0,
       user: {},
       id: '',
       baseu: '',
@@ -171,9 +169,7 @@ export default {
       card: { required },
       expiration: { required },
       cvv: { required }
-    },
-    total: { required },
-    totalPagar: { required }
+    }
   },
   mounted () {
     this.getHospedaje()
@@ -199,6 +195,49 @@ export default {
             console.log('hospedaje', this.hospedaje)
           }
         })
+      }
+    },
+    totalPrice (val) {
+      var total = 0
+      var dias = 0
+      if (this.fechaValida) {
+        dias = moment(this.form.fecha_salida).diff(this.form.fecha_ingreso, 'days') + 1
+        console.log('dias', dias)
+      } else {}
+      if (dias > 0) {
+        total = val * dias
+      }
+      return total
+    },
+    reservar () {
+      this.$v.form.fecha_ingreso.$touch()
+      this.$v.form.fecha_salida.$touch()
+      if (!this.$v.form.fecha_ingreso.$error && !this.$v.form.fecha_salida.$error) {
+        if (this.form.fecha_ingreso <= this.form.fecha_salida) {
+          this.fechaValida = true
+          this.reserva = true
+        } else {
+          this.fechaValida = false
+          this.$q.dialog({
+            title: 'Atención',
+            message: 'El orden de las fechas no coinciden',
+            cancel: false,
+            persistent: true
+          }).onOk(() => {
+            // Ok
+          }).onCancel(() => {
+            // cancel
+          })
+        }
+      }
+    },
+    pagar () {
+      this.$v.form.name.$touch()
+      this.$v.form.card.$touch()
+      this.$v.form.expiration.$touch()
+      this.$v.form.cvv.$touch()
+      if (!this.$v.form.name.$error && !this.$v.form.card.$error && !this.$v.form.expiration.$error && !this.$v.form.cvv.$error) {
+        this.reserva = false
       }
     }
   }
