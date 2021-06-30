@@ -388,8 +388,8 @@
             <div class="q-px-sm">
               <div class="text-h6 text-bold">Dirección de envío</div>
               <div class="text-subtitle1 text-grey-7">{{user.name + ' ' + user.lastName}}</div>
-              <q-select borderless dense color="black" v-model="form.direccion" :options="ciudades" label="Seleccione dirección" map-options
-                error-message="requerido" :error="$v.form.direccion.$error" @blur="$v.form.direccion.$touch()"
+              <q-select borderless dense color="black" v-model="direccion" :options="ciudades" label="Seleccione dirección" map-options
+                error-message="requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"
                 option-label="name" >
                   <template v-slot:no-option>
                     <q-item>
@@ -498,6 +498,7 @@ export default {
       servicio: {},
       producto: {},
       form: {},
+      direccion: null,
       carrito: [],
       ciudades: [],
       allProductos: [],
@@ -509,9 +510,7 @@ export default {
     }
   },
   validations: {
-    form: {
-      direccion: { required }
-    }
+    direccion: { required }
   },
   computed: {
     totalCarrito () {
@@ -635,9 +634,9 @@ export default {
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
     addCarrito (val, bool) {
-      if (!this.carrito.find(v => v._id === val._id)) {
+      if (!this.carrito.find(v => v.articulo_id === val._id)) {
         var prod = {
-          _id: val._id,
+          articulo_id: val._id,
           price: val.price,
           cantidad_compra: 1
         }
@@ -703,14 +702,16 @@ export default {
       this.carrito.splice(index, 1)
     },
     async iniciarCompra () {
-      this.$v.form.direccion.$touch()
-      if (!this.$v.form.direccion.$error) {
+      this.$v.direccion.$touch()
+      if (!this.$v.direccion.$error) {
+        this.form.country_id = this.user.country_id
+        this.form.city_id = this.direccion._id
         this.form.cliente_id = this.user._id
         this.form.tienda_id = this.tienda._id
         this.tienda_name = this.tienda.name
         this.form.totalValor = this.totalCarrito
         this.form.totalProductos = this.totalProductos
-        /* this.$api.post('comprar_productos', { dat: this.form, carrito: this.carrito }).then(async res => {
+        this.$api.post('comprar_productos', { dat: this.form, carrito: this.carrito }).then(async res => {
           if (res) {
             this.comprarCarrito = false
             this.compraExitosa = true
@@ -718,7 +719,7 @@ export default {
             this.comprarCarrito = false
             this.compraFallo = true
           }
-        }) */
+        })
       }
     }
   }

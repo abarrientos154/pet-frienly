@@ -16,7 +16,7 @@
             <q-file borderless v-model="img" @input="!edit ? servicio_img() : edit_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
             @blur="$v.img.$touch()">
               <div class="absolute-center column items-center" style="width:100%">
-                <q-icon name="image" size="75px" color="white" />
+                <q-icon v-if="imgServicio != ''" name="image" size="75px" color="white" />
               </div>
             </q-file>
           </q-img>

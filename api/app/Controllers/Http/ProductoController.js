@@ -1,6 +1,8 @@
 'use strict'
 const Producto = use("App/Models/Producto")
 const Categoria = use("App/Models/Categoria")
+const Pedidos = use("App/Models/Pedido")
+const Comprados = use("App/Models/Comprado")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
@@ -58,6 +60,22 @@ class ProductoController {
    * @param {View} ctx.view
    */
   async create ({ request, response, view }) {
+  }
+
+  async pre_pago_tienda ({request, response}) {
+    var data = request.all().dat
+    var productos = request.all().carrito
+    data.productos_total = productos.length
+    data.status = 'En Local'
+    data.type = 1
+    var compra = await Pedidos.create(data)
+    for (let i = 0; i < productos.length; i++) {
+      var dat = productos[i]
+      dat.pedido_id = compra._id
+      delete dat.cantidad
+      var producto = await Comprados.create(dat) 
+    }
+    response.send(true)
   }
 
   /**
