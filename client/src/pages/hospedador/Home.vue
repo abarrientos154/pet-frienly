@@ -6,7 +6,7 @@
 
     <div class="row q-pa-sm">
       <div class="col q-mr-sm" style="max-width: 250px;">
-        <q-avatar rounded style="height: 100px; width: 100%;" class="bg-secondary q-my-xs">
+        <q-avatar rounded style="height: 100px; width: 100%;" class="q-my-xs">
           <q-img style="height: 100%;" :src="hospedador.spaceFile ? baseu + hospedador.spaceFile.name : ''"/>
         </q-avatar>
         <div class="row justify-between">
@@ -44,14 +44,14 @@
       </div>
     </div>
 
-    <div>
-      <div class="text-subtitle1 text-bold">Reseñas de clientes</div>
-      <q-scroll-area horizontal style="height: 150px">
-        <div class="row no-wrap" style="width: 100%">
-          <q-card class="q-mt-sm q-mx-sm shadow-6" v-for="index in 3" :key="index" style="width: 300px; height: 125px;">
+    <div class="q-pa-sm">
+      <div class="text-h6">Reseñas de clientes</div>
+      <q-scroll-area horizontal style="height: 150px" v-if="comentarios.length">
+        <div class="row no-wrap q-gutter-md" style="width: 100%">
+          <q-card class="shadow-6" v-for="index in comentarios" :key="index" style="width: 300px; height: 125px;">
             <q-card-section horizontal style="height: 100%;">
               <q-card-section>
-                <q-avatar rounded style="height: 100%; width: 100px; border-radius: 20px;" class="bg-secondary">
+                <q-avatar rounded style="height: 100%; width: 100px; border-radius: 20px;" class="bg-grey">
                   <q-img style="height: 100%;" :src="''"/>
                 </q-avatar>
               </q-card-section>
@@ -59,7 +59,7 @@
                 <div class="text-subtitle3 text-bold">Titulo del comentario</div>
                 <div class="col">
                   <q-scroll-area style="height: 55px;">
-                    <div class="text-caption text-grey-6 text-italic">{{lorem}}</div>
+                    <div class="text-caption text-grey-6 text-italic">{{'Descripcion'}}</div>
                   </q-scroll-area>
                 </div>
                 <q-rating max="5" size="15px" v-model="rating" color="grey" color-selected="orange-8" readonly/>
@@ -68,13 +68,14 @@
           </q-card>
         </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 150px;">No hay reseñas actualmente</div>
     </div>
 
     <div>
       <div class="text-subtitle1 text-bold q-mb-md">Conoce los espacios disponibles</div>
       <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;">
         <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;" @click="$router.push('/descripcion_espacio/' + item._id)">
-          <q-img class="bg-secondary" :src="baseuHospedador + item.images[0]" style="height: 175px;">
+          <q-img :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
           <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
@@ -111,12 +112,12 @@ export default {
       rating: 4,
       rol: 0,
       id: '',
-      lorem: 'Aliquam ac elit id libero tincidunt vestibulum. Etiam porttitor arcu sed sem fermentum tempor.',
       baseu: '',
       baseuHospedador: '',
       hospedador: {},
       user: {},
       cityUser: {},
+      comentarios: [1, 2, 3],
       allhospedajes: [],
       hospedajes: []
     }
@@ -138,14 +139,14 @@ export default {
             this.user = res
             if (this.$route.params.id) {
               this.id = this.$route.params.id
-              this.getHospedador()
+              this.getHospedador(this.id)
             }
           }
         }
       })
     },
-    getHospedador () {
-      this.$api.get('user_by_id/' + this.id).then(res => {
+    getHospedador (id) {
+      this.$api.get('hospedaje_by_id/' + id).then(res => {
         if (res) {
           this.hospedador = res
           this.ciudadUser()
@@ -161,11 +162,15 @@ export default {
       })
     },
     getHospedajes () {
+      this.$q.loading.show({
+        message: 'Cargando hospedajes'
+      })
       this.$api.get('hospedaje_by_hospedador/' + this.hospedador._id).then(res => {
         if (res) {
           this.allhospedajes = res
           this.hospedajes = this.allhospedajes.slice(0, 3)
           this.baseuHospedador = env.apiUrl + 'hospedajes_img/'
+          this.$q.loading.hide()
         }
       })
     },
