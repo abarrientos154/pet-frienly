@@ -1,5 +1,6 @@
 'use strict'
 const Hospedaje = use("App/Models/Hospedaje")
+const Servicios = use("App/Models/Servicio")
 const User = use("App/Models/Hospedaje")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
@@ -82,7 +83,6 @@ class HospedajeController {
    */
   async show ({ params, request, response, view, auth }) {
     let hospedaje = (await Hospedaje.with('datos_hospedador').find(params.id)).toJSON()
-    console.log('hospedaje :>> ', hospedaje);
     hospedaje.images = hospedaje.images.map(ele => {
       return { src: ele }
     })

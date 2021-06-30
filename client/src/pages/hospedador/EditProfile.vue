@@ -35,21 +35,7 @@
             </div>
             <div class="q-mb-md">
               <div class="text-caption">Correo de contacto</div>
-              <q-input filled v-model="form.email"  dense placeholder="micorreo@petfriendly.com" error-message="Este campo es requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
-            </div>
-            <div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
-                <div class="text-caption">Contraseña</div>
-                <q-input :type="ver ? 'text' : 'password'" v-model="password" placeholder="Contraseña" outlined dense filled error-message="Ingrese una contraseña válida, mínimo 6 caracteres" :error="$v.password.$error" @blur="$v.password.$touch()">
-                  <template v-slot:append>
-                    <q-icon :name="ver ? 'visibility_off' : 'visibility'" class="cursor-pointer q-pa-sm" color="primary" @click="ver = !ver" />
-                  </template>
-                </q-input>
-              </div>
-              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
-                <div class="text-caption">Repite Contraseña</div>
-                <q-input :type="ver ? 'text' : 'password'" v-model="repeatPassword" placeholder="Repita su Contraseña" outlined dense filled error-message="Las contraseñas deben ser iguales" :error="$v.repeatPassword.$error" @blur="$v.repeatPassword.$touch()"/>
-              </div>
+              <q-input filled v-model="form.email" readonly dense placeholder="micorreo@petfriendly.com" error-message="Este campo es requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
             </div>
             <div>
               <div class="text-caption">Imágenes de documento de identificación</div>
@@ -169,7 +155,7 @@
 </template>
 
 <script>
-import { required, maxLength, email, sameAs, minLength } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators'
 import env from '../../env'
 export default {
   data () {
@@ -180,14 +166,13 @@ export default {
       slide: 1,
       form: {},
       formMySpace: {},
-      password: '',
-      repeatPassword: '',
       paisUser: null,
       cityUser: null,
       representImg: '',
       RLImg: {},
       identificacionImg: [],
       IImg: [],
+      idt: 0,
       perfilImg: '',
       PImg: {},
       paises: [],
@@ -216,9 +201,7 @@ export default {
       direction: { required },
       hora_inicio: { required },
       hora_cierre: { required }
-    },
-    password: { required, maxLength: maxLength(256), minLength: minLength(6) },
-    repeatPassword: { sameAsPassword: sameAs('password') }
+    }
   },
   mounted () {
     this.getUser()
@@ -259,9 +242,7 @@ export default {
     siguiente () {
       if (this.slide === 1) {
         this.$v.form.$touch()
-        this.$v.password.$touch()
-        this.$v.repeatPassword.$touch()
-        if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && this.terminos) {
+        if (!this.$v.form.$error && this.terminos) {
           this.slide = 2
         } else {
           this.$q.notify({
@@ -298,23 +279,24 @@ export default {
       this.form.PImg = this.PImg
     },
     identificacion_img () {
-      this.identificacionImg = []
-      this.IImg.push(this.img)
-      this.identificacionImg.push(URL.createObjectURL(this.img))
+      this.IImg[this.idt] = this.img
+      this.identificacionImg[this.idt] = URL.createObjectURL(this.img)
       this.img = null
       this.form.IImg = this.IImg
+      if (this.idt === 1) {
+        this.idt = 0
+      } else {
+        this.idt++
+      }
     },
     modificarPerfil () {
       this.$v.form.$touch()
-      this.$v.password.$touch()
-      this.$v.repeatPassword.$touch()
       this.$v.formMySpace.$touch()
-      if (!this.$v.form.$error && !this.$v.formMySpace.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && this.terminos) {
+      if (!this.$v.form.$error && !this.$v.formMySpace.$error && this.terminos) {
         this.$q.loading.show({
           message: 'Actualizando...'
         })
         this.form.my_space = this.formMySpace
-        this.form.password = this.password
         console.log(this.form)
         var formData = new FormData()
         var files = []
