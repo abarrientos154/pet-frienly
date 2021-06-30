@@ -91,7 +91,6 @@ export default {
         this.$api.post('login', this.form).then(res => {
           if (res) {
             this.user = res.TRI_SESSION_INFO
-            console.log('user', this.user)
 
             this.login(res)
             if (this.user.roles[0] === 1) {

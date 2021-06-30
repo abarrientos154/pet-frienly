@@ -1,13 +1,13 @@
 <template>
   <div class="q-pa-sm">
     <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
-      <div class="text-white text-h6 text-center">{{rol === 4 ? 'Tu espacio' : hospedador.my_space.name}}</div>
+      <div class="text-white text-h6 text-center">{{rol === 4 ? 'Tu espacio' : hospedador.spaceFile ? hospedador.my_space.name : ''}}</div>
     </q-header>
 
     <div class="row q-pa-sm">
       <div class="col q-mr-sm" style="max-width: 250px;">
         <q-avatar rounded style="height: 100px; width: 100%;" class="bg-secondary q-my-xs">
-          <q-img style="height: 100%;" :src="baseu + hospedador.spaceFile.name"/>
+          <q-img style="height: 100%;" :src="hospedador.spaceFile ? baseu + hospedador.spaceFile.name : ''"/>
         </q-avatar>
         <div class="row justify-between">
           <q-rating v-model="ratingModel" color="grey" color-selected="orange-8" readonly size="18px"/>
@@ -17,7 +17,7 @@
       <div class="col">
         <div class="text-subtitle1 text-bold">Bienvenido</div>
         <q-scroll-area class="q-mb-sm" style="height: 75px;">
-          <div class="text-caption">{{hospedador.my_space.description}}</div>
+          <div class="text-caption">{{hospedador.my_space ? hospedador.my_space.description : ''}}</div>
         </q-scroll-area>
         <q-btn v-if="rol === 4" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/editar_hospedador')" no-caps/>
       </div>
@@ -25,7 +25,7 @@
 
     <div>
       <div class="text-subtitle1 text-bold">Informacion</div>
-      <div class="row">
+      <div v-if="hospedador.my_space" class="row">
         <div class="col q-mx-md">
           <div class="text-subtitle3 text-bold text-grey-6">Ciudad</div>
           <div class="text-caption text-grey-6">{{cityUser.name}}</div>
@@ -86,8 +86,8 @@
             <div>
               <div class="text-subtitle2" style="font-size: 13px">{{item.name}}</div>
               <div class="items-center row text-grey">
-                  <q-icon name="place" />
-                  <div class="text-subtitle2" style="font-size: 12px">Pais, Ciudad</div>
+                  <q-icon name="bubble_chart" size="20px" />
+                  <div class="text-subtitle2" style="font-size: 12px">{{item.state}}</div>
               </div>
             </div>
             <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{item.price}} por noche</q-btn>
@@ -132,7 +132,6 @@ export default {
           this.rol = res.roles[0]
           if (this.rol === 4) {
             this.hospedador = res
-            console.log(this.hospedador)
             this.ciudadUser()
             this.getHospedajes()
           } else if (this.rol === 2) {
@@ -149,7 +148,6 @@ export default {
       this.$api.get('user_by_id/' + this.id).then(res => {
         if (res) {
           this.hospedador = res
-          console.log(this.hospedador)
           this.ciudadUser()
           this.getHospedajes()
         }
@@ -159,7 +157,6 @@ export default {
       this.$api.get('ciudad_by_id/' + this.hospedador.my_space.ciudad_id).then(res => {
         if (res) {
           this.cityUser = res
-          console.log(this.cityUser)
         }
       })
     },
@@ -169,7 +166,6 @@ export default {
           this.allhospedajes = res
           this.hospedajes = this.allhospedajes.slice(0, 3)
           this.baseuHospedador = env.apiUrl + 'hospedajes_img/'
-          console.log(this.allhospedajes)
         }
       })
     },

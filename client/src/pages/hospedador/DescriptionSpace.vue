@@ -7,8 +7,8 @@
       <div class="col-10 text-white text-subtitle1 text-center">{{hospedaje.name}}</div>
     </q-header>
 
-      <div class="q-mt-xl q-pt-lg">
-        <q-carousel size="sm" v-model="slide" style="height: 200px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px" transition-prev="jump-right" transition-next="jump-left" swipeable animated prev-icon="arrow_left" next-icon="arrow_right" navigation arrows>
+      <div class="q-pt-xl">
+        <q-carousel v-model="slide" style="height: 200px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px" transition-prev="jump-right" transition-next="jump-left" swipeable animated prev-icon="arrow_left" next-icon="arrow_right" navigation arrows>
           <q-carousel-slide v-for="(img, index) in hospedaje.images" :key="index" :name="index" :img-src="baseu + img.src"/>
         </q-carousel>
         <div class="q-pa-md">
@@ -72,12 +72,12 @@
               </q-select>
             </div>
           </div>
-
-          <div class="row items-center">
-            <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
-            <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
-          </div>
         </div>
+      </div>
+
+      <div class="row items-center q-pa-md">
+        <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+        <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
       </div>
 
       <q-dialog v-model="reserva" maximized persistent>
@@ -202,7 +202,6 @@ export default {
       var dias = 0
       if (this.fechaValida) {
         dias = moment(this.form.fecha_salida).diff(this.form.fecha_ingreso, 'days') + 1
-        console.log('dias', dias)
       } else {}
       if (dias > 0) {
         total = val * dias
