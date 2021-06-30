@@ -133,7 +133,20 @@
          <div class="q-my-md">
            <div>Fecha de nacimiento</div>
            <div class="text-overline q-ml-md">¿Cuándo nacio tu mascota?</div>
-           <q-input type="date" filled v-model="formThree.birthdate"  dense error-message="Requerido" :error="$v.formThree.birthdate.$error" @blur="$v.formThree.birthdate.$touch()"/>
+           <q-input filled readonly dense v-model="formThree.birthdate" placeholder="dd/mm/aaaa" @click="$refs.qDateProxy.show()"
+            error-message="Este campo es requerido" :error="$v.formThree.birthdate.$error" @blur="$v.formThree.birthdate.$touch()">
+              <template v-slot:append>
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                    <q-date v-model="formThree.birthdate" mask="DD/MM/YYYY">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
+                </q-icon>
+              </template>
+            </q-input>
          </div>
          <div>
            <div>¿Qué tipo de mascota tienes?</div>
@@ -178,24 +191,24 @@ import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
+      terms: false,
+      isPwd: true,
+      appear: false,
+      formLogin: null,
+      country: null,
+      city: null,
       slide: 1,
+      password: '',
+      repeatPassword: '',
+      imgPerfil: '',
       form: {},
       formTwo: {},
       formThree: {},
-      country: null,
-      city: null,
       files: [null, null, null],
       petImg: [null, null, null],
       perfilFile: null,
-      imgPerfil: '',
       countries: [],
       cities: [],
-      terms: false,
-      isPwd: true,
-      password: '',
-      repeatPassword: '',
-      appear: false,
-      formLogin: null,
       sizeDog: [
         { name: 'Pequeño', value: 1 },
         { name: 'Mediano', value: 2 },

@@ -53,10 +53,34 @@
               <div class="text-overline">Cuando te vas a alojar</div>
               <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
               <div class="row justify-around">
-                <q-input type="date" class="col-5" filled v-model="form.fecha_ingreso" dense hint="Fecha de ingreso"
-                error-message="Requerido" :error="$v.form.fecha_ingreso.$error" @blur="$v.form.fecha_ingreso.$touch()"/>
-                <q-input type="date" class="col-5" filled v-model="form.fecha_salida" dense hint="Fecha de salida"
-                error-message="Requerido" :error="$v.form.fecha_salida.$error" @blur="$v.form.fecha_salida.$touch()"/>
+                <q-input filled readonly dense v-model="form.fecha_ingreso" class="col-5" placeholder="dd/mm/aaaa" hint="Fecha de ingreso" @click="$refs.qDateProxy1.show()"
+                error-message="Este campo es requerido" :error="$v.form.fecha_ingreso.$error" @blur="$v.form.fecha_ingreso.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy ref="qDateProxy1" transition-show="scale" transition-hide="scale">
+                        <q-date v-model="form.fecha_ingreso" mask="DD/MM/YYYY">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
+                <q-input filled readonly dense v-model="form.fecha_salida" class="col-5" placeholder="dd/mm/aaaa" hint="Fecha de salida" @click="$refs.qDateProxy2.show()"
+                error-message="Este campo es requerido" :error="$v.form.fecha_salida.$error" @blur="$v.form.fecha_salida.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="event" class="cursor-pointer">
+                      <q-popup-proxy ref="qDateProxy2" transition-show="scale" transition-hide="scale">
+                        <q-date v-model="form.fecha_salida" mask="DD/MM/YYYY">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-date>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
               </div>
             </div>
             <div class="q-my-md">
@@ -107,7 +131,20 @@
               <q-card-section horizontal style="height: 100%;">
                 <q-card-section class="col">
                   <div class="text-grey-8">Fecha de expiración</div>
-                  <q-input dense type="date" v-model="form.expiration" error-message="Este campo es requerido" :error="$v.form.expiration.$error" @blur="$v.form.expiration.$touch()"/>
+                  <q-input readonly dense v-model="form.expiration" placeholder="dd/mm/aaaa" @click="$refs.qDateProxy3.show()"
+                  error-message="Este campo es requerido" :error="$v.form.expiration.$error" @blur="$v.form.expiration.$touch()">
+                    <template v-slot:append>
+                      <q-icon name="event" class="cursor-pointer">
+                        <q-popup-proxy ref="qDateProxy3" transition-show="scale" transition-hide="scale">
+                          <q-date v-model="form.expiration" mask="DD/MM/YYYY">
+                            <div class="row items-center justify-end">
+                              <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                            </div>
+                          </q-date>
+                        </q-popup-proxy>
+                      </q-icon>
+                    </template>
+                  </q-input>
                 </q-card-section>
                 <q-card-section class="col">
                   <div class="text-grey-8">CVV</div>
