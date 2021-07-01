@@ -9,7 +9,7 @@ const Servicio = use("App/Models/Servicio")
 const TiendaServicio = use("App/Models/TiendaServicio")
 const Role = use("App/Models/Role")
 const { validate } = use("Validator")
-const Paises = use("App/Models/Pais")
+const Pais = use("App/Models/Pais")
 const Ciudad = use("App/Models/Ciudad")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -307,7 +307,7 @@ class UserController {
   async userLogueado({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
     if (user.roles[0] === 3) {
-      let country = await Paises.find(user.tienda.country_id)
+      let country = await Pais.find(user.tienda.country_id)
       let city = await Ciudad.find(user.tienda.city_id)
       user.tienda.country = country
       user.tienda.city = city
@@ -329,7 +329,7 @@ class UserController {
     if (user.ciudad_id && user.pais_id) {
       let objCiudad = await Ciudad.find(user.ciudad_id)
       ciudad = objCiudad.ciudad
-      let objPais = await Paises.find(user.pais_id)
+      let objPais = await Pais.find(user.pais_id)
       pais = objPais.pais
     }
     user.paisName = pais
@@ -339,7 +339,7 @@ class UserController {
     if (user.hoteleria.ciudad_id && user.hoteleria.pais_id) {
       let objCiudad = await Ciudad.find(user.hoteleria.ciudad_id)
       ciudadhotel = objCiudad.ciudad
-      let objPais = await Paises.find(user.hoteleria.pais_id)
+      let objPais = await Pais.find(user.hoteleria.pais_id)
       paishotel = objPais.pais
     }
     user.hoteleria.paisName = paishotel
@@ -354,7 +354,7 @@ class UserController {
     if (user.hoteleria.ciudad && user.hoteleria.pais_id) {
       let objCiudad = await Ciudad.find(user.hoteleria.ciudad)
       ciudad = objCiudad.ciudad
-      let objPais = await Paises.find(user.hoteleria.pais_id)
+      let objPais = await Pais.find(user.hoteleria.pais_id)
       pais = objPais.pais
     }
     user.hoteleria.paisName = pais
@@ -365,7 +365,7 @@ class UserController {
   async tiendaById({ params, response }) {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()
     let servicios = (await TiendaServicio.query().where({tienda_id: params.id}).with('servicio').fetch()).toJSON()
-    let country = await Paises.find(user.tienda.country_id)
+    let country = await Pais.find(user.tienda.country_id)
     let city = await Ciudad.find(user.tienda.city_id)
     user.tienda.servicios = servicios
     user.tienda.country = country
@@ -375,7 +375,7 @@ class UserController {
 
   async hospedajeById({ params, response }) {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()
-    let country = await Paises.find(user.my_space.pais_id)
+    let country = await Pais.find(user.my_space.pais_id)
     let city = await Ciudad.find(user.my_space.ciudad_id)
     user.my_space.country = country
     user.my_space.city = city
@@ -393,6 +393,7 @@ class UserController {
       } else if (rol.rol[0] == 4) {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].my_space.ciudad_id)).name
+          user[i].country = (await Pais.find(user[i].my_space.pais_id)).name
         }
       }
       response.send(user)
