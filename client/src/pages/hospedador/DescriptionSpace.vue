@@ -86,7 +86,7 @@
             <div class="q-my-md">
               <div class="text-overline">Selecciona tu(s) mascota(s)</div>
               <div class="text-caption">Recuerda que solo podras agregar mascotas que cumplan los requisitos</div>
-              <q-select dense filled v-model="form.mascotas" :options="mascotas" option-label="name" map-options
+              <q-select dense multiple use-chips filled v-model="form.mascotas" :options="mascotas" option-label="name" map-options
               error-message="Este campo es requerido" :error="$v.form.mascotas.$error" @blur="$v.form.mascotas.$touch()">
                 <template v-slot:no-option>
                   <q-item>
@@ -193,7 +193,9 @@ export default {
       id: '',
       baseu: '',
       hospedaje: {},
-      form: {},
+      form: {
+        mascotas: []
+      },
       mascotas: []
     }
   },
@@ -222,15 +224,24 @@ export default {
     }
   },
   mounted () {
-    this.getHospedaje()
     this.getUser()
+    this.getHospedaje()
   },
   methods: {
     getUser () {
+      this.$q.loading.show({
+        message: 'Cargando datos'
+      })
       this.$api.get('user_logueado').then(res => {
         if (res) {
           this.rol = res.roles[0]
           this.user = res
+          this.$api.get('mascota_by_user_id/' + this.user._id).then(res => {
+            if (res) {
+              this.mascotas = res
+              this.$q.loading.hide()
+            }
+          })
         }
       })
     },
@@ -241,7 +252,6 @@ export default {
           if (res) {
             this.hospedaje = res
             this.baseu = env.apiUrl + 'hospedajes_img/'
-            console.log('hospedaje', this.hospedaje)
           }
         })
       }
@@ -249,7 +259,8 @@ export default {
     reservar () {
       this.$v.form.fecha_ingreso.$touch()
       this.$v.form.fecha_salida.$touch()
-      if (!this.$v.form.fecha_ingreso.$error && !this.$v.form.fecha_salida.$error) {
+      this.$v.form.mascotas.$touch()
+      if (!this.$v.form.fecha_ingreso.$error && !this.$v.form.fecha_salida.$error && !this.$v.form.mascotas.$error) {
         if (this.form.fecha_ingreso <= this.form.fecha_salida) {
           this.fechaValida = true
           this.reserva = true

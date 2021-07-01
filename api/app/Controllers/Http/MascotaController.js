@@ -31,7 +31,7 @@ class MascotaController {
   }
 
   async mascotaByUserId ({ response, params }) {
-    let datos = (await Mascota.query().where({ownerId: params.user_id}).with('creador').fetch()).toJSON()
+    let datos = (await Mascota.query().where({ownerId: params.user_id}).fetch()).toJSON()
     response.send(datos)
   }
 

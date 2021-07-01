@@ -42,16 +42,16 @@
                     <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.phone : ''}}</div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row q-mb-md" v-for="(mascota, index) in item.mascotas" :key="index">
                   <div class="col column items-center">
                     <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
-                      <q-img style="height: 100%;" :src="''"/>
+                      <q-img style="height: 100%;" :src="baseuMascotas + mascota.images[0]"/>
                     </q-avatar>
                   </div>
                   <div class="col">
                     <div class="text-caption text-grey-7 text-bold">Datos de mascota</div>
-                    <div class="text-grey-7" style="font-size: 11px">Nombre de mascota</div>
-                    <div class="text-grey-7" style="font-size: 11px">Raza</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{mascota.name}}</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{mascota.race}}</div>
                   </div>
                 </div>
               </div>
@@ -139,16 +139,16 @@
                     <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.phone : ''}}</div>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row q-mb-md" v-for="(mascota, index) in item.mascotas" :key="index">
                   <div class="col column items-center">
                     <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
-                      <q-img style="height: 100%;" :src="''"/>
+                      <q-img style="height: 100%;" :src="baseuMascotas + mascota.images[0]"/>
                     </q-avatar>
                   </div>
                   <div class="col">
                     <div class="text-caption text-grey-7 text-bold">Datos de mascota</div>
-                    <div class="text-grey-7" style="font-size: 11px">Nombre de mascota</div>
-                    <div class="text-grey-7" style="font-size: 11px">Raza</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{mascota.name}}</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{mascota.race}}</div>
                   </div>
                 </div>
               </div>
@@ -194,6 +194,7 @@ export default {
       selectMes: '',
       baseuHospedaje: '',
       baseuRepresentante: '',
+      baseuMascotas: '',
       allArriendos: [],
       enCurso: [],
       arriendos: [],
@@ -203,6 +204,7 @@ export default {
   mounted () {
     this.baseuHospedaje = env.apiUrl + 'hospedajes_img/'
     this.baseuRepresentante = env.apiUrl + 'perfil_img/'
+    this.baseuMascotas = env.apiUrl + 'mascota_img/'
     this.getArriendos()
   },
   methods: {
