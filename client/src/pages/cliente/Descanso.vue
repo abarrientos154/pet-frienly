@@ -13,7 +13,7 @@
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(item, index) in host" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
-            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
+            <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-full q-ml-md column justify-end q-mb-sm">
@@ -47,7 +47,7 @@
     <div>
       <div class="row justify-around col-6 q-mb-sm">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:48%" clickable v-ripple v-for="(item, index) in host" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)" class="q-mb-sm">
-            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
+            <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-full q-ml-md column justify-end q-mb-sm">
@@ -95,7 +95,7 @@ export default {
     },
     getHost () {
       this.$api.post('user_by_rol', { rol: [4] }).then(res => {
-        this.imgProfile = env.apiUrl + 'perfil_img/'
+        this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           this.host = res
           console.log(this.host)

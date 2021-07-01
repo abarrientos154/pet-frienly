@@ -84,6 +84,7 @@ addPrefixToGroup(
     Route.put("update_statushotel/:id", "UserController.userStatushotel")
     Route.post("update_hospedador", "UserController.editHospedador")
     Route.put('datosnew/:id', 'UserController.updatedata')
+    Route.get('clientById/:id', 'UserController.clientById')
     
     Route.get('mascota', 'MascotaController.index')
     Route.post('mascota', 'MascotaController.store')

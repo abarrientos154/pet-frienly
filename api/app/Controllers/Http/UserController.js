@@ -361,6 +361,10 @@ class UserController {
     user.hoteleria.ciudadName = ciudad
     response.send(user)
   }
+  async clientById({ params, response }) {
+    const user = await User.find(params.id)
+    response.send(user)
+  }
 
   async tiendaById({ params, response }) {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()

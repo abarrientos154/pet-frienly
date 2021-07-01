@@ -1,6 +1,7 @@
 <template>
   <div>
     <div style="height: 300px; width: 100%;" class="bg-primary">
+      <q-btn no-caps color="secondary" class="q-mt-md q-ml-md" label="Editar Perfil" @click="$router.push('/editar-perfil/' + user._id)"/>
     </div>
     <div class="q-mx-md">
       <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
@@ -81,7 +82,7 @@
         >
           <div class="row no-wrap q-py-md q-px-md q-gutter-md">
             <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(item, index) in lastHost" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
-               <q-img :src="imgProfile + item._id" style="height: 240px; width: 100%" class="bg-primary">
+               <q-img :src="imgProfile + item.spaceFile.name" style="height: 240px; width: 100%" class="bg-primary">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="row justify-center items-center q-ma-md">
@@ -98,7 +99,7 @@
       <div>
         <div class="row justify-around col-6">
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:48%" clickable v-ripple v-for="(item, index) in host" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)" class="q-mb-sm">
-              <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
+              <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%" class="bg-primary">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-full q-ml-md column justify-end q-mb-sm">
@@ -155,10 +156,12 @@ export default {
       search: {},
       stars: 4,
       lastStores: [],
-      lastHosts: []
+      lastHosts: [],
+      user: {}
     }
   },
   mounted () {
+    this.getUser()
     this.getCities()
     this.getStore()
     this.getProductos()
@@ -168,6 +171,14 @@ export default {
     console.log('this.stores :>> ', this.stores)
   },
   methods: {
+    getUser () {
+      this.$api.get('user_logueado').then(res => {
+        if (res) {
+          this.user = res
+          console.log('this.user._id :>> ', this.user._id)
+        }
+      })
+    },
     async getCities () {
       await this.$api.get('ciudades').then(res => {
         if (res) {
@@ -179,8 +190,8 @@ export default {
     seeAccommodation (id) {
       this.$router.push('/descripcionalojamiento/' + id)
     },
-    getStore () {
-      this.$api.post('user_by_rol', { rol: [3] }).then(res => {
+    async getStore () {
+      await this.$api.post('user_by_rol', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         console.log('this.imgTienda :>> ', this.imgTienda)
         if (res) {
@@ -201,9 +212,9 @@ export default {
         }
       })
     },
-    getHost () {
-      this.$api.post('user_by_rol', { rol: [4] }).then(res => {
-        this.imgProfile = env.apiUrl + 'perfil_img/'
+    async getHost () {
+      await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
+        this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           const total = [...res]
           this.host = res

@@ -37,6 +37,7 @@ const routes = [
       { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       { path: '/inicio-proveedor/:id', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/inicio-hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
+      { path: '/editar-perfil/:id', component: () => import('pages/cliente/EditarPerfil.vue') },
       // Generales
       { path: '/Datos', component: () => import('pages/Datauser.vue') },
       { path: '/Datosedit', component: () => import('pages/Userdata.vue') }
