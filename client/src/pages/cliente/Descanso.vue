@@ -17,7 +17,7 @@
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-full q-ml-md column justify-end q-mb-sm">
-              <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
+              <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="130%" />
               <div class="text-white text-bold">{{item.my_space.name}}</div>
               <div class="row">
                 <q-icon name="place" class="q-mr-xs text-white"/>
@@ -46,12 +46,12 @@
       </div>
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm q-mb-md" style="width:100%">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(item, index) in host" :key="index">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%; min-width:120px" clickable v-ripple v-for="(item, index) in host" :key="index">
             <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-full q-ml-md column justify-end q-mb-sm">
-              <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
+              <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="130%" />
               <div class="text-white text-bold">{{item.my_space.name}}</div>
               <div class="row">
                 <q-icon name="place" class="q-mr-xs text-white"/>
