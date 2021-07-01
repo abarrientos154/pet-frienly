@@ -36,7 +36,7 @@
         style="height: 330px;"
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(store, index) in stores" :key="index" @click="$router.push('/inicio/' + store._id)">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(store, index) in stores" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
@@ -54,7 +54,7 @@
     <div class="q-mb-md q-mx-sm text-h4">Nuestras tiendas</div>
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%; min-width:120px" clickable v-ripple v-for="(store, index) in stores" :key="index" @click="$router.push('/inicio/' + store._id)">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%; min-width:120px" clickable v-ripple v-for="(store, index) in stores" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
@@ -103,7 +103,7 @@
     <div class="q-mb-md q-mx-sm text-h4">Alojamientos</div>
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%; min-width:120px" clickable v-ripple v-for="(item, index) in host" :key="index">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%; min-width:120px" clickable v-ripple v-for="(item, index) in host" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
             <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
