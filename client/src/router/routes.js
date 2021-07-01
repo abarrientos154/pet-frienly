@@ -35,7 +35,8 @@ const routes = [
       { path: '/descanso', component: () => import('pages/cliente/Descanso.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
       { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
-      { path: '/inicio/:id', component: () => import('pages/proveedor/Inicio.vue') },
+      { path: '/inicio-proveedor/:id', component: () => import('pages/proveedor/Inicio.vue') },
+      { path: '/inicio-hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
       // Generales
       { path: '/Datos', component: () => import('pages/Datauser.vue') },
       { path: '/Datosedit', component: () => import('pages/Userdata.vue') }
