@@ -279,7 +279,7 @@ export default {
         })
         this.form.hospedador_id = this.hospedaje.hospedador_id
         this.form.hospedaje_id = this.hospedaje._id
-        this.form.image = this.hospedaje.images[0]
+        this.form.image = this.hospedaje.images[0].src
         this.form.cliente_id = this.user.cliente_id
         this.form.hospedaje_price = this.hospedaje.price
         this.form.total = this.totalPrice

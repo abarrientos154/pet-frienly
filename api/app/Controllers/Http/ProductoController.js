@@ -67,11 +67,13 @@ class ProductoController {
 
   async arriendos ({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
-    let data = (await Reservas.query().where({hospedador_id: user._id}).fetch()).toJSON()
+    let data = (await Reservas.query().where({hospedador_id: user._id}).with('representante').fetch()).toJSON()
     data = data.map(v => {
       return {
         ...v,
         detalles: false,
+        dias: moment(v.fecha_salida).diff(v.fecha_ingreso, 'days'),
+        expirado: moment(v.expiration) > moment() ? false : true,
         fecha_arriendo: moment(v.created_at).format('DD/MM/YYYY')
       }
     })

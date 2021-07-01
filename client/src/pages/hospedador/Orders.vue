@@ -9,9 +9,9 @@
       <div class="q-mb-sm text-caption text-grey-8 text-italic">Ordena los arriendos por fechas para ver su disponibilidad</div>
     </div>
 
-    <q-list v-if="arriendos.length" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
-        <q-card v-for="(item, index) in arriendos" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-          <q-img class="bg-secondary" :src="''" style="height: 175px;">
+    <q-list v-if="enCurso.length" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
+        <q-card v-for="(item, index) in enCurso" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
+          <q-img :src="baseuHospedaje + item.image" style="height: 175px;">
             <q-btn no-caps dense color="primary" class="q-mt-md q-pr-xl q-pl-sm" style="border-top-right-radius: 12px; border-bottom-right-radius: 10px;">
               <div class="row">
                 <div class="q-mr-xs">Espacio</div>
@@ -21,8 +21,8 @@
           </q-img>
           <q-card-section class="column items-center">
             <div class="row justify-between full-width q-mb-sm">
-              <div class="text-caption text-bold">Fecha de compra</div>
-              <div class="text-caption text-bold" style="font-size: 12px">Arriendo nº</div>
+              <div class="text-caption"><b>Fecha de compra </b>{{item.fecha_arriendo}}</div>
+              <div class="text-caption" style="font-size: 12px"><b>Arriendo nº </b>{{index + 1}}</div>
             </div>
             <div class="full-width q-my-lg" v-if="item.detalles">
               <div class="q-mb-sm">
@@ -32,19 +32,19 @@
               <div class="column q-my-lg">
                 <div class="row q-mb-md">
                   <div class="col column items-center">
-                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-secondary">
-                      <q-img style="height: 100%;" :src="''"/>
+                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
+                      <q-img style="height: 100%;" :src="baseuRepresentante + item.hospedador_id"/>
                     </q-avatar>
                   </div>
                   <div class="col">
                     <div class="text-caption text-grey-7 text-bold">Datos del representante</div>
-                    <div class="text-grey-7" style="font-size: 11px">Nombre del representante</div>
-                    <div class="text-grey-7" style="font-size: 11px">Telefono</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.name + ' ' + item.representante.last_name : ''}}</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.phone : ''}}</div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col column items-center">
-                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-secondary">
+                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
                       <q-img style="height: 100%;" :src="''"/>
                     </q-avatar>
                   </div>
@@ -57,26 +57,26 @@
               </div>
               <div>
                 <div class="row justify-between q-mb-md">
-                  <div class="text-caption text-grey">Datos de mascota</div>
-                  <div class="text-caption text-grey-7 text-bold">10 dias</div>
+                  <div class="text-caption text-grey-8">Datos de mascota</div>
+                  <div class="text-caption text-grey-8 text-bold">{{item.dias}} días</div>
                 </div>
                 <div class="column q-mb-md">
                   <div class="row justify-between">
-                    <div class="text-caption text-grey">Inicio del alojamiento</div>
-                    <div class="text-caption text-grey-7 text-bold">10/01/2021</div>
+                    <div class="text-caption text-grey-8">Inicio del alojamiento</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_ingreso}}</div>
                   </div>
                   <div class="row justify-between">
-                    <div class="text-caption text-grey">Fin del alojamiento</div>
-                    <div class="text-caption text-grey-7 text-bold">12/01/2021</div>
+                    <div class="text-caption text-grey-8">Fin del alojamiento</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_salida}}</div>
                   </div>
                 </div>
                 <div class="row justify-between">
-                  <div class="text-caption text-grey">Precio total</div>
-                  <div class="text-primary">$17.95</div>
+                  <div class="text-caption text-grey-8">Precio total</div>
+                  <div class="text-primary">${{item.total}}</div>
                 </div>
               </div>
             </div>
-            <q-btn no-caps flat class="bg-primary text-white q-pa-xs" @click="item.detalles = !item.detalles" label="Ver detalles" style="width: 70%"/>
+            <q-btn no-caps flat class="bg-primary text-white q-pa-xs" @click="item.detalles = !item.detalles" :label="!item.detalles ? 'Ver detalles' : 'Ver menos'" style="width: 70%"/>
           </q-card-section>
         </q-card>
       </q-list>
@@ -85,16 +85,30 @@
       <div class="text-subtitle1 text-bold">Filtra tus arriendos</div>
       <div class="q-mb-sm text-caption text-grey-8 text-italic">Historial de arriendos</div>
       <div class="row q-px-lg">
-        <div class="col2 text-caption">Selecciona <br/>el mes</div>
-        <q-select outlined dense filled class="col q-mx-md" placeholder="Mes" v-model="selectMes" :options="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"/>
-        <q-btn class="col2" label="Buscar" color="primary" no-caps/>
+        <div class="col-12 text-caption">Selecciona el mes</div>
+        <q-input filled readonly dense v-model="selectMes" class="col q-mr-md" placeholder="Mes" mask="##" @click="$refs.qDateProxy.show()">
+            <template v-slot:append>
+              <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                  <q-date v-model="selectMes" text-color="black" mask="MM" minimal emit-immediately default-view="Months"
+                  @input="$refs.qDateProxy.hide()">
+                    <div class="row items-center justify-between">
+                      <q-btn @click="arriendos = allArriendos, selectMes = '', $refs.qDateProxy.hide()" label="Todos" color="primary" flat />
+                      <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                    </div>
+                  </q-date>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        <q-btn class="col2" :disable="selectMes !== '' ? false : true" label="Buscar" color="primary" no-caps @click="filtrarArriendos()"/>
       </div>
     </div>
 
     <div>
       <q-list v-if="arriendos.length" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
         <q-card v-for="(item, index) in arriendos" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;">
-          <q-img class="bg-secondary" :src="''" style="height: 175px;">
+          <q-img :src="baseuHospedaje + item.image" style="height: 175px;">
             <q-btn no-caps dense color="primary" class="q-mt-md q-pr-xl q-pl-sm" style="border-top-right-radius: 12px; border-bottom-right-radius: 10px;">
               <div class="row">
                 <div class="q-mr-xs">Espacio</div>
@@ -104,8 +118,8 @@
           </q-img>
           <q-card-section class="column items-center">
             <div class="row justify-between full-width q-mb-sm">
-              <div class="text-caption text-bold">Fecha de compra</div>
-              <div class="text-caption text-bold" style="font-size: 12px">Arriendo nº</div>
+              <div class="text-caption"><b>Fecha de compra </b>{{item.fecha_arriendo}}</div>
+              <div class="text-caption" style="font-size: 12px"><b>Arriendo nº </b>{{index + 1}}</div>
             </div>
             <div class="full-width q-my-lg" v-if="item.detalles">
               <div class="q-mb-sm">
@@ -115,19 +129,19 @@
               <div class="column q-my-lg">
                 <div class="row q-mb-md">
                   <div class="col column items-center">
-                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-secondary">
-                      <q-img style="height: 100%;" :src="''"/>
+                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
+                      <q-img style="height: 100%;" :src="baseuRepresentante + item.hospedador_id"/>
                     </q-avatar>
                   </div>
                   <div class="col">
                     <div class="text-caption text-grey-7 text-bold">Datos del representante</div>
-                    <div class="text-grey-7" style="font-size: 11px">Nombre del representante</div>
-                    <div class="text-grey-7" style="font-size: 11px">Telefono</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.name + ' ' + item.representante.last_name : ''}}</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.phone : ''}}</div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col column items-center">
-                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-secondary">
+                    <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
                       <q-img style="height: 100%;" :src="''"/>
                     </q-avatar>
                   </div>
@@ -140,26 +154,26 @@
               </div>
               <div>
                 <div class="row justify-between q-mb-md">
-                  <div class="text-caption text-grey">Datos de mascota</div>
-                  <div class="text-caption text-grey-7 text-bold">10 dias</div>
+                  <div class="text-caption text-grey-8">Datos de mascota</div>
+                  <div class="text-caption text-grey-8 text-bold">{{item.dias}} días</div>
                 </div>
                 <div class="column q-mb-md">
                   <div class="row justify-between">
-                    <div class="text-caption text-grey">Inicio del alojamiento</div>
-                    <div class="text-caption text-grey-7 text-bold">10/01/2021</div>
+                    <div class="text-caption text-grey-8">Inicio del alojamiento</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_ingreso}}</div>
                   </div>
                   <div class="row justify-between">
-                    <div class="text-caption text-grey">Fin del alojamiento</div>
-                    <div class="text-caption text-grey-7 text-bold">12/01/2021</div>
+                    <div class="text-caption text-grey-8">Fin del alojamiento</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_salida}}</div>
                   </div>
                 </div>
                 <div class="row justify-between">
-                  <div class="text-caption text-grey">Precio total</div>
-                  <div class="text-primary">$17.95</div>
+                  <div class="text-caption text-grey-8">Precio total</div>
+                  <div class="text-primary">${{item.total}}</div>
                 </div>
               </div>
             </div>
-            <q-btn no-caps flat class="bg-primary text-white q-pa-xs" @click="item.detalles = !item.detalles" label="Ver detalles" style="width: 70%"/>
+            <q-btn no-caps flat class="bg-primary text-white q-pa-xs" @click="item.detalles = !item.detalles" :label="!item.detalles ? 'Ver detalles' : 'Ver menos'" style="width: 70%"/>
           </q-card-section>
         </q-card>
       </q-list>
@@ -172,16 +186,24 @@
 </template>
 
 <script>
+import env from '../../env'
+import moment from 'moment'
 export default {
   data () {
     return {
       selectMes: '',
+      baseuHospedaje: '',
+      baseuRepresentante: '',
       allArriendos: [],
+      enCurso: [],
       arriendos: [],
       ver: false
     }
   },
   mounted () {
+    this.baseuHospedaje = env.apiUrl + 'hospedajes_img/'
+    this.baseuRepresentante = env.apiUrl + 'perfil_img/'
+    this.getArriendos()
   },
   methods: {
     getArriendos () {
@@ -190,13 +212,30 @@ export default {
       })
       this.$api.get('arriendos').then(res => {
         if (res) {
-          this.allArriendos = res
+          this.allArriendos = res.filter(v => v.expirado)
+          console.log(this.allArriendos)
+          this.enCurso = res.filter(v => !v.expirado)
           this.arriendos = this.allArriendos.slice(0, 4)
           this.$q.loading.hide()
         } else {
           this.$q.loading.hide()
         }
       })
+    },
+    filtrarArriendos () {
+      this.arriendos = this.allArriendos.filter(v => {
+        if (moment(v.created_at).format('YYYY/MM') === moment().format('YYYY') + '/' + String(this.selectMes)) {
+          return v
+        }
+      })
+    },
+    verMas () {
+      if (!this.ver) {
+        this.arriendos = this.allArriendos
+      } else {
+        this.arriendos = this.allArriendos.slice(0, 4)
+      }
+      this.ver = !this.ver
     }
   }
 }

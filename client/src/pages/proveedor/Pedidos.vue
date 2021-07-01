@@ -240,15 +240,11 @@ export default {
       })
     },
     filtrarPedidos () {
-      if (this.selectMes === 'Todos los pedidos') {
-        this.pedidos = this.allPedidos
-      } else {
-        this.pedidos = this.allPedidos.filter(v => {
-          if (moment(v.created_at).format('YYYY/MM') === moment().format('YYYY') + '/' + String(this.selectMes)) {
-            return v
-          }
-        })
-      }
+      this.pedidos = this.allPedidos.filter(v => {
+        if (moment(v.created_at).format('YYYY/MM') === moment().format('YYYY') + '/' + String(this.selectMes)) {
+          return v
+        }
+      })
     },
     verMas () {
       if (!this.ver) {
