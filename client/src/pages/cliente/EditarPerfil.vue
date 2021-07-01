@@ -8,7 +8,7 @@
           <div class="row justify-center">
             <q-avatar size="200px" class="bg-grey row justify-center">
               <q-img :src="perfilFile ? imgPerfil : ''" style="height: 100%">
-                <q-file borderless v-model="perfilFile" @input="changeProfile()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
+                <q-file borderless v-model="perfilFile" @input="changeProfile(perfilFile)" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
                   <q-icon name="photo_camera" class="absolute-center" size="50px" color="white" />
                 </q-file>
               </q-img>
@@ -74,6 +74,7 @@
   </div>
 </template>
 <script>
+import env from '../../env'
 import { required, email } from 'vuelidate/lib/validators'
 import { mapMutations } from 'vuex'
 export default {
@@ -82,11 +83,10 @@ export default {
       formLogin: null,
       country: null,
       city: null,
-      slide: 2,
+      slide: 1,
       imgPerfil: '',
       form: {},
       formTwo: {},
-      files: [null, null, null],
       perfilFile: null,
       countries: [],
       cities: [],
@@ -129,13 +129,15 @@ export default {
     async getUser () {
       await this.$api.get('clientById/' + this.$route.params.id).then(res => {
         if (res) {
+          this.imgPerfil = env.apiUrl + 'perfil_img/' + res._id
+          this.perfilFile = 1
           this.form.name = res.name
           this.form.email = res.email
           this.form.phone = res.phone
           this.formTwo.address = res.address
           this.country = res.country
           this.city = res.city
-          console.log('res :>> ', res)
+          console.log('res :>> ', this.imgPerfil)
         }
       })
     },
@@ -148,9 +150,8 @@ export default {
     },
     next () {
       this.$v.form.$touch()
-      // this.$v.perfilFile.$touch()
-      if (!this.$v.form.$error && !this.$v.password.$error && !this.$v.repeatPassword.$error && !this.$v.perfilFile.$error && this.terms) {
-        this.form.password = this.password
+      this.$v.perfilFile.$touch()
+      if (!this.$v.form.$error && !this.$v.perfilFile.$error) {
         this.slide = 2
       } else {
         this.$q.notify({
@@ -232,11 +233,10 @@ export default {
         }
       })
     },
-    changeProfile () {
-      if (this.perfilFile) { this.imgPerfil = URL.createObjectURL(this.perfilFile) }
-    },
-    changePetFile (ind) {
-      if (this.files[ind]) { this.petImg[ind] = URL.createObjectURL(this.files[ind]) }
+    changeProfile (file) {
+      if (file) {
+        this.imgPerfil = URL.createObjectURL(file)
+      }
     }
   }
 }

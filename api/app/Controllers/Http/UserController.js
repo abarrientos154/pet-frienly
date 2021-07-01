@@ -363,6 +363,8 @@ class UserController {
   }
   async clientById({ params, response }) {
     const user = await User.find(params.id)
+    user.country = await Pais.find(user.country_id)
+    user.city = await Ciudad.find(user.city_id)
     response.send(user)
   }
 
