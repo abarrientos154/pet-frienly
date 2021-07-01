@@ -11,20 +11,19 @@
         horizontal
         style="height: 330px;"
       >
-        <div class="row no-wrap q-py-xs q-px-md q-gutter-md">
-          <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
-              <q-card-section class="q-my-lg"></q-card-section>
-              <q-card-section>
-                <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white text-subtitle2">Nombre del alojamiento</div>
+        <div class="row no-wrap q-py-md q-px-md q-gutter-md">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(store, index) in stores" :key="index">
+            <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
+              <div class="q-ml-sm q-mt-xl">
+                <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
+                <div class="text-white">{{store.tienda.name}}</div>
                 <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-subtitle2 text-white">Ciudad / Direccion</div>
+                  <div class="text-white col-10">{{store.city}}, {{store.tienda.direccion}}</div>
                 </div>
-              </q-card-section>
-            </q-card>
+              </div>
+            </q-img>
           </q-card>
         </div>
       </q-scroll-area>
@@ -46,26 +45,27 @@
       </div>
     </div>
       <div class="row">
-        <div class="row justify-center q-py-xl q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 8" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
+      <div class="row justify-center q-py-sm q-px-sm q-gutter-sm q-mb-lg" style="width:100%">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(store, index) in stores" :key="index">
+            <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="bg-primary">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               <q-card-section class="q-my-lg"></q-card-section>
-              <q-card-section>
-                <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white text-subtitle2">Nombre del alojamiento</div>
+              <q-card-section class="q-mt-xl">
+                <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
+                <div class="text-white text-subtitle2">{{store.tienda.name}}</div>
                 <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-subtitle2 text-white">Ciudad / Direccion</div>
+                  <div class="text-subtitle2 text-white">{{store.city}}, {{store.tienda.direccion}}</div>
                 </div>
               </q-card-section>
-            </q-card>
+            </q-img>
           </q-card>
         </div>
     </div>
   </div>
 </template>
 <script>
+import env from '../../env'
 export default {
   data () {
     return {
@@ -75,11 +75,15 @@ export default {
         { name: 'Ambos', value: 3 }
       ],
       cities: [],
-      search: {}
+      search: {},
+      stores: [],
+      imgTienda: '',
+      stars: 1
     }
   },
   mounted () {
     this.getCities()
+    this.getStore()
   },
   methods: {
     async getCities () {
@@ -87,6 +91,16 @@ export default {
         if (res) {
           this.cities = res
           console.log('cities :>> ', this.cities)
+        }
+      })
+    },
+    getStore () {
+      this.$api.post('user_by_rol', { rol: [3] }).then(res => {
+        this.imgTienda = env.apiUrl + 'tienda_img/'
+        console.log('this.imgTienda :>> ', this.imgTienda)
+        if (res) {
+          this.stores = res
+          console.log(this.stores)
         }
       })
     }

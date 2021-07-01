@@ -12,19 +12,19 @@
         style="height: 330px;"
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(card, index) in 10" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
-              <q-card-section class="q-my-lg"></q-card-section>
-              <q-card-section>
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(item, index) in host" :key="index">
+            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
+              <q-card-section class="q-my-xl"></q-card-section>
+              <div class="q-ml-sm q-mt-xl">
                 <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white text-subtitle2">Nombre del alojamiento</div>
+                <div class="text-white">{{item.my_space.name}}</div>
                 <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-subtitle2 text-white">Ciudad / Direccion</div>
+                  <div class="text-white">{{item.city}}, {{item.my_space.direction}}</div>
                 </div>
-              </q-card-section>
-            </q-card>
+              </div>
+            </q-img>
           </q-card>
         </div>
       </q-scroll-area>
@@ -47,25 +47,26 @@
       </div>
     <div class="row">
       <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
-          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(card, index) in 6" :key="index">
-            <q-card style="height: 280px; width: 100%" class="bg-primary">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey"/>
-              <q-card-section class="q-my-lg"></q-card-section>
-              <q-card-section>
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(item, index) in host" :key="index">
+            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
+              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
+              <q-card-section class="q-my-xl"></q-card-section>
+              <div class="q-ml-sm q-mt-xl">
                 <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white text-subtitle2">Nombre del alojamiento</div>
+                <div class="text-white">{{item.my_space.name}}</div>
                 <div class="row">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-subtitle2 text-white">Ciudad / Direccion</div>
+                  <div class="text-white">{{item.city}}, {{item.my_space.direction}}</div>
                 </div>
-              </q-card-section>
-            </q-card>
+              </div>
+            </q-img>
           </q-card>
         </div>
     </div>
   </div>
 </template>
 <script>
+import env from '../../env'
 export default {
   data () {
     return {
@@ -75,11 +76,14 @@ export default {
         { name: 'Ambos', value: 3 }
       ],
       cities: [],
-      search: {}
+      search: {},
+      host: [],
+      imgProfile: ''
     }
   },
   mounted () {
     this.getCities()
+    this.getHost()
   },
   methods: {
     async getCities () {
@@ -87,6 +91,15 @@ export default {
         if (res) {
           this.cities = res
           console.log('cities :>> ', this.cities)
+        }
+      })
+    },
+    getHost () {
+      this.$api.post('user_by_rol', { rol: [4] }).then(res => {
+        this.imgProfile = env.apiUrl + 'perfil_img/'
+        if (res) {
+          this.host = res
+          console.log(this.host)
         }
       })
     }
