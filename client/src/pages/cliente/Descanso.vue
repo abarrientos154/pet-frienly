@@ -15,16 +15,15 @@
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(item, index) in host" :key="index">
             <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
-              <q-card-section class="q-my-xl"></q-card-section>
-              <div class="q-ml-sm q-mt-xl">
-                <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white">{{item.my_space.name}}</div>
-                <div class="row">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-white">{{item.city}}, {{item.my_space.direction}}</div>
-                </div>
-              </div>
             </q-img>
+            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+              <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
+              <div class="text-white text-bold">{{item.my_space.name}}</div>
+              <div class="row">
+                <q-icon name="place" class="q-mr-xs text-white"/>
+                <div class="text-white text-subtitle2">{{item.city}}, {{item.my_space.direction}}</div>
+              </div>
+            </div>
           </q-card>
         </div>
       </q-scroll-area>
@@ -46,20 +45,19 @@
         </div>
       </div>
     <div class="row">
-      <div class="row justify-center q-py-sm q-px-sm q-gutter-sm" style="width:100%">
+      <div class="row justify-center q-py-sm q-px-sm q-gutter-sm q-mb-md" style="width:100%">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(item, index) in host" :key="index">
             <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
-              <q-card-section class="q-my-xl"></q-card-section>
-              <div class="q-ml-sm q-mt-xl">
-                <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white">{{item.my_space.name}}</div>
-                <div class="row">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-white">{{item.city}}, {{item.my_space.direction}}</div>
-                </div>
-              </div>
             </q-img>
+            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+              <q-rating class="q-mt-lg q-mb-sm" v-model="stars" :max="5" size="25px" />
+              <div class="text-white text-bold">{{item.my_space.name}}</div>
+              <div class="row">
+                <q-icon name="place" class="q-mr-xs text-white"/>
+                <div class="text-white text-subtitle2">{{item.city}}, {{item.my_space.direction}}</div>
+              </div>
+            </div>
           </q-card>
         </div>
     </div>
@@ -78,7 +76,8 @@ export default {
       cities: [],
       search: {},
       host: [],
-      imgProfile: ''
+      imgProfile: '',
+      stars: 4
     }
   },
   mounted () {

@@ -386,16 +386,13 @@ class UserController {
     try {
       let rol = request.all()
       const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
-      console.log('rol[0] :>> ', rol.rol[0]);
       if (rol.rol[0] == 3) {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].tienda.city_id)).name
-          console.log('user[i].city :>> ', user[i].city);
         }
       } else if (rol.rol[0] == 4) {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].my_space.ciudad_id)).name
-          console.log('user[i].city :>> ', user[i].city);
         }
       }
       response.send(user)

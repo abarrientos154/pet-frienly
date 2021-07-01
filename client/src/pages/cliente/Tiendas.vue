@@ -15,15 +15,15 @@
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(store, index) in stores" :key="index">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
-              <div class="q-ml-sm q-mt-xl">
-                <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white">{{store.tienda.name}}</div>
-                <div class="row">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-white col-10">{{store.city}}, {{store.tienda.direccion}}</div>
-                </div>
-              </div>
             </q-img>
+            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+              <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
+              <div class="text-white text-bold">{{store.tienda.name}}</div>
+              <div class="row">
+                <q-icon name="place" class="q-mr-xs text-white"/>
+                <div class="text-white text-subtitle2 col-10">{{store.city}}, {{store.tienda.direccion}}</div>
+              </div>
+            </div>
           </q-card>
         </div>
       </q-scroll-area>
@@ -49,16 +49,15 @@
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:40%" clickable v-ripple v-for="(store, index) in stores" :key="index">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="bg-primary">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
-              <q-card-section class="q-my-lg"></q-card-section>
-              <q-card-section class="q-mt-xl">
-                <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
-                <div class="text-white text-subtitle2">{{store.tienda.name}}</div>
-                <div class="row">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="text-subtitle2 text-white">{{store.city}}, {{store.tienda.direccion}}</div>
-                </div>
-              </q-card-section>
             </q-img>
+            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+              <q-rating class="q-mb-sm" v-model="stars" :max="5" size="25px" />
+              <div class="text-white text-bold">{{store.tienda.name}}</div>
+              <div class="row">
+                <q-icon name="place" class="q-mr-xs text-white"/>
+                <div class="text-subtitle2 text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+              </div>
+            </div>
           </q-card>
         </div>
     </div>
@@ -78,7 +77,7 @@ export default {
       search: {},
       stores: [],
       imgTienda: '',
-      stars: 1
+      stars: 4
     }
   },
   mounted () {
