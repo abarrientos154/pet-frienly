@@ -125,5 +125,8 @@ addPrefixToGroup(
     Route.get("arriendos", "ProductoController.arriendos")
     Route.put("pedido_status/:id", "ProductoController.pedidoStatus")
 
+    Route.get("ventas_diarias", "ProductoController.ventasDiarias")
+    Route.post("estadistica", "ProductoController.crearEstadistica")
+
   }).middleware("auth")
 );

@@ -8,6 +8,7 @@ const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
 const moment = require("moment")
+moment.locale('es')
 const fs = require('fs')
 var randomize = require('randomatic');
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
@@ -152,6 +153,88 @@ class ProductoController {
   async show ({ params, request, response, view }) {
     let producto = (await Producto.query().where({_id: params.id}).with('categoria').first()).toJSON()
     response.send(producto)
+  }
+
+  async ventasDiarias ({ params, request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    var total = 0
+    if (user.roles[0] === 3) {
+      let pedidos = (await Pedidos.query().where({tienda_id: user._id}).fetch()).toJSON()
+      pedidos.forEach(v => {
+        if (moment(v.created_at).format('YYYY/MM/DD') === moment().format('YYYY/MM/DD')) {
+          total = total + v.totalValor
+        }
+      })
+    } else {
+      let arriendos = (await Reservas.query().where({hospedador_id: user._id}).fetch()).toJSON()
+      arriendos.forEach(v => {
+        if (moment(v.created_at).format('YYYY/MM/DD') === moment().format('YYYY/MM/DD')) {
+          total = total + v.total
+        }
+      })
+    }
+    response.send(total)
+  }
+
+  async crearEstadistica ({ request, response, auth }) {
+    let data = request.all()
+    const Modelo = use(`App/Models/${data.modelo}`)
+    let user = await auth.getUser()
+    var objParam
+    if (user.roles.some(v => v == 3)) {
+      objParam = {
+        tienda_id: String(user._id)
+      }
+    } else {
+      objParam = {
+        hospedador_id: String(user._id)
+      }
+    }
+    var fecha = data.fecha
+    let ventas = (await Modelo.query().where(objParam).fetch()).toJSON()
+    let todas = []
+    var respuesta = [['Gün', 'Monto']]
+    if (data.type === 'Anual') {
+      todas = ventas.filter(v => moment(v.created_at).year() == fecha)
+      for (let i = 1; i < 13; i++) {
+        var arr = todas.filter(v => (moment(v.created_at).month() + 1) == i)
+        var num = 0
+        for (let j = 0; j < arr.length; j++) {
+          num += arr[j][data.campo]
+        }
+        var nuevo = [String(moment().month(i-1).format('MMM')), num]
+        respuesta.push(nuevo)
+      }
+    } else if (data.type === 'Mensual') {
+      if (fecha < 10)
+      /* fecha = '0' + fecha */
+      todas = ventas.filter(v => moment(v.created_at).format('YYYY/MM') == moment().format('YYYY') + '/' + fecha)
+      var num = 0
+      for (let j = 0; j < todas.length; j++) {
+        num += todas[j][data.campo]
+      }
+      var nuevo = [String(moment().month(fecha-1).format('MMMM')), num]
+      respuesta.push(nuevo)
+    } else {
+      todas = ventas.filter(v => {
+        if (moment(v.created_at).format('YYYY/MM/DD') >= fecha.from && moment(v.created_at).format('YYYY/MM/DD') <= fecha.to) {
+          return v
+        }
+      })
+      var dd = moment(fecha.from).dayOfYear() - 1
+      for (let i = 1; i < 8; i++) {
+        var arr = todas.filter(v => (moment(v.created_at).dayOfYear()) == dd + i)
+        var num = 0
+        for (let j = 0; j < arr.length; j++) {
+          num += arr[j][data.campo]
+        }
+        var name = moment().dayOfYear(dd+i)
+        var nuevo = [String(moment(name).date()), num]
+        respuesta.push(nuevo)
+      }
+
+    }
+    response.send(respuesta)
   }
 
   async productoFiltrado ({ params, request, response, view }) {
