@@ -119,7 +119,7 @@ export default {
         },
         {
           icon: 'assignment',
-          label: 'Pedidos',
+          label: 'Reservass',
           ruta: '/pedidos_hospedador'
         },
         {

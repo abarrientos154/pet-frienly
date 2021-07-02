@@ -20,7 +20,7 @@
             </q-avatar>
           </div>
           <div class="text-center text-h5 text-grey-8">¿Eres fanatico de las mascotas?</div>
-         <div class="q-mx-xl">
+         <div class="q-mx-lg">
           <div class="q-mt-sm">
             Nombre de Usuario
             <q-input filled v-model="form.name"  dense placeholder="Nombre de usuario"
@@ -52,16 +52,23 @@
                 </q-input>
            </div>
          </div>
-          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="next()" class="q-py-sm"/>
+         <div class="column items-center">
+           <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="next()"/>
+         </div>
         </div>
       </q-carousel-slide>
+
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
           <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
-          <div class="text-center text-h5 text-grey-8">Información de despacho</div>
-         <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
-         <div class="q-mx-xl">
-           <div class="q-mb-md">
+          <div class="text-center text-h5 text-grey-8 q-mb-xs">Información de despacho</div>
+          <q-avatar rounded style="height: 250px; width: 100%;" class="bg-grey q-mb-sm">
+            <q-img style="height: 100%;" :src="perfilFile ? imgPerfil : ''">
+            </q-img>
+          </q-avatar>
+
+         <div class="q-mx-lg">
+           <div>
               <div class="text-caption">País</div>
               <q-select outlined dense filled placeholder="Escoja un pais" v-model="country" :options="countries" @input="cities = country.ciudades, city = null" option-label="name" map-options
               error-message="Este campo es requerido" :error="$v.country.$error" @blur="$v.country.$touch()">
@@ -72,7 +79,7 @@
                 </template>
               </q-select>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Ciudad</div>
               <q-select outlined dense filled placeholder="Escoja una ciudad" v-model="city" :options="cities" option-label="name" map-options
               error-message="Este campo es requerido" :error="$v.city.$error" @blur="$v.city.$touch()">
@@ -88,13 +95,19 @@
              <q-input type="tel" filled v-model="formTwo.address"  dense placeholder="Ingrese su dirección" error-message="Requerido" :error="$v.formTwo.address.$error" @blur="$v.formTwo.address.$touch()"/>
            </div>
          </div>
-          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="nextTwo()" class="q-py-sm"/>
+         <div class="column items-center">
+           <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="nextTwo()"/>
+         </div>
         </div>
       </q-carousel-slide>
+
       <q-carousel-slide :name="3" class="q-pa-none">
         <div class="q-pa-lg">
           <q-btn flat rounded color="primary" icon="arrow_back" @click="slide=2"/>
-          <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
+          <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-grey">
+            <q-img style="height: 100%;" :src="files[0] ? petImg[0] : ''">
+            </q-img>
+          </q-card>
           <div class="text-center text-h5 text-grey-8">Cuentanos de tu <br> mascota</div>
          <div style="text-align: left; padding-top: 20px">
           <div class="text-subtitle2 q-ml-md">Fotos de tu mascota</div>
@@ -120,17 +133,17 @@
             </q-avatar>
           </div>
          </div>
-         <div class="q-my-md">
+         <div>
            <div>Nombre de mascota</div>
            <div class="text-overline q-ml-md">Solo 25 caracteres</div>
            <q-input filled v-model="formThree.name"  dense error-message="Requerido" :error="$v.formThree.name.$error" @blur="$v.formThree.name.$touch()"/>
          </div>
-         <div class="q-my-md">
+         <div>
            <div>Edad</div>
            <div class="text-overline q-ml-md">¿Cuántos años tiene tu mascota?</div>
            <q-input type="number" min="0" filled v-model.number="formThree.age"  dense error-message="Requerido" :error="$v.formThree.age.$error" @blur="$v.formThree.age.$touch()"/>
          </div>
-         <div class="q-my-md">
+         <div>
            <div>Fecha de nacimiento</div>
            <div class="text-overline q-ml-md">¿Cuándo nacio tu mascota?</div>
            <q-input filled readonly dense v-model="formThree.birthdate" placeholder="dd/mm/aaaa" @click="$refs.qDateProxy.show()"
@@ -170,16 +183,19 @@
            <div class="text-overline q-ml-md">Hasta 100 caracteres</div>
            <q-input type="textarea" filled v-model="formThree.description" error-message="Requerido" :error="$v.formThree.description.$error" @blur="$v.formThree.description.$touch()"/>
          </div>
-         <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="finish()"/>
+         <div class="column items-center">
+           <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="finish()"/>
+         </div>
         </div>
       </q-carousel-slide>
+
       <q-carousel-slide :name="4" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
         <div class="absolute-bottom custom-caption">
           <div class="text-h4" color="white">¡Tu mascota ha sido</div>
           <div class="text-h4" color="white">creada con exito!</div>
         </div>
         <div class="absolute-bottom custom-captionTwo row justify-center">
-          <q-btn class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%; margin-top: 20px; border-radius: 10px" to="/inicio_cliente"/>
+          <q-btn no-caps rounded class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%;" to="/inicio_cliente"/>
         </div>
       </q-carousel-slide>
     </q-carousel>
@@ -340,10 +356,10 @@ export default {
         }
       }).then(res => {
         if (res) {
-          this.$q.notify({
+          /* this.$q.notify({
             message: 'Tu mascota ya forma parte de PeT, Bienvenido',
             color: 'positive'
-          })
+          }) */
         }
       })
     },

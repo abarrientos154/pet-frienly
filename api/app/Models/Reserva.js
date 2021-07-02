@@ -4,11 +4,14 @@
 const Model = use('Model')
 
 class Reserva extends Model {
-  static get objectIDpais () {
-    return ["hospedador_id"];
+  static get objectIDs () {
+    return ["alojamiento_id", "_id", "hospedador_id", "cliente_id"];
   }
   representante () {
-    return this.hasOne("App/Models/User", "hospedador_id", "_id")
+    return this.hasOne("App/Models/User", "cliente_id", "_id")
+  }
+  calificacion () {
+    return this.hasOne("App/Models/Comentario", "_id", "alojamiento_id")
   }
 }
 
