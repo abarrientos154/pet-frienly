@@ -64,9 +64,14 @@ export default {
           ruta: '/descanso'
         },
         {
-          icon: 'pets',
-          label: 'Mascotas',
-          ruta: '/mascotas'
+          icon: 'assignment',
+          label: 'Pedidos',
+          ruta: '/mis_pedidos'
+        },
+        {
+          icon: 'assignment',
+          label: 'Reservas',
+          ruta: '/mis_reservas'
         },
         {
           icon: 'power_settings_new',
@@ -83,8 +88,7 @@ export default {
         {
           icon: 'assignment',
           label: 'Pedidos',
-          ruta: '/pedidos',
-          permission: 1
+          ruta: '/pedidos'
         },
         {
           icon: 'description',

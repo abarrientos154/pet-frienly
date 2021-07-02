@@ -4,6 +4,7 @@ const Categoria = use("App/Models/Categoria")
 const Pedidos = use("App/Models/Pedido")
 const Reservas = use("App/Models/Reserva")
 const Comprados = use("App/Models/Comprado")
+const Comentario = use('App/Models/Comentario')
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
@@ -54,7 +55,12 @@ class ProductoController {
 
   async pedidos ({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
-    let data = (await Pedidos.query().where({tienda_id: user._id}).with('productos').fetch()).toJSON()
+    let data
+    if (user.roles[0] === 2) {
+      data = (await Pedidos.query().where({cliente_id: user._id}).with('productos').fetch()).toJSON()
+    } else {
+      data = (await Pedidos.query().where({tienda_id: user._id}).with('productos').fetch()).toJSON()
+    }
     data = data.map(v => {
       return {
         ...v,
@@ -68,7 +74,12 @@ class ProductoController {
 
   async arriendos ({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
-    let data = (await Reservas.query().where({hospedador_id: user._id}).with('representante').fetch()).toJSON()
+    let data
+    if (user.roles[0] === 2) {
+      data = (await Reservas.query().where({cliente_id: user._id}).with('representante').fetch()).toJSON()
+    } else {
+      data = (await Reservas.query().where({hospedador_id: user._id}).with('representante').fetch()).toJSON()
+    }
     data = data.map(v => {
       return {
         ...v,
@@ -85,6 +96,24 @@ class ProductoController {
     let dat = request.all()
     let modificar = await Pedidos.query().where('_id', params.id).update({status: dat.status})
     response.send(modificar)
+  }
+
+  async calificarTienda ({ request, response }) {
+    var data = request.all()
+    var comentario = await Comentario.create(data)
+    let modificar
+    if (data.pedido_id) {
+      modificar = await Pedidos.query().where({_id: data.pedido_id}).update({calificado: true})
+    } else {
+      modificar = await Reservas.query().where({_id: data.alojamiento_id}).update({calificado: true})
+    }
+    response.send(comentario)
+  }
+
+  async traerComentarios ({ request, response, params }) {
+    let id = params.id
+    var comentarios = (await Comentario.query().where({tienda_id: id}).fetch()).toJSON()
+    response.send(comentarios)
   }
 
   /**

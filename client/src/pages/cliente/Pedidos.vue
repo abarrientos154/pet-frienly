@@ -58,14 +58,14 @@
                   <div class="text-subtitle1 text-black">${{item.totalValor}}</div>
                 </div>
               </div>
-              <div v-if="item.status === 'En Local'" class="q-mb-sm">
+              <div v-if="item.status === 'Enviado'" class="q-mb-sm">
                 <div class="text-caption text-bold">Estado del pedido</div>
                 <div class="text-caption text-italic q-mb-sm">Seleccione el estado que tendrá el pedido.</div>
-                <q-select dense filled v-model="item.newStatus" :options="['Enviado']"/>
+                <q-select dense filled v-model="item.newStatus" :options="['Recibe conforme']"/>
               </div>
-              <div v-if="item.status === 'En Local'" class="q-my-sm">
+              <div v-if="item.status === 'Enviado'" class="q-my-sm">
                 <div class="text-caption text-bold">Estado del pedido</div>
-                <div class="text-caption text-italic q-mb-sm">Una vez que cambias el estado a enviado, debes esperar por la respuesta del cliente.</div>
+                <div class="text-caption text-italic q-mb-sm">Una vez que cambias el estado a recibido, se marcará como completada la operación.</div>
               </div>
             </div>
             <div v-if="!item.detalles" class="row justify-center q-py-lg">
@@ -74,7 +74,7 @@
             </div>
             <div v-else>
                 <div class="column items-center q-py-lg">
-                    <q-btn v-if="item.status === 'En Local'" :disable="item.newStatus !== '' ? false : true" no-caps class="q-py-sm" color="primary" label="Cambiar estado" style="width: 70%"
+                    <q-btn v-if="item.status === 'Enviado'" :disable="item.newStatus !== '' ? false : true" no-caps class="q-py-sm" color="primary" label="Cambiar estado" style="width: 70%"
                     @click="cambiarStatus(item)"/>
                     <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Ver menos" style="width: 70%"
                     @click="item.detalles = false"/>
@@ -168,6 +168,8 @@
             </div>
             <div v-else>
                 <div class="column items-center q-py-lg">
+                    <q-btn v-if="!item.calificado" no-caps class="q-py-sm" color="primary" label="Calificar" style="width: 70%"
+                    @click="accionCalificar(item)"/>
                     <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Ver menos" style="width: 70%"
                     @click="item.detalles = false"/>
                 </div>
@@ -179,23 +181,67 @@
       <div class="column items-center q-mb-xl">
         <q-btn v-if="allPedidos.length > 4" @click="verMas()" class="q-pa-sm" color="primary" :label="ver ? 'Ver menos' :'Ver más'" style="width: 70%;" no-caps/>
       </div>
+
+      <q-dialog persistent v-model="calificar">
+        <q-card style="width: 100%; border-radius:20px">
+            <div class="q-pt-lg">
+                <div class="row justify-center items-center bg-primary text-white" style="height: 50px; width:100%">Pedido finalizado</div>
+                <div class="row justify-center q-py-md" style="width:100%">
+                    <q-img src="noimg.png" style="width:80%; height:200px; border-radius: 20px" />
+                </div>
+                <div class="q-px-md">
+                    <div class="text-caption text-bold">Calificación</div>
+                    <div :class="$v.form.calificacion.$error ? 'text-red' : 'text-grey-8'" class="text-caption text-italic">Califica correctamente la tienda</div>
+                    <q-rating
+                        v-model="calificacion"
+                        color="orange"
+                        size="25px"
+                        icon="star"
+                    />
+                </div>
+                <div class="q-px-md q-pt-sm">
+                    <div class="text-caption text-bold">Comentario</div>
+                    <div class="text-caption text-grey-8 text-italic">Máximo 100 carácteres</div>
+                    <q-input filled outlined maxlength="110" v-model="form.comentario" type="textarea"
+                    :error="$v.form.comentario.$error" error-message="Este campo es requerido"  @blur="$v.form.comentario.$touch()"/>
+                </div>
+                <div class="column items-center q-pt-lg">
+                    <q-btn no-caps class="q-py-sm" color="primary" label="Publicar" style="width: 70%"
+                    @click="publicar()"/>
+                    <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Omitir" style="width: 70%"
+                    @click="getPedidos()"/>
+                </div>
+            </div>
+        </q-card>
+      </q-dialog>
   </div>
 </template>
 
 <script>
+import { required, requiredIf } from 'vuelidate/lib/validators'
 import moment from 'moment'
 import env from '../../env'
 export default {
   data () {
     return {
       ver: false,
+      calificar: false,
       selectMes: '',
       baseuproductos: '',
       baseuServicios: '',
       newStatus: '',
+      calificacion: 0,
+      dataSelec: {},
+      form: {},
       allPedidos: [],
       pedidos: [],
       pendientes: []
+    }
+  },
+  validations: {
+    form: {
+      calificacion: { required: requiredIf(function () { return this.calificacion < 1 }) },
+      comentario: { required }
     }
   },
   mounted () {
@@ -213,6 +259,7 @@ export default {
           this.allPedidos = res.filter(v => v.status === 'Completado')
           this.pedidos = this.allPedidos.slice(0, 4)
           this.pendientes = res.filter(v => v.status === 'En Local' || v.status === 'Enviado')
+          this.calificar = false
           this.$q.loading.hide()
         } else {
           this.$q.loading.hide()
@@ -223,14 +270,42 @@ export default {
       this.$q.loading.show({
         message: 'Cambiando estado'
       })
-      this.$api.put('pedido_status/' + data._id, { status: data.newStatus }).then(res => {
+      this.dataSelec = data
+      this.$api.put('pedido_status/' + data._id, { status: 'Completado' }).then(res => {
         if (res) {
-          this.getPedidos()
+          this.calificacion = 0
+          this.form = {}
+          this.$v.form.$reset()
+          this.calificar = true
           this.$q.loading.hide()
         } else {
           this.$q.loading.hide()
         }
       })
+    },
+    publicar () {
+      this.$v.form.$touch()
+      if (!this.$v.form.$error) {
+        this.form.calificacion = this.calificacion
+        this.form.tienda_id = this.dataSelec.tienda_id
+        this.form.cliente_id = this.dataSelec.cliente_id
+        this.form.pedido_id = this.dataSelec._id
+        this.$api.post('calificar', this.form).then(res => {
+          if (res) {
+            this.getPedidos()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
+    },
+    accionCalificar (data) {
+      this.calificacion = 0
+      this.form = {}
+      this.$v.form.$reset()
+      this.dataSelec = data
+      this.calificar = true
     },
     filtrarPedidos () {
       this.pedidos = this.allPedidos.filter(v => {

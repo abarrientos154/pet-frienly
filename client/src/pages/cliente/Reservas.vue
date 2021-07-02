@@ -188,7 +188,9 @@
                 <q-btn no-caps class="q-py-sm" color="primary" label="Ver detalles" style="width: 70%"
                 @click="item.detalles = true"/>
             </div>
-            <div v-else class="row justify-center q-py-lg" style="width:100%">
+            <div v-else class="column items-center q-py-lg" style="width:100%">
+                <q-btn v-if="!item.calificado" no-caps class="q-py-sm" color="primary" label="Calificar" style="width: 70%"
+                @click="accionCalificar(item)"/>
                 <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Ver menos" style="width: 70%"
                 @click="item.detalles = false"/>
             </div>
@@ -200,23 +202,67 @@
         <q-btn v-if="arriendos.length > 3" @click="ver = !ver" class="q-pa-sm" color="primary" :label="ver ? 'Ver menos' :'Ver más'" style="width: 70%;" no-caps/>
       </div>
     </div>
+
+    <q-dialog persistent v-model="calificar">
+        <q-card style="width: 100%; border-radius:20px">
+            <div class="q-pt-lg">
+                <div class="row justify-center items-center bg-primary text-white" style="height: 50px; width:100%">Reserva finalizada</div>
+                <div class="row justify-center q-py-md" style="width:100%">
+                    <q-img src="noimg.png" style="width:80%; height:200px; border-radius: 20px" />
+                </div>
+                <div class="q-px-md">
+                    <div class="text-caption text-bold">Calificación</div>
+                    <div :class="$v.form.calificacion.$error ? 'text-red' : 'text-grey-8'" class="text-caption text-italic">Califica correctamente el alojamiento</div>
+                    <q-rating
+                        v-model="calificacion"
+                        color="orange"
+                        size="25px"
+                        icon="star"
+                    />
+                </div>
+                <div class="q-px-md q-pt-sm">
+                    <div class="text-caption text-bold">Comentario</div>
+                    <div class="text-caption text-grey-8 text-italic">Máximo 100 carácteres</div>
+                    <q-input filled outlined maxlength="110" v-model="form.comentario" type="textarea"
+                    :error="$v.form.comentario.$error" error-message="Este campo es requerido"  @blur="$v.form.comentario.$touch()"/>
+                </div>
+                <div class="column items-center q-pt-lg">
+                    <q-btn no-caps class="q-py-sm" color="primary" label="Publicar" style="width: 70%"
+                    @click="publicar()"/>
+                    <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Omitir" style="width: 70%"
+                    @click="calificar = false"/>
+                </div>
+            </div>
+        </q-card>
+      </q-dialog>
   </div>
 </template>
 
 <script>
 import env from '../../env'
 import moment from 'moment'
+import { required, requiredIf } from 'vuelidate/lib/validators'
 export default {
   data () {
     return {
+      ver: false,
+      calificar: false,
       selectMes: '',
       baseuHospedaje: '',
       baseuRepresentante: '',
       baseuMascotas: '',
+      calificacion: 0,
+      dataSelec: {},
+      form: {},
       allArriendos: [],
       enCurso: [],
-      arriendos: [],
-      ver: false
+      arriendos: []
+    }
+  },
+  validations: {
+    form: {
+      calificacion: { required: requiredIf(function () { return this.calificacion < 1 }) },
+      comentario: { required }
     }
   },
   mounted () {
@@ -228,12 +274,11 @@ export default {
   methods: {
     getArriendos () {
       this.$q.loading.show({
-        message: 'Cargando arriendos'
+        message: 'Cargando reservas'
       })
       this.$api.get('arriendos').then(res => {
         if (res) {
           this.allArriendos = res.filter(v => v.expirado)
-          console.log(this.allArriendos)
           this.enCurso = res.filter(v => !v.expirado)
           this.arriendos = this.allArriendos.slice(0, 4)
           this.$q.loading.hide()
@@ -241,6 +286,31 @@ export default {
           this.$q.loading.hide()
         }
       })
+    },
+    accionCalificar (data) {
+      this.calificacion = 0
+      this.form = {}
+      this.$v.form.$reset()
+      this.dataSelec = data
+      this.calificar = true
+    },
+    publicar () {
+      this.$v.form.$touch()
+      if (!this.$v.form.$error) {
+        this.form.calificacion = this.calificacion
+        this.form.tienda_id = this.dataSelec.hospedador_id
+        this.form.cliente_id = this.dataSelec.cliente_id
+        this.form.alojamiento_id = this.dataSelec._id
+        this.$api.post('calificar', this.form).then(res => {
+          if (res) {
+            this.getArriendos()
+            this.calificar = false
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
     },
     filtrarArriendos () {
       this.arriendos = this.allArriendos.filter(v => {

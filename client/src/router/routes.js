@@ -13,12 +13,10 @@ const routes = [
       { path: '/descripcionhotel/:id', component: () => import('pages/admin/DescripcionHotel.vue') },
       // Proveedor
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
-      { path: '/tienda/:id', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/pedidos', component: () => import('pages/proveedor/Pedidos.vue') },
       { path: '/estadisticas_resportes', component: () => import('pages/proveedor/Reportes.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
-      { path: '/hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
       { path: '/editar_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
       { path: '/nuevo_espacio', component: () => import('pages/hospedador/NewSpace.vue') },
       { path: '/reportes', component: () => import('pages/hospedador/Reports.vue') },
@@ -37,6 +35,8 @@ const routes = [
       { path: '/buscar_hospedaje', component: () => import('pages/cliente/BuscarHospedaje.vue') },
       { path: '/inicio-proveedor/:id', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/inicio-hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
+      { path: '/mis_pedidos', component: () => import('pages/cliente/Pedidos.vue') },
+      { path: '/mis_reservas', component: () => import('pages/cliente/Reservas.vue') },
       // Generales
       { path: '/Datos', component: () => import('pages/Datauser.vue') },
       { path: '/Datosedit', component: () => import('pages/Userdata.vue') }

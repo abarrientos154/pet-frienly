@@ -175,6 +175,36 @@
           </div>
         </q-card>
       </q-dialog>
+
+      <q-dialog persistent maximized v-model="reservaExitosa">
+      <q-card style="width: 100%; height: 100%">
+        <q-img src="noimg.png" style="width:100%; height: 100%">
+          <div class="absolute-bottom q-py-sm full-width">
+            <div class="text-h4 text-white text-bold q-px-sm">Tu reserva se ha realizado con éxito</div>
+            <div class="text-subtitle1 text-white q-px-sm">Puedes ver tu reserva en tu panel de reservas</div>
+            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
+              <q-btn no-caps color="primary" label="Volver al alojamiento" class="q-py-xs" style="width: 60%;"
+                @click="$router.go(-1)"/>
+            </div>
+          </div>
+        </q-img>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog persistent maximized v-model="reservaFallo">
+      <q-card style="width: 100%; height: 100%">
+        <q-img src="noimg.png" style="width:100%; height: 100%">
+          <div class="absolute-bottom q-py-sm full-width">
+            <div class="text-h4 text-white text-bold q-px-sm">Tu reserva ha fallado</div>
+            <div class="text-subtitle1 text-white q-px-sm">Te estamos redireccionando al hospedaje</div>
+            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
+              <q-btn no-caps color="primary" label="Volver al alojamiento" class="q-py-xs" style="width: 60%;"
+                @click="$router.go(-1)"/>
+            </div>
+          </div>
+        </q-img>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -187,6 +217,8 @@ export default {
     return {
       reserva: false,
       fechaValida: false,
+      reservaExitosa: false,
+      reservaFallo: false,
       slide: 0,
       rol: 0,
       user: {},
@@ -236,9 +268,10 @@ export default {
         if (res) {
           this.rol = res.roles[0]
           this.user = res
-          this.$api.get('mascota_by_user_id/' + this.user._id).then(res => {
-            if (res) {
-              this.mascotas = res
+          this.$api.get('mascota_by_user_id/' + this.user._id).then(v => {
+            if (v) {
+              this.mascotas = v
+              console.log(this.user._id)
               this.$q.loading.hide()
             }
           })
@@ -291,7 +324,7 @@ export default {
         this.form.hospedador_id = this.hospedaje.hospedador_id
         this.form.hospedaje_id = this.hospedaje._id
         this.form.image = this.hospedaje.images[0].src
-        this.form.cliente_id = this.user.cliente_id
+        this.form.cliente_id = this.user._id
         this.form.hospedaje_price = this.hospedaje.price
         this.form.total = this.totalPrice
         this.$api.post('arrendar_espacio', { dat: this.form }).then(async res => {
@@ -299,9 +332,11 @@ export default {
             this.form = {}
             this.$v.form.$reset()
             this.$q.loading.hide()
+            this.reservaExitosa = true
             this.reserva = false
           } else {
             this.$q.loading.hide()
+            this.reservaFallo = true
             this.reserva = false
           }
         })

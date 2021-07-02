@@ -123,10 +123,13 @@ addPrefixToGroup(
     Route.post("arrendar_espacio", "ProductoController.arrendarEspacio")
     Route.get("pedidos", "ProductoController.pedidos")
     Route.get("arriendos", "ProductoController.arriendos")
+    Route.get("pedidos_cliente", "ProductoController.pedidosCliente")
     Route.put("pedido_status/:id", "ProductoController.pedidoStatus")
 
     Route.get("ventas_diarias", "ProductoController.ventasDiarias")
     Route.post("estadistica", "ProductoController.crearEstadistica")
+    Route.post("calificar", "ProductoController.calificarTienda")
+    Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
 
   }).middleware("auth")
 );

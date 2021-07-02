@@ -108,7 +108,7 @@ export default {
   data () {
     return {
       ver: false,
-      ratingModel: 4,
+      ratingModel: 0,
       rating: 4,
       rol: 0,
       id: '',
@@ -132,7 +132,7 @@ export default {
         if (res) {
           this.rol = res.roles[0]
           if (this.rol === 4) {
-            this.hospedador = res
+            this.getHospedador(res._id)
             this.ciudadUser()
             this.getHospedajes()
           } else if (this.rol === 2) {
@@ -149,6 +149,7 @@ export default {
       this.$api.get('hospedaje_by_id/' + id).then(res => {
         if (res) {
           this.hospedador = res
+          this.ratingModel = this.hospedador.my_space.calificacion
           this.ciudadUser()
           this.getHospedajes()
         }

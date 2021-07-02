@@ -7,6 +7,7 @@ var randomize = require('randomatic');
 const User = use("App/Models/User")
 const Servicio = use("App/Models/Servicio")
 const TiendaServicio = use("App/Models/TiendaServicio")
+const Comentario = use('App/Models/Comentario')
 const Role = use("App/Models/Role")
 const { validate } = use("Validator")
 const Paises = use("App/Models/Pais")
@@ -370,6 +371,17 @@ class UserController {
     user.tienda.servicios = servicios
     user.tienda.country = country
     user.tienda.city = city
+
+    var cal = (await Comentario.query().where({tienda_id: params.id}).fetch()).toJSON()
+    var total = 0
+    if (cal.length) {
+      cal.forEach(v => {
+        total += v.calificacion
+      })
+      user.tienda.calificacion = (total / cal.length)
+    } else {
+      user.tienda.calificacion = total
+    }
     response.send(user)
   }
 
@@ -379,6 +391,17 @@ class UserController {
     let city = await Ciudad.find(user.my_space.ciudad_id)
     user.my_space.country = country
     user.my_space.city = city
+
+    var cal = (await Comentario.query().where({tienda_id: params.id}).fetch()).toJSON()
+    var total = 0
+    if (cal.length) {
+      cal.forEach(v => {
+        total += v.calificacion
+      })
+      user.my_space.calificacion = (total / cal.length)
+    } else {
+      user.my_space.calificacion = total
+    }
     response.send(user)
   }
 
