@@ -68,7 +68,7 @@
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-full q-ml-md column justify-end q-mb-sm">
-                <q-rating class="q-mb-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
+                <q-rating readonly class="q-mb-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
                 <div class="row no-wrap items-center" style="width:100%">
                   <div class="text-white text-bold ellipsis">{{store.tienda.name}}</div>
                 </div>
@@ -148,7 +148,6 @@ export default {
       imgTienda: '',
       imgProfile: '',
       urlHospedaje: '',
-      stars: 4,
       search: {},
       user: {},
       stores: [],
@@ -193,7 +192,6 @@ export default {
       await this.$api.post('user_by_rol', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
-          console.log(res)
           this.stores = res.slice(0, 4)
           const total = [...res]
           this.lastStores = total.reverse().slice(0, 10)

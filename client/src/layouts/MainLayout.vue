@@ -59,7 +59,7 @@ export default {
           ruta: '/tiendas'
         },
         {
-          icon: 'description',
+          icon: 'home_work',
           label: 'Descanso',
           ruta: '/descanso'
         },

@@ -431,6 +431,17 @@ class UserController {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].my_space.ciudad_id)).name
           user[i].country = (await Pais.find(user[i].my_space.pais_id)).name
+          var cal = []
+          cal = (await Comentario.query().where({tienda_id: user[i]._id}).fetch()).toJSON()
+          var total = 0
+          if (cal.length) {
+            cal.forEach(v => {
+              total += v.calificacion
+            })
+            user[i].calificacion = (total / cal.length)
+          } else {
+            user[i].calificacion = total
+          }
         }
       }
       response.send(user)
