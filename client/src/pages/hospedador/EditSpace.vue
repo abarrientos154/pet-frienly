@@ -163,7 +163,6 @@ export default {
               this.mostrarImg.push(this.baseu + this.form.images[i].src)
             }
             delete this.form.datos_hospedador
-            console.log(this.form)
           }
         })
       }
@@ -175,9 +174,7 @@ export default {
     },
     actualizar () {
       this.$v.$touch()
-      console.log(this.form)
       if (!this.$v.form.$error) {
-        console.log('sin fallo')
         this.$q.loading.show({
           message: 'Subiendo Espacio de Descanso, Por Favor Espere...'
         })

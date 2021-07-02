@@ -130,7 +130,6 @@ class UserController {
   async registerClient({ request, response }) {
       let dat = request.only(['dat'])
       dat = JSON.parse(dat.dat)
-      console.log(dat, 'data')
       const validation = await validate(dat, User.fieldValidationRulesProveedor())
       if (validation.fails()) {
         response.unprocessableEntity(validation.messages())
@@ -162,7 +161,6 @@ class UserController {
   async registerHospedador({ request, response }) {
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    console.log(dat, 'DATA')
     const validation = await validate(dat, User.fieldValidationRulesProveedor())
     if (validation.fails()) {
       response.unprocessableEntity(validation.messages())
@@ -226,7 +224,6 @@ class UserController {
   async editHospedador({ request, response }) {
     var dat = request.only(['dat'])
     dat = JSON.parse(dat.dat)
-    console.log(dat, 'DATA')
     let images = dat.identificationFiles
     if (dat.IImg) {
       images = []
@@ -508,7 +505,6 @@ class UserController {
       })
     })
 
-    console.log(permissions, 'permissions')
     token.email = user.email
     token.estatus = user.estatus
     token.full_name = user.full_name ? user.full_name : null

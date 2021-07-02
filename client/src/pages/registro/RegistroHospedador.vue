@@ -492,7 +492,6 @@ export default {
         })
         this.form.my_space = this.formMySpace
         this.form.password = this.password
-        console.log(this.form)
         var formData = new FormData()
         var files = []
         var files2 = []
@@ -542,9 +541,7 @@ export default {
     },
     guardar () {
       this.$v.$touch()
-      console.log(this.formEspacio)
       if (!this.$v.espacioImg.$error && !this.$v.formEspacio.$error) {
-        console.log('sin fallo')
         this.$q.loading.show({
           message: 'Subiendo Espacio de Descanso, Por Favor Espere...'
         })

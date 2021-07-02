@@ -256,7 +256,6 @@ class UploadController {
         let proveedor = await User.find(user._id)
         proveedor.status = 0
         proveedor = await proveedor.save()
-        console.log(proveedor, 'proveedor buscar')
         user = await auth.getUser()
         response.send(user)
       }

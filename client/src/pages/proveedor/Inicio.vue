@@ -576,7 +576,6 @@ export default {
       await this.$api.get('tienda_by_id/' + id).then(v => {
         if (v) {
           this.tienda = v.tienda
-          console.log(this.tienda)
           if (this.user._id === v._id) {
             this.miTienda = true
           } else {

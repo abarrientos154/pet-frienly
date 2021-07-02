@@ -36,7 +36,6 @@ class HospedajeController {
     for (let i in datos) {
       datos[i].filename = datos[i].images[0]
     }
-    console.log(datos, 'datos');
     response.send(datos)
   }
 
@@ -91,7 +90,6 @@ class HospedajeController {
 
   async hospedajeFiltrado ({ params, request, response, view }) {
     let filtrar = request.all()
-    console.log(filtrar)
     if (filtrar.ciudad_id && filtrar.pet_num && filtrar.habt_type) {
       let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
       let filter = datos.filter(v => {
@@ -101,12 +99,10 @@ class HospedajeController {
           }
         }
       })
-      console.log('1')
       response.send(filter)
     }
     else if (filtrar.ciudad_id && filtrar.pet_num) {
       let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
-      console.log('2')
       response.send(datos)
     }
     else if (filtrar.pet_num && filtrar.habt_type) {
@@ -118,7 +114,6 @@ class HospedajeController {
           }
         }
       })
-      console.log('3')
       response.send(filter)
     }
     else if (filtrar.ciudad_id && filtrar.habt_type) {
@@ -130,22 +125,18 @@ class HospedajeController {
           }
         }
       })
-      console.log('4')
       response.send(filter)
     }
     else if (filtrar.ciudad_id) {
       let datos = (await Hospedaje.query().where('ciudad_id', filtrar.ciudad_id).with('datos_proveedor').fetch()).toJSON()
-      console.log('5')
       response.send(datos)
     }
     else if (filtrar.pet_num) {
       let datos = (await Hospedaje.query().where('pet_num', '>=', filtrar.pet_num).with('datos_proveedor').fetch()).toJSON()
-      console.log('6')
       response.send(datos)
     }
     else if (filtrar.habt_type) {
       let datos = (await Hospedaje.query().where({}).with('datos_proveedor').fetch()).toJSON()
-      console.log(datos)
       let filter = datos.filter(v => {
         for (let i of v.habt_types) {
           if (i === filtrar.habt_type) {
@@ -153,7 +144,6 @@ class HospedajeController {
           }
         }
       })
-      console.log('7')
       response.send(filter)
     }
     else if (filtrar.fecha) {

@@ -271,7 +271,6 @@ export default {
           this.$api.get('mascota_by_user_id/' + this.user._id).then(v => {
             if (v) {
               this.mascotas = v
-              console.log(this.user._id)
               this.$q.loading.hide()
             }
           })

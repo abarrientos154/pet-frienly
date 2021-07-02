@@ -153,23 +153,13 @@ export default {
             this.rol = v.roles[0]
             if (this.rol === 1) {
               this.menu = this.admin
-            } else {
-              if (this.rol === 2) {
-                this.menu = this.cliente
-              } else {
-                if (this.rol === 3) {
-                  this.menu = this.proveedor
-                } else {
-                  if (this.rol === 4) {
-                    this.menu = this.hospedador
-                  } else {
-                    console.log(this.rol)
-                  }
-                }
-              }
+            } else if (this.rol === 2) {
+              this.menu = this.cliente
+            } else if (this.rol === 3) {
+              this.menu = this.proveedor
+            } else if (this.rol === 4) {
+              this.menu = this.hospedador
             }
-          } else {
-            console.log(this.rol)
           }
         })
       }

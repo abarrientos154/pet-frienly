@@ -288,7 +288,6 @@ export default {
         this.formTwo.country_id = this.country._id
         this.formTwo.city_id = this.city._id
         this.form = { ...this.form, ...this.formTwo }
-        console.log('this.form :>> ', this.form)
         this.formLogin = {
           email: this.form.email,
           password: this.form.password
@@ -305,12 +304,10 @@ export default {
       this.$q.loading.show()
       this.$v.formThree.$touch()
       if (!this.$v.formThree.$error) {
-        console.log('this.form :>> ', this.form)
         await this.saveUser()
         await this.$api.post('login', this.formLogin).then(res => {
           if (res) {
             this.user = res.TRI_SESSION_INFO
-            console.log('user', this.user)
 
             this.login(res)
           }
@@ -373,7 +370,6 @@ export default {
       await this.$api.get('pais').then(res => {
         if (res) {
           this.countries = res
-          console.log(this.countries)
         }
       })
     },

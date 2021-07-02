@@ -147,9 +147,7 @@ export default {
     },
     guardar () {
       this.$v.$touch()
-      console.log(this.form)
       if (!this.$v.espacioImg.$error && !this.$v.form.$error) {
-        console.log('sin fallo')
         this.$q.loading.show({
           message: 'Subiendo Espacio de Descanso, Por Favor Espere...'
         })

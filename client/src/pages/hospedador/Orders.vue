@@ -233,7 +233,6 @@ export default {
       this.$api.get('arriendos').then(res => {
         if (res) {
           this.allArriendos = res.filter(v => v.expirado)
-          console.log(this.allArriendos)
           this.enCurso = res.filter(v => !v.expirado)
           this.arriendos = this.allArriendos.slice(0, 4)
           this.$q.loading.hide()

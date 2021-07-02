@@ -45,24 +45,23 @@
     </div>
 
     <div class="q-pa-sm">
-      <div class="text-h6">Reseñas de clientes</div>
+      <div class="text-h6 q-pb-sm">Reseñas de clientes</div>
       <q-scroll-area horizontal style="height: 150px" v-if="comentarios.length">
-        <div class="row no-wrap q-gutter-md" style="width: 100%">
-          <q-card class="shadow-6" v-for="index in comentarios" :key="index" style="width: 300px; height: 125px;">
+        <div class="row items-center no-wrap q-gutter-md q-px-sm" style="width: 100%">
+          <q-card class="shadow-6" v-for="(item, index) in comentarios" :key="index" style="width: 300px; height: 125px;">
             <q-card-section horizontal style="height: 100%;">
               <q-card-section>
                 <q-avatar rounded style="height: 100%; width: 100px; border-radius: 20px;" class="bg-grey">
-                  <q-img style="height: 100%;" :src="''"/>
+                  <q-img style="height: 100%;" :src="baseuPerfil + item.cliente_id"/>
                 </q-avatar>
               </q-card-section>
               <div class="q-py-md q-pr-md col column">
-                <div class="text-subtitle3 text-bold">Titulo del comentario</div>
                 <div class="col">
                   <q-scroll-area style="height: 55px;">
-                    <div class="text-caption text-grey-6 text-italic">{{'Descripcion'}}</div>
+                    <div class="text-caption text-grey-8 text-italic">{{item.comentario}}</div>
                   </q-scroll-area>
                 </div>
-                <q-rating max="5" size="15px" v-model="rating" color="grey" color-selected="orange-8" readonly/>
+                <q-rating max="5" size="15px" v-model="item.calificacion" color="grey" color-selected="orange-8" readonly/>
               </div>
             </q-card-section>
           </q-card>
@@ -109,21 +108,22 @@ export default {
     return {
       ver: false,
       ratingModel: 0,
-      rating: 4,
       rol: 0,
       id: '',
       baseu: '',
+      baseuPerfil: '',
       baseuHospedador: '',
       hospedador: {},
       user: {},
       cityUser: {},
-      comentarios: [1, 2, 3],
+      comentarios: [],
       allhospedajes: [],
       hospedajes: []
     }
   },
   mounted () {
     this.baseu = env.apiUrl + 'espacio_img/'
+    this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.getUser()
   },
   methods: {
@@ -133,7 +133,6 @@ export default {
           this.rol = res.roles[0]
           if (this.rol === 4) {
             this.getHospedador(res._id)
-            this.ciudadUser()
             this.getHospedajes()
           } else if (this.rol === 2) {
             this.user = res
@@ -152,6 +151,11 @@ export default {
           this.ratingModel = this.hospedador.my_space.calificacion
           this.ciudadUser()
           this.getHospedajes()
+          this.$api.get('mis_comentarios/' + id).then(res => {
+            if (res) {
+              this.comentarios = res
+            }
+          })
         }
       })
     },
