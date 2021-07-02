@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-lg">
     <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
-      <div class="text-white text-h6 text-center">Nuevo espacio</div>
+      <div class="text-white text-subtitle1 text-center">Nuevo espacio</div>
     </q-header>
 
     <div class="q-pa-md">
