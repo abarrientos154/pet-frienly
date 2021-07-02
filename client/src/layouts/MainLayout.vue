@@ -6,9 +6,11 @@
     </q-page-container>
 
     <q-footer elevated>
-      <div class="bg-primary full-width row" v-if="rol != null">
-        <div class="col row justify-center items-center" v-for="(item, index) in menu" :key="index">
-          <q-btn round flat stack dense no-caps class="text-italic q-py-xs" :icon="item.icon" color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : ruta(item)"><div style="font-size: 10px">{{item.label}}</div></q-btn>
+      <div class="bg-primary full-width row items-center" v-if="rol != null">
+        <div class="col row justify-center items-center q-py-xs" v-for="(item, index) in menu" :key="index">
+          <q-btn flat stack dense no-caps class="text-italic" :icon="item.icon" color="primary" text-color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : ruta(item)">
+            <div style="font-size: 10px">{{item.label}}</div>
+          </q-btn>
         </div>
       </div>
     </q-footer>
@@ -21,9 +23,7 @@ export default {
   name: 'MainLayout',
   data () {
     return {
-      usuario: {},
       rol: null,
-      drawer: false,
       menu: [],
       admin: [
         {
@@ -132,7 +132,6 @@ export default {
   },
   mounted () {
     this.getUser()
-    // console.log(localStorage, 'local')
   },
   computed: {
     ...mapGetters('generals', ['can']),
