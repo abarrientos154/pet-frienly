@@ -3,6 +3,7 @@
       <q-carousel
         class="window-height q-pa-none"
         animated
+        swipeable
         v-model="slide"
         ref="carousel2">
         <q-carousel-slide :name="1" class="q-pa-none" img-src="https://cdn.quasar.dev/img/mountains.jpg">

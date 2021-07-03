@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
-    <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
-      <div class="text-white text-h6 text-center">Tus arriendos</div>
+    <q-header elevated class="bg-primary row justify-center items-center" style="width:100%; height:60px">
+      <div class="text-white text-subtitle1 text-center">Tus arriendos</div>
     </q-header>
 
     <div class="q-mb-lg">
@@ -33,12 +33,12 @@
                 <div class="row q-mb-md">
                   <div class="col column items-center">
                     <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
-                      <q-img style="height: 100%;" :src="baseuRepresentante + item.hospedador_id"/>
+                      <q-img style="height: 100%;" :src="baseuRepresentante + item.cliente_id"/>
                     </q-avatar>
                   </div>
                   <div class="col">
                     <div class="text-caption text-grey-7 text-bold">Datos del representante</div>
-                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.name + ' ' + item.representante.last_name : ''}}</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.name : ''}}</div>
                     <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.phone : ''}}</div>
                   </div>
                 </div>
@@ -137,12 +137,12 @@
                 <div class="row q-mb-md">
                   <div class="col column items-center">
                     <q-avatar rounded style="height: 80px; width: 80px; border-radius: 15px;" class="bg-grey">
-                      <q-img style="height: 100%;" :src="baseuRepresentante + item.hospedador_id"/>
+                      <q-img style="height: 100%;" :src="baseuRepresentante + item.cliente_id"/>
                     </q-avatar>
                   </div>
                   <div class="col">
                     <div class="text-caption text-grey-7 text-bold">Datos del representante</div>
-                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.name + ' ' + item.representante.last_name : ''}}</div>
+                    <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.name : ''}}</div>
                     <div class="text-grey-7" style="font-size: 11px">{{item.representante ? item.representante.phone : ''}}</div>
                   </div>
                 </div>
@@ -161,7 +161,7 @@
               </div>
               <div>
                 <div class="row justify-between q-mb-md">
-                  <div class="text-caption text-grey-8">Datos de mascota</div>
+                  <div class="text-caption text-grey-8">Días arrendados</div>
                   <div class="text-caption text-grey-8 text-bold">{{item.dias}} días</div>
                 </div>
                 <div class="column q-mb-md">
@@ -178,9 +178,15 @@
                   <div class="text-caption text-grey-8">Precio total</div>
                   <div class="text-primary">${{item.total}}</div>
                 </div>
-                <div v-if="item.calificado" class="row items-center q-pt-sm">
-                    <div class="text-caption text-grey-9">Calificado</div>
-                    <q-icon name="star" class="text-orange" size="sm" />
+                <div v-if="item.calificado" class="row items-center justify-between q-pt-sm">
+                    <div class="row items-center">
+                      <div class="text-caption text-grey-9">Calificado</div>
+                      <q-icon name="star" class="text-orange" size="sm" />
+                    </div>
+                    <div>
+                      <q-btn no-caps flat color="orange" label="Ver"
+                      @click="calificado = item.calificacion, verCalificacion = true"/>
+                    </div>
                 </div>
               </div>
             </div>
@@ -208,7 +214,7 @@
             <div class="q-pt-lg">
                 <div class="row justify-center items-center bg-primary text-white" style="height: 50px; width:100%">Reserva finalizada</div>
                 <div class="row justify-center q-py-md" style="width:100%">
-                    <q-img src="noimg.png" style="width:80%; height:200px; border-radius: 20px" />
+                    <q-img :src="dataSelec.cliente_id ? baseuRepresentante + dataSelec.cliente_id : 'noimg.png'" style="width:80%; height:200px; border-radius: 20px" />
                 </div>
                 <div class="q-px-md">
                     <div class="text-caption text-bold">Calificación</div>
@@ -235,6 +241,35 @@
             </div>
         </q-card>
       </q-dialog>
+
+      <q-dialog persistent v-model="verCalificacion">
+        <q-card style="width: 100%; border-radius:20px">
+            <div class="q-pt-lg">
+                <div class="row justify-center items-center bg-primary text-white" style="height: 50px; width:100%">Reserva finalizada</div>
+                <div class="row justify-center q-py-md" style="width:100%">
+                    <q-img :src="calificado.cliente_id ? baseuRepresentante + calificado.cliente_id : 'noimg.png'" style="width:80%; height:200px; border-radius: 20px" />
+                </div>
+                <div class="q-px-md">
+                    <div class="text-caption text-bold">Calificación</div>
+                    <q-rating
+                        v-model="calificado.calificacion"
+                        readonly
+                        color="orange"
+                        size="25px"
+                        icon="star"
+                    />
+                </div>
+                <div class="q-px-md q-pt-sm">
+                    <div class="text-caption text-bold">Comentario</div>
+                    <q-input filled outlined readonly v-model="calificado.comentario" type="textarea"/>
+                </div>
+                <div class="column items-center q-pt-lg">
+                    <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Cerrar" style="width: 70%"
+                    @click="verCalificacion = false"/>
+                </div>
+            </div>
+        </q-card>
+      </q-dialog>
   </div>
 </template>
 
@@ -247,11 +282,13 @@ export default {
     return {
       ver: false,
       calificar: false,
+      verCalificacion: false,
       selectMes: '',
       baseuHospedaje: '',
       baseuRepresentante: '',
       baseuMascotas: '',
       calificacion: 0,
+      calificado: {},
       dataSelec: {},
       form: {},
       allArriendos: [],

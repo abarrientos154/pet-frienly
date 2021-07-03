@@ -156,9 +156,15 @@
                   <div class="text-caption text-grey-7">Precio total</div>
                   <div class="text-subtitle1 text-black">${{item.totalValor}}</div>
                 </div>
-                <div v-if="item.calificado" class="row items-center q-pt-sm">
-                    <div class="text-caption text-grey-9">Calificado</div>
-                    <q-icon name="star" class="text-orange" size="sm" />
+                <div v-if="item.calificado" class="row items-center justify-between q-pt-sm">
+                    <div class="row items-center">
+                      <div class="text-caption text-grey-9">Calificado</div>
+                      <q-icon name="star" class="text-orange" size="sm" />
+                    </div>
+                    <div>
+                      <q-btn no-caps flat color="orange" label="Ver"
+                      @click="calificado = item.calificacion, verCalificacion = true"/>
+                    </div>
                 </div>
               </div>
             </div>
@@ -179,6 +185,35 @@
       <div class="column items-center q-mb-xl">
         <q-btn v-if="allPedidos.length > 4" @click="verMas()" class="q-pa-sm" color="primary" :label="ver ? 'Ver menos' :'Ver más'" style="width: 70%;" no-caps/>
       </div>
+
+      <q-dialog persistent v-model="verCalificacion">
+        <q-card style="width: 100%; border-radius:20px">
+            <div class="q-pt-lg">
+                <div class="row justify-center items-center bg-primary text-white" style="height: 50px; width:100%">Pedido finalizado</div>
+                <div class="row justify-center q-py-md" style="width:100%">
+                    <q-img :src="calificado.cliente_id ? baseuRepresentante + calificado.cliente_id : 'noimg.png'" style="width:80%; height:200px; border-radius: 20px" />
+                </div>
+                <div class="q-px-md">
+                    <div class="text-caption text-bold">Calificación</div>
+                    <q-rating
+                        v-model="calificado.calificacion"
+                        readonly
+                        color="orange"
+                        size="25px"
+                        icon="star"
+                    />
+                </div>
+                <div class="q-px-md q-pt-sm">
+                    <div class="text-caption text-bold">Comentario</div>
+                    <q-input filled outlined readonly v-model="calificado.comentario" type="textarea"/>
+                </div>
+                <div class="column items-center q-pt-lg">
+                    <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Cerrar" style="width: 70%"
+                    @click="verCalificacion = false"/>
+                </div>
+            </div>
+        </q-card>
+      </q-dialog>
   </div>
 </template>
 
@@ -189,10 +224,13 @@ export default {
   data () {
     return {
       ver: false,
+      verCalificacion: false,
       selectMes: '',
       baseuproductos: '',
       baseuServicios: '',
+      baseuRepresentante: '',
       newStatus: '',
+      calificado: {},
       allPedidos: [],
       pedidos: [],
       pendientes: []
@@ -201,6 +239,7 @@ export default {
   mounted () {
     this.baseuproductos = env.apiUrl + 'productos_img/'
     this.baseuServicios = env.apiUrl + 'servicio_img/'
+    this.baseuRepresentante = env.apiUrl + 'perfil_img/'
     this.getPedidos()
   },
   methods: {

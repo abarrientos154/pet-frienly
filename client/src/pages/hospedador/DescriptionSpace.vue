@@ -115,7 +115,7 @@
 
           <div class="column items-center">
             <div class="q-ma-lg">
-              <q-avatar rounded style="height: 150px; width: 250px;" class="bg-secondary q-mb-sm">
+              <q-avatar rounded style="height: 150px; width: 250px;" class="q-mb-sm">
                 <q-img style="height: 100%;" :src="hospedaje.images ? baseu + hospedaje.images[0].src : ''"/>
               </q-avatar>
             </div>

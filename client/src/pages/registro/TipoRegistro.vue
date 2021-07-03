@@ -1,6 +1,12 @@
 <template>
   <div>
-    <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
+    <q-carousel
+      class="window-height"
+      animated
+      v-model="slide"
+      infinite
+      swipeable
+      ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none" img-src="https://cdn.quasar.dev/img/mountains.jpg">
         <div class="absolute-center full-width custom-caption bg-transparent">
           <div class="row justify-end q-mb-md">

@@ -59,7 +59,7 @@ export default {
           ruta: '/tiendas'
         },
         {
-          icon: 'description',
+          icon: 'home_work',
           label: 'Descanso',
           ruta: '/descanso'
         },
@@ -119,7 +119,7 @@ export default {
         },
         {
           icon: 'assignment',
-          label: 'Pedidos',
+          label: 'Reservass',
           ruta: '/pedidos_hospedador'
         },
         {

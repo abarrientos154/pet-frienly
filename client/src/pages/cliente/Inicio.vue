@@ -1,11 +1,12 @@
 <template>
   <div>
-    <div style="height: 300px; width: 100%;" class="bg-primary">
-      <q-btn no-caps color="secondary" class="q-mt-md q-ml-md" label="Editar Perfil" @click="$router.push('/editar-perfil/' + user._id)"/>
+    <div style="height: 300px; width: 100%;" class="bg-grey">
+      <q-btn no-caps color="primary" class="q-mt-md q-ml-md" label="Editar Perfil" @click="$router.push('/editar-perfil/' + user._id)"/>
     </div>
+
     <div class="q-mx-md">
       <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
-      <div class="q-mb-md q-mx-sm text-weight-bolder">El amor es una palabra de cuatro patas</div>
+      <div class="q-mb-md q-mx-sm">El amor es una palabra de cuatro patas</div>
       <div class="q-mb-md q-mx-sm text-weight-bolder">¿Qué es lo que buscas?
       <div class="text-overline">Selecciona Hospedaje o Tienda</div>
       <div class="row q-mx-sm q-mb-sm">
@@ -28,22 +29,25 @@
       </div>
       </div>
       <div class="row justify-center q-my-lg">
-        <q-btn color="primary" label="Buscar" style="width: 70%; heigth 40px; border-radius: 10px"/>
+        <q-btn no-caps class="q-py-xs" color="primary" label="Buscar" style="width: 70%"/>
       </div>
     </div>
+
     <div class="q-pa-sm">
-      <div class="q-mb-md q-mx-sm text-h4">Ultimas tiendas añadidas</div>
+      <div class="q-mb-md text-h5 text-center">Ultimas tiendas añadidas</div>
       <q-scroll-area
           horizontal
           style="height: 330px;"
         >
-          <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:230px" clickable v-ripple v-for="(store, index) in lastStores" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
+          <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width: 100%">
+            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(store, index) in lastStores" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
-              <div class="absolute-full q-ml-md column justify-end q-mb-sm">
-                <div class="text-white text-bold">{{store.tienda.name}}</div>
+              <div class="absolute-full q-pl-md column justify-end q-mb-sm">
+                <div class="row no-wrap items-center" style="width:100%">
+                  <div class="text-white text-bold ellipsis">{{store.tienda.name}}</div>
+                </div>
                 <div class="row no-wrap items-center" style="width:100%">
                   <q-icon name="place" class="q-mr-xs text-white"/>
                   <div class="ellipsis text-white text-subtitle2 col-10">{{store.city}}, {{store.tienda.direccion}}</div>
@@ -52,17 +56,22 @@
             </q-card>
           </div>
         </q-scroll-area>
-      <q-card style="height: 250px" class="q-mx-md q-my-md bg-primary"></q-card>
-      <div class="q-mb-md q-mx-sm text-h4">Nuestras tiendas</div>
-      <div>
-        <div class="row justify-around col-6">
-            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:48%" clickable v-ripple v-for="(store, index) in stores" :key="index" @click="$router.push('/inicio-proveedor/' + 'store._id')" class="q-mb-sm">
-              <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="bg-primary">
+
+      <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey"></q-card>
+
+      <div class="q-mb-md q-mx-sm text-h5">Nuestras tiendas</div>
+      <div class="row justify-around" style="width:100%">
+        <div class="col-6 q-mb-sm row justify-center" v-for="(store, index) in stores" :key="index">
+            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
+            @click="$router.push('/inicio-proveedor/' + 'store._id')">
+              <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-full q-ml-md column justify-end q-mb-sm">
-                <q-rating class="q-mb-sm" v-model="stars" :max="5" size="130%" />
-                <div class="text-white text-bold ellipsis">{{store.tienda.name}}</div>
+                <q-rating readonly class="q-mb-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
+                <div class="row no-wrap items-center" style="width:100%">
+                  <div class="text-white text-bold ellipsis">{{store.tienda.name}}</div>
+                </div>
                 <div class="row no-wrap items-center" style="width:100%">
                   <q-icon name="place" class="q-mr-xs text-white"/>
                   <div class="ellipsis text-subtitle2 text-white">{{store.city}}, {{store.tienda.direccion}}</div>
@@ -71,39 +80,48 @@
             </q-card>
           </div>
       </div>
+
       <div class="row justify-center q-my-lg">
-        <q-btn no-caps color="primary" label="Ver más" class="q-py-md" style="width: 70%; heigth 40px; border-radius: 6px" @click="$router.push('/tiendas')"/>
+        <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/tiendas')"/>
       </div>
-      <q-card style="height: 250px" class="q-mx-md q-my-md bg-primary"></q-card>
-      <div class="q-mb-md q-mx-sm text-h4">Ultimos alojamientos</div>
+
+      <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey"></q-card>
+
+      <div class="q-mb-md text-center text-h5">Ultimos alojamientos</div>
       <q-scroll-area
           horizontal
-          style="height: 360px;"
+          style="height: 330px;"
         >
-          <div class="row no-wrap q-py-md q-px-md q-gutter-md">
-            <q-card style="border-radius: 24px; width:230px" clickable v-ripple v-for="(item, index) in lastHost" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
-               <q-img :src="imgProfile + item.spaceFile.name" style="height: 240px; width: 100%" class="bg-primary">
+          <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width:100%">
+            <q-card style="border-radius: 15px; width:330px" clickable v-ripple v-for="(item, index) in lastHost" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
+               <q-img :src="imgProfile + item.spaceFile.name" style="height: 200px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="row justify-center items-center q-ma-md">
-                <div class="text-subtitle2 text-grey q-mb-xs q-mx-sm">{{item.my_space.name}}</div>
-                <div class="row items-center">
-                  <q-icon class="text-grey" name="place" />
-                  <div class="text-subtitle2 text-grey q-mb-xs q-mx-sm">{{item.country}}, {{item.city}}</div>
+                <div class="row no-wrap items-center" style="width:100%">
+                  <div class="text-grey-8 text-bold text-subtitle1 ellipsis">{{item.my_space.name}}</div>
+                </div>
+                <div class="row no-wrap items-center" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs text-grey-8"/>
+                  <div class="text-grey-8 ellipsis text-caption col-10">{{item.country}}, {{item.city}}</div>
                 </div>
               </div>
             </q-card>
           </div>
         </q-scroll-area>
-      <div class="q-mb-md q-mx-sm text-h4">Alojamientos</div>
-      <div>
-        <div class="row justify-around col-6">
-            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:48%" clickable v-ripple v-for="(item, index) in host" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)" class="q-mb-sm">
-              <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%" class="bg-primary">
+
+      <div class="q-mb-md q-mx-sm text-h5">Alojamientos</div>
+      <div class="row justify-around">
+        <div class="row justify-center col-6 q-mb-sm" v-for="(item, index) in host" :key="index">
+            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
+            @click="$router.push('/inicio-hospedador/' + item._id)">
+              <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-full q-ml-md column justify-end q-mb-sm">
-                <div class="text-white text-bold">{{item.my_space.name}}</div>
+                <div class="row no-wrap items-center" style="width:100%">
+                  <div class="text-white text-bold ellipsis">{{item.my_space.name}}</div>
+                </div>
                 <div class="row no-wrap items-center" style="width:100%">
                   <q-icon name="place" class="q-mr-xs text-white"/>
                   <div class="ellipsis text-white text-subtitle2 q-mr-sm">{{item.city}}, {{item.my_space.direction}}</div>
@@ -112,8 +130,9 @@
             </q-card>
           </div>
       </div>
+
       <div class="row justify-center q-my-lg">
-        <q-btn no-caps color="primary" label="Ver más" class="q-py-md" style="width: 70%; heigth 40px; border-radius: 6px" @click="$router.push('/descanso')"/>
+        <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/descanso')"/>
       </div>
     </div>
   </div>
@@ -126,23 +145,16 @@ export default {
   },
   data () {
     return {
-      place: [],
       imgTienda: '',
       imgProfile: '',
-      imgProducto: '',
-      tabCat: 'mails',
-      tabSer: 'mails',
-      stores: [],
-      productos: [],
-      rating: 3,
-      host: [],
       urlHospedaje: '',
-      servicios: [],
-      thumbStyle: {
-        borderRadius: '5px',
-        backgroundColor: 'gray',
-        opacity: 0.25
-      },
+      search: {},
+      user: {},
+      stores: [],
+      lastStores: [],
+      host: [],
+      lastHost: [],
+      cities: [],
       services: [
         { name: 'Hospedaje', value: 1 },
         { name: 'Tienda', value: 2 }
@@ -151,31 +163,21 @@ export default {
         { name: 'Perro', value: 1 },
         { name: 'Gato', value: 2 },
         { name: 'Ambos', value: 3 }
-      ],
-      cities: [],
-      search: {},
-      stars: 4,
-      lastStores: [],
-      lastHosts: [],
-      user: {}
+      ]
     }
   },
   mounted () {
     this.getUser()
     this.getCities()
     this.getStore()
-    this.getProductos()
     this.urlHospedaje = env.apiUrl + 'hospedaje_img'
     this.getHost()
-    this.getServicios()
-    console.log('this.stores :>> ', this.stores)
   },
   methods: {
     getUser () {
       this.$api.get('user_logueado').then(res => {
         if (res) {
           this.user = res
-          console.log('this.user._id :>> ', this.user._id)
         }
       })
     },
@@ -183,32 +185,16 @@ export default {
       await this.$api.get('ciudades').then(res => {
         if (res) {
           this.cities = res
-          console.log('cities :>> ', this.cities)
         }
       })
-    },
-    seeAccommodation (id) {
-      this.$router.push('/descripcionalojamiento/' + id)
     },
     async getStore () {
       await this.$api.post('user_by_rol', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
-        console.log('this.imgTienda :>> ', this.imgTienda)
         if (res) {
+          this.stores = res.slice(0, 4)
           const total = [...res]
-          this.stores = res
           this.lastStores = total.reverse().slice(0, 10)
-          this.stores = this.stores.slice(0, 4)
-          console.log(this.stores)
-        }
-      })
-    },
-    getProductos () {
-      this.$api.get('producto').then(res => {
-        this.imgProducto = env.apiUrl + 'productos_img/'
-        if (res) {
-          this.productos = res
-          // console.log(this.productos)
         }
       })
     },
@@ -216,19 +202,9 @@ export default {
       await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
         this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
+          this.host = res.slice(0, 4)
           const total = [...res]
-          this.host = res
           this.lastHost = total.reverse().slice(0, 10)
-          this.host = this.host.slice(0, 4)
-          console.log(this.host)
-        }
-      })
-    },
-    getServicios () {
-      this.$api.get('servicios').then(res => {
-        if (res) {
-          this.servicios = res
-          // console.log(this.servicios, 'mira')
         }
       })
     }

@@ -7,6 +7,9 @@ class Pedido extends Model {
   productos () {
     return this.hasMany("App/Models/Comprado", "_id", "pedido_id")
   }
+  calificacion () {
+    return this.hasOne("App/Models/Comentario", "_id", "pedido_id")
+  }
 }
 
 module.exports = Pedido

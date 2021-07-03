@@ -57,9 +57,9 @@ class ProductoController {
     const user = (await auth.getUser()).toJSON()
     let data
     if (user.roles[0] === 2) {
-      data = (await Pedidos.query().where({cliente_id: user._id}).with('productos').fetch()).toJSON()
+      data = (await Pedidos.query().where({cliente_id: user._id}).with('productos').with('calificacion').fetch()).toJSON()
     } else {
-      data = (await Pedidos.query().where({tienda_id: user._id}).with('productos').fetch()).toJSON()
+      data = (await Pedidos.query().where({tienda_id: user._id}).with('productos').with('calificacion').fetch()).toJSON()
     }
     data = data.map(v => {
       return {
@@ -76,15 +76,15 @@ class ProductoController {
     const user = (await auth.getUser()).toJSON()
     let data
     if (user.roles[0] === 2) {
-      data = (await Reservas.query().where({cliente_id: user._id}).with('representante').fetch()).toJSON()
+      data = (await Reservas.query().where({cliente_id: user._id}).with('representante').with('calificacion').fetch()).toJSON()
     } else {
-      data = (await Reservas.query().where({hospedador_id: user._id}).with('representante').fetch()).toJSON()
+      data = (await Reservas.query().where({hospedador_id: user._id}).with('representante').with('calificacion').fetch()).toJSON()
     }
     data = data.map(v => {
       return {
         ...v,
         detalles: false,
-        dias: moment(v.fecha_salida).diff(v.fecha_ingreso, 'days'),
+        dias: moment(v.fecha_salida).diff(v.fecha_ingreso, 'days') + 1,
         expirado: moment(v.expiration) > moment() ? false : true,
         fecha_arriendo: moment(v.created_at).format('DD/MM/YYYY')
       }
@@ -104,7 +104,7 @@ class ProductoController {
     let modificar
     if (data.pedido_id) {
       modificar = await Pedidos.query().where({_id: data.pedido_id}).update({calificado: true})
-    } else {
+    } else if (data.alojamiento_id) {
       modificar = await Reservas.query().where({_id: data.alojamiento_id}).update({calificado: true})
     }
     response.send(comentario)
