@@ -2,7 +2,7 @@
   <div>
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
-        <div class="q-pa-lg">
+        <div class="q-pa-md">
         <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
           <div class="text-center text-h5 text-grey-8">Editar Perfil</div>
           <div class="row justify-center">
@@ -15,7 +15,7 @@
             </q-avatar>
           </div>
          <div class="q-mx-xl">
-          <div class="q-mt-sm">
+          <div class="q-mt-md">
             Nombre de Usuario
             <q-input filled v-model="form.name"  dense placeholder="Nombre de usuario"
             error-message="Requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
@@ -27,7 +27,7 @@
           </div>
           <div>
             Correo Electrónico
-            <q-input filled v-model="form.email"  dense placeholder="Correo Electrónico"
+            <q-input filled readonly v-model="form.email"  dense placeholder="Correo Electrónico"
             error-message="Requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
           </div>
          </div>
@@ -35,7 +35,7 @@
         </div>
       </q-carousel-slide>
       <q-carousel-slide :name="2" class="q-pa-none">
-        <div class="q-pa-lg">
+        <div class="q-pa-md">
           <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
           <div class="text-center text-h5 text-grey-8">Información de despacho</div>
          <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
@@ -67,7 +67,7 @@
              <q-input type="tel" filled v-model="formTwo.address"  dense placeholder="Ingrese su dirección" error-message="Requerido" :error="$v.formTwo.address.$error" @blur="$v.formTwo.address.$touch()"/>
            </div>
          </div>
-          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="nextTwo()" class="q-py-sm"/>
+          <q-btn color="primary" label="Finalizar" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="finish()" class="q-py-sm"/>
         </div>
       </q-carousel-slide>
     </q-carousel>
@@ -160,7 +160,7 @@ export default {
         })
       }
     },
-    nextTwo () {
+    finish () {
       this.$v.formTwo.$touch()
       this.$v.country.$touch()
       this.$v.city.$touch()
@@ -169,11 +169,8 @@ export default {
         this.formTwo.city_id = this.city._id
         this.form = { ...this.form, ...this.formTwo }
         console.log('this.form :>> ', this.form)
-        this.formLogin = {
-          email: this.form.email,
-          password: this.form.password
-        }
-        this.slide = 3
+        this.updateUser()
+        this.$router.push('/inicio_cliente')
       } else {
         this.$q.notify({
           message: 'Debes ingresar todos los datos requeridos',
@@ -181,47 +178,24 @@ export default {
         })
       }
     },
-    async finish () {
+    async updateUser () {
       this.$q.loading.show()
-      this.$v.formThree.$touch()
-      if (!this.$v.formThree.$error) {
-        console.log('this.form :>> ', this.form)
-        await this.saveUser()
-        await this.$api.post('login', this.formLogin).then(res => {
-          if (res) {
-            this.user = res.TRI_SESSION_INFO
-            console.log('user', this.user)
-
-            this.login(res)
-          }
-        })
-        await this.savePet()
-        this.$q.loading.hide()
-        this.slide = 4
-      } else {
-        this.$q.notify({
-          message: 'Debes ingresar todos los datos requeridos',
-          color: 'negative'
-        })
-        this.$q.loading.hide()
-      }
-    },
-    async saveUser () {
       const formData = new FormData()
       const files = []
       files[0] = this.perfilFile
       formData.append('perfilFile', files[0])
       formData.append('dat', JSON.stringify(this.form))
-      await this.$api.post('register_client', formData, {
+      await this.$api.put('update_client/' + this.$route.params.id, formData, {
         headers: {
           'Content-Type': undefined
         }
       }).then(res => {
         if (res) {
           this.$q.notify({
-            message: 'Ya formas parte de PeT, Bienvenido',
+            message: 'Perfil actualizado correctamente',
             color: 'positive'
           })
+          this.$q.loading.hide()
         }
       })
     },

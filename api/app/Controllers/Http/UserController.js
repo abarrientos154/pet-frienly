@@ -157,6 +157,30 @@ class UserController {
         response.send(user)
       }
     }
+  async updateClient({ request, response, params }) {
+      try {
+        let dat = request.only(['dat'])
+        dat = JSON.parse(dat.dat)
+        let body = dat
+        const user = await User.where({ _id: params.id }).update(body)
+        const profilePic = request.file('perfilFile', {
+          types: ['image']
+        })
+        if (profilePic != null) {
+          if (Helpers.appRoot('storage/uploads/perfil')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/perfil'), {
+              name: params.id.toString(),
+              overwrite: true
+            })
+          } else {
+            mkdirp.sync(`${__dirname}/storage/Excel`)
+          }
+        }
+        response.send(user)
+      } catch (error) {
+        console.error('update ' + error.name + ': ' + error.message)
+      }
+  }
 
   async registerHospedador({ request, response }) {
     var dat = request.only(['dat'])
