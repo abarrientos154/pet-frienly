@@ -95,35 +95,18 @@
 <script>
 import env from '../../env'
 import { required, email } from 'vuelidate/lib/validators'
-import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
-      formLogin: null,
       country: null,
       city: null,
+      perfilFile: null,
       slide: 1,
       imgPerfil: '',
       form: {},
       formTwo: {},
-      perfilFile: null,
       countries: [],
-      cities: [],
-      sizeDog: [
-        { name: 'Pequeño', value: 1 },
-        { name: 'Mediano', value: 2 },
-        { name: 'Intermedio', value: 3 },
-        { name: 'Grande', value: 4 }
-      ],
-      sizeCat: [
-        { name: 'Pequeño', value: 1 },
-        { name: 'Grande', value: 4 }
-      ],
-      petType: [
-        { name: 'Perro', value: 1 },
-        { name: 'Gato', value: 2 }
-      ],
-      sizes: []
+      cities: []
     }
   },
   validations: {
@@ -144,7 +127,6 @@ export default {
     this.getUser()
   },
   methods: {
-    ...mapMutations('generals', ['login']),
     async getUser () {
       await this.$api.get('clientById/' + this.$route.params.id).then(res => {
         if (res) {
@@ -159,13 +141,6 @@ export default {
           console.log('res :>> ', this.imgPerfil)
         }
       })
-    },
-    getSize (value) {
-      if (value === 'Perro') {
-        this.sizes = [...this.sizeDog]
-      } else if (value === 'Gato') {
-        this.sizes = [...this.sizeCat]
-      }
     },
     next () {
       this.$v.form.$touch()
