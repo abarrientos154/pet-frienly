@@ -11,9 +11,9 @@
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-md">
           <div class="row justify-center">
-            <q-avatar size="200px" class="bg-grey row justify-center">
-              <q-img :src="perfilFile ? imgPerfil : ''" style="height: 100%">
-                <q-file borderless v-model="perfilFile" @input="changeProfile(perfilFile)" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
+            <q-avatar size="200px" class="row justify-center">
+              <q-img :src="imgPerfil" style="height: 100%">
+                <q-file borderless v-model="perfilFile" @input="changeProfile()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px">
                   <q-icon name="photo_camera" class="absolute-center" size="50px" color="white" />
                 </q-file>
               </q-img>
@@ -47,7 +47,7 @@
           <div class="text-center text-h5 text-grey-8 q-mb-xs">Información de despacho</div>
           <div class="row justify-center q-px-lg">
             <q-avatar rounded style="height: 250px; width: 100%;" class="bg-grey q-mb-sm">
-              <q-img style="height: 100%;" :src="perfilFile ? imgPerfil : ''">
+              <q-img style="height: 100%;" :src="imgPerfil">
               </q-img>
             </q-avatar>
           </div>
@@ -131,21 +131,19 @@ export default {
       await this.$api.get('clientById/' + this.$route.params.id).then(res => {
         if (res) {
           this.imgPerfil = env.apiUrl + 'perfil_img/' + res._id
-          this.perfilFile = 1
           this.form.name = res.name
           this.form.email = res.email
           this.form.phone = res.phone
           this.formTwo.address = res.address
           this.country = res.country
           this.city = res.city
-          console.log('res :>> ', this.imgPerfil)
         }
       })
     },
     next () {
       this.$v.form.$touch()
       this.$v.perfilFile.$touch()
-      if (!this.$v.form.$error && !this.$v.perfilFile.$error) {
+      if (!this.$v.form.$error) {
         this.slide = 2
       } else {
         this.$q.notify({
@@ -162,7 +160,6 @@ export default {
         this.formTwo.country_id = this.country._id
         this.formTwo.city_id = this.city._id
         this.form = { ...this.form, ...this.formTwo }
-        console.log('this.form :>> ', this.form)
         this.updateUser()
         this.$router.push('/inicio_cliente')
       } else {
@@ -173,22 +170,17 @@ export default {
       }
     },
     async updateUser () {
-      this.$q.loading.show()
-      const formData = new FormData()
-      const files = []
-      files[0] = this.perfilFile
-      formData.append('perfilFile', files[0])
-      formData.append('dat', JSON.stringify(this.form))
-      await this.$api.put('update_client/' + this.$route.params.id, formData, {
-        headers: {
-          'Content-Type': undefined
-        }
-      }).then(res => {
+      this.$q.loading.show({
+        message: 'Guardando...'
+      })
+      await this.$api.post('update_client', this.form).then(res => {
         if (res) {
           this.$q.notify({
-            message: 'Perfil actualizado correctamente',
+            message: 'Datos guardados correctamente',
             color: 'positive'
           })
+          this.$q.loading.hide()
+        } else {
           this.$q.loading.hide()
         }
       })
@@ -197,13 +189,30 @@ export default {
       await this.$api.get('pais').then(res => {
         if (res) {
           this.countries = res
-          console.log(this.countries)
         }
       })
     },
-    changeProfile (file) {
-      if (file) {
-        this.imgPerfil = URL.createObjectURL(file)
+    async changeProfile () {
+      this.$q.loading.show()
+      if (this.perfilFile) {
+        var formData = new FormData()
+        formData.append('files', this.perfilFile)
+        await this.$api.post('perfil_imagen', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Foto actualizada',
+              color: 'positive'
+            })
+            location.reload()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
       }
     }
   }
