@@ -337,6 +337,7 @@ class UserController {
     }
 
     for (let i in tiendasFilter) {
+      tiendasFilter[i].city = (await Ciudad.find(tiendasFilter[i].tienda.city_id)).name
       var cal = []
       cal = (await Comentario.query().where({tienda_id: tiendasFilter[i]._id}).fetch()).toJSON()
       var total = 0
@@ -378,6 +379,7 @@ class UserController {
     }
 
     for (let i in hostFilter) {
+      hostFilter[i].city = (await Ciudad.find(hostFilter[i].my_space.ciudad_id)).name
       var cal = []
       cal = (await Comentario.query().where({tienda_id: hostFilter[i]._id}).fetch()).toJSON()
       var total = 0

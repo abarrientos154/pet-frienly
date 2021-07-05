@@ -99,6 +99,11 @@ export default {
       await this.$api.get('ciudades').then(res => {
         if (res) {
           this.cities = res
+          if (this.$route.params.type && this.$route.params.city) {
+            this.petType = this.$route.params.type
+            this.city = this.cities.find(v => v._id === this.$route.params.city)
+            this.filtrarTiendas()
+          }
         }
       })
     },
@@ -106,8 +111,10 @@ export default {
       this.$api.post('user_by_rol', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
-          this.stores = res
           this.mejorCalificadas = res
+          if (!this.$route.params.type) {
+            this.stores = res
+          }
         }
       })
     },

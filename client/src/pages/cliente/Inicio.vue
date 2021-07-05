@@ -11,26 +11,27 @@
       <div class="q-mb-md q-mx-sm text-weight-bolder">¿Qué es lo que buscas?
       <div class="text-overline">Selecciona Hospedaje o Tienda</div>
       <div class="row q-mx-sm q-mb-sm">
-        <q-select outlined dense filled v-model="search.service" :options="services" option-value="value" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
+        <q-select outlined dense filled v-model="service" :options="services" option-value="value" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
         </q-select>
       </div>
       </div>
       <div class="q-mb-md q-mx-sm text-weight-bolder">¿Para quién lo buscas?
       <div class="text-overline">Selecciona perro gato o ambos</div>
       <div class="row q-mx-sm q-mb-sm">
-        <q-select outlined dense filled v-model="search.petType" :options="petType" option-value="value" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
+        <q-select outlined dense filled v-model="petType" :options="petTypes" map-options class="shadow-4 col q-mr-sm">
         </q-select>
       </div>
       </div>
       <div class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
       <div class="text-overline">Selecciona tu ciudad</div>
       <div class="row q-mx-sm q-mb-sm">
-        <q-select outlined dense filled v-model="search.city" :options="cities" option-value="_id" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
+        <q-select outlined dense filled v-model="city" :options="cities" option-value="_id" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
         </q-select>
       </div>
       </div>
       <div class="row justify-center q-my-lg">
-        <q-btn no-caps class="q-py-xs" color="primary" label="Buscar" style="width: 70%"/>
+        <q-btn no-caps class="q-py-xs" color="primary" label="Buscar" style="width: 70%"
+        :disable="!service || !petType || !city ? true : false" @click="filtrarDatos()"/>
       </div>
     </div>
 
@@ -150,24 +151,22 @@ export default {
   },
   data () {
     return {
+      service: null,
+      petType: null,
+      city: null,
       imgTienda: '',
       imgProfile: '',
       urlHospedaje: '',
-      search: {},
       user: {},
       stores: [],
       lastStores: [],
       host: [],
       lastHost: [],
       cities: [],
+      petTypes: ['Perros', 'Gatos', 'Ambos'],
       services: [
         { name: 'Hospedaje', value: 1 },
         { name: 'Tienda', value: 2 }
-      ],
-      petType: [
-        { name: 'Perro', value: 1 },
-        { name: 'Gato', value: 2 },
-        { name: 'Ambos', value: 3 }
       ]
     }
   },
@@ -212,6 +211,13 @@ export default {
           this.lastHost = total.reverse().slice(0, 10)
         }
       })
+    },
+    filtrarDatos () {
+      if (this.service === 1) {
+        this.$router.push('descanso/' + this.petType + '/' + this.city)
+      } else {
+        this.$router.push('tiendas/' + this.petType + '/' + this.city)
+      }
     }
   }
 }

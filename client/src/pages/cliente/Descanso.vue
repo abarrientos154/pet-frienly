@@ -101,15 +101,23 @@ export default {
       await this.$api.get('ciudades').then(res => {
         if (res) {
           this.cities = res
+          if (this.$route.params.type && this.$route.params.city) {
+            this.petType = this.$route.params.type
+            this.city = this.cities.find(v => v._id === this.$route.params.city)
+            this.filtrarAlojamientos()
+            console.log('ciudad', this.city)
+          }
         }
       })
     },
-    getHost () {
-      this.$api.post('user_by_rol', { rol: [4] }).then(res => {
+    async getHost () {
+      await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
         this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
-          this.host = res
           this.mejorCalificados = res
+          if (!this.$route.params.type) {
+            this.host = res
+          }
         }
       })
     },
