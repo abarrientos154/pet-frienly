@@ -255,8 +255,10 @@
         </div>
 
         <div class="row justify-center q-my-lg">
-          <q-btn v-if="miTienda" class="q-py-xs" no-caps color="primary" label="Editar servicio" style="width:80%"
+          <q-btn v-if="miTienda" class="q-py-xs" no-caps color="primary" label="Editar servicio" style="width:70%"
           @click="$router.push('/editar_servicio/' + servicio._id)"/>
+          <q-btn v-if="miTienda" flat no-caps color="red" icon="delete"
+          @click="eliminarServicio(servicio._id)"/>
           <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
           @click="addCarrito(servicio, true), verServicio = false"/>
         </div>
@@ -297,8 +299,10 @@
         </q-scroll-area>
 
         <div class="row justify-center q-py-lg">
-          <q-btn v-if="miTienda" class="q-py-sm" no-caps color="primary" label="Editar producto" style="width:80%"
+          <q-btn v-if="miTienda" class="q-py-sm" no-caps color="primary" label="Editar producto" style="width:70%"
           @click="$router.push('/editar_producto/' + producto._id)"/>
+          <q-btn v-if="miTienda" flat no-caps color="red" icon="delete"
+          @click="eliminarProducto(producto._id)"/>
           <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
           @click="addCarrito(producto,false), verProducto = false"/>
         </div>
@@ -748,6 +752,48 @@ export default {
           }
         })
       }
+    },
+    eliminarServicio (id) {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro desea eliminar este servicio?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show({
+          message: 'Eliminando servicio'
+        })
+        this.$api.delete('servicio/' + id).then(res => {
+          if (res) {
+            this.getTienda(this.id)
+            this.verServicio = false
+            this.$q.loading.hide()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
+    },
+    eliminarProducto (id) {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro desea eliminar este producto?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show({
+          message: 'Eliminando producto'
+        })
+        this.$api.delete('producto/' + id).then(res => {
+          if (res) {
+            this.getProductos(this.id)
+            this.verProducto = false
+            this.$q.loading.hide()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
     }
   }
 }

@@ -9,7 +9,12 @@
 
       <div class="q-pt-xl">
         <q-carousel v-model="slide" style="height: 200px; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px" transition-prev="jump-right" transition-next="jump-left" swipeable animated prev-icon="arrow_left" next-icon="arrow_right" navigation arrows>
-          <q-carousel-slide v-for="(img, index) in hospedaje.images" :key="index" :name="index" :img-src="baseu + img.src"/>
+          <q-carousel-slide v-for="(img, index) in hospedaje.images" :key="index" :name="index" :img-src="baseu + img.src">
+            <div class="absolute-bottom-right">
+              <q-btn v-if="rol === 4" flat no-caps color="red" icon="delete"
+              @click="eliminarAlojamiento()"/>
+            </div>
+          </q-carousel-slide>
         </q-carousel>
         <div class="q-pa-md">
           <div class="q-mb-md">
@@ -340,6 +345,26 @@ export default {
           }
         })
       }
+    },
+    eliminarAlojamiento () {
+      this.$q.dialog({
+        title: 'Confirma',
+        message: '¿Seguro desea eliminar este alojamiento?',
+        cancel: true,
+        persistent: true
+      }).onOk(() => {
+        this.$q.loading.show({
+          message: 'Eliminando alojamiento'
+        })
+        this.$api.delete('hospedaje/' + this.hospedaje._id).then(res => {
+          if (res) {
+            this.$router.push('/inicio_hospedador')
+            this.$q.loading.hide()
+          }
+        })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      })
     }
   }
 }

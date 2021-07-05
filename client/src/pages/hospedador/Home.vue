@@ -72,7 +72,7 @@
 
     <div>
       <div class="text-subtitle1 text-bold q-mb-md">Conoce los espacios disponibles</div>
-      <q-list class="q-mb-md row justify-center" style="width: 100%; height: auto;">
+      <q-list v-if="hospedajes.length" class="q-mb-md row justify-center" style="width: 100%; height: auto;">
         <q-card v-for="(item, index) in hospedajes" :key="index" class=" q-mb-md col no-wrap" style="min-width: 300px; max-width: 375px; border-radius: 12px;" @click="$router.push('/descripcion_espacio/' + item._id)">
           <q-img :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
@@ -94,6 +94,7 @@
           </q-card-section>
         </q-card>
       </q-list>
+      <div v-else class="row items-center justify-center" style="height: 150px;">No hay alojamientos actualmente</div>
       <div class="column items-center q-mb-xl">
         <q-btn class="q-pa-sm" v-if="allhospedajes.length > 3" color="primary" :label="ver ? 'Ver menos' : 'Ver más'" style="width: 70%;" @click="verMas()" no-caps/>
       </div>

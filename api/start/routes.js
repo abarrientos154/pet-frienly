@@ -133,5 +133,8 @@ addPrefixToGroup(
     Route.post("calificar", "ProductoController.calificarTienda")
     Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
 
+    Route.post("filtrar_tiendas", "UserController.filtrarTiendas")
+    Route.post("filtrar_alojamientos", "UserController.filtrarAlojamientos")
+
   }).middleware("auth")
 );

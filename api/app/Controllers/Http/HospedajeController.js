@@ -225,11 +225,6 @@ class HospedajeController {
   async destroy ({ params, request, response, auth }) {
     var user = await auth.getUser();
     let { id } = params;
-    let hospedaje = await Hospedaje.find(id)
-    /* fs.unlink(`storage/uploads/hospedajes/${hospedaje.fileName}`, (err) => {
-      if (err) throw err;
-      console.log(`${hospedaje.fileName} Eliminado por el Cliente`);
-    }); */
     let hospedajeDestroy = (await Hospedaje.find(id)).delete();
     response.send(hospedajeDestroy)
   }
