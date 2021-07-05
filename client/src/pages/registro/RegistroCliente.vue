@@ -62,10 +62,12 @@
         <div class="q-pa-lg">
           <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
           <div class="text-center text-h5 text-grey-8 q-mb-xs">Información de despacho</div>
-          <q-avatar rounded style="height: 250px; width: 100%;" class="bg-grey q-mb-sm">
-            <q-img style="height: 100%;" :src="perfilFile ? imgPerfil : ''">
-            </q-img>
-          </q-avatar>
+          <div class="row justify-center q-px-lg">
+            <q-avatar rounded style="height: 250px; width: 100%;" class="bg-grey q-mb-sm">
+              <q-img style="height: 100%;" :src="perfilFile ? imgPerfil : ''">
+              </q-img>
+            </q-avatar>
+          </div>
 
          <div class="q-mx-lg">
            <div>

@@ -1,10 +1,15 @@
 <template>
   <div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+        <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+        </div>
+        <div class="col-10 text-white text-subtitle1 text-center">Mi perfil</div>
+    </q-header>
+
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-md">
-        <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-          <div class="text-center text-h5 text-grey-8">Editar Perfil</div>
           <div class="row justify-center">
             <q-avatar size="200px" class="bg-grey row justify-center">
               <q-img :src="perfilFile ? imgPerfil : ''" style="height: 100%">
@@ -31,14 +36,21 @@
             error-message="Requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
           </div>
          </div>
-          <q-btn color="primary" label="Siguiente" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="next()" class="q-py-sm"/>
+         <div class="row justify-center q-mt-lg">
+           <q-btn rounded no-caps color="primary" label="Siguiente" style="width: 90%;" @click="next()" class="q-py-xs"/>
+         </div>
         </div>
       </q-carousel-slide>
+
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-md">
-          <q-btn flat rounded color="primary" icon="arrow_back" @click="slide = 1"/>
-          <div class="text-center text-h5 text-grey-8">Información de despacho</div>
-         <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-primary"></q-card>
+          <div class="text-center text-h5 text-grey-8 q-mb-xs">Información de despacho</div>
+          <div class="row justify-center q-px-lg">
+            <q-avatar rounded style="height: 250px; width: 100%;" class="bg-grey q-mb-sm">
+              <q-img style="height: 100%;" :src="perfilFile ? imgPerfil : ''">
+              </q-img>
+            </q-avatar>
+          </div>
          <div class="q-mx-xl">
            <div class="q-mb-md">
               <div class="text-caption">País</div>
@@ -67,7 +79,14 @@
              <q-input type="tel" filled v-model="formTwo.address"  dense placeholder="Ingrese su dirección" error-message="Requerido" :error="$v.formTwo.address.$error" @blur="$v.formTwo.address.$touch()"/>
            </div>
          </div>
-          <q-btn color="primary" label="Finalizar" style="width: 100%; margin-top: 20px; border-radius: 10px" @click="finish()" class="q-py-sm"/>
+         <div class="row justify-center q-mt-lg">
+            <q-btn no-caps rounded color="primary" label="Finalizar" class="q-py-xs" style="width: 90%;"
+            @click="finish()"/>
+          </div>
+         <div class="row justify-center q-mt-sm">
+            <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 90%;"
+            @click="slide = 1"/>
+          </div>
         </div>
       </q-carousel-slide>
     </q-carousel>
