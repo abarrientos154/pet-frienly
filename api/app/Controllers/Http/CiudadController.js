@@ -15,8 +15,10 @@ const User = use("App/Models/User")
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 class CiudadController {
-  async index ({ request, response, view }) {
-    let datos = await Ciudad.all()
+  async index ({ request, response, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    const pais = await Pais.find(user.country_id)
+    let datos = (await Ciudad.where({pais_id: pais.id}).fetch()).toJSON()
     response.send(datos)
   }
   async ciudadById({ params, response }) {

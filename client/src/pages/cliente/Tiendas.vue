@@ -9,6 +9,7 @@
       <div class="text-caption text-grey-8">Las tiendas mejor calificadas en tu ciudad</div>
     </div>
     <q-scroll-area
+        v-if="mejorCalificadas.length"
         horizontal
         style="height: 330px;"
       >
@@ -30,27 +31,32 @@
           </q-card>
         </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 330px;">No hay tiendas actualmente</div>
 
-    <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey"></q-card>
+    <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey">
+      <q-img src="nopublicidad.jpg" style="height: 200px; width: 100%" />
+    </q-card>
 
     <div class="q-mr-lg q-mt-md">
       <div class="q-mb-md q-mx-sm text-weight-bolder">¿Para quién lo buscas?
       <div class="text-caption text-grey-8">Selecciona para quien, perro, gato o ambos</div>
       <div class="row q-px-sm q-mb-sm">
-        <q-select dense filled class="col-11" v-model="search.petType" :options="petType" option-value="value" option-label="name" emit-value map-options>
+        <q-select dense filled class="col-11" v-model="petType" :options="petTypes" map-options
+        @input="filtrarTiendas()">
         </q-select>
       </div>
       </div>
       <div class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
       <div class="text-caption text-grey-8">Selecciona tu ciudad</div>
       <div class="row q-px-sm q-mb-sm">
-        <q-select dense filled class="col-11" v-model="search.city" :options="cities" option-value="_id" option-label="name" emit-value map-options>
+        <q-select dense filled class="col-11" v-model="city" :options="cities" option-label="name" map-options
+        @input="filtrarTiendas()">
         </q-select>
       </div>
       </div>
     </div>
 
-    <div class="row justify-around col-6 q-mb-sm">
+    <div v-if="stores.length" class="row justify-around col-6 q-mb-sm">
       <div class="col-6 q-mb-sm" v-for="(store, index) in stores" :key="index">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple @click="$router.push('/inicio-proveedor/' + store._id)">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
@@ -67,6 +73,7 @@
           </q-card>
         </div>
     </div>
+    <div v-else class="row items-center justify-center" style="height: 280px;">No hay tiendas actualmente</div>
   </div>
 </template>
 <script>
@@ -75,15 +82,12 @@ export default {
   data () {
     return {
       imgTienda: '',
-      search: {},
+      petType: null,
+      city: null,
       cities: [],
       mejorCalificadas: [],
       stores: [],
-      petType: [
-        { name: 'Perro', value: 1 },
-        { name: 'Gato', value: 2 },
-        { name: 'Ambos', value: 3 }
-      ]
+      petTypes: ['Perros', 'Gatos', 'Ambos']
     }
   },
   mounted () {
@@ -95,6 +99,11 @@ export default {
       await this.$api.get('ciudades').then(res => {
         if (res) {
           this.cities = res
+          if (this.$route.params.type && this.$route.params.city) {
+            this.petType = this.$route.params.type
+            this.city = this.cities.find(v => v._id === this.$route.params.city)
+            this.filtrarTiendas()
+          }
         }
       })
     },
@@ -102,9 +111,20 @@ export default {
       this.$api.post('user_by_rol', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
-          this.stores = res
           this.mejorCalificadas = res
+          if (!this.$route.params.type) {
+            this.stores = res
+          }
         }
+      })
+    },
+    filtrarTiendas () {
+      this.$q.loading.show({
+        message: 'Filtrando datos'
+      })
+      this.$api.post('filtrar_tiendas', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
+        this.stores = res
+        this.$q.loading.hide()
       })
     }
   }

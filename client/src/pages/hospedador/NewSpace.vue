@@ -6,16 +6,18 @@
 
     <div class="q-pa-md">
       <div class="text-subtitle1">Carga las fotos de tu espacio de descanso</div>
-      <div :class="$v.espacioImg.$error ? 'text-subtitle1 text-italic text-negative' : 'text-subtitle1 text-grey text-italic'">{{$v.espacioImg.$error ? 'Debes cargar minimo una foto' : 'Puedes cargar hasta 3 fotos'}}</div>
+      <div :class="$v.espacioImg.$error ? 'text-caption text-italic text-negative' : 'text-caption text-grey-10 text-italic'">{{$v.espacioImg.$error ? 'Debes cargar minimo una foto' : 'Puedes cargar hasta 3 fotos'}}</div>
       <div class="row">
-        <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-secondary q-my-xs q-mr-xs">
+        <q-avatar rounded style="height: 100px; width: 100px; border-radius: 15px;" class="bg-grey q-my-xs q-mr-xs">
           <q-file  borderless :disable="espacioImg.length < 3 ? false : true" v-model="img" class="button-camera" @input="espacio_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
           <q-icon name="backup" class="absolute-center" size="50px" color="white" />
         </q-avatar>
         <q-scroll-area horizontal class="col" style="height: 110px;">
           <div class="row no-wrap" style="width: 100%;">
             <q-avatar class="q-ma-xs" rounded v-for="(item, index) in mostrarImg" :key="index" style="height: 100px; width: 100px; border-radius: 15px;">
-              <q-img style="height: 100%;" :src="item"/>
+              <q-img style="height: 100%;" :src="item">
+                <q-btn @click="borrarImg(index, 1)" flat class="absolute all-pointer-events" size="15px" dense icon="clear" color="negative" style="top: 0px; right: 0px" rounded />
+              </q-img>
             </q-avatar>
           </div>
         </q-scroll-area>
@@ -25,12 +27,12 @@
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
         <div class="text-subtitle1 text-bold">Nombre para tu espacio</div>
-        <div class="text-subtitle1 text-grey text-italic">Solo 25 caracteres</div>
+        <div class="text-caption text-grey-10 text-italic">Solo 25 caracteres</div>
         <q-input dense filled v-model="form.name" placeholder="Nombre espacio" error-message="Este campo es requerido" :error="$v.form.name.$error" @blur="$v.form.name.$touch()"/>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
         <div class="text-subtitle1 text-bold">¿Para quien estará disponible tu espacio?</div>
-        <div class="text-subtitle1 text-grey text-italic">Escoger perro, gato o ambos</div>
+        <div class="text-caption text-grey-10 text-italic">Escoger perro, gato o ambos</div>
         <q-select dense filled option-value="name" option-label="name" v-model="form.pet_type" :options="mascotas" placeholder="tipos de mascotas" emit-value map-options error-message="Este campo es requerido" :error="$v.form.pet_type.$error" @blur="$v.form.pet_type.$touch()"/>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
@@ -64,7 +66,7 @@
 
     <div>
       <div class="text-subtitle1 text-bold">Descripción del espacio</div>
-      <div class="text-subtitle1 text-grey text-italic">Solo 80 caracteres</div>
+      <div class="text-caption text-grey-10 text-italic">Solo 80 caracteres</div>
       <q-input filled outlined placeholder="Mi espacio es..." v-model="form.description" type="textarea" error-message="Este campo es requerido" :error="$v.form.description.$error" @blur="$v.form.description.$touch()"/>
     </div>
 
@@ -72,28 +74,28 @@
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">Valor por noche</div>
         <div class=" col column">
-          <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Ingresa el costo por noche</div>
+          <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Ingresa el costo por noche</div>
           <q-input prefix="$" filled color="primary" v-model.number="form.price" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.price.$error" @blur="$v.form.price.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">Cantidad de huéspedes</div>
         <div class=" col column">
-          <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de huéspedes</div>
+          <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Cantidad de huéspedes</div>
           <q-input filled color="primary" v-model.number="form.guests" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.guests.$error" @blur="$v.form.guests.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">Metros cuadrados</div>
         <div class=" col column">
-          <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
+          <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
           <q-input filled color="primary" v-model.number="form.dimensions" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.dimensions.$error" @blur="$v.form.dimensions.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">¿El espacio es Solo para hopedadores?</div>
         <div class=" col column">
-          <div class="text-subtitle1 text-grey text-italic" style="font-size: 11px">Seleccione el tipo de espacio</div>
+          <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Seleccione el tipo de espacio</div>
           <q-select dense filled option-value="enable" option-label="name" v-model="form.only_pets" :options="only_pets" emit-value map-options error-message="Este campo es requerido" :error="$v.form.only_pets.$error" @blur="$v.form.only_pets.$touch()"/>
         </div>
       </div>
@@ -144,6 +146,10 @@ export default {
       this.espacioImg.push(this.img)
       this.mostrarImg.push(URL.createObjectURL(this.img))
       this.img = null
+    },
+    borrarImg (index, val) {
+      this.espacioImg.splice(index, val)
+      this.mostrarImg.splice(index, val)
     },
     guardar () {
       this.$v.$touch()
