@@ -1,7 +1,8 @@
 <template>
   <div>
     <div style="height: 300px; width: 100%;" class="bg-grey">
-      <q-btn no-caps color="primary" class="q-mt-md q-ml-md" label="Editar Perfil" @click="$router.push('/editar-perfil/' + user._id)"/>
+      <q-img src="nopublicidad.jpg" style="height: 300px; width: 100%" />
+      <q-btn no-caps color="primary" class="q-mt-md q-ml-md absolute-top" label="Editar Perfil" @click="$router.push('/editar-perfil/' + user._id)"/>
     </div>
 
     <div class="q-mx-md">
@@ -57,7 +58,9 @@
           </div>
         </q-scroll-area>
 
-      <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey"></q-card>
+      <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey">
+        <q-img src="nopublicidad.jpg" style="height: 200px; width: 100%" />
+      </q-card>
 
       <div class="q-mb-md q-mx-sm text-h5">Nuestras tiendas</div>
       <div class="row justify-around" style="width:100%">
@@ -85,7 +88,9 @@
         <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/tiendas')"/>
       </div>
 
-      <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey"></q-card>
+      <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey">
+        <q-img src="nopublicidad.jpg" style="height: 200px; width: 100%" />
+      </q-card>
 
       <div class="q-mb-md text-center text-h5">Ultimos alojamientos</div>
       <q-scroll-area
