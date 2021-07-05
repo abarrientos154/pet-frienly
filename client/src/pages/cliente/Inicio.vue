@@ -141,6 +141,10 @@
         <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/descanso')"/>
       </div>
     </div>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-fab color="primary" icon="pets" direction="up" vertical-actions-align="right" @click="$router.push('/registromascota')">
+      </q-fab>
+    </q-page-sticky>
   </div>
 </template>
 
