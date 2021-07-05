@@ -93,7 +93,7 @@
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                  <q-date v-model="selectMes" text-color="black" mask="MM" minimal emit-immediately default-view="Months"
+                  <q-date v-model="selectMes" mask="MM" minimal emit-immediately default-view="Months"
                   @input="$refs.qDateProxy.hide()">
                     <div class="row items-center justify-between">
                       <q-btn @click="pedidos = allPedidos, selectMes = '', $refs.qDateProxy.hide()" label="Todos" color="primary" flat />
