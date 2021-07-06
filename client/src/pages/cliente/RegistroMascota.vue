@@ -192,7 +192,7 @@ export default {
         this.sizes = [...this.sizeCat]
       }
     },
-    /* imgsTraidas () {
+    imgsTraidas () {
       for (let i = 0; i < this.form.images.length; i++) {
         console.log('prueba')
         var cc = ''
@@ -267,7 +267,7 @@ export default {
           this.$router.push('/mascotas')
         })
       }
-    }, */
+    },
     changePetFile (ind) {
       if (this.files[ind]) { this.petImg[ind] = URL.createObjectURL(this.files[ind]) }
     }

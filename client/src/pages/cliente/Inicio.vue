@@ -142,7 +142,7 @@
       </div>
     </div>
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-fab color="primary" icon="pets" direction="up" vertical-actions-align="right" @click="$router.push('/registromascota')">
+      <q-fab color="primary" icon="pets" direction="up" vertical-actions-align="right" @click="$router.push('/mascotas')">
       </q-fab>
     </q-page-sticky>
   </div>

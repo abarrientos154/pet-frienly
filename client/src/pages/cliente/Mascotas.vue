@@ -1,40 +1,39 @@
 <template>
   <div>
-    <div class="row justify-between q-ma-sm">
-      <q-btn no-caps class="shadow-11" color="white" text-color="black" icon="add" to="/registromascota"/>
+    <q-header elevated class="bg-primary row justify-center items-center" style="width:100%; height:60px">
+      <div class="text-white text-subtitle1 text-center">Mis Mascotas</div>
+    </q-header>
+    <q-btn class="q-mt-sm" flat rounded color="primary" icon="arrow_back" @click="$router.push('/inicio_cliente')"/>
+    <div v-if="data.length" class="row justify-around q-ma-sm">
+      <div class="col-6 q-mb-sm" v-for="(item, index) in data" :key="index">
+          <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" v-ripple>
+            <q-img :src="item.images ? baseu + '/' + item.images[0] : 'noimgpro.png'" style="height: 280px; width: 100%">
+              <q-btn class="bg-grey q-mr-xs q-mt-md q-ml-md q-mb-xl" round flat size="sm" text-color="primary" icon="edit" @click="updatePet(item._id)" />
+              <q-btn class="bg-grey q-mr-xs q-mt-md q-mb-xl" round flat size="sm" text-color="primary" icon="delete" @click="deletePet(item._id)" />
+            </q-img>
+            <!-- <div class="absolute-full q-mt-md q-ml-md q-mb-xl">
+              <q-btn class="bg-grey q-mr-xs" round flat size="sm" text-color="primary" icon="edit" @click="updatePet(item._id)" />
+              <q-btn class="bg-grey" round flat size="sm" text-color="primary" icon="delete" @click="deletePet(item._id)" />
+            </div> -->
+            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+              <div class="row no-wrap items-center" style="width:100%">
+                <div class="text-white text-bold ellipsis">{{item.name}}</div>
+              </div>
+              <div class="row no_wrap" style="width:100%">
+                <q-chip class="text-white text-bold ellipsis" :label="item.type" color="primary" />
+              </div>
+              <div class="row no-wrap items-center" style="width:100%">
+                <div class="text-white text-bold ellipsis">Raza: {{item.race}}</div>
+              </div>
+            </div>
+          </q-card>
+      </div>
     </div>
-    <q-separator inset />
-    <div class="row justify-center">
-      <div class="text-h6 q-ma-md text-center estilo-titulos">Mis Mascotas</div>
-    </div>
-    <q-list class="row justify-center" v-if="data.length > 0">
-      <q-card class="q-pa-md bordes dimension col-6 no-wrap q-mx-xl q-my-sm" v-for="(item, index) in data" :key="index" v-ripple >
-        <div class="row justify-between">
-          <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-4">
-            <q-img :src="item.images ? baseu + '/' + item.images[0] : 'noimgpro.png'" style="height: 80px;" />
-          </div>
-          <div @click="$router.push('/descripcionmascota/' + item._id)" class="col-5">
-              <q-scroll-area
-                horizontal
-                style="height: 27px"
-              >
-                <div class="text-subtitle2 text-weight-bolder">{{item.name}}</div>
-              </q-scroll-area>
-              <div class="text-caption">Raza:</div>
-              <q-chip text-color="white" :label="item.race" color="amber-7" />
-          </div>
-          <q-separator vertical color="black" />
-          <div class="column col-2 justify-around">
-            <q-btn round flat color="white" size="sm" text-color="black" icon="edit" @click="editMascota(item._id)" />
-            <q-separator color="black" />
-            <q-btn round flat color="white" size="sm" text-color="red" icon="delete" @click="deleteMascota(item._id)" />
-          </div>
-        </div>
-      </q-card>
-    </q-list>
-    <q-card v-else class="shadow-2 q-ma-md q-pa-md">
-      <div class="text-center text-subtitle1">Actualmente sin mascotas...</div>
-    </q-card>
+    <div v-else class="row items-center justify-center" style="height: 280px;">No hay alojamientos actualmente</div>
+  <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-fab color="primary" icon="add" direction="up" vertical-actions-align="right" @click="$router.push('/registromascota')">
+    </q-fab>
+  </q-page-sticky>
   </div>
 </template>
 
@@ -69,10 +68,10 @@ export default {
         }
       }) */
     },
-    editMascota (id) {
+    updatePet (id) {
       this.$router.push('/edit_mascota/' + id)
     },
-    deleteMascota (id) {
+    deletePet (id) {
       this.$q.dialog({
         title: 'Confirma',
         message: '¿Seguro deseas eliminar esta mascota?',
