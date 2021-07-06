@@ -11,11 +11,7 @@
               <q-btn class="bg-grey q-mr-xs q-mt-md q-ml-md q-mb-xl" round flat size="sm" text-color="primary" icon="edit" @click="updatePet(item._id)" />
               <q-btn class="bg-grey q-mr-xs q-mt-md q-mb-xl" round flat size="sm" text-color="primary" icon="delete" @click="deletePet(item._id)" />
             </q-img>
-            <!-- <div class="absolute-full q-mt-md q-ml-md q-mb-xl">
-              <q-btn class="bg-grey q-mr-xs" round flat size="sm" text-color="primary" icon="edit" @click="updatePet(item._id)" />
-              <q-btn class="bg-grey" round flat size="sm" text-color="primary" icon="delete" @click="deletePet(item._id)" />
-            </div> -->
-            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+            <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
               <div class="row no-wrap items-center" style="width:100%">
                 <div class="text-white text-bold ellipsis">{{item.name}}</div>
               </div>
@@ -48,7 +44,7 @@ export default {
   },
   mounted () {
     this.getMascotas()
-    this.baseu = env.apiUrl + 'mascota_img'
+    this.baseu = env.apiUrl + '/mascota_img'
     console.log(this.baseu)
   },
   methods: {

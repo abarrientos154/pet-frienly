@@ -125,40 +125,48 @@ class MascotaController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
-    var dat = request.only(['dat'])
-    dat = JSON.parse(dat.dat)
-    const validation = await validate(dat, Mascota.fieldValidationRules())
-    if (validation.fails()) {
-      response.unprocessableEntity(validation.messages())
-    } else {
-      let images = []
-      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
-        for (let i = 0; i < dat.cantidadArchivos; i++) {
-          let codeFile = randomize('Aa0', 30)
-          const albumpic = request.file('album' + i, {
-            types: ['image']
-          })
-          if (Helpers.appRoot('storage/uploads/pets')) {
-            await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
-              name: codeFile,
-              overwrite: true
+    try {
+      var dat = request.only(['dat'])
+      dat = JSON.parse(dat.dat)
+      const validation = await validate(dat, Mascota.fieldValidationRules())
+      if (validation.fails()) {
+        response.unprocessableEntity(validation.messages())
+      } else {
+        let images = []
+        if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+          for (let i = 0; i < dat.index; i++) {
+            let codeFile = randomize('Aa0', 30)
+            const albumpic = request.file('files' + i, {
+              types: ['image']
             })
-          } else {
-            mkdirp.sync(`${__dirname}/storage/Excel`)
+            console.log('albumpic :>> ', albumpic);
+            if (Helpers.appRoot('storage/uploads/pets')) {
+              await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
+                name: codeFile,
+                overwrite: true
+              })
+            } else {
+              mkdirp.sync(`${__dirname}/storage/Excel`)
+            }
+            images.push(albumpic.fileName)
           }
-          images.push(albumpic.fileName)
+          let prevImages = (await Mascota.find(params.id)).images
+          console.log('prevImages :>> ', prevImages);
+          /* for (let j of dat.images) {
+            fs.unlink(`storage/uploads/pets/${j}`, (err) => {
+              if (err) throw err;
+              console.log(`${j} Eliminado por el Cliente`);
+            });
+          } */
+          dat.images = images
         }
-        for (let j of dat.images) {
-          fs.unlink(`storage/uploads/pets/${j}`, (err) => {
-            if (err) throw err;
-            console.log(`${j} Eliminado por el Cliente`);
-          });
-        }
-        dat.images = images
+        delete dat.cantidadArchivos
+        delete dat.index
+        let modificar = await Mascota.where({_id: params.id}).update(dat)
+        response.send(modificar)
       }
-      delete dat.cantidadArchivos
-      let modificar = await Mascota.where({_id: params.id}).update(dat)
-      response.send(modificar)
+    } catch (error) {
+      console.error('update ' + error.name + ': ' + error.message)
     }
   }
 

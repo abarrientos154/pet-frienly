@@ -18,7 +18,7 @@
             <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
-            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+            <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
               <q-rating readonly class="q-mt-lg q-mb-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
               <div class="row no-wrap items-center" style="width:100%">
                 <div class="text-white text-bold ellipsis">{{item.my_space.name}}</div>
@@ -62,7 +62,7 @@
             <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
-            <div class="absolute-full q-ml-md column justify-end q-mb-sm">
+            <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
               <q-rating readonly class="q-mt-lg q-mb-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
               <div class="row no-wrap items-center" style="width:100%">
                 <div class="text-white text-bold ellipsis">{{item.my_space.name}}</div>
@@ -112,7 +112,7 @@ export default {
     },
     async getHost () {
       await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
-        this.imgProfile = env.apiUrl + 'espacio_img/'
+        this.imgProfile = env.apiUrl + '/espacio_img/'
         if (res) {
           this.mejorCalificados = res
           if (!this.$route.params.type) {

@@ -1,7 +1,7 @@
 <template>
  <div>
    <div class="q-pa-lg">
-      <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.push('/inicio_cliente')"/>
+      <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.push('/mascotas')"/>
       <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-grey">
         <q-img style="height: 100%;" :src="files[0] ? petImg[0] : ''">
         </q-img>
@@ -82,7 +82,7 @@
         <q-input type="textarea" filled v-model="form.description" error-message="Requerido" :error="$v.form.description.$error" @blur="$v.form.description.$touch()"/>
       </div>
       <div class="column items-center">
-        <q-btn rounded class="q-pa-sm" color="primary" label="Crear Mascota" style="width: 70%;" @click="savePet()"/>
+        <q-btn rounded class="q-pa-sm" color="primary" :label="edit ? 'Actualizar Mascota' : 'Crear Mascota'" style="width: 70%;" @click="edit ? updatePet() : savePet()"/>
       </div>
     </div>
  </div>
@@ -94,6 +94,9 @@ import env from '../../env'
 export default {
   data () {
     return {
+      id: '',
+      edit: false,
+      editImg: false,
       terms: false,
       form: {},
       files: [null, null, null],
@@ -126,10 +129,10 @@ export default {
       size: { required },
       description: { required, maxLength: maxLength(100) }
     },
-    album: { required }
+    files: { required }
   },
   mounted () {
-    this.baseu = env.apiUrl + 'mascota_img'
+    this.baseu = env.apiUrl + '/mascota_img'
     if (this.$route.params.id) {
       this.edit = true
       this.editImg = true
@@ -137,15 +140,8 @@ export default {
       this.$api.get('mascota/' + this.id).then(res => {
         if (res) {
           this.form = res
-          // this.categoria_id = this.form.categoria_id
+          console.log('this.form >> ', this.form)
           this.imgsTraidas()
-          /* for (let i = 0; i < this.categorias.length; i++) {
-            if (this.categorias[i]._id === this.form.categoria_id) {
-              this.categorias[i].select = true
-            } else {
-              this.categorias[i].select = false
-            }
-          } */
         }
       }).catch(error => {
         console.log(error)
@@ -163,7 +159,7 @@ export default {
         if (this.files) {
           this.form.cantidadArchivos = this.files.length
           for (let i = 0; i < this.files.length; i++) {
-            formDataTwo.append('album' + i, this.files[i])
+            formDataTwo.append('files' + i, this.files[i])
           }
         } else {
           this.form.cantidadArchivos = 0
@@ -197,62 +193,35 @@ export default {
         console.log('prueba')
         var cc = ''
         cc = this.baseu + '/' + this.form.images[i]
-        this.imgMascota.push(cc)
+        this.petImg[i] = cc
+        this.files[i] = 1
       }
       this.editImg = true
-      console.log(this.editImg)
     },
     filesMascota () {
       var img = ''
       var cc = {}
-      if (this.editImg && this.album.length > 0) {
-        this.imgMascota = []
+      if (this.editImg && this.files.length > 0) {
+        this.petImg = []
         this.editImg = false
       }
-      if (this.album.length > 0) {
-        cc = this.album[this.album.length - 1]
+      if (this.files.length > 0) {
+        cc = this.files[this.files.length - 1]
         img = URL.createObjectURL(cc)
-        this.imgMascota.push(img)
+        this.petImg.push(img)
       }
     },
-    agregar () {
-      this.$v.$touch()
-      if (!this.$v.form.$error) {
-        this.$q.loading.show({
-          message: 'Subiendo su mascota, Por Favor Espere...'
-        })
-        var formData = new FormData()
-        formData.append('perfilFile', this.perfilFile)
-        this.form.cantidadArchivos = this.album.length
-        for (let i = 0; i < this.album.length; i++) {
-          formData.append('album' + i, this.album[i])
-        }
-        formData.append('dat', JSON.stringify(this.form))
-        console.log(this.perfilFile)
-        this.$api.post('mascota', formData, {
-          headers: {
-            'Content-Type': undefined
-          }
-        }).then(res => {
-          this.$q.loading.hide()
-          this.$router.push('/mascotas')
-        })
-      } else {
-        console.log('fallando')
-      }
-    },
-    async actualizarMascota () {
+    async updatePet () {
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
-        // this.form.categoria_id = this.categoria_id
         this.$q.loading.show({
           message: 'Actualizando Mascota, Por Favor Espere...'
         })
         var formData = new FormData()
-        if (this.album) {
-          this.form.cantidadArchivos = this.album.length
-          for (let i = 0; i < this.album.length; i++) {
-            formData.append('album' + i, this.album[i])
+        if (this.files) {
+          this.form.cantidadArchivos = this.files.length
+          for (let i = 0; i < this.files.length; i++) {
+            formData.append('files' + i, this.files[i])
           }
         } else {
           this.form.cantidadArchivos = 0
@@ -264,12 +233,13 @@ export default {
           }
         }).then((res) => {
           this.$q.loading.hide()
-          this.$router.push('/mascotas')
+          // this.$router.push('/mascotas')
         })
       }
     },
     changePetFile (ind) {
       if (this.files[ind]) { this.petImg[ind] = URL.createObjectURL(this.files[ind]) }
+      this.form.index.push(ind)
     }
   }
 }
