@@ -25,7 +25,7 @@
           </q-card>
       </div>
     </div>
-    <div v-else class="row items-center justify-center" style="height: 280px;">No hay alojamientos actualmente</div>
+    <div v-else class="row items-center justify-center" style="height: 280px;">No hay mascotas actualmente</div>
   <q-page-sticky position="bottom-right" :offset="[18, 18]">
     <q-fab color="primary" icon="add" direction="up" vertical-actions-align="right" @click="$router.push('/registromascota')">
     </q-fab>
