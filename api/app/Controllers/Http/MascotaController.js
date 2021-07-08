@@ -24,10 +24,15 @@ class MascotaController {
    * @param {View} ctx.view
    */
   async index ({ request, response, auth }) {
-    var user = (await auth.getUser()).toJSON();
-    let pets = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
-    console.log(pets)
-    response.send(pets)
+    try {
+      console.log('sirve index');
+      var user = (await auth.getUser()).toJSON();
+      let pets = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
+      console.log(pets)
+      response.send(pets)
+    } catch (error) {
+      console.error('index ' + error.name + ': ' + error.message)
+    }
   }
 
   async mascotaByUserId ({ response, params }) {
@@ -56,38 +61,45 @@ class MascotaController {
    * @param {Response} ctx.response
    */
   async store ({ request, response, auth }) {
-    console.log(request.all())
-    var dat = request.only(['dat'])
-    dat = JSON.parse(dat.dat)
-    const validation = await validate(dat, Mascota.fieldValidationRules())
-    if (validation.fails()) {
-      response.unprocessableEntity(validation.messages())
-    } else {
-      let images = []
-      if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
-        for (let i = 0; i < dat.cantidadArchivos; i++) {
-          let codeFile2 = randomize('Aa0', 30)
-          const albumpic = request.file('album' + i, {
-            types: ['image'],
-            size: '20mb'
-          })
-          if (Helpers.appRoot('storage/uploads/pets')) {
-            await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
-              name: codeFile2,
-              overwrite: true
+    try {
+      console.log(request.all())
+      var dat = request.only(['dat'])
+      dat = JSON.parse(dat.dat)
+      const validation = await validate(dat, Mascota.fieldValidationRules())
+      if (validation.fails()) {
+        response.unprocessableEntity(validation.messages())
+      } else {
+        let images = []
+        if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
+          for (let i = 0; i < dat.cantidadArchivos; i++) {
+            let codeFile2 = randomize('Aa0', 30)
+            const albumpic = request.file('files' + i, {
+              types: ['image'],
+              size: '20mb'
             })
-          } else {
-            mkdirp.sync(`${__dirname}/storage/Excel`)
+            console.log('albumpic :>> ', albumpic);
+            if (albumpic != null) {
+              if (Helpers.appRoot('storage/uploads/pets')) {
+                await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
+                  name: codeFile2,
+                  overwrite: true
+                })
+              } else {
+                mkdirp.sync(`${__dirname}/storage/Excel`)
+              }
+              images.push(albumpic.fileName)
+            }
           }
-          images.push(albumpic.fileName)
+          dat.images = images
         }
-        dat.images = images
+        let body = dat
+        delete body.cantidadArchivos
+        body.ownerId = ((await auth.getUser()).toJSON())._id
+        let guardar = await Mascota.create(body)
+        response.send(guardar)
       }
-      let body = dat
-      delete body.cantidadArchivos
-      body.ownerId = ((await auth.getUser()).toJSON())._id
-      let guardar = await Mascota.create(body)
-      response.send(guardar)
+    } catch (error) {
+      console.error('store ' + error.name + ': ' + error.message)
     }
   }
 
@@ -134,31 +146,46 @@ class MascotaController {
       } else {
         let images = []
         if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
-          for (let i = 0; i < dat.index; i++) {
+          for (let i = 0; i < dat.cantidadArchivos; i++) {
             let codeFile = randomize('Aa0', 30)
             const albumpic = request.file('files' + i, {
-              types: ['image']
+              types: ['image'],
+              size: '20mb'
             })
             console.log('albumpic :>> ', albumpic);
-            if (Helpers.appRoot('storage/uploads/pets')) {
-              await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
-                name: codeFile,
-                overwrite: true
-              })
-            } else {
-              mkdirp.sync(`${__dirname}/storage/Excel`)
-            }
-            images.push(albumpic.fileName)
+            if (albumpic != null) {
+              if (Helpers.appRoot('storage/uploads/pets')) {
+                await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
+                  name: codeFile,
+                  overwrite: true
+                })
+              } else {
+                mkdirp.sync(`${__dirname}/storage/Excel`)
+              }
+              images.push(albumpic.fileName)
+            }  
           }
-          let prevImages = (await Mascota.find(params.id)).images
+          console.log('images :>> ', images);
+          console.log('dat.index :>> ', dat.index);
+          let prevImages = [...dat.images]
           console.log('prevImages :>> ', prevImages);
-          /* for (let j of dat.images) {
+          let deleteImages = []
+          for (let j in dat.index) {
+            if (dat.index[j] != null) {
+              console.log('dat.index[j] :>> ', dat.index[j]);
+              let e = dat.index[j]
+              deleteImages.push(prevImages[e])
+              prevImages[e] = images[j]
+            }
+          }
+          for (let j of deleteImages) {
             fs.unlink(`storage/uploads/pets/${j}`, (err) => {
               if (err) throw err;
               console.log(`${j} Eliminado por el Cliente`);
             });
-          } */
-          dat.images = images
+          }
+          dat.images = prevImages
+          console.log('dat.images :>> ', dat.images);
         }
         delete dat.cantidadArchivos
         delete dat.index

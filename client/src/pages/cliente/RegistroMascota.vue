@@ -99,6 +99,7 @@ export default {
       editImg: false,
       terms: false,
       form: {},
+      index: [],
       files: [null, null, null],
       petImg: [null, null, null],
       perfilFile: null,
@@ -147,9 +148,11 @@ export default {
         console.log(error)
       })
     }
+    console.log('edit :>> ', this.edit)
   },
   methods: {
     async savePet () {
+      console.log('savePet')
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
@@ -158,6 +161,7 @@ export default {
         const formDataTwo = new FormData()
         if (this.files) {
           this.form.cantidadArchivos = this.files.length
+          console.log('this.files :>> ', this.files)
           for (let i = 0; i < this.files.length; i++) {
             formDataTwo.append('files' + i, this.files[i])
           }
@@ -176,7 +180,7 @@ export default {
               message: 'Tu mascota ha sido creada correctamente',
               color: 'positive'
             })
-            this.$router.push('/inicio_cliente')
+            this.$router.push('/mascotas')
           }
         })
       }
@@ -212,6 +216,7 @@ export default {
       }
     },
     async updatePet () {
+      console.log('updatePet')
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
@@ -219,9 +224,20 @@ export default {
         })
         var formData = new FormData()
         if (this.files) {
+          console.log('this.files :>> ', this.files)
           this.form.cantidadArchivos = this.files.length
+          console.log('this.files :>> ', this.files)
+          const indexF = []
+          for (const x in this.index) {
+            if (this.index[x] != null) {
+              indexF.push(this.index[x])
+            }
+          }
+          this.form.index = indexF
           for (let i = 0; i < this.files.length; i++) {
-            formData.append('files' + i, this.files[i])
+            if (this.files[i] !== 1) {
+              formData.append('files' + i, this.files[i])
+            }
           }
         } else {
           this.form.cantidadArchivos = 0
@@ -233,13 +249,17 @@ export default {
           }
         }).then((res) => {
           this.$q.loading.hide()
-          // this.$router.push('/mascotas')
+          this.$q.notify({
+            message: 'Tu mascota ha sido actualizada correctamente',
+            color: 'positive'
+          })
+          this.$router.push('/mascotas')
         })
       }
     },
     changePetFile (ind) {
       if (this.files[ind]) { this.petImg[ind] = URL.createObjectURL(this.files[ind]) }
-      this.form.index.push(ind)
+      this.index[ind] = ind
     }
   }
 }
