@@ -14,6 +14,7 @@ const Role = use("App/Models/Role")
 const { validate } = use("Validator")
 const Pais = use("App/Models/Pais")
 const Ciudad = use("App/Models/Ciudad")
+const Email = use("App/Functions/Email")
 
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
