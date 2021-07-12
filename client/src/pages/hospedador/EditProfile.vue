@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
-      <q-carousel-slide :name="1" class="q-pa-none">
+      <!-- <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
           <div class="q-mb-lg text-center text-h5 text-grey-6">Representante Legal</div>
 
@@ -64,7 +64,7 @@
             <q-btn class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%; border-radius: 4px" @click="siguiente()" no-caps/>
           </div>
         </div>
-      </q-carousel-slide>
+      </q-carousel-slide> -->
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
@@ -163,7 +163,7 @@ export default {
       baseu: '',
       baseuIdentif: '',
       baseuEspacio: '',
-      slide: 1,
+      slide: 2,
       form: {},
       formMySpace: {},
       paisUser: null,
@@ -184,13 +184,13 @@ export default {
     }
   },
   validations: {
-    form: {
+    /* form: {
       name: { required },
       last_name: { required },
       birth: { required },
       phone: { required },
       email: { required, email }
-    },
+    }, */
     formMySpace: {
       name: { required },
       email: { required, email },
@@ -216,7 +216,7 @@ export default {
           this.baseu = env.apiUrl + 'perfil_img/'
           this.baseuIdentif = env.apiUrl + 'identificacion_img/'
           this.baseuEspacio = env.apiUrl + 'espacio_img/'
-          console.log(this.form)
+          // console.log(this.form)
           console.log(this.formMySpace)
           this.representImg = this.baseu + this.form._id
           this.identificacionImg.push(this.baseuIdentif + this.form.identificationFiles[0])
@@ -241,7 +241,7 @@ export default {
     },
     siguiente () {
       if (this.slide === 1) {
-        this.$v.form.$touch()
+        /* this.$v.form.$touch()
         if (!this.$v.form.$error && this.terminos) {
           this.slide = 2
         } else {
@@ -250,7 +250,7 @@ export default {
             color: 'negative'
           })
           this.aparecer = true
-        }
+        } */
       } else if (this.slide === 2) {
         this.$v.formMySpace.name.$touch()
         this.$v.formMySpace.email.$touch()
@@ -267,10 +267,10 @@ export default {
       }
     },
     represent_img () {
-      this.RLImg = this.img
+      /* this.RLImg = this.img
       this.representImg = URL.createObjectURL(this.img)
       this.img = null
-      this.form.RLImg = this.RLImg
+      this.form.RLImg = this.RLImg */
     },
     perfil_img () {
       this.PImg = this.img
@@ -279,7 +279,7 @@ export default {
       this.form.PImg = this.PImg
     },
     identificacion_img () {
-      this.IImg[this.idt] = this.img
+      /* this.IImg[this.idt] = this.img
       this.identificacionImg[this.idt] = URL.createObjectURL(this.img)
       this.img = null
       this.form.IImg = this.IImg
@@ -287,26 +287,26 @@ export default {
         this.idt = 0
       } else {
         this.idt++
-      }
+      } */
     },
     modificarPerfil () {
-      this.$v.form.$touch()
+      // this.$v.form.$touch()
       this.$v.formMySpace.$touch()
-      if (!this.$v.form.$error && !this.$v.formMySpace.$error && this.terminos) {
+      if (!this.$v.formMySpace.$error) {
         this.$q.loading.show({
           message: 'Actualizando...'
         })
         this.form.my_space = this.formMySpace
         console.log(this.form)
         var formData = new FormData()
-        var files = []
+        // var files = []
         var files2 = []
-        files[0] = this.RLImg
+        // files[0] = this.RLImg
         files2[0] = this.PImg
-        for (let i = 0; i < this.IImg.length; i++) {
+        /* for (let i = 0; i < this.IImg.length; i++) {
           formData.append('IFiles' + i, this.IImg[i])
-        }
-        formData.append('RLFiles', files[0])
+        } */
+        // formData.append('RLFiles', files[0])
         formData.append('PFiles', files2[0])
         formData.append('dat', JSON.stringify(this.form))
         this.$api.post('update_hospedador', formData, {
@@ -328,7 +328,7 @@ export default {
           message: 'Debe ingresar todos los datos correspondientes',
           color: 'negative'
         })
-        this.aparecer = true
+        // this.aparecer = true
       }
     }
   }
