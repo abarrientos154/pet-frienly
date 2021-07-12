@@ -4,7 +4,7 @@
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
           <q-btn flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-          <div class="q-mb-lg text-center text-h5 text-grey-8">Representante Legal</div>
+          <div class="q-mb-lg text-center text-h5 text-grey-8">Datos del Aliado</div>
 
           <div class="column items-center q-mb-lg">
             <q-avatar rounded style="height: 200px; width: 90%; border-radius: 25px;" class="row justify-center">
@@ -54,7 +54,7 @@
           </div>
           <div>
             Correo de contacto
-            <q-input filled v-model="form.email"  dense placeholder="micorreo@petfriendly.com"
+            <q-input filled v-model="form.email"  dense placeholder="micorreo@email.com"
             error-message="Este campo es requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
           </div>
           <div>
@@ -129,7 +129,7 @@
          </div>
          <div>
            Correo de contacto tienda
-           <q-input filled v-model="formTienda.email"  dense placeholder="micorreo@petfriendly.com "
+           <q-input filled v-model="formTienda.email"  dense placeholder="micorreo@email.com"
            error-message="Este campo es requerido" :error="$v.formTienda.email.$error" @blur="$v.formTienda.email.$touch()"/>
          </div>
          <div>

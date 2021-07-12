@@ -141,7 +141,7 @@
         >
           <div class="row no-wrap q-gutter-md items-center">
             <div v-for="(item, index) in categorias" :key="index">
-              <q-btn no-caps :color="filterSelec === item._id ? 'positive' : 'grey'" text-color="grey-10" :label="item.name" style="min-width:150px"
+              <q-btn no-caps :color="filterSelec === item._id ? 'primary' : 'grey'" :text-color="filterSelec === item._id ? 'white' : 'grey-10'" :label="item.name" style="min-width:150px"
               @click="filtrar(item._id)" />
             </div>
           </div>
@@ -221,7 +221,7 @@
     </div>
 
     <q-page-sticky v-if="miTienda" position="bottom-right" :offset="[18, 18]">
-      <q-fab color="primary" icon="add" direction="up" vertical-actions-align="right">
+      <q-fab color="primary" icon="add" label="Nuevo" no-caps direction="up" vertical-actions-align="right">
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
           color="primary" icon="add_shopping_cart" label="Producto" @click="$router.push('/registro_producto')" />
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"

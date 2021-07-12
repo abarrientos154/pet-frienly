@@ -59,12 +59,12 @@
             </q-select>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
-            <div class="text-subtitle1 text-bold">Donde esta ubicado</div>
-            <q-select dense filled placeholder="Tamaños" option-value="name" option-label="name" v-model="form.location" :options="location" emit-value map-options error-message="Este campo es requerido" :error="$v.form.location.$error" @blur="$v.form.location.$touch()"/>
+            <div class="text-subtitle1 text-bold">Tipo de espacio</div>
+            <q-select dense filled placeholder="" option-value="name" option-label="name" v-model="form.location" :options="location" emit-value map-options error-message="Este campo es requerido" :error="$v.form.location.$error" @blur="$v.form.location.$touch()"/>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 q-mb-md">
             <div class="text-subtitle1 text-bold">Estado del espacio</div>
-            <q-select dense filled placeholder="Tamaños" option-value="name" option-label="name" v-model="form.state" :options="state" emit-value map-options error-message="Este campo es requerido" :error="$v.form.state.$error" @blur="$v.form.state.$touch()"/>
+            <q-select dense filled placeholder="" option-value="name" option-label="name" v-model="form.state" :options="state" emit-value map-options error-message="Este campo es requerido" :error="$v.form.state.$error" @blur="$v.form.state.$touch()"/>
           </div>
         </div>
 
@@ -97,7 +97,7 @@
             </div>
           </div>
           <div class="row items-center">
-            <div class="text-subtitle1 text-bold col">¿El espacio es Solo para hopedadores?</div>
+            <div class="text-subtitle1 text-bold col"> El espacio es parte de un(a)</div>
             <div class=" col column">
               <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Seleccione el tipo de espacio</div>
               <q-select dense filled option-value="enable" option-label="name" v-model="form.only_pets" :options="only_pets" emit-value map-options error-message="Este campo es requerido" :error="$v.form.only_pets.$error" @blur="$v.form.only_pets.$touch()"/>
@@ -127,9 +127,9 @@ export default {
       servicios: [{ name: 'Paseo de mascota' }],
       servicios2: [],
       mascotas: [{ name: 'Perros' }, { name: 'Gatos' }, { name: 'Ambos' }],
-      location: [{ name: 'Espacio compartido por tipo', description: 'Tu mascota se aloja en un espacio compartido con otras mascotas de su mismo tipo' }, { name: 'Espacio compartido', description: 'Tu mascota se aloja en un espacio compartido con otros perros y gatos' }, { name: 'Espacio privado', description: 'Espacio habilitado para una sola mascota' }],
+      location: [{ name: 'Espacio compartido', description: 'Tu mascota se aloja en un espacio compartido con otros perros y gatos' }, { name: 'Espacio privado', description: 'Espacio habilitado para una sola mascota' }],
       state: [{ name: 'Disponible' }, { name: 'Ocupado' }, { name: 'Mantención' }],
-      only_pets: [{ name: 'Si', enable: true, description: 'Solo esta habilitado para hospedaje' }, { name: 'No', enable: false, description: 'Vivo yo o alguien mas en el espacio' }]
+      only_pets: [{ name: 'Hotel para mascotas' }, { name: 'Persona natural' }]
     }
   },
   validations: {
