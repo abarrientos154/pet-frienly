@@ -6,16 +6,17 @@
 
     <div class="row q-pa-sm">
       <div class="col-6">
-        <q-img style="height: 100%; width: 100%" :src="baseuTienda + id"/>
-        <div class="q-gutter-y-md row">
+        <img style="height: 150px; width: 100%" :src="baseuTienda + id"/>
+        <div class="row items-center">
           <q-rating
             v-model="tienda.calificacion"
+            class="col-11"
             color="orange"
             readonly
             size="25px"
             icon="star"
           />
-        <div class="q-pa-sm text-green-9 text-bold">({{tienda.calificacion ? tienda.calificacion : 0}})</div>
+        <div class="col-1 text-green-9 text-bold">({{tienda.calificacion ? tienda.calificacion : 0}})</div>
         </div>
       </div>
       <div class="col-6 q-pl-sm">
@@ -113,7 +114,7 @@
                 <div class="col-8">
                   <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
                     style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                    ${{item.price}}
+                    ${{formatPrice(item.price)}}
                   </div>
                   <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
                     style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
@@ -158,7 +159,7 @@
                   <div class="col-8">
                     <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                      ${{item.price}}
+                      ${{formatPrice(item.price)}}
                     </div>
                     <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
@@ -194,7 +195,7 @@
                   <div class="col-8">
                     <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                      ${{item.price}}
+                      ${{formatPrice(item.price)}}
                     </div>
                     <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
@@ -249,7 +250,7 @@
             </div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold">Valor por hora: </div>
-              <div class="text-subtitle1 q-pl-sm">${{servicio.price}}</div>
+              <div class="text-subtitle1 q-pl-sm">${{formatPrice(servicio.price)}}</div>
             </div>
           </div>
         </div>
@@ -290,7 +291,7 @@
               <div class="q-py-md">
                 <div class="text-h6">{{producto.name}}</div>
                 <div class="text-subtitle1 text-grey-8">Disponible - {{producto.cantidad}} unidades</div>
-                <div class="text-primary text-h5 q-py-md">$ {{producto.oferta ? producto.oferta_price : producto.price}}</div>
+                <div class="text-primary text-h5 q-py-md">$ {{producto.oferta ? formatPrice(producto.oferta_price) : formatPrice(producto.price)}}</div>
                 <div class="text-h6">Descripción</div>
                 <div class="text-subtitle1 text-grey-8">{{producto.descripcion}}</div>
               </div>

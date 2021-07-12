@@ -6,6 +6,7 @@
       </div>
       <div class="col-10 text-white text-subtitle1 text-center">Editar espacio</div>
     </q-header>
+
     <q-page-container>
       <div class="q-pa-lg">
         <div class="q-pa-md">

@@ -82,7 +82,7 @@
             </div>
         </q-card>
       </div>
-    <div v-else class="text-center">No hay pedidos pendientes</div>
+    <div v-else class="row items-center justify-center" style="height: 100px;">No hay pedidos pendientes</div>
 
     <div class="q-mb-lg">
       <div class="text-subtitle1 text-bold">Filtra tus pedidos</div>
@@ -180,7 +180,7 @@
             </div>
         </q-card>
       </div>
-      <div v-else class="text-center">No hay pedidos completados</div>
+      <div v-else class="row items-center justify-center" style="height: 100px;">No hay pedidos completados</div>
 
       <div class="column items-center q-mb-xl">
         <q-btn v-if="allPedidos.length > 4" @click="verMas()" class="q-pa-sm" color="primary" :label="ver ? 'Ver menos' :'Ver más'" style="width: 70%;" no-caps/>

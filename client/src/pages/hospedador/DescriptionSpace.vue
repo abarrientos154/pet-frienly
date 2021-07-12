@@ -19,37 +19,23 @@
         <div class="q-pa-md">
           <div class="q-mb-md">
             <div class="text-subtitle1 q-mb-sm">Conoce nuestro alojamiento</div>
-            <div class="text-subtitle3 text-grey-6">{{hospedaje.description}}</div>
+            <div class="text-subtitle2 text-grey-8">{{hospedaje.description}}</div>
           </div>
           <div class="q-mb-lg">
             <div class="text-subtitle1 text-bold">Informacion</div>
             <div class="row">
               <div class="col q-mx-sm">
-                <div class="text-subtitle3 text-bold text-grey-6">Disponible para</div>
-                <div class="text-caption text-grey-6">{{hospedaje.pet_type}}</div>
-                <div class="text-subtitle3 text-bold text-grey-6">Cantidad de pasajero</div>
-                <div class="text-caption text-grey-6">{{hospedaje.guests}} mascotas</div>
-                <div class="text-subtitle3 text-bold text-grey-6">Tipo de espacio</div>
-                <div class="text-caption text-grey-6">{{hospedaje.location}}</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Disponible para</div>
+                <div class="text-caption text-grey-8">{{hospedaje.pet_type}}</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Cantidad de pasajero</div>
+                <div class="text-caption text-grey-8">{{hospedaje.guests}} mascotas</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Tipo de espacio</div>
+                <div class="text-caption text-grey-8">{{hospedaje.location}}</div>
               </div>
               <div class="col q-mx-sm">
-                <div class="text-subtitle3 text-bold text-grey-6">Tamaños que recibe</div>
-                <div class="text-caption text-grey-6">{{hospedaje.petSize}}</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Tamaños que recibe</div>
+                <div class="text-caption text-grey-8">{{hospedaje.petSize}}</div>
               </div>
-            </div>
-          </div>
-          <div class="q-mb-lg row items-center">
-            <div class="col column items-center">
-              <q-avatar rounded class="bg-orange-2 text-black q-mb-xs" icon="directions_car" size="50px" style="border-radius: 10px;"/>
-              <div class="text-subtitle3">Estacionamiento</div>
-            </div>
-            <div class="col column items-center">
-              <q-avatar rounded class="bg-orange-2 text-black q-mb-xs" icon="pool" size="50px" style="border-radius: 10px;"/>
-              <div class="text-subtitle3">Piscina</div>
-            </div>
-            <div class="col column items-center">
-              <q-avatar rounded class="bg-orange-2 text-black q-mb-xs" icon="directions_walk" size="50px" style="border-radius: 10px;"/>
-              <div class="text-subtitle3">Paseo</div>
             </div>
           </div>
 
@@ -106,7 +92,7 @@
 
       <div class="row items-center q-pa-md">
         <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
-        <q-btn class="col2 q-pa-sm text-black" color="orange-2" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px; border-top-right-radius: 15px; border-bottom-right-radius: 15px;" no-caps>${{hospedaje.price}} por dia</q-btn>
+        <div class="col q-px-sm q-py-md text-black bg-orange-2 text-center ellipsis" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;" >${{formatPrice(hospedaje.price)}} por día</div>
       </div>
 
       <q-dialog v-model="reserva" maximized persistent>
@@ -365,6 +351,10 @@ export default {
       }).onCancel(() => {
         // console.log('>>>> Cancel')
       })
+    },
+    formatPrice (value) {
+      const val = (value / 1).toFixed(0).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     }
   }
 }

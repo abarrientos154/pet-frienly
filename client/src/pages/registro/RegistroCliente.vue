@@ -4,12 +4,6 @@
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
         <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-          <div class="column items-center justify-center q-mb-md" style="padding-top: 20px">
-            <q-checkbox v-model="terms" size="xs" label="">
-              <div class="text-caption">Acepto Terminos y condiciones de uso</div>
-            </q-checkbox>
-            <div class="text-negative text-h7" v-if="!terms && appear"> Debe Aceptar los terminos </div>
-          </div>
           <div class="row justify-center">
             <q-avatar size="200px" class="bg-grey row justify-center">
               <q-img :src="perfilFile ? imgPerfil : ''" style="height: 100%">
@@ -52,6 +46,12 @@
                 </q-input>
            </div>
          </div>
+         <div class="column items-center justify-center q-mb-md">
+            <q-checkbox v-model="terms" size="xs" label="">
+              <div>Acepto Terminos y condiciones de uso</div>
+            </q-checkbox>
+            <div class="text-negative text-h7" v-if="!terms && appear"> Debe Aceptar los terminos </div>
+          </div>
          <div class="column items-center">
            <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="next()"/>
          </div>

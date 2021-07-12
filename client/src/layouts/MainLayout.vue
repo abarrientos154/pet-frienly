@@ -108,11 +108,6 @@ export default {
           ruta: '/inicio_hospedador'
         },
         {
-          icon: 'store',
-          label: 'Nuevo Espacio',
-          ruta: '/nuevo_espacio'
-        },
-        {
           icon: 'description',
           label: 'Reportes',
           ruta: '/reportes'
