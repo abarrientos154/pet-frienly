@@ -1,7 +1,10 @@
 <template>
   <div class="q-pa-lg">
-    <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
-      <div class="text-white text-subtitle1 text-center">Nuevo espacio</div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+      <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+      </div>
+      <div class="col-10 text-white text-subtitle1 text-center">Nuevo espacio</div>
     </q-header>
 
     <div class="q-pa-md">
