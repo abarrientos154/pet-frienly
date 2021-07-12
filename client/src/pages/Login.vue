@@ -42,7 +42,6 @@
         </div>
 
         <div class="colunm justify-center q-pa-sm">
-          <p align="center" style="cursor:pointer"><a class="text-bold text-caption text-grey">O registrate con algunas de tus redes sociales</a></p>
           <div class="row justify-between q-mr-xl q-ml-xl q-mt-sm q-mb-sm">
             <q-btn  round color="grey-5" style="width: 40px; height: 40px">
               <img src="icons/Iconos_Redes.png" style="width: 20px; height: 20px"/>

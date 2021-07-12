@@ -7,54 +7,45 @@
       infinite
       swipeable
       ref="carousel">
-      <q-carousel-slide :name="1" class="q-pa-none" img-src="https://cdn.quasar.dev/img/mountains.jpg">
-        <div class="absolute-center full-width custom-caption bg-transparent">
-          <div class="row justify-end q-mb-md">
-            <q-btn flat color="white" size="lg" icon="arrow_forward" to="/registro/proveedor"/>
+      <q-carousel-slide :name="1" class="q-pa-none">
+        <div class="q-pa-sm">
+          <q-btn flat round color="black" size="lg" icon="arrow_back" @click="$router.go(-1)"/>
+        </div>
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
+            </div>
+            <div class="text-h5 text-bold text-center text-grey-9">¿Qué quieres hacer?</div>
+            <div class="text-caption text-center">Selecciona lo que quieres realizar en el app</div>
           </div>
-          <div class="text-h4 text-bold" color="white">Quiero ser un <br> proveedor</div>
-          <div class="text-subtitle1">Tienes una tienda de mascotas o espaciospara alojar mascotas? PetFriendly es tu lugar</div>
-          <div class="q-gutter-xs">
-            <q-btn
-              push dense color="white" text-color="black" style="width: 20px; height: 10px;"
-              @click="$refs.carousel.previous()"/>
-            <q-btn
-              push dense color="white" text-color="black"  style="width: 20px; height: 10px;"
-              @click="$refs.carousel.next()"/>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Cliente" style="width: 60%"
+              to="/registro/cliente"/>
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Aliado" style="width: 60%"
+              @click="slide = 2"/>
           </div>
         </div>
       </q-carousel-slide>
-      <q-carousel-slide :name="2" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-center full-width custom-caption bg-transparent">
-          <div class="row justify-end q-mb-md">
-            <q-btn flat color="white" size="lg" icon="arrow_forward" to="/registro/cliente"/>
-          </div>
-          <div class="text-h4 text-bold" color="white">Quiero un producto o <br> servicio</div>
-          <div class="text-subtitle1">Todo lo que tu mascota necesita en una sola app. Desde paseos hasta alojamiento.</div>
-          <div class="q-gutter-xs">
-            <q-btn
-              push dense color="white" text-color="black" style="width: 20px; height: 10px;"
-              @click="$refs.carousel.previous()"/>
-            <q-btn
-              push dense color="white" text-color="black"  style="width: 20px; height: 10px;"
-              @click="$refs.carousel.next()"/>
-          </div>
+
+      <q-carousel-slide :name="2" class="q-pa-none">
+        <div class="q-pa-sm">
+          <q-btn flat round color="black" size="lg" icon="arrow_back" @click="slide = 1"/>
         </div>
-      </q-carousel-slide>
-      <q-carousel-slide :name="3" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax1.jpg">
-        <div class="absolute-center full-width custom-caption bg-transparent">
-          <div class="row justify-end q-mb-md">
-            <q-btn flat color="white" size="lg" icon="arrow_forward" to="/registro/hospedador"/>
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center">
+              <img src="logo.png" style="width:260px" />
+            </div>
           </div>
-          <div class="text-h4 text-bold" color="white">Quiero ser un <br> proveedor de espacios</div>
-          <div class="text-subtitle1">Tienes espacios para alojar mascotas? PetFriendly es tu lugar</div>
-          <div class="q-gutter-xs">
-            <q-btn
-              push dense color="white" text-color="black" style="width: 20px; height: 10px;"
-              @click="$refs.carousel.previous()"/>
-            <q-btn
-              push dense color="white" text-color="black"  style="width: 20px; height: 10px;"
-              @click="$refs.carousel.next()"/>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <div class="text-h5 text-bold text-center text-grey-9 q-pb-sm">¿Qué tipo de aliado <br> quieres ser?</div>
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Tienda" style="width: 60%"
+              to="/registro/proveedor"/>
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Hospedador" style="width: 60%"
+              to="/registro/hospedador"/>
           </div>
         </div>
       </q-carousel-slide>
