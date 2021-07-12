@@ -198,7 +198,7 @@ export default {
     },
     async getStore () {
       await this.$api.post('user_by_rol', { rol: [3] }).then(res => {
-        this.imgTienda = env.apiUrl + '/tienda_img/'
+        this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
           this.stores = res.slice(0, 4)
           const total = [...res]
@@ -208,7 +208,7 @@ export default {
     },
     async getHost () {
       await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
-        this.imgProfile = env.apiUrl + '/espacio_img/'
+        this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           this.host = res.slice(0, 4)
           const total = [...res]

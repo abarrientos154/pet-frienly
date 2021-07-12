@@ -109,7 +109,7 @@ export default {
     },
     getStore () {
       this.$api.post('user_by_rol', { rol: [3] }).then(res => {
-        this.imgTienda = env.apiUrl + '/tienda_img/'
+        this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
           this.mejorCalificadas = res
           if (!this.$route.params.type) {

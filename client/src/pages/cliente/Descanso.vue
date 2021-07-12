@@ -112,7 +112,7 @@ export default {
     },
     async getHost () {
       await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
-        this.imgProfile = env.apiUrl + '/espacio_img/'
+        this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           this.mejorCalificados = res
           if (!this.$route.params.type) {
