@@ -328,6 +328,7 @@ export default {
               color: 'positive'
             })
             this.$q.loading.hide()
+            this.$router.go(-1)
           } else {
             this.$q.loading.hide()
           }
