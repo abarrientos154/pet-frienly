@@ -77,7 +77,7 @@
               <div class="text-caption q-mb-sm">Imágenes de documento de identificación</div>
               <div class="row q-gutter-sm">
                 <div class="col q-mb-sm">
-                  <div>Documento frontal</div>
+                  <div class="text-caption">Carga la parte frontal de tu documento de identidad</div>
                   <q-avatar rounded style="width: 100%;" class="bg-primary">
                     <q-file borderless :disable="identificacion.length < 1 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
@@ -85,7 +85,7 @@
                   </q-avatar>
                 </div>
                 <div class="col q-mb-sm">
-                  <div>Documento reverso</div>
+                  <div class="text-caption">Carga la parte trasera de tu documento de identidad</div>
                   <q-avatar rounded style="width: 100%;" class="bg-primary">
                     <q-file borderless :disable="identificacion.length < 2 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
