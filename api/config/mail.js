@@ -25,12 +25,12 @@ module.exports = {
   smtp: {
     driver: 'smtp',
     pool: true,
-    port: Env.get('SMTP_PORT', 587),
-    host: Env.get('SMTP_HOST'),
-    secure: false,
+    port: Env.get('MAIL_PORT', 4),
+    host: Env.get('MAIL_HOST', 'mail.test.com'),
+    secure: true,
     auth: {
-      user: Env.get('MAIL_USERNAME'),
-      pass: Env.get('MAIL_PASSWORD')
+      user: Env.get('MAIL_USERNAME', 'revisiones@test.com'),
+      pass: Env.get('MAIL_PASSWORD', 'VIU0oMKnk3B1')
     },
     tls: {
       // do not fail on invalid certs

@@ -167,7 +167,7 @@ class UserController {
         response.send(user)
       }
     }
-  
+
 
   async registerHospedador({ request, response }) {
     var dat = request.only(['dat'])
@@ -705,6 +705,40 @@ class UserController {
         }
       }
       response.send(body)
+    }
+
+    async recuperacionapp ({ request, response, params }) {
+      if (((await User.where({email: params.email}).fetch()).toJSON()).length) {
+        let codigo = randomize('Aa0', 30)
+        await User.query().where({email: params.email}).update({codigoRecuperacion: codigo})
+        let mail = await Email.sendMail(params.email, 'Recuperacion de Correo', `
+            <center>
+              <img src="https://app.petfriendly.com/logo.png" alt="logo" />
+            </center>
+            <h2 style="text-align:center">
+              Haz solicitado restablecer tu contraseña
+            </h2>
+            <div style="text-align:center">
+              Ingrese al link https://app.telderecuperacion.com/recuperacion?codigo=${codigo} para restablecer su contraseña
+            </div>
+            `)
+          console.log(mail)
+          response.send(mail)
+      } else {
+        response.unprocessableEntity([{
+          message: 'Correo no registrado en el sistema!',
+          error: true
+        }])
+      }
+    }
+
+    async actualizarPass({ request, response, params }) {
+      let user = await User.findBy('codigoRecuperacion', params.code)
+      let data = request.only(['password'])
+      user.password = data.password
+      user.codigoRecuperacion = null
+      await user.save()
+      response.send(user)
     }
 
 }
