@@ -53,6 +53,7 @@ addPrefixToGroup(
     Route.put("actualizar_pass/:code", "UserController.actualizarPass");
 
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
+    Route.get('obtener_logo', 'UploadController.getLogo')
     Route.get('tienda_img/:file', 'UploadController.getFileByDirectoryTienda')
     Route.get('espacio_img/:file', 'UploadController.getFileByDirectoryEspacioDescanso')
     Route.get('identificacion_img/:file', 'UploadController.getFileByDirectoryIdentificacion')

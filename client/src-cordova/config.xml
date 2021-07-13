@@ -21,4 +21,9 @@
         <allow-intent href="itms-apps:*" />
     </platform>
     <allow-navigation href="about:*" />
+    <universal-links>
+        <host event="ul_recuperar" name="app.petfriendlyrecuperacion.com" scheme="https">
+            <path url="/recuperacion" />
+        </host>
+    </universal-links>
 </widget>
