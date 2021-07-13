@@ -69,11 +69,23 @@
             </div>
             <div>
               <div class="text-caption">Imágenes de documento de identificación</div>
-              <div style="width: 50%;" class="q-pr-xs q-mb-sm">
-                <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
-                  <q-file  borderless :disable="IImg.length < 2 ? false : true" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
-                  <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
-                </q-avatar>
+              <div class="row q-gutter-sm">
+                <div class="col q-mb-sm">
+                  <div>Documento frontal</div>
+                  <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
+                    <q-file  borderless :disable="IImg.length < 1 ? false : true" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                      <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
+                    </q-file>
+                  </q-avatar>
+                </div>
+                <div class="col q-mb-sm">
+                  <div>Documento reverso</div>
+                  <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
+                    <q-file  borderless :disable="IImg.length < 2 ? false : true" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                      <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
+                    </q-file>
+                  </q-avatar>
+                </div>
               </div>
               <div class="row">
                 <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
