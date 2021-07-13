@@ -8,7 +8,7 @@
     </q-header>
 
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
-      <q-carousel-slide :name="1" class="q-pa-none">
+      <!-- <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
           <div class="q-mb-md text-center text-h5 text-grey-8 q-mt-xl">Representante Legal</div>
 
@@ -72,7 +72,7 @@
             @click="siguiente(1)"/>
           </div>
         </div>
-      </q-carousel-slide>
+      </q-carousel-slide> -->
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
@@ -115,10 +115,10 @@
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
             @click="siguiente(2)"/>
           </div>
-         <div class="row justify-center q-mt-sm">
+         <!-- <div class="row justify-center q-mt-sm">
             <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 90%;"
             @click="slide = 1"/>
-          </div>
+          </div> -->
         </div>
       </q-carousel-slide>
 
@@ -232,7 +232,7 @@ export default {
       imgP: null,
       pais: null,
       ciudad: null,
-      slide: 1,
+      slide: 2,
       baseuPerfil: '',
       baseuTienda: '',
       baseuIdentidad: '',
@@ -249,12 +249,12 @@ export default {
     }
   },
   validations: {
-    form: {
+    /* form: {
       name: { required },
       last_name: { required },
       birthday: { required },
       phone: { required }
-    },
+    }, */
     formTienda: {
       name: { required },
       phone: { required },
@@ -267,9 +267,9 @@ export default {
     ciudad: { required }
   },
   mounted () {
-    this.baseuPerfil = env.apiUrl + 'perfil_img/'
+    // this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.baseuTienda = env.apiUrl + 'tienda_img/'
-    this.baseuIdentidad = env.apiUrl + 'identificacion_img/'
+    // this.baseuIdentidad = env.apiUrl + 'identificacion_img/'
     this.getUser()
     this.getPaisesCiudades()
   },
@@ -278,7 +278,7 @@ export default {
       await this.$api.get('user_logueado').then(res => {
         if (res) {
           this.form = res
-          this.imgRepresentante = this.baseuPerfil + this.form._id
+          // this.imgRepresentante = this.baseuPerfil + this.form._id
           this.formTienda = res.tienda
           this.imgPerfil = this.baseuTienda + this.form._id
           this.pais = this.formTienda.country
@@ -294,18 +294,18 @@ export default {
       })
     },
     siguiente (val) {
-      if (val === 1) {
+      /* if (val === 1) {
         this.$v.form.$touch()
         if (!this.$v.form.$error) {
           this.slide = 2
         }
       } else {
-        this.$v.formTienda.name.$touch()
-        this.$v.formTienda.phone.$touch()
-        this.$v.formTienda.descripcion.$touch()
-        if (!this.$v.formTienda.name.$error && !this.$v.formTienda.phone.$error && !this.$v.formTienda.descripcion.$error) {
-          this.slide = 3
-        }
+      } */
+      this.$v.formTienda.name.$touch()
+      this.$v.formTienda.phone.$touch()
+      this.$v.formTienda.descripcion.$touch()
+      if (!this.$v.formTienda.name.$error && !this.$v.formTienda.phone.$error && !this.$v.formTienda.descripcion.$error) {
+        this.slide = 3
       }
     },
     finalizar () {
@@ -341,7 +341,7 @@ export default {
       }
     },
     async representante_img () {
-      this.$q.loading.show()
+      /* this.$q.loading.show()
       if (this.imgR) {
         var formData = new FormData()
         formData.append('files', this.imgR)
@@ -361,10 +361,10 @@ export default {
             this.$q.loading.hide()
           }
         })
-      }
+      } */
     },
     async identificacion_img (val) {
-      this.$q.loading.show()
+      /* this.$q.loading.show()
       if (this.imgI) {
         var formData = new FormData()
         formData.append('files', this.imgI)
@@ -384,7 +384,7 @@ export default {
             this.$q.loading.hide()
           }
         })
-      }
+      } */
     },
     async perfil_img () {
       this.$q.loading.show()
