@@ -187,6 +187,30 @@ class UploadController {
     }
   }
 
+  async subirImgEspacioPerfil ({ request, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    var profilePic = request.file('files', {
+      types: ['image'],
+      size: '25mb'
+    })
+    if (profilePic) {
+      if (Helpers.appRoot('storage/uploads/hospedajeFiles')) {
+        await profilePic.move(Helpers.appRoot('storage/uploads/hospedajeFiles'), {
+          name: user._id.toString(),
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      if (!profilePic.moved()) {
+        return profilePic.error()
+      } else {
+        response.send(true)
+      }
+    }
+  }
+
   async subirimgtiendaById ({ request, response, auth }) {
     let codeFile = randomize('Aa0', 30)
     let user = (await auth.getUser()).toJSON()

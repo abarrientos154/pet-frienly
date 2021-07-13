@@ -196,26 +196,25 @@ class UserController {
         }
         images.push(profilePic.fileName)
       }
-      let codeFile = randomize('Aa0', 30)
+      let body = dat
+      body.status = 0 // Estatus para verificacion del Proveedor
+      body.roles = [4]
+      body.images_ident = images
+      body.my_space.qualification = 0
+      const user = await User.create(body)
+
       const profilePic2 = request.file('PFiles', {
         types: ['image']
       })
       if (Helpers.appRoot('storage/uploads/hospedejeFiles')) {
         await profilePic2.move(Helpers.appRoot('storage/uploads/hospedajeFiles'), {
-          name: codeFile,
+          name: user._id.toString(),
           overwrite: true
         })
       } else {
         mkdirp.sync(`${__dirname}/storage/Excel`)
       }
-      const image = { name: profilePic2.fileName }
-      let body = dat
-      const rol = 4 // Rol hospedador
-      body.status = 0 // Estatus para verificacion del Proveedor
-      body.roles = [rol]
-      body.spaceFile = image
-      body.identificationFiles = images
-      const user = await User.create(body)
+
       const profilePic3 = request.file('RLFiles', {
         types: ['image']
       })
@@ -227,73 +226,15 @@ class UserController {
       } else {
         mkdirp.sync(`${__dirname}/storage/Excel`)
       }
-      const data = { name: profilePic3.fileName }
       response.send(user)
     }
   }
 
-  async editHospedador({ request, response }) {
-    var dat = request.only(['dat'])
-    dat = JSON.parse(dat.dat)
-    let images = dat.identificationFiles
-    if (dat.IImg) {
-      images = []
-      for (let i = 0; i < 2; i++) {
-        let codeFile = randomize('Aa0', 30)
-        const profilePic = request.file('IFiles' + i, {
-          types: ['image']
-        })
-        if (Helpers.appRoot('storage/uploads/identificacionFiles')) {
-          await profilePic.move(Helpers.appRoot('storage/uploads/identificacionFiles'), {
-            name: codeFile,
-            overwrite: true
-          })
-        } else {
-          mkdirp.sync(`${__dirname}/storage/Excel`)
-        }
-        images.push(profilePic.fileName)
-      }
-    }
-    let image = dat.spaceFile
-    if (dat.PImg) {
-      let codeFile = randomize('Aa0', 30)
-      const profilePic2 = request.file('PFiles', {
-        types: ['image']
-      })
-      if (Helpers.appRoot('storage/uploads/hospedejeFiles')) {
-        await profilePic2.move(Helpers.appRoot('storage/uploads/hospedajeFiles'), {
-          name: codeFile,
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-      image = { name: profilePic2.fileName }
-    }
-    let body = dat
-    let contraseña = body.password
-    body.spaceFile = image
-    body.identificationFiles = images
-    if (body.RLImg) {
-      const profilePic3 = request.file('RLFiles', {
-        types: ['image']
-      })
-      if (Helpers.appRoot('storage/uploads/perfil')) {
-        await profilePic3.move(Helpers.appRoot('storage/uploads/perfil'), {
-          name: body._id.toString(),
-          overwrite: true
-        })
-      } else {
-        mkdirp.sync(`${__dirname}/storage/Excel`)
-      }
-      const data = { name: profilePic3.fileName }
-    }
-    delete body.RLImg
-    delete body.PImg
-    delete body.IImg
-    delete body.password
-    const user = await User.where('_id', body._id).update(body)
-    response.send(user)
+  async editHospedador({ request, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    let body = request.all()
+    let modificar = await User.where('_id', user._id).update(body)
+    response.send(modificar)
   }
 
   async filtrarTiendas({ response, request }) {

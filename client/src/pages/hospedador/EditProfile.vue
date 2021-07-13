@@ -1,5 +1,12 @@
 <template>
   <div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+        <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+        </div>
+        <div class="col-10 text-white text-subtitle1 text-center">Mi perfil</div>
+    </q-header>
+
     <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
       <!-- <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
@@ -72,9 +79,10 @@
 
           <div class="column items-center q-mb-lg">
             <q-avatar rounded style="height: 150px; width: 200px;" class="bg-secondary q-mb-sm">
-              <q-img style="height: 100%;" :src="perfilImg != '' ? perfilImg : ''">
-                <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;"/>
-                <q-icon name="backup" class="absolute-center" size="50px" color="white" />
+              <q-img style="height: 100%;" :src="baseuEspacio + form._id">
+                <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                  <q-icon name="backup" class="absolute-center" size="50px" color="white" />
+                </q-file>
               </q-img>
             </q-avatar>
             <div>Carga tu foto de perfil</div>
@@ -110,7 +118,7 @@
           <div class="q-mb-lg text-center text-h5 text-grey-6">Datos de espacios</div>
 
           <q-avatar rounded style="height: 250px; width: 100%;" class="bg-secondary q-mb-sm">
-            <q-img style="height: 100%;" :src="perfilImg != '' ? perfilImg : ''">
+            <q-img style="height: 100%;" :src="baseuEspacio + form._id">
               <q-icon name="image" class="absolute-center" size="50px" color="white" />
             </q-img>
           </q-avatar>
@@ -218,11 +226,11 @@ export default {
           this.baseuEspacio = env.apiUrl + 'espacio_img/'
           // console.log(this.form)
           console.log(this.formMySpace)
-          this.representImg = this.baseu + this.form._id
+          /* this.representImg = this.baseu + this.form._id
           this.identificacionImg.push(this.baseuIdentif + this.form.identificationFiles[0])
           this.identificacionImg.push(this.baseuIdentif + this.form.identificationFiles[1])
           this.perfilImg = this.baseuEspacio + this.form.spaceFile.name
-          this.terminos = true
+          this.terminos = true */
         }
       })
     },
@@ -233,9 +241,6 @@ export default {
           this.paisUser = this.paises.filter(v => v._id === this.formMySpace.pais_id)
           this.selectPais = this.paisUser[0].ciudades
           this.cityUser = this.selectPais.filter(v => v._id === this.formMySpace.ciudad_id)
-          console.log(this.paisUser)
-          console.log(this.cityUser)
-          console.log(this.paises)
         }
       })
     },
@@ -267,27 +272,31 @@ export default {
       }
     },
     represent_img () {
-      /* this.RLImg = this.img
-      this.representImg = URL.createObjectURL(this.img)
-      this.img = null
-      this.form.RLImg = this.RLImg */
     },
     perfil_img () {
-      this.PImg = this.img
-      this.perfilImg = URL.createObjectURL(this.img)
-      this.img = null
-      this.form.PImg = this.PImg
+      this.$q.loading.show()
+      if (this.img) {
+        var formData = new FormData()
+        formData.append('files', this.img)
+        this.$api.post('subir_img_espacio_perfil', formData, {
+          headers: {
+            'Content-Type': undefined
+          }
+        }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Foto actualizada',
+              color: 'positive'
+            })
+            location.reload()
+            this.$q.loading.hide()
+          } else {
+            this.$q.loading.hide()
+          }
+        })
+      }
     },
     identificacion_img () {
-      /* this.IImg[this.idt] = this.img
-      this.identificacionImg[this.idt] = URL.createObjectURL(this.img)
-      this.img = null
-      this.form.IImg = this.IImg
-      if (this.idt === 1) {
-        this.idt = 0
-      } else {
-        this.idt++
-      } */
     },
     modificarPerfil () {
       // this.$v.form.$touch()
@@ -298,22 +307,7 @@ export default {
         })
         this.form.my_space = this.formMySpace
         console.log(this.form)
-        var formData = new FormData()
-        // var files = []
-        var files2 = []
-        // files[0] = this.RLImg
-        files2[0] = this.PImg
-        /* for (let i = 0; i < this.IImg.length; i++) {
-          formData.append('IFiles' + i, this.IImg[i])
-        } */
-        // formData.append('RLFiles', files[0])
-        formData.append('PFiles', files2[0])
-        formData.append('dat', JSON.stringify(this.form))
-        this.$api.post('update_hospedador', formData, {
-          headers: {
-            'Content-Type': undefined
-          }
-        }).then(res => {
+        this.$api.post('update_hospedador', this.form).then(res => {
           if (res) {
             this.$q.notify({
               message: 'Tu perfil a sido actualizado correctamente',
