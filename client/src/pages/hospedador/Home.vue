@@ -6,7 +6,7 @@
 
     <div class="row">
       <div class="col-6">
-        <img style="height: 150px; width:100%" :src="hospedador.spaceFile ? baseu + hospedador.spaceFile.name : ''"/>
+        <img style="height: 150px; width:100%" :src="baseu + hospedador._id"/>
         <div class="row items-center">
           <q-rating class="col-11" v-model="ratingModel" color="orange" readonly icon="star" size="25px"/>
           <div class="col-1 text-green-9 text-bold">({{this.ratingModel}})</div>
