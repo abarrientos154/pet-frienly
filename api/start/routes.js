@@ -49,8 +49,11 @@ addPrefixToGroup(
     Route.get("cityByCountry/:id", "CiudadController.cityByCountry")
     Route.get("habitacion_type", "HabitacionController.index")
     Route.get("validate_email/:email", "UserController.validateEmail")
+    Route.get("email_send_app/:email", "UserController.recuperacionapp")
+    Route.put("actualizar_pass/:code", "UserController.actualizarPass");
 
     Route.get('perfil_img/:file', 'UploadController.getFileByDirectoryPerfil')
+    Route.get('obtener_logo', 'UploadController.getLogo')
     Route.get('tienda_img/:file', 'UploadController.getFileByDirectoryTienda')
     Route.get('espacio_img/:file', 'UploadController.getFileByDirectoryEspacioDescanso')
     Route.get('identificacion_img/:file', 'UploadController.getFileByDirectoryIdentificacion')
@@ -58,14 +61,14 @@ addPrefixToGroup(
     Route.get('hospedajes_img/:file', 'UploadController.getFileByDirectoryHospedajes')
     Route.get('mascota_img/:file', 'UploadController.getFileByDirectoryMascota')
     Route.get('servicio_img/:file', 'UploadController.getFileByDirectoryServicio')
-    
+
     Route.post("user_by_rol", "UserController.userByRol") // metodo para obtener usuarios segun el rol
     Route.get("user_by_id/:id", "UserController.userById") // metodo para obtener informacion del usuario por id del mismo
-    
+
     Route.get('producto', 'ProductoController.index')
     Route.get('producto/:id', 'ProductoController.show')
     Route.get('producto_by_proveedor/:proveedor_id', 'ProductoController.productoByProveedor')
-    
+
     Route.get('hospedaje', 'HospedajeController.index')
     Route.get('hospedaje/:id', 'HospedajeController.show')
   })
@@ -86,16 +89,17 @@ addPrefixToGroup(
     Route.post("update_hospedador", "UserController.editHospedador")
     Route.put('datosnew/:id', 'UserController.updatedata')
     Route.get('clientById/:id', 'UserController.clientById')
-    
+
     Route.get('mascota', 'MascotaController.index')
     Route.post('mascota', 'MascotaController.store')
     Route.get('mascota_by_user_id/:user_id', 'MascotaController.mascotaByUserId')
     Route.get('mascota/:id', 'MascotaController.show')
     Route.put('mascota/:id', 'MascotaController.update')
     Route.delete('mascota/:id', 'MascotaController.destroy')
-    
+
     Route.post('producto', 'UploadController.registrarProducto')
     Route.get('categorias', 'ProductoController.categorias')
+    Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
     Route.put('producto/:id', 'ProductoController.update')
     Route.delete('producto/:id', 'ProductoController.destroy')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')

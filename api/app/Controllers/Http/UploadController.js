@@ -158,6 +158,10 @@ class UploadController {
     }
   }
 
+   async getLogo ({ request, response, auth }) {
+    response.download(Helpers.appRoot('public/logo.png'))
+   }
+
   async subirImgIdentidad ({ request, response, auth, params }) {
     let user = (await auth.getUser()).toJSON()
     let val = params.val

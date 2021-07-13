@@ -130,7 +130,7 @@ export default {
     async getUser () {
       await this.$api.get('clientById/' + this.$route.params.id).then(res => {
         if (res) {
-          this.imgPerfil = env.apiUrl + '/perfil_img/' + res._id
+          this.imgPerfil = env.apiUrl + 'perfil_img/' + res._id
           this.form.name = res.name
           this.form.email = res.email
           this.form.phone = res.phone

@@ -87,6 +87,7 @@
           </q-card-section>
         </q-card>
       </q-list>
+      <div v-else class="row items-center justify-center" style="height: 100px;">No hay arriendos en curso</div>
 
     <div class="q-mb-xl">
       <div class="text-subtitle1 text-bold">Filtra tus arriendos</div>
@@ -203,6 +204,7 @@
           </q-card-section>
         </q-card>
       </q-list>
+      <div v-else class="row items-center justify-center" style="height: 100px;">No hay arriendos actualmente</div>
 
       <div class="column items-center q-mb-xl">
         <q-btn v-if="arriendos.length > 3" @click="ver = !ver" class="q-pa-sm" color="primary" :label="ver ? 'Ver menos' :'Ver más'" style="width: 70%;" no-caps/>

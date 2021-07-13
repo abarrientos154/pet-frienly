@@ -39,7 +39,7 @@
             <q-card style="border-radius: 50px; width:140px; height:140px" clickable v-ripple v-for="(item, index) in tienda.servicios" :key="index"
             @click="servicio = item, verServicio = true">
               <q-img :src="baseuServicios + item._id" style="height: 100%; width: 100%; border-radius: 50px" >
-                <div class="full-width text-center absolute-bottom">{{item.servicio.name}}</div>
+                <div class="full-width text-center absolute-bottom bg-primary">{{item.servicio.name}}</div>
               </q-img>
             </q-card>
           </div>
@@ -137,6 +137,7 @@
 
       <div class="text-h6 text-grey-8 text-center q-mb-md">Busca por categoria de productos</div>
       <q-scroll-area
+          v-if="categorias.length"
           horizontal
           style="height: 60px;"
         >
@@ -147,6 +148,7 @@
             </div>
           </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 60px;">No hay productos que buscar</div>
 
         <div class="row justify-around q-mt-xs">
           <div class="col-6 row justify-center" v-for="(item, index) in productosFilter" :key="index">
@@ -551,7 +553,6 @@ export default {
     this.baseuproductos = env.apiUrl + 'productos_img/'
     this.baseuServicios = env.apiUrl + 'servicio_img/'
     this.getUser()
-    this.getCategorias()
     if (this.$route.params.id) {
       this.id = this.$route.params.id
       this.getTienda(this.id)
@@ -567,6 +568,7 @@ export default {
             this.id = this.user._id
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
+            this.getCategorias(this.user._id)
           } else {
             this.$api.get('cityByCountry/' + this.user.country_id).then(v => {
               if (v) {
@@ -581,6 +583,7 @@ export default {
       await this.$api.get('tienda_by_id/' + id).then(v => {
         if (v) {
           this.tienda = v.tienda
+          this.getCategorias(v._id)
           if (this.user._id === v._id) {
             this.miTienda = true
           } else {
@@ -610,8 +613,8 @@ export default {
         }
       })
     },
-    getCategorias () {
-      this.$api.get('categorias').then(res => {
+    getCategorias (id) {
+      this.$api.get('categorias_by_user/' + id).then(res => {
         if (res) {
           this.categorias = res
         }
