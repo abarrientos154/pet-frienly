@@ -46,13 +46,16 @@
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
-              <div class="absolute-bottom q-pl-md column justify-end q-mb-sm">
-                <div class="row no-wrap items-center" style="width:100%">
-                  <div class="text-white text-bold ellipsis">{{store.tienda.name}}</div>
-                </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-white text-subtitle2 col-10">{{store.city}}, {{store.tienda.direccion}}</div>
+              <div class="absolute-bottom column justify-end q-mb-md">
+                <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
+                <div class="bg-primary q-pl-sm">
+                  <div class="row no-wrap items-center" style="width:100%">
+                    <div class="text-white text-subtitle1 ellipsis">{{store.tienda.name}}</div>
+                  </div>
+                  <div class="row no-wrap items-center" style="width:100%">
+                    <q-icon name="place" class="q-mr-xs text-white"/>
+                    <div class="ellipsis text-caption text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+                  </div>
                 </div>
               </div>
             </q-card>
@@ -71,14 +74,16 @@
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
-              <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
-                <q-rating readonly class="q-mb-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
-                <div class="row no-wrap items-center" style="width:100%">
-                  <div class="text-white text-bold ellipsis">{{store.tienda.name}}</div>
-                </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-subtitle2 text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+              <div class="absolute-bottom column justify-end q-mb-md">
+                <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
+                <div class="bg-primary q-pl-sm">
+                  <div class="row no-wrap items-center" style="width:100%">
+                    <div class="text-white text-subtitle1 ellipsis">{{store.tienda.name}}</div>
+                  </div>
+                  <div class="row no-wrap items-center" style="width:100%">
+                    <q-icon name="place" class="q-mr-xs text-white"/>
+                    <div class="ellipsis text-caption text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+                  </div>
                 </div>
               </div>
             </q-card>
