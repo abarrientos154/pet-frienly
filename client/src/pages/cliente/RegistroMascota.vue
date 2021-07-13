@@ -1,36 +1,43 @@
 <template>
- <div>
-   <div class="q-pa-lg">
-      <q-btn flat rounded color="primary" icon="arrow_back" @click="$router.push('/mascotas')"/>
-      <q-card style="height: 150px" class="q-mx-xl q-my-xl bg-grey">
-        <q-img style="height: 100%;" :src="files[0] ? petImg[0] : ''">
-        </q-img>
-      </q-card>
-      <div class="text-center text-h5 text-grey-8">Cuentanos de tu <br> mascota</div>
-      <div style="text-align: left; padding-top: 20px">
-      <div class="text-subtitle2 q-ml-md">Fotos de tu mascota</div>
-      <div class="text-overline q-ml-md">Puede cargar hasta 3 fotos</div>
-      <div class="row justify-around q-my-md">
-        <q-avatar square size="80px">
-          <img :src="files[0] ? petImg[0] : 'petnoimg.png'" style="width: 150%">
-            <q-file borderless v-model="files[0]" class="absolute-center button-subir" @input="changePetFile(0)" accept=".jpg, image/*" style="z-index:1">
-              <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-            </q-file>
-        </q-avatar>
-        <q-avatar square size="80px">
-          <img :src="files[1] ? petImg[1] : 'petnoimg.png'" style="width: 150%">
-            <q-file borderless v-model="files[1]" class="absolute-center button-subir" @input="changePetFile(1)" accept=".jpg, image/*" style="z-index:1">
-              <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-            </q-file>
-        </q-avatar>
-        <q-avatar square size="80px">
-          <img :src="files[2] ? petImg[2] : 'petnoimg.png'" style="width: 150%">
-            <q-file borderless v-model="files[2]" class="absolute-center button-subir" @input="changePetFile(2)" accept=".jpg, image/*" style="z-index:1">
-              <q-icon name="photo_camera" class="absolute-center" size="20px" color="white" />
-            </q-file>
-        </q-avatar>
+  <div>
+    <div class="q-my-lg q-mx-lg">
+      <q-btn flat round color="primary" icon="arrow_back" @click="$router.push('/mascotas')"/>
+    </div>
+
+    <div class="row justify-center q-mb-lg">
+      <q-img :src="petImg[files.length - 1]" style="width: 60%; height: 150px; border-radius: 5px;">
+        <div class="absolute-full column items-center justify-center">
+          <div class="text-center text-h5 text-bold">Cuentanos de tu <br> mascota</div>
+        </div>
+      </q-img>
+    </div>
+
+    <div>
+      <div class="text-subtitle2 q-ml-lg">Fotos de tu mascota</div>
+      <div class="text-overline q-ml-lg">Puede cargar hasta 3 fotos</div>
+      <div class="row">
+        <div class="column items-center" v-for="(item, i) in petImg" :key="i" style="width: 33%">
+          <q-avatar square size="90px">
+            <q-img :src="item" class="bg-grey" style="height: 100%">
+              <q-file borderless v-model="img" class="absolute-center button-subir" @input="changePetFile(i)" accept=".jpg, image/*">
+                <q-icon name="edit" class="absolute-center" size="25px" color="white" />
+              </q-file>
+            </q-img>
+          </q-avatar>
+        </div>
+        <div v-if="files.length < 3" class="column items-center" style="width: 33%">
+          <q-avatar square size="90px">
+            <q-img src="" class="bg-grey" style="height: 100%">
+              <q-file borderless v-model="img" class="absolute-center button-subir" @input="changePetFile()" accept=".jpg, image/*">
+                <q-icon name="photo_camera" class="absolute-center" size="25px" color="white" />
+              </q-file>
+            </q-img>
+          </q-avatar>
+        </div>
       </div>
-      </div>
+    </div>
+
+    <div class="q-pa-lg">
       <div>
         <div>Nombre de mascota</div>
         <div class="text-overline q-ml-md">Solo 25 caracteres</div>
@@ -85,7 +92,7 @@
         <q-btn rounded class="q-pa-sm" color="primary" :label="edit ? 'Actualizar Mascota' : 'Crear Mascota'" style="width: 70%;" @click="edit ? updatePet() : savePet()"/>
       </div>
     </div>
- </div>
+  </div>
 </template>
 
 <script>
@@ -100,8 +107,9 @@ export default {
       terms: false,
       form: {},
       index: [],
-      files: [null, null, null],
-      petImg: [null, null, null],
+      img: null,
+      files: [],
+      petImg: [],
       perfilFile: null,
       sizeDog: [
         { name: 'Pequeño', value: 1 },
@@ -257,9 +265,17 @@ export default {
         })
       }
     },
-    changePetFile (ind) {
-      if (this.files[ind]) { this.petImg[ind] = URL.createObjectURL(this.files[ind]) }
-      this.index[ind] = ind
+    changePetFile (i) {
+      if (this.img && i != null) {
+        this.files[i] = this.img
+        this.petImg[i] = URL.createObjectURL(this.img)
+        this.img = null
+      } else {
+        this.files.push(this.img)
+        this.petImg.push(URL.createObjectURL(this.img))
+        this.img = null
+        console.log(i)
+      }
     }
   }
 }
