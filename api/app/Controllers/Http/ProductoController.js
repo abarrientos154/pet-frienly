@@ -53,6 +53,17 @@ class ProductoController {
     response.send(categorias)
   }
 
+  async categoriasByUser ({ params, response, auth }) {
+    let categorias = (await Categoria.query().where({}).fetch()).toJSON()
+    let productos = (await Producto.query().where({proveedor_id: params.id}).fetch()).toJSON()
+    let filtrado = categorias.filter(v => {
+      if (productos.find(c => c.categoria_id === v._id)) {
+        return v
+      }
+    })
+    response.send(filtrado)
+  }
+
   async pedidos ({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
     let data

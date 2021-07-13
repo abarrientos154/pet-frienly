@@ -96,6 +96,7 @@ addPrefixToGroup(
     
     Route.post('producto', 'UploadController.registrarProducto')
     Route.get('categorias', 'ProductoController.categorias')
+    Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
     Route.put('producto/:id', 'ProductoController.update')
     Route.delete('producto/:id', 'ProductoController.destroy')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')
