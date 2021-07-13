@@ -4,42 +4,40 @@
       <div class="text-white text-subtitle1 text-center">{{rol === 4 ? 'Tu espacio' : hospedador.spaceFile ? hospedador.my_space.name : ''}}</div>
     </q-header>
 
-    <div class="row q-pa-sm">
-      <div class="col q-mr-sm" style="max-width: 250px;">
-        <q-avatar rounded style="height: 100px; width: 100%;" class="q-my-xs">
-          <q-img style="height: 100%;" :src="hospedador.spaceFile ? baseu + hospedador.spaceFile.name : ''"/>
-        </q-avatar>
-        <div class="row justify-between">
-          <q-rating v-model="ratingModel" color="grey" color-selected="orange-8" readonly size="18px"/>
-          <div class="q-pa-sm text-green-9 text-bold">{{"("}}{{this.ratingModel}}{{")"}}</div>
+    <div class="row">
+      <div class="col-6">
+        <img style="height: 150px; width:100%" :src="hospedador.spaceFile ? baseu + hospedador.spaceFile.name : ''"/>
+        <div class="row items-center">
+          <q-rating class="col-11" v-model="ratingModel" color="orange" readonly icon="star" size="25px"/>
+          <div class="col-1 text-green-9 text-bold">({{this.ratingModel}})</div>
         </div>
       </div>
-      <div class="col">
+      <div class="col-6 q-pl-sm">
         <div class="text-subtitle1 text-bold">Bienvenido</div>
-        <q-scroll-area class="q-mb-sm" style="height: 75px;">
-          <div class="text-caption">{{hospedador.my_space ? hospedador.my_space.description : ''}}</div>
-        </q-scroll-area>
-        <q-btn v-if="rol === 4" class="full-width" label="Editar perfil" color="primary" @click="$router.push('/editar_hospedador')" no-caps/>
+        <div>{{hospedador.my_space ? hospedador.my_space.description : ''}}</div>
+        <div v-if="rol === 4" class="q-pt-sm">
+          <q-btn label="Editar perfil" color="primary" no-caps style="width: 100%" to="/editar_hospedador"/>
+        </div>
       </div>
     </div>
 
-    <div>
-      <div class="text-subtitle1 text-bold">Informacion</div>
-      <div v-if="hospedador.my_space" class="row">
-        <div class="col q-mx-md">
-          <div class="text-subtitle3 text-bold text-grey-6">Ciudad</div>
-          <div class="text-caption text-grey-6">{{cityUser.name}}</div>
-          <div class="text-subtitle3 text-bold text-grey-6">Direccion</div>
-          <div class="text-caption text-grey-6">{{hospedador.my_space.direction}}</div>
-          <div class="text-subtitle3 text-bold text-grey-6">Correo de contacto</div>
-          <div class="text-caption text-grey-6">{{hospedador.my_space.email}}</div>
+    <div class="q-mt-md">
+      <div class="text-h6">Informacion</div>
+      <div v-if="hospedador.my_space" class="row q-mx-md">
+        <div class="col-6">
+          <div class="text-subtitle2 text-grey-8">Ciudad</div>
+          <div class="text-caption text-grey-8">{{cityUser.name}}</div>
+          <div class="text-subtitle2 text-grey-8">Direccion</div>
+          <div class="text-caption text-grey-8">{{hospedador.my_space.direction}}</div>
+          <div class="text-subtitle2 text-grey-8">Correo de contacto</div>
+          <div class="text-caption text-grey-8">{{hospedador.my_space.email}}</div>
         </div>
-        <div class="col q-mx-md">
-          <div class="text-subtitle3 text-bold text-grey-6">Horarios de atencóon</div>
-          <div class="text-caption text-grey-6">Apertura {{hospedador.my_space.hora_inicio}}</div>
-          <div class="text-caption text-grey-6">Cierre {{hospedador.my_space.hora_cierre}}</div>
-          <div class="text-subtitle3 text-bold text-grey-6">Telefono de contacto</div>
-          <div class="text-caption text-grey-6">{{hospedador.my_space.phone}}</div>
+        <div class="col-6">
+          <div class="text-subtitle2 text-grey-8">Horarios de atencóon</div>
+          <div class="text-caption text-grey-8">Apertura {{hospedador.my_space.hora_inicio}}</div>
+          <div class="text-caption text-grey-8">Cierre {{hospedador.my_space.hora_cierre}}</div>
+          <div class="text-subtitle2 text-grey-8">Telefono de contacto</div>
+          <div class="text-caption text-grey-8">{{hospedador.my_space.phone}}</div>
         </div>
       </div>
     </div>
@@ -77,11 +75,6 @@
           <q-img :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
-          <div class="row justify-end q-mb-md q-mr-sm" style="margin-top: -70px;">
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_car" size="50px" style="border-radius: 10px;"/>
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="pool" size="50px" style="border-radius: 10px;"/>
-            <q-avatar rounded class="bg-orange-2 text-black q-mx-xs" icon="directions_walk" size="50px" style="border-radius: 10px;"/>
-          </div>
           <q-card-section class="row justify-between">
             <div>
               <div class="text-subtitle2" style="font-size: 13px">{{item.name}}</div>
@@ -90,7 +83,7 @@
                   <div class="text-subtitle2" style="font-size: 12px">{{item.state}}</div>
               </div>
             </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{item.price}} por noche</q-btn>
+            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{formatPrice(item.price)}} por noche</q-btn>
           </q-card-section>
         </q-card>
       </q-list>
@@ -99,6 +92,11 @@
         <q-btn class="q-pa-sm" v-if="allhospedajes.length > 3" color="primary" :label="ver ? 'Ver menos' : 'Ver más'" style="width: 70%;" @click="verMas()" no-caps/>
       </div>
     </div>
+
+    <q-page-sticky v-if="rol === 4" position="bottom-right" :offset="[18, 18]">
+      <q-fab color="primary" icon="add" label="Nuevo" no-caps direction="up" vertical-actions-align="right" @click="$router.push('/nuevo_espacio')">
+      </q-fab>
+    </q-page-sticky>
   </div>
 </template>
 
@@ -179,6 +177,10 @@ export default {
           this.$q.loading.hide()
         }
       })
+    },
+    formatPrice (value) {
+      const val = (value / 1).toFixed(0).replace('.', ',')
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
     },
     verMas () {
       this.ver = !this.ver

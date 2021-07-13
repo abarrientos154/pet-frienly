@@ -4,7 +4,7 @@
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
           <q-btn flat round color="primary" icon="arrow_back" @click="$router.go(-1)"/>
-          <div class="q-mb-lg text-center text-h5 text-grey-8">Representante Legal</div>
+          <div class="q-mb-lg text-center text-h5 text-grey-8">Datos del Aliado</div>
 
           <div class="column items-center q-mb-lg">
             <q-avatar rounded style="height: 200px; width: 90%; border-radius: 25px;" class="row justify-center">
@@ -54,7 +54,7 @@
           </div>
           <div>
             Correo de contacto
-            <q-input filled v-model="form.email"  dense placeholder="micorreo@petfriendly.com"
+            <q-input filled v-model="form.email"  dense placeholder="micorreo@email.com"
             error-message="Este campo es requerido" :error="$v.form.email.$error" @blur="$v.form.email.$touch()"/>
           </div>
           <div>
@@ -75,12 +75,23 @@
           </div>
           <div>
               <div class="text-caption q-mb-sm">Imágenes de documento de identificación</div>
-              <div style="width: 50%;" class="q-mb-sm">
-                <q-avatar rounded style="width: 100%;" class="bg-primary">
-                  <q-file borderless :disable="identificacion.length < 2 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
-                    <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
-                  </q-file>
-                </q-avatar>
+              <div class="row q-gutter-sm">
+                <div class="col q-mb-sm">
+                  <div class="text-caption">Carga la parte frontal de tu documento de identidad</div>
+                  <q-avatar rounded style="width: 100%;" class="bg-primary">
+                    <q-file borderless :disable="identificacion.length < 1 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
+                      <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
+                    </q-file>
+                  </q-avatar>
+                </div>
+                <div class="col q-mb-sm">
+                  <div class="text-caption">Carga la parte trasera de tu documento de identidad</div>
+                  <q-avatar rounded style="width: 100%;" class="bg-primary">
+                    <q-file borderless :disable="identificacion.length < 2 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
+                      <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
+                    </q-file>
+                  </q-avatar>
+                </div>
               </div>
               <div class="row">
                 <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
@@ -129,7 +140,7 @@
          </div>
          <div>
            Correo de contacto tienda
-           <q-input filled v-model="formTienda.email"  dense placeholder="micorreo@petfriendly.com "
+           <q-input filled v-model="formTienda.email"  dense placeholder="micorreo@email.com"
            error-message="Este campo es requerido" :error="$v.formTienda.email.$error" @blur="$v.formTienda.email.$touch()"/>
          </div>
          <div>

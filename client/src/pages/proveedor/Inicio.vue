@@ -6,16 +6,17 @@
 
     <div class="row q-pa-sm">
       <div class="col-6">
-        <q-img style="height: 100%; width: 100%" :src="baseuTienda + id"/>
-        <div class="q-gutter-y-md row">
+        <img style="height: 150px; width: 100%" :src="baseuTienda + id"/>
+        <div class="row items-center">
           <q-rating
             v-model="tienda.calificacion"
+            class="col-11"
             color="orange"
             readonly
             size="25px"
             icon="star"
           />
-        <div class="q-pa-sm text-green-9 text-bold">({{tienda.calificacion ? tienda.calificacion : 0}})</div>
+        <div class="col-1 text-green-9 text-bold">({{tienda.calificacion ? tienda.calificacion : 0}})</div>
         </div>
       </div>
       <div class="col-6 q-pl-sm">
@@ -38,7 +39,7 @@
             <q-card style="border-radius: 50px; width:140px; height:140px" clickable v-ripple v-for="(item, index) in tienda.servicios" :key="index"
             @click="servicio = item, verServicio = true">
               <q-img :src="baseuServicios + item._id" style="height: 100%; width: 100%; border-radius: 50px" >
-                <div class="full-width text-center absolute-bottom">{{item.servicio.name}}</div>
+                <div class="full-width text-center absolute-bottom bg-primary">{{item.servicio.name}}</div>
               </q-img>
             </q-card>
           </div>
@@ -113,7 +114,7 @@
                 <div class="col-8">
                   <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
                     style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                    ${{item.price}}
+                    ${{formatPrice(item.price)}}
                   </div>
                   <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
                     style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
@@ -136,16 +137,18 @@
 
       <div class="text-h6 text-grey-8 text-center q-mb-md">Busca por categoria de productos</div>
       <q-scroll-area
+          v-if="categorias.length"
           horizontal
           style="height: 60px;"
         >
           <div class="row no-wrap q-gutter-md items-center">
             <div v-for="(item, index) in categorias" :key="index">
-              <q-btn no-caps :color="filterSelec === item._id ? 'positive' : 'grey'" text-color="grey-10" :label="item.name" style="min-width:150px"
+              <q-btn no-caps :color="filterSelec === item._id ? 'primary' : 'grey'" :text-color="filterSelec === item._id ? 'white' : 'grey-10'" :label="item.name" style="min-width:150px"
               @click="filtrar(item._id)" />
             </div>
           </div>
       </q-scroll-area>
+      <div v-else class="row items-center justify-center" style="height: 60px;">No hay productos que buscar</div>
 
         <div class="row justify-around q-mt-xs">
           <div class="col-6 row justify-center" v-for="(item, index) in productosFilter" :key="index">
@@ -158,7 +161,7 @@
                   <div class="col-8">
                     <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                      ${{item.price}}
+                      ${{formatPrice(item.price)}}
                     </div>
                     <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
@@ -194,7 +197,7 @@
                   <div class="col-8">
                     <div v-if="!item.oferta" class="bg-primary text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
-                      ${{item.price}}
+                      ${{formatPrice(item.price)}}
                     </div>
                     <div v-if="item.oferta" class="bg-orange-9 text-subtitle2 text-white q-px-sm ellipsis"
                       style="border-top-right-radius: 5px; border-bottom-right-radius: 5px">
@@ -221,7 +224,7 @@
     </div>
 
     <q-page-sticky v-if="miTienda" position="bottom-right" :offset="[18, 18]">
-      <q-fab color="primary" icon="add" direction="up" vertical-actions-align="right">
+      <q-fab color="primary" icon="add" label="Nuevo" no-caps direction="up" vertical-actions-align="right">
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
           color="primary" icon="add_shopping_cart" label="Producto" @click="$router.push('/registro_producto')" />
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
@@ -249,7 +252,7 @@
             </div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold">Valor por hora: </div>
-              <div class="text-subtitle1 q-pl-sm">${{servicio.price}}</div>
+              <div class="text-subtitle1 q-pl-sm">${{formatPrice(servicio.price)}}</div>
             </div>
           </div>
         </div>
@@ -290,7 +293,7 @@
               <div class="q-py-md">
                 <div class="text-h6">{{producto.name}}</div>
                 <div class="text-subtitle1 text-grey-8">Disponible - {{producto.cantidad}} unidades</div>
-                <div class="text-primary text-h5 q-py-md">$ {{producto.oferta ? producto.oferta_price : producto.price}}</div>
+                <div class="text-primary text-h5 q-py-md">$ {{producto.oferta ? formatPrice(producto.oferta_price) : formatPrice(producto.price)}}</div>
                 <div class="text-h6">Descripción</div>
                 <div class="text-subtitle1 text-grey-8">{{producto.descripcion}}</div>
               </div>
@@ -550,7 +553,6 @@ export default {
     this.baseuproductos = env.apiUrl + 'productos_img/'
     this.baseuServicios = env.apiUrl + 'servicio_img/'
     this.getUser()
-    this.getCategorias()
     if (this.$route.params.id) {
       this.id = this.$route.params.id
       this.getTienda(this.id)
@@ -566,6 +568,7 @@ export default {
             this.id = this.user._id
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
+            this.getCategorias(this.user._id)
           } else {
             this.$api.get('cityByCountry/' + this.user.country_id).then(v => {
               if (v) {
@@ -580,6 +583,7 @@ export default {
       await this.$api.get('tienda_by_id/' + id).then(v => {
         if (v) {
           this.tienda = v.tienda
+          this.getCategorias(v._id)
           if (this.user._id === v._id) {
             this.miTienda = true
           } else {
@@ -609,8 +613,8 @@ export default {
         }
       })
     },
-    getCategorias () {
-      this.$api.get('categorias').then(res => {
+    getCategorias (id) {
+      this.$api.get('categorias_by_user/' + id).then(res => {
         if (res) {
           this.categorias = res
         }

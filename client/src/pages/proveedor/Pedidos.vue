@@ -61,7 +61,7 @@
               <div v-if="item.status === 'En Local'" class="q-mb-sm">
                 <div class="text-caption text-bold">Estado del pedido</div>
                 <div class="text-caption text-italic q-mb-sm">Seleccione el estado que tendrá el pedido.</div>
-                <q-select dense filled v-model="item.newStatus" :options="['Enviado']"/>
+                <q-select dense filled v-model="item.newStatus" :options="['Enviado']" placeholder="En local"/>
               </div>
               <div v-if="item.status === 'En Local'" class="q-my-sm">
                 <div class="text-caption text-bold">Estado del pedido</div>
@@ -70,11 +70,11 @@
             </div>
             <div v-if="!item.detalles" class="row justify-center q-py-lg">
                 <q-btn no-caps class="q-py-sm" color="primary" label="Ver detalles" style="width: 70%"
-                @click="item.newStatus = '', item.detalles = true"/>
+                @click="item.newStatus = 'En local', item.detalles = true"/>
             </div>
             <div v-else>
                 <div class="column items-center q-py-lg">
-                    <q-btn v-if="item.status === 'En Local'" :disable="item.newStatus !== '' ? false : true" no-caps class="q-py-sm" color="primary" label="Cambiar estado" style="width: 70%"
+                    <q-btn v-if="item.status === 'En Local'" :disable="item.newStatus !== 'Enviado' ? true : false" no-caps class="q-py-sm" color="primary" label="Cambiar estado" style="width: 70%"
                     @click="cambiarStatus(item)"/>
                     <q-btn no-caps flat class="q-mt-sm" color="white" text-color="grey-8" label="Ver menos" style="width: 70%"
                     @click="item.detalles = false"/>
@@ -82,7 +82,7 @@
             </div>
         </q-card>
       </div>
-    <div v-else class="text-center">No hay pedidos pendientes</div>
+    <div v-else class="row items-center justify-center" style="height: 100px;">No hay pedidos pendientes</div>
 
     <div class="q-mb-lg">
       <div class="text-subtitle1 text-bold">Filtra tus pedidos</div>
@@ -170,7 +170,7 @@
             </div>
             <div v-if="!item.detalles" class="row justify-center q-py-lg">
                 <q-btn no-caps class="q-py-sm" color="primary" label="Ver detalles" style="width: 70%"
-                @click="item.newStatus = '', item.detalles = true"/>
+                @click="item.detalles = true"/>
             </div>
             <div v-else>
                 <div class="column items-center q-py-lg">
@@ -180,7 +180,7 @@
             </div>
         </q-card>
       </div>
-      <div v-else class="text-center">No hay pedidos completados</div>
+      <div v-else class="row items-center justify-center" style="height: 100px;">No hay pedidos completados</div>
 
       <div class="column items-center q-mb-xl">
         <q-btn v-if="allPedidos.length > 4" @click="verMas()" class="q-pa-sm" color="primary" :label="ver ? 'Ver menos' :'Ver más'" style="width: 70%;" no-caps/>

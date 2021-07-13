@@ -41,7 +41,7 @@
           </div>
         </div>
 
-        <div class="colunm justify-center q-pa-sm">
+        <!-- <div class="colunm justify-center q-pa-sm">
           <div class="row justify-between q-mr-xl q-ml-xl q-mt-sm q-mb-sm">
             <q-btn  round color="grey-5" style="width: 40px; height: 40px">
               <img src="icons/Iconos_Redes.png" style="width: 20px; height: 20px"/>
@@ -53,7 +53,7 @@
               <img src="icons/Iconos_Redes_3.png" style="width: 20px; height: 20px"/>
             </q-btn>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <q-dialog v-model="cambio">

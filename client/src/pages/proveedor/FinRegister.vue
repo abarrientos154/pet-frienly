@@ -3,9 +3,10 @@
       <q-carousel
         class="window-height q-pa-none"
         animated
+        padding
         swipeable
         v-model="slide"
-        ref="carousel2">
+        ref="carousel">
         <q-carousel-slide :name="1" class="q-pa-none" img-src="https://cdn.quasar.dev/img/mountains.jpg">
           <div class="absolute-center q-py-sm full-width">
             <div class="row justify-end q-mb-md">

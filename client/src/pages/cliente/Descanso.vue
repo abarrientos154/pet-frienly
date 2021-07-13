@@ -18,14 +18,16 @@
             <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
-            <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
-              <q-rating readonly class="q-mt-lg q-mb-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
-              <div class="row no-wrap items-center" style="width:100%">
-                <div class="text-white text-bold ellipsis">{{item.my_space.name}}</div>
-              </div>
-              <div class="row no-wrap items-center" style="width:100%">
-                <q-icon name="place" class="q-mr-xs text-white"/>
-                <div class="ellipsis text-white text-subtitle2">{{item.city}}, {{item.my_space.direction}}</div>
+            <div class="absolute-bottom column justify-end q-mb-md">
+              <q-rating readonly class="q-mt-lg q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
+              <div class="bg-primary q-pl-sm">
+                <div class="row no-wrap items-center" style="width:100%">
+                  <div class="text-white text-subtitle1 ellipsis">{{item.my_space.name}}</div>
+                </div>
+                <div class="row no-wrap items-center" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs text-white"/>
+                  <div class="ellipsis text-white text-caption">{{item.city}}, {{item.my_space.direction}}</div>
+                </div>
               </div>
             </div>
           </q-card>
@@ -62,14 +64,16 @@
             <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
-            <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
-              <q-rating readonly class="q-mt-lg q-mb-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
-              <div class="row no-wrap items-center" style="width:100%">
-                <div class="text-white text-bold ellipsis">{{item.my_space.name}}</div>
-              </div>
-              <div class="row no-wrap items-center" style="width:100%">
-                <q-icon name="place" class="q-mr-xs text-white"/>
-                <div class="ellipsis text-white text-subtitle2">{{item.city}}, {{item.my_space.direction}}</div>
+            <div class="absolute-bottom column justify-end q-mb-md">
+              <q-rating readonly class="q-mt-lg q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
+              <div class="bg-primary q-pl-sm">
+                <div class="row no-wrap items-center" style="width:100%">
+                  <div class="text-white text-subtitle1 ellipsis">{{item.my_space.name}}</div>
+                </div>
+                <div class="row no-wrap items-center" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs text-white"/>
+                  <div class="ellipsis text-white text-caption">{{item.city}}, {{item.my_space.direction}}</div>
+                </div>
               </div>
             </div>
           </q-card>
@@ -112,7 +116,7 @@ export default {
     },
     async getHost () {
       await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
-        this.imgProfile = env.apiUrl + '/espacio_img/'
+        this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           this.mejorCalificados = res
           if (!this.$route.params.type) {
