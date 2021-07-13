@@ -2,7 +2,6 @@
   <div>
     <div style="height: 300px; width: 100%;" class="bg-grey">
       <q-img src="nopublicidad.jpg" style="height: 300px; width: 100%" />
-      <q-btn no-caps color="primary" class="q-mt-md q-ml-md absolute-top" label="Editar Perfil" @click="$router.push('/editar-perfil/' + user._id)"/>
     </div>
 
     <div class="q-mx-md">
@@ -129,13 +128,13 @@
               <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
-              <div class="absolute-bottom q-ml-md column justify-end q-mb-sm">
+              <div class="absolute-bottom q-pl-sm column justify-end q-mb-md bg-primary">
                 <div class="row no-wrap items-center" style="width:100%">
-                  <div class="text-white text-bold ellipsis">{{item.my_space.name}}</div>
+                  <div class="text-white text-subtitle1 ellipsis">{{item.my_space.name}}</div>
                 </div>
                 <div class="row no-wrap items-center" style="width:100%">
                   <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-white text-subtitle2 q-mr-sm">{{item.city}}, {{item.my_space.direction}}</div>
+                  <div class="ellipsis text-white text-caption q-mr-sm">{{item.city}}, {{item.my_space.direction}}</div>
                 </div>
               </div>
             </q-card>
@@ -146,8 +145,13 @@
         <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/descanso')"/>
       </div>
     </div>
+
     <q-page-sticky position="bottom-right" :offset="[18, 18]">
-      <q-fab color="primary" icon="pets" direction="up" vertical-actions-align="right" @click="$router.push('/mascotas')">
+      <q-fab color="primary" icon="pets" label="Mis acciones" no-caps direction="up" vertical-actions-align="right">
+        <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
+          color="primary" icon="person" label="Editar perfil" @click="$router.push('/editar-perfil/' + user._id)" />
+        <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
+          color="primary" icon="pets" label="Mascotas" @click="$router.push('/mascotas')" />
       </q-fab>
     </q-page-sticky>
   </div>

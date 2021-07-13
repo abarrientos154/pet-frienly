@@ -76,7 +76,7 @@ class ProductoController {
       return {
         ...v,
         detalles: false,
-        newStatus: '',
+        newStatus: user.roles[0] === 2 ? 'Enviado' : 'En local',
         fecha_compra: moment(v.created_at).format('DD/MM/YYYY')
       }
     })
