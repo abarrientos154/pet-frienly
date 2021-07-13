@@ -39,7 +39,7 @@
             <q-card style="border-radius: 50px; width:140px; height:140px" clickable v-ripple v-for="(item, index) in tienda.servicios" :key="index"
             @click="servicio = item, verServicio = true">
               <q-img :src="baseuServicios + item._id" style="height: 100%; width: 100%; border-radius: 50px" >
-                <div class="full-width text-center absolute-bottom">{{item.servicio.name}}</div>
+                <div class="full-width text-center absolute-bottom bg-primary">{{item.servicio.name}}</div>
               </q-img>
             </q-card>
           </div>
