@@ -397,27 +397,8 @@
             <div class="q-px-sm">
               <div class="text-h6 text-bold">Dirección de envío</div>
               <div class="text-subtitle1 text-grey-7">{{user.name}}</div>
-              <q-select borderless dense color="black" v-model="direccion" :options="ciudades" label="Seleccione dirección" map-options
-                error-message="requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"
-                option-label="name" >
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey text-italic">
-                        No hay Resultados
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                  <template v-slot:option="scope">
-                    <q-item
-                      v-bind="scope.itemProps"
-                      v-on="scope.itemEvents"
-                    >
-                      <q-item-section>
-                        <q-item-label v-html="scope.opt.name" />
-                      </q-item-section>
-                    </q-item>
-                  </template>
-              </q-select>
+              <q-input filled v-model="direccion"  dense placeholder="Ingrese una dirección"
+                error-message="Requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"/>
               <q-separator />
               <div class="text-h6 text-bold q-my-md">Pedido</div>
               <div class="row justify-between" style="width:100%">
@@ -511,7 +492,6 @@ export default {
       direccion: null,
       comentarios: [],
       carrito: [],
-      ciudades: [],
       allProductos: [],
       ultimos: [],
       productos: [],
@@ -569,12 +549,6 @@ export default {
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
             this.getCategorias(this.user._id)
-          } else {
-            this.$api.get('cityByCountry/' + this.user.country_id).then(v => {
-              if (v) {
-                this.ciudades = v
-              }
-            })
           }
         }
       })
@@ -736,7 +710,8 @@ export default {
           message: 'Iniciando compra'
         })
         this.form.country_id = this.user.country_id
-        this.form.city_id = this.direccion._id
+        this.form.city_id = this.user.city_id
+        this.form.direccion = this.direccion
         this.form.cliente_id = this.user._id
         this.form.tienda_id = this.id
         this.form.tienda_name = this.tienda.name
