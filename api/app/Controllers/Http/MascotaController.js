@@ -152,20 +152,21 @@ class MascotaController {
             types: ['image'],
             size: '20mb'
           })
-          console.log('albumpic :>> ', profilePic);
           if (profilePic != null && images[dat.index[i]] && Helpers.appRoot('storage/uploads/pets')) {
             await profilePic.move(Helpers.appRoot('storage/uploads/pets'), {
               name: images[dat.index[i]],
               overwrite: true
             })
-          } else if (profilePic != null && Helpers.appRoot('storage/uploads/pets')) {
-            await profilePic.move(Helpers.appRoot('storage/uploads/pets'), {
-              name: codeFile,
-              overwrite: true
-            })
-            images.push(profilePic.fileName)
-          } else {
-            mkdirp.sync(`${__dirname}/storage/Excel`)
+          } else if (profilePic != null) {
+            console.log('profilePic :>> ', profilePic)
+            if (Helpers.appRoot('storage/uploads/pets')) {
+              await profilePic.move(Helpers.appRoot('storage/uploads/pets'), {
+                name: codeFile,
+                overwrite: true
+              })
+            } else {
+              mkdirp.sync(`${__dirname}/storage/Excel`)
+            }
             images.push(profilePic.fileName)
           }
         }
