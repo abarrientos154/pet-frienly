@@ -1,35 +1,35 @@
 <template>
   <div>
-    <div class="q-my-lg q-mx-lg">
-      <q-btn flat round color="primary" icon="arrow_back" @click="$router.push('/mascotas')"/>
-    </div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+        <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+        </div>
+        <div class="col-10 text-white text-subtitle1 text-center">{{edit ? 'Actualizar datos de mascota' : 'Crear nueva mascota'}}</div>
+    </q-header>
 
     <div class="row justify-center q-mb-lg">
-      <q-img :src="petImg[files.length - 1]" style="width: 60%; height: 150px; border-radius: 5px;">
-        <div class="absolute-full column items-center justify-center">
-          <div class="text-center text-h5 text-bold">Cuentanos de tu <br> mascota</div>
-        </div>
-      </q-img>
+      <div class="text-center text-grey text-h5 text-bold q-my-lg">Cuentanos de tu <br> mascota</div>
+      <q-img :src="petImg[files.length - 1]" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
     </div>
 
     <div>
       <div class="text-subtitle2 q-ml-lg">Fotos de tu mascota</div>
       <div class="text-overline q-ml-lg">Puede cargar hasta 3 fotos</div>
       <div class="row">
-        <div class="column items-center" v-for="(item, i) in petImg" :key="i" style="width: 33%">
-          <q-avatar square size="90px">
-            <q-img :src="item" class="bg-grey" style="height: 100%">
-              <q-file borderless v-model="img" class="absolute-center button-subir" @input="changePetFile(i)" accept=".jpg, image/*">
-                <q-icon name="edit" class="absolute-center" size="25px" color="white" />
-              </q-file>
-            </q-img>
-          </q-avatar>
-        </div>
         <div v-if="files.length < 3" class="column items-center" style="width: 33%">
           <q-avatar square size="90px">
             <q-img src="" class="bg-grey" style="height: 100%">
               <q-file borderless v-model="img" class="absolute-center button-subir" @input="changePetFile()" accept=".jpg, image/*">
                 <q-icon name="photo_camera" class="absolute-center" size="25px" color="white" />
+              </q-file>
+            </q-img>
+          </q-avatar>
+        </div>
+        <div class="column items-center" v-for="(item, i) in petImg" :key="i" style="width: 33%">
+          <q-avatar square size="90px">
+            <q-img :src="item" class="bg-grey" style="height: 100%">
+              <q-file borderless v-model="img" class="absolute-center button-subir" @input="changePetFile(i)" accept=".jpg, image/*">
+                <q-icon name="edit" class="absolute-center" size="25px" color="white" />
               </q-file>
             </q-img>
           </q-avatar>
@@ -103,7 +103,6 @@ export default {
     return {
       id: '',
       edit: false,
-      editImg: false,
       terms: false,
       form: {},
       index: [],
@@ -141,10 +140,9 @@ export default {
     files: { required }
   },
   mounted () {
-    this.baseu = env.apiUrl + '/mascota_img'
+    this.baseu = env.apiUrl + 'mascota_img'
     if (this.$route.params.id) {
       this.edit = true
-      this.editImg = true
       this.id = this.$route.params.id
       this.$api.get('mascota/' + this.id).then(res => {
         if (res) {
@@ -208,23 +206,8 @@ export default {
         this.petImg[i] = cc
         this.files[i] = 1
       }
-      this.editImg = true
-    },
-    filesMascota () {
-      var img = ''
-      var cc = {}
-      if (this.editImg && this.files.length > 0) {
-        this.petImg = []
-        this.editImg = false
-      }
-      if (this.files.length > 0) {
-        cc = this.files[this.files.length - 1]
-        img = URL.createObjectURL(cc)
-        this.petImg.push(img)
-      }
     },
     async updatePet () {
-      console.log('updatePet')
       this.$v.form.$touch()
       if (!this.$v.form.$error) {
         this.$q.loading.show({
@@ -232,19 +215,12 @@ export default {
         })
         var formData = new FormData()
         if (this.files) {
-          console.log('this.files :>> ', this.files)
           this.form.cantidadArchivos = this.files.length
-          console.log('this.files :>> ', this.files)
-          const indexF = []
-          for (const x in this.index) {
-            if (this.index[x] != null) {
-              indexF.push(this.index[x])
-            }
-          }
-          this.form.index = indexF
           for (let i = 0; i < this.files.length; i++) {
             if (this.files[i] !== 1) {
               formData.append('files' + i, this.files[i])
+              this.index.push(i)
+              this.form.index = this.index
             }
           }
         } else {
@@ -256,12 +232,14 @@ export default {
             'Content-Type': undefined
           }
         }).then((res) => {
+          if (res) {
+            this.$q.notify({
+              message: 'Tu mascota ha sido actualizada correctamente',
+              color: 'positive'
+            })
+            this.$router.push('/mascotas')
+          }
           this.$q.loading.hide()
-          this.$q.notify({
-            message: 'Tu mascota ha sido actualizada correctamente',
-            color: 'positive'
-          })
-          this.$router.push('/mascotas')
         })
       }
     },
@@ -270,11 +248,14 @@ export default {
         this.files[i] = this.img
         this.petImg[i] = URL.createObjectURL(this.img)
         this.img = null
+        /* if (this.edit && i !== this.index[this.index.length - 1]) {
+          this.index.push(i)
+          console.log(this.index)
+        } */
       } else {
         this.files.push(this.img)
         this.petImg.push(URL.createObjectURL(this.img))
         this.img = null
-        console.log(i)
       }
     }
   }

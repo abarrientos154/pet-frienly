@@ -1,9 +1,11 @@
 <template>
   <div>
-    <q-header elevated class="bg-primary row justify-center items-center" style="width:100%; height:60px">
-      <div class="text-white text-subtitle1 text-center">Mis Mascotas</div>
+    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+        <div class="col-1">
+        <q-btn flat round color="white" icon="arrow_back" @click="$router.push('/inicio_cliente')"/>
+        </div>
+        <div class="col-10 text-white text-subtitle1 text-center">Mis Mascotas</div>
     </q-header>
-    <q-btn class="q-mt-sm" flat rounded color="primary" icon="arrow_back" @click="$router.push('/inicio_cliente')"/>
     <div v-if="data.length" class="row justify-around q-ma-sm">
       <div class="col-6 q-mb-sm" v-for="(item, index) in data" :key="index">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" v-ripple>
@@ -44,7 +46,7 @@ export default {
   },
   mounted () {
     this.getMascotas()
-    this.baseu = env.apiUrl + '/mascota_img'
+    this.baseu = env.apiUrl + 'mascota_img'
     console.log(this.baseu)
   },
   methods: {
