@@ -9,7 +9,7 @@
 
     <div class="row justify-center q-mb-lg">
       <div class="text-center text-grey text-h5 text-bold q-my-lg">Cuentanos de tu <br> mascota</div>
-      <q-img :src="petImg[files.length - 1]" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
+      <q-img :src="mostrarImg" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
     </div>
 
     <div>
@@ -107,6 +107,7 @@ export default {
       form: {},
       index: [],
       img: null,
+      mostrarImg: null,
       files: [],
       petImg: [],
       perfilFile: null,
@@ -149,6 +150,7 @@ export default {
           this.form = res
           console.log('this.form >> ', this.form)
           this.imgsTraidas()
+          this.mostrarImg = this.petImg[0]
         }
       }).catch(error => {
         console.log(error)
@@ -247,14 +249,12 @@ export default {
       if (this.img && i != null) {
         this.files[i] = this.img
         this.petImg[i] = URL.createObjectURL(this.img)
+        this.mostrarImg = URL.createObjectURL(this.img)
         this.img = null
-        /* if (this.edit && i !== this.index[this.index.length - 1]) {
-          this.index.push(i)
-          console.log(this.index)
-        } */
       } else {
         this.files.push(this.img)
         this.petImg.push(URL.createObjectURL(this.img))
+        this.mostrarImg = URL.createObjectURL(this.img)
         this.img = null
       }
     }
