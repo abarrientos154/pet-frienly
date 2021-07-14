@@ -220,9 +220,9 @@ export default {
             if (this.files[i] !== 1) {
               formData.append('files' + i, this.files[i])
               this.index.push(i)
-              this.form.index = this.index
             }
           }
+          this.form.index = this.index
         } else {
           this.form.cantidadArchivos = 0
         }

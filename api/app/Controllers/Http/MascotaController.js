@@ -148,24 +148,25 @@ class MascotaController {
       if (dat.cantidadArchivos && dat.cantidadArchivos > 0) {
         for (let i = 0; i < dat.cantidadArchivos; i++) {
           let codeFile = randomize('Aa0', 30)
-          const albumpic = request.file('files' + dat.index[i], {
+          const profilePic = request.file('files' + dat.index[i], {
             types: ['image'],
             size: '20mb'
           })
-          if (images[dat.index[i]] && Helpers.appRoot('storage/uploads/pets')) {
-            await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
+          console.log('albumpic :>> ', profilePic);
+          if (profilePic != null && images[dat.index[i]] && Helpers.appRoot('storage/uploads/pets')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/pets'), {
               name: images[dat.index[i]],
               overwrite: true
             })
-          } else if (Helpers.appRoot('storage/uploads/pets')) {
-            await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
+          } else if (profilePic != null && Helpers.appRoot('storage/uploads/pets')) {
+            await profilePic.move(Helpers.appRoot('storage/uploads/pets'), {
               name: codeFile,
               overwrite: true
             })
-            images.push(albumpic.fileName)
+            images.push(profilePic.fileName)
           } else {
             mkdirp.sync(`${__dirname}/storage/Excel`)
-            images.push(albumpic.fileName)
+            images.push(profilePic.fileName)
           }
         }
       }
