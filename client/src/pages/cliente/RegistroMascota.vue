@@ -141,7 +141,7 @@ export default {
     files: { required }
   },
   mounted () {
-    this.baseu = env.apiUrl + '/mascota_img'
+    this.baseu = env.apiUrl + 'mascota_img'
     if (this.$route.params.id) {
       this.edit = true
       this.editImg = true
