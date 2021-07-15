@@ -91,7 +91,7 @@
       </div>
 
       <div class="row items-center q-pa-md">
-        <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+        <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : !login ? nologin = true : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
         <div class="col q-px-sm q-py-md text-black bg-orange-2 text-center ellipsis" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;" >${{formatPrice(hospedaje.price)}} por día</div>
       </div>
 
@@ -196,6 +196,23 @@
         </q-img>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="nologin">
+      <q-card class="q-pa-md">
+        <q-card-section>
+          <div class="text-center text-subtitle1">Para poder reservar un alojamiento debes tener una cuenta.</div>
+          <div class="text-center text-h6">¿Deseas registrarte?</div>
+        </q-card-section>
+
+        <q-card-section class="column items-center">
+          <q-btn no-caps style="border-radius: 14px" label="Registrarme" color="primary" @click="$router.push('/registro')" />
+          <div class="row items-center">
+            <div>Ya tengo una cuenta</div>
+            <q-btn no-caps flat dense class="text-subtitle1 text-bold" color="primary" @click="$router.push('/login')" >Iniciar Sesión</q-btn>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -210,6 +227,8 @@ export default {
       fechaValida: false,
       reservaExitosa: false,
       reservaFallo: false,
+      login: true,
+      nologin: false,
       slide: 0,
       rol: 0,
       user: {},
@@ -247,7 +266,12 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getUser()
+    } else {
+      this.login = false
+    }
     this.getHospedaje()
   },
   methods: {

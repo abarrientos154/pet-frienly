@@ -129,7 +129,7 @@ export default {
             if (this.user.roles[0] === 1) {
               this.$router.push('/inicio_administrador')
             } else if (this.user.roles[0] === 2) {
-              this.$router.push('/inicio_cliente')
+              this.$router.push('/inicio')
             } else if (this.user.roles[0] === 3) {
               this.$router.push('/inicio_proveedor')
             } else if (this.user.roles[0] === 4) {

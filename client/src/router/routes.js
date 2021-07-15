@@ -22,7 +22,7 @@ const routes = [
       { path: '/reportes', component: () => import('pages/hospedador/Reports.vue') },
       { path: '/pedidos_hospedador', component: () => import('pages/hospedador/Orders.vue') },
       // Cliente
-      { path: '/inicio_cliente', component: () => import('pages/cliente/Inicio.vue') },
+      { path: '/inicio', component: () => import('pages/cliente/Inicio.vue') },
       { path: '/mascotas', component: () => import('pages/cliente/Mascotas.vue') },
       { path: '/registromascota', component: () => import('pages/cliente/RegistroMascota.vue') },
       { path: '/edit_mascota/:id', component: () => import('pages/cliente/RegistroMascota.vue') },
@@ -31,6 +31,8 @@ const routes = [
       { path: '/descanso', component: () => import('pages/cliente/Descanso.vue') },
       { path: '/tiendas/:type/:city', component: () => import('pages/cliente/Tiendas.vue') },
       { path: '/descanso/:type/:city', component: () => import('pages/cliente/Descanso.vue') },
+      { path: '/tiendas/:type', component: () => import('pages/cliente/Tiendas.vue') },
+      { path: '/descanso/:type', component: () => import('pages/cliente/Descanso.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
       { path: '/inicio-proveedor/:id', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/inicio-hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
@@ -60,11 +62,11 @@ const routes = [
   { path: '/editar_espacio/:id', component: () => import('pages/hospedador/EditSpace.vue') },
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/inicio'
   },
   {
     path: '*',
-    redirect: '/login'
+    redirect: '/inicio'
   },
 
   // Always leave this as last one,

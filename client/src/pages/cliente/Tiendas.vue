@@ -48,9 +48,9 @@
         </q-select>
       </div>
       </div>
-      <div class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
-      <div class="text-caption text-grey-8">Selecciona tu ciudad</div>
-      <div class="row q-px-sm q-mb-sm">
+      <div v-if="!nologin" class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
+      <div v-if="!nologin" class="text-caption text-grey-8">Selecciona tu ciudad</div>
+      <div v-if="!nologin" class="row q-px-sm q-mb-sm">
         <q-select dense filled class="col-11" v-model="city" :options="cities" option-label="name" map-options
         @input="filtrarTiendas()">
         </q-select>
@@ -88,6 +88,7 @@ export default {
       imgTienda: '',
       petType: null,
       city: null,
+      nologin: true,
       cities: [],
       mejorCalificadas: [],
       stores: [],
@@ -95,8 +96,14 @@ export default {
     }
   },
   mounted () {
-    this.getCities()
-    this.getStore()
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getCities()
+      this.nologin = false
+      this.getStore()
+    } else {
+      this.getStore()
+    }
   },
   methods: {
     async getCities () {
@@ -112,12 +119,15 @@ export default {
       })
     },
     getStore () {
-      this.$api.post('user_by_rol', { rol: [3] }).then(res => {
+      this.$api.post(!this.nologin ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
           this.mejorCalificadas = res
           if (!this.$route.params.type) {
             this.stores = res
+          } else {
+            this.petType = this.$route.params.type
+            this.filtrarTiendas()
           }
         }
       })
@@ -126,7 +136,7 @@ export default {
       this.$q.loading.show({
         message: 'Filtrando datos'
       })
-      this.$api.post('filtrar_tiendas', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
+      this.$api.post(!this.nologin ? 'filtrar_tiendas' : 'filtrar_tiendas_no_logueo', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
         this.stores = res
         this.$q.loading.hide()
       })

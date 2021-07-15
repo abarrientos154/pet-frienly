@@ -237,7 +237,52 @@ class UserController {
     response.send(modificar)
   }
 
-  async filtrarTiendas({ response, request }) {
+  async filtrarTiendas({ response, request, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let typePet = request.all().type
+    let city = request.all().ciudad
+    let allTiendas = (await User.query().where({roles: [3]}).fetch()).toJSON()
+    let tiendas
+    let tiendasFilter = []
+
+    if (city === false) {
+      tiendas = allTiendas
+    } else {
+      tiendas = allTiendas.filter(v => v.tienda.city_id === city._id)
+    }
+
+    if (typePet === false) {
+      tiendasFilter = tiendas
+    } else {
+      for (let i = 0; i < tiendas.length; i++) {
+        let producto = (await Producto.query().where({destinatario: typePet, proveedor_id: tiendas[i]._id}).fetch()).toJSON()
+        let servicio = (await TiendaServicio.query().where({destinatario: typePet, tienda_id: tiendas[i]._id}).fetch()).toJSON()
+        if (producto.length || servicio.length) {
+          tiendasFilter.push(tiendas[i])
+        }
+      }
+    }
+
+    for (let i in tiendasFilter) {
+      tiendasFilter[i].city = (await Ciudad.find(tiendasFilter[i].tienda.city_id)).name
+      var cal = []
+      cal = (await Comentario.query().where({tienda_id: tiendasFilter[i]._id}).fetch()).toJSON()
+      var total = 0
+      if (cal.length) {
+        cal.forEach(v => {
+          total += v.calificacion
+        })
+        tiendasFilter[i].calificacion = (total / cal.length)
+      } else {
+        tiendasFilter[i].calificacion = total
+      }
+    }
+    let respuesta = tiendasFilter.filter(v => v.tienda.city_id === user.city_id)
+
+    response.send(respuesta)
+  }
+
+  async filtrarTiendasNoLogueo({ response, request }) {
     let typePet = request.all().type
     let city = request.all().ciudad
     let allTiendas = (await User.query().where({roles: [3]}).fetch()).toJSON()
@@ -320,6 +365,50 @@ class UserController {
     }
 
     response.send(hostFilter)
+  }
+
+  async filtrarAlojamientosNoLogueo({ response, request, auth }) {
+    const user = (await auth.getUser()).toJSON()
+    let typePet = request.all().type
+    let city = request.all().ciudad
+    let allHost = (await User.query().where({roles: [4]}).fetch()).toJSON()
+    let host
+    let hostFilter = []
+
+    if (city === false) {
+      host = allHost
+    } else {
+      host = allHost.filter(v => v.my_space.ciudad_id === city._id)
+    }
+
+    if (typePet === false) {
+      hostFilter = host
+    } else {
+      for (let i = 0; i < host.length; i++) {
+        let alojamientos = (await Hospedaje.query().where({pet_type: typePet, hospedador_id: host[i]._id}).fetch()).toJSON()
+        if (alojamientos.length) {
+          hostFilter.push(host[i])
+        }
+      }
+    }
+
+    for (let i in hostFilter) {
+      hostFilter[i].city = (await Ciudad.find(hostFilter[i].my_space.ciudad_id)).name
+      var cal = []
+      cal = (await Comentario.query().where({tienda_id: hostFilter[i]._id}).fetch()).toJSON()
+      var total = 0
+      if (cal.length) {
+        cal.forEach(v => {
+          total += v.calificacion
+        })
+        hostFilter[i].calificacion = (total / cal.length)
+      } else {
+        hostFilter[i].calificacion = total
+      }
+    }
+    let respuesta = hostFilter.filter(v => v.my_space.ciudad_id === user.city_id)
+
+    response.send(respuesta)
   }
 
   async validateEmail({ request, response, params }) {
@@ -445,7 +534,53 @@ class UserController {
     response.send(user)
   }
 
-  async userByRol({ request, params, response }) {
+  async userByRol({ request, auth, response }) {
+    try {
+      let logueado = (await auth.getUser()).toJSON()
+      let filtrado
+      let rol = request.all()
+      const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
+      if (rol.rol[0] == 3) {
+        for (let i in user) {
+          user[i].city = (await Ciudad.find(user[i].tienda.city_id)).name
+          var cal = []
+          cal = (await Comentario.query().where({tienda_id: user[i]._id}).fetch()).toJSON()
+          var total = 0
+          if (cal.length) {
+            cal.forEach(v => {
+              total += v.calificacion
+            })
+            user[i].calificacion = (total / cal.length)
+          } else {
+            user[i].calificacion = total
+          }
+        }
+        filtrado = user.filter(v => v.tienda.city_id === logueado.city_id)
+      } else if (rol.rol[0] == 4) {
+        for (let i in user) {
+          user[i].city = (await Ciudad.find(user[i].my_space.ciudad_id)).name
+          user[i].country = (await Pais.find(user[i].my_space.pais_id)).name
+          var cal = []
+          cal = (await Comentario.query().where({tienda_id: user[i]._id}).fetch()).toJSON()
+          var total = 0
+          if (cal.length) {
+            cal.forEach(v => {
+              total += v.calificacion
+            })
+            user[i].calificacion = (total / cal.length)
+          } else {
+            user[i].calificacion = total
+          }
+        }
+        filtrado = user.filter(v => v.my_space.ciudad_id === logueado.city_id)
+      }
+      response.send(filtrado)
+    } catch (error) {
+      console.error('user by rol: ' + error.name + ':' + error.message)
+    }
+  }
+
+  async userByRolNoLogueo({ request, params, response }) {
     try {
       let rol = request.all()
       const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()

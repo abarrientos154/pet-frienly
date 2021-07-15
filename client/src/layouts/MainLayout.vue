@@ -5,8 +5,8 @@
       <router-view />
     </q-page-container>
 
-    <q-footer elevated>
-      <div class="bg-primary full-width row items-center" v-if="rol != null">
+    <q-footer elevated v-if="rol != null">
+      <div class="bg-primary full-width row items-center">
         <div class="col row justify-center items-center q-py-xs" v-for="(item, index) in menu" :key="index">
           <q-btn flat stack dense no-caps class="text-italic" :icon="item.icon" color="primary" text-color="white" size="md" @click="item.label === 'Salir' ? cerrarSesion() : ruta(item)">
             <div style="font-size: 10px">{{item.label}}</div>
@@ -51,7 +51,7 @@ export default {
         {
           icon: 'home',
           label: 'Home',
-          ruta: '/inicio_cliente'
+          ruta: '/inicio'
         },
         {
           icon: 'store',
@@ -126,7 +126,10 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getUser()
+    }
   },
   computed: {
     ...mapGetters('generals', ['can']),

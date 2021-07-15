@@ -203,7 +203,7 @@
           <div class="text-h4" color="white">creada con exito!</div>
         </div>
         <div class="absolute-bottom custom-captionTwo row justify-center">
-          <q-btn no-caps rounded class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%;" to="/inicio_cliente"/>
+          <q-btn no-caps rounded class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%;" to="/inicio"/>
         </div>
       </q-carousel-slide>
     </q-carousel>

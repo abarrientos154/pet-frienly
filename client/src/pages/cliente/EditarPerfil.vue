@@ -161,7 +161,7 @@ export default {
         this.formTwo.city_id = this.city._id
         this.form = { ...this.form, ...this.formTwo }
         this.updateUser()
-        this.$router.push('/inicio_cliente')
+        this.$router.push('/inicio')
       } else {
         this.$q.notify({
           message: 'Debes ingresar todos los datos requeridos',

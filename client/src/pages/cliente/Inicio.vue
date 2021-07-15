@@ -3,6 +3,9 @@
     <div style="height: 300px; width: 100%;" class="bg-grey">
       <q-img src="nopublicidad.jpg" style="height: 300px; width: 100%" />
     </div>
+    <div v-if="!login" class="absolute-top-right q-pa-md">
+      <q-btn no-caps rounded color="primary" label="Iniciar sesión" to="/login" />
+    </div>
 
     <div class="q-mx-md">
       <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
@@ -21,22 +24,23 @@
         </q-select>
       </div>
       </div>
-      <div class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
-      <div class="text-overline">Selecciona tu ciudad</div>
-      <div class="row q-mx-sm q-mb-sm">
+      <div v-if="login" class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
+      <div v-if="login" class="text-overline">Selecciona tu ciudad</div>
+      <div v-if="login" class="row q-mx-sm q-mb-sm">
         <q-select outlined dense filled v-model="city" :options="cities" option-value="_id" option-label="name" emit-value map-options class="shadow-4 col q-mr-sm">
         </q-select>
       </div>
       </div>
       <div class="row justify-center q-my-lg">
         <q-btn no-caps class="q-py-xs" color="primary" label="Buscar" style="width: 70%"
-        :disable="!service || !petType || !city ? true : false" @click="filtrarDatos()"/>
+        :disable="login ? !service || !petType || !city ? true : false : !service || !petType ? true : false" @click="filtrarDatos()"/>
       </div>
     </div>
 
     <div class="q-pa-sm">
       <div class="q-mb-md text-h5 text-center">Ultimas tiendas añadidas</div>
       <q-scroll-area
+          v-if="lastStores.length"
           horizontal
           style="height: 330px;"
         >
@@ -60,16 +64,17 @@
             </q-card>
           </div>
         </q-scroll-area>
+        <div v-else class="row items-center justify-center" style="height: 330px;">No hay tiendas actualmente</div>
 
       <q-card style="height: 200px" class="q-mx-md q-my-md bg-grey">
         <q-img src="nopublicidad.jpg" style="height: 200px; width: 100%" />
       </q-card>
 
       <div class="q-mb-md q-mx-sm text-h5">Nuestras tiendas</div>
-      <div class="row justify-around" style="width:100%">
+      <div v-if="stores.length" class="row justify-around" style="width:100%">
         <div class="col-6 q-mb-sm row justify-center" v-for="(store, index) in stores" :key="index">
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
-            @click="$router.push('/inicio-proveedor/' + 'store._id')">
+            @click="$router.push('/inicio-proveedor/' + store._id)">
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
@@ -88,6 +93,7 @@
             </q-card>
           </div>
       </div>
+      <div v-else class="row items-center justify-center" style="height: 280px;">No hay tiendas actualmente</div>
 
       <div class="row justify-center q-my-lg">
         <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/tiendas')"/>
@@ -99,6 +105,7 @@
 
       <div class="q-mb-md text-center text-h5">Ultimos alojamientos</div>
       <q-scroll-area
+          v-if="lastHost.length"
           horizontal
           style="height: 330px;"
         >
@@ -119,9 +126,10 @@
             </q-card>
           </div>
         </q-scroll-area>
+        <div v-else class="row items-center justify-center" style="height: 330px;">No hay alojamientos actualmente</div>
 
       <div class="q-mb-md q-mx-sm text-h5">Alojamientos</div>
-      <div class="row justify-around">
+      <div v-if="host.length" class="row justify-around">
         <div class="row justify-center col-6 q-mb-sm" v-for="(item, index) in host" :key="index">
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
             @click="$router.push('/inicio-hospedador/' + item._id)">
@@ -140,13 +148,14 @@
             </q-card>
           </div>
       </div>
+      <div v-else class="row items-center justify-center" style="height: 280px;">No hay alojamientos actualmente</div>
 
       <div class="row justify-center q-my-lg">
         <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/descanso')"/>
       </div>
     </div>
 
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-page-sticky v-if="user._id" position="bottom-right" :offset="[18, 18]">
       <q-fab color="primary" icon="pets" label="Mis acciones" no-caps direction="up" vertical-actions-align="right">
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
           color="primary" icon="person" label="Editar perfil" @click="$router.push('/editar-perfil/' + user._id)" />
@@ -167,6 +176,7 @@ export default {
       service: null,
       petType: null,
       city: null,
+      login: true,
       imgTienda: '',
       imgProfile: '',
       urlHospedaje: '',
@@ -184,11 +194,18 @@ export default {
     }
   },
   mounted () {
-    this.getUser()
-    this.getCities()
-    this.getStore()
     this.urlHospedaje = env.apiUrl + 'hospedaje_img'
-    this.getHost()
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getUser()
+      this.getCities()
+      this.getStore()
+      this.getHost()
+    } else {
+      this.login = false
+      this.getStore()
+      this.getHost()
+    }
   },
   methods: {
     getUser () {
@@ -206,7 +223,7 @@ export default {
       })
     },
     async getStore () {
-      await this.$api.post('user_by_rol', { rol: [3] }).then(res => {
+      await this.$api.post(this.login ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [3] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
           this.stores = res.slice(0, 4)
@@ -216,7 +233,7 @@ export default {
       })
     },
     async getHost () {
-      await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
+      await this.$api.post(this.login ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [4] }).then(res => {
         this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           this.host = res.slice(0, 4)
@@ -227,9 +244,17 @@ export default {
     },
     filtrarDatos () {
       if (this.service === 1) {
-        this.$router.push('descanso/' + this.petType + '/' + this.city)
+        if (this.login) {
+          this.$router.push('descanso/' + this.petType + '/' + this.city)
+        } else {
+          this.$router.push('descanso/' + this.petType)
+        }
       } else {
-        this.$router.push('tiendas/' + this.petType + '/' + this.city)
+        if (this.login) {
+          this.$router.push('tiendas/' + this.petType + '/' + this.city)
+        } else {
+          this.$router.push('tiendas/' + this.petType)
+        }
       }
     }
   }

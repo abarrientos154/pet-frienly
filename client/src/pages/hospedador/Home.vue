@@ -123,7 +123,14 @@ export default {
   mounted () {
     this.baseu = env.apiUrl + 'espacio_img/'
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
-    this.getUser()
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getUser()
+    }
+    if (this.$route.params.id) {
+      this.id = this.$route.params.id
+      this.getHospedador(this.id)
+    }
   },
   methods: {
     getUser () {
@@ -135,10 +142,6 @@ export default {
             this.getHospedajes()
           } else if (this.rol === 2) {
             this.user = res
-            if (this.$route.params.id) {
-              this.id = this.$route.params.id
-              this.getHospedador(this.id)
-            }
           }
         }
       })
