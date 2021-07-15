@@ -80,7 +80,7 @@
           <div class="column items-center q-mb-lg">
             <q-avatar rounded style="height: 150px; width: 200px;" class="q-mb-sm">
               <q-img style="height: 100%;" :src="baseuEspacio + form._id">
-                <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%; font-size: 0px">
                   <q-icon name="backup" class="absolute-center" size="50px" color="white" />
                 </q-file>
               </q-img>

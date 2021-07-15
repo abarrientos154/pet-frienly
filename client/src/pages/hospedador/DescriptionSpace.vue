@@ -26,7 +26,7 @@
             <div class="row">
               <div class="col q-mx-sm">
                 <div class="text-subtitle2 text-bold text-grey-8">Disponible para</div>
-                <div class="text-caption text-grey-8">{{hospedaje.pet_type}}</div>
+                <div class="text-caption text-grey-8">{{hospedaje.pet_type === 'Ambos' ? 'Perros y Gatos' : hospedaje.pet_type}}</div>
                 <div class="text-subtitle2 text-bold text-grey-8">Cantidad de pasajero</div>
                 <div class="text-caption text-grey-8">{{hospedaje.guests}} mascotas</div>
                 <div class="text-subtitle2 text-bold text-grey-8">Tipo de espacio</div>

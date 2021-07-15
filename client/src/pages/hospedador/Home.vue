@@ -75,15 +75,21 @@
           <q-img :src="baseuHospedador + item.images[0]" style="height: 175px;">
             <q-btn position="top-left" round icon="favorite" color="primary" size="10px" class="q-mt-sm q-ml-sm"/>
           </q-img>
-          <q-card-section class="row justify-between">
+          <q-card-section class="row justify-between items-center">
             <div>
               <div class="text-subtitle2" style="font-size: 13px">{{item.name}}</div>
-              <div class="items-center row text-grey">
-                  <q-icon name="bubble_chart" size="20px" />
+              <div class="items-center row text-grey-7">
+                  <q-icon name="pets" size="15px" />
+                  <div class="text-subtitle2" style="font-size: 12px">{{item.pet_type === 'Ambos' ? 'Perros y Gatos' : item.pet_type}}</div>
+              </div>
+              <div class="items-center row text-grey-7">
+                  <q-icon name="bubble_chart" size="17px" />
                   <div class="text-subtitle2" style="font-size: 12px">{{item.state}}</div>
               </div>
             </div>
-            <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{formatPrice(item.price)}} por noche</q-btn>
+            <div>
+              <q-btn no-caps flat dense rounded class="bg-primary text-white q-pa-sm">${{formatPrice(item.price)}} por noche</q-btn>
+            </div>
           </q-card-section>
         </q-card>
       </q-list>
@@ -139,7 +145,6 @@ export default {
           this.rol = res.roles[0]
           if (this.rol === 4) {
             this.getHospedador(res._id)
-            this.getHospedajes()
           } else if (this.rol === 2) {
             this.user = res
           }
