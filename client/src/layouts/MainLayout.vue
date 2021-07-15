@@ -14,6 +14,20 @@
         </div>
       </div>
     </q-footer>
+
+    <q-dialog v-model="modal">
+      <q-card class="q-pa-md">
+        <q-card-section>
+          <div class="text-center text-h5 text-bold text-primary q-pb-sm">Bienvenido a PetFriendly</div>
+          <div class="text-center text-subtitle2">Te invitamos a registrarte para que conozcas tiendas y alojamientos cerca de ti</div>
+        </q-card-section>
+
+        <q-card-section class="column items-center">
+          <q-btn no-caps style="border-radius: 14px" label="Registrarme" color="primary" @click="$router.push('/registro')" />
+          <q-btn no-caps flat dense label="Omitir" color="primary" @click="modal = false" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -24,6 +38,7 @@ export default {
   data () {
     return {
       rol: null,
+      modal: false,
       menu: [],
       admin: [
         {
@@ -126,6 +141,7 @@ export default {
     }
   },
   mounted () {
+    this.get()
     const value = localStorage.getItem('TRI_SESSION_INFO')
     if (value) {
       this.getUser()
@@ -159,6 +175,16 @@ export default {
             }
           }
         })
+      }
+    },
+    get () {
+      var primera = localStorage.getItem('primeraVez')
+      primera = JSON.parse(primera)
+      if (primera) {
+        this.modal = false
+      } else {
+        localStorage.setItem('primeraVez', JSON.stringify({ modal: true }))
+        this.modal = true
       }
     },
     ruta (itm) {
