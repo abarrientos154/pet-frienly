@@ -53,7 +53,7 @@
             <div class="text-negative text-h7" v-if="!terms && appear"> Debe Aceptar los terminos </div>
           </div>
          <div class="column items-center">
-           <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="next()"/>
+           <q-btn rounded no-caps class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="next()"/>
          </div>
         </div>
       </q-carousel-slide>
@@ -98,19 +98,19 @@
            </div>
          </div>
          <div class="column items-center">
-           <q-btn rounded class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="nextTwo()"/>
+           <q-btn rounded no-caps class="q-pa-sm" color="primary" label="Siguiente" style="width: 70%;" @click="nextTwo()"/>
          </div>
         </div>
       </q-carousel-slide>
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div>
-          <div class="q-my-lg q-mx-lg">
+          <div class="q-pa-lg">
             <q-btn flat round color="primary" icon="arrow_back" @click="slide=2"/>
           </div>
 
           <div class="row justify-center q-mb-lg">
-            <div class="text-center text-grey text-h5 text-bold q-mb-lg">Cuentanos de tu <br> mascota</div>
+            <div class="text-center text-grey-8 text-h5 q-mb-lg">Cuéntanos de tu <br> mascota</div>
             <q-img :src="petImg[files.length - 1]" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
           </div>
 
@@ -191,7 +191,7 @@
               <q-input type="textarea" filled v-model="formThree.description" error-message="Requerido" :error="$v.formThree.description.$error" @blur="$v.formThree.description.$touch()"/>
             </div>
             <div class="column items-center">
-              <q-btn rounded class="q-pa-sm" color="primary" label="Crear Mascota" style="width: 70%;" @click="finish()"/>
+              <q-btn rounded no-caps class="q-pa-sm" color="primary" label="Crear Mascota" style="width: 70%;" @click="finish()"/>
             </div>
           </div>
         </div>
@@ -202,7 +202,7 @@
           <div class="text-h4" color="white">¡Tu mascota ha sido</div>
           <div class="text-h4" color="white">creada con exito!</div>
         </div>
-        <div class="absolute-bottom custom-captionTwo row justify-center">
+        <div class="absolute-bottom bg-transparent custom-captionTwo row justify-center">
           <q-btn no-caps rounded class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%;" to="/inicio"/>
         </div>
       </q-carousel-slide>

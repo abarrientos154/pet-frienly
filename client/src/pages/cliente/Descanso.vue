@@ -15,7 +15,7 @@
       >
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(item, index) in mejorCalificados" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
-            <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
+            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-bottom column justify-end q-mb-md">
@@ -61,7 +61,7 @@
     <div v-if="host.length" class="row justify-around">
       <div class="col-6 q-mb-sm" v-for="(item, index) in host" :key="index">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple @click="$router.push('/inicio-hospedador/' + item._id)">
-            <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
+            <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%">
               <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-bottom column justify-end q-mb-md">
@@ -138,7 +138,7 @@ export default {
       this.$q.loading.show({
         message: 'Filtrando datos'
       })
-      this.$api.post(this.nologin ? 'filtrar_alojamientos' : 'filtrar_alojamientos_no_logueo', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
+      this.$api.post('filtrar_alojamientos', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
         this.host = res
         this.$q.loading.hide()
       })

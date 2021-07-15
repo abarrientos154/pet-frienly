@@ -81,7 +81,7 @@
                 <div class="col q-mb-sm">
                   <div class="text-caption">Carga la parte trasera de tu documento de identidad</div>
                   <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
-                    <q-file  borderless :disable="IImg.length < 2 ? false : true" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
+                    <q-file  borderless :disable="IImg.length > 1 || IImg.length < 1 ? true : false" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
                     </q-file>
                   </q-avatar>
@@ -156,7 +156,7 @@
           <q-btn flat round color="primary" icon="arrow_back" @click="slide = 2"/>
           <div class="q-mb-lg text-center text-h5 text-grey-6">Datos de espacios</div>
 
-          <q-avatar rounded style="height: 250px; width: 100%;" class="bg-secondary q-mb-sm">
+          <q-avatar rounded style="height: 250px; width: 100%;" class="q-mb-sm">
             <q-img style="height: 100%;" :src="perfilImg != '' ? perfilImg : ''">
               <q-icon name="image" class="absolute-center" size="50px" color="white" />
             </q-img>

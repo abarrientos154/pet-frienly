@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-sm">
     <q-header elevated class="bg-primary row justify-center items-center full-width" style="height: 60px">
-      <div class="text-white text-subtitle1 text-center">{{rol === 4 ? 'Tu espacio' : hospedador.spaceFile ? hospedador.my_space.name : ''}}</div>
+      <div class="text-white text-subtitle1 text-center">{{rol === 4 ? 'Tu espacio' : hospedador.my_space ? hospedador.my_space.name : ''}}</div>
     </q-header>
 
     <div class="row">

@@ -7,7 +7,7 @@
         <div class="col-10 text-white text-subtitle1 text-center">Mi perfil</div>
     </q-header>
 
-    <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
+    <q-carousel style="height:100%" animated v-model="slide" infinite ref="carousel">
       <!-- <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-lg">
           <div class="q-mb-lg text-center text-h5 text-grey-6">Representante Legal</div>
@@ -53,10 +53,10 @@
                 </q-avatar>
               </div>
               <div class="row">
-                <q-avatar class="q-mr-sm bg-secondary col" rounded style="height: 50px;">
+                <q-avatar class="q-mr-sm col" rounded style="height: 50px;">
                   <q-img style="height: 100%;" :src="identificacionImg.length ? identificacionImg[0] : ''"/>
                 </q-avatar>
-                <q-avatar class="bg-secondary col" rounded style="height: 50px;">
+                <q-avatar class="col" rounded style="height: 50px;">
                   <q-img style="height: 100%;" :src="identificacionImg.length > 1 ? identificacionImg[1] : ''"/>
                 </q-avatar>
               </div>
@@ -75,10 +75,10 @@
 
       <q-carousel-slide :name="2" class="q-pa-none">
         <div class="q-pa-lg">
-          <div class="q-mb-lg text-center text-h5 text-grey-6">Datos de espacios</div>
+          <div class="q-mb-lg text-center text-h5 text-grey-8">Datos de espacios</div>
 
           <div class="column items-center q-mb-lg">
-            <q-avatar rounded style="height: 150px; width: 200px;" class="bg-secondary q-mb-sm">
+            <q-avatar rounded style="height: 150px; width: 200px;" class="q-mb-sm">
               <q-img style="height: 100%;" :src="baseuEspacio + form._id">
                 <q-file  borderless v-model="img" class="button-camera" @input="perfil_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
                   <q-icon name="backup" class="absolute-center" size="50px" color="white" />
@@ -89,21 +89,21 @@
           </div>
 
           <div class="q-mb-lg">
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Nombre de espacios</div>
-              <q-input  v-model="formMySpace.name" placeholder="Nombré comercial" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$error" @blur="$v.formMySpace.name.$touch()"/>
+              <q-input  v-model="formMySpace.name" placeholder="Nombré comercial" dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$error" @blur="$v.formMySpace.name.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div class="q-pb-sm">
               <div class="text-caption">Correo de contacto tienda</div>
-              <q-input  v-model="formMySpace.email" placeholder="micorreo@petfriendly.com" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.email.$error" @blur="$v.formMySpace.email.$touch()"/>
+              <q-input readonly v-model="formMySpace.email" placeholder="micorreo@email.com" dense filled/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Telefono de contacto tienda</div>
-              <q-input  v-model="formMySpace.phone" placeholder="+5695331583" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$phone" @blur="$v.formMySpace.phone.$touch()"/>
+              <q-input  v-model="formMySpace.phone" placeholder="+5695331583" dense filled error-message="Este campo es requerido" :error="$v.formMySpace.name.$phone" @blur="$v.formMySpace.phone.$touch()"/>
             </div>
             <div>
               <div class="text-caption">Descripción</div>
-              <q-input filled outlined placeholder="Mi espacio es..." v-model="formMySpace.description" type="textarea" error-message="Este campo es requerido" :error="$v.formMySpace.description.$error" @blur="$v.formMySpace.description.$touch()"/>
+              <q-input filled placeholder="Mi espacio es..." v-model="formMySpace.description" type="textarea" error-message="Este campo es requerido" :error="$v.formMySpace.description.$error" @blur="$v.formMySpace.description.$touch()"/>
             </div>
           </div>
 
@@ -115,24 +115,24 @@
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div class="q-pa-lg">
-          <div class="q-mb-lg text-center text-h5 text-grey-6">Datos de espacios</div>
+          <div class="q-mb-lg text-center text-h5 text-grey-8">Datos de espacios</div>
 
-          <q-avatar rounded style="height: 250px; width: 100%;" class="bg-secondary q-mb-sm">
+          <q-avatar rounded style="height: 250px; width: 100%;" class="q-mb-sm">
             <q-img style="height: 100%;" :src="baseuEspacio + form._id">
               <q-icon name="image" class="absolute-center" size="50px" color="white" />
             </q-img>
           </q-avatar>
 
           <div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">País</div>
-              <q-select outlined dense filled placeholder="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais[0].pais_id" option-value="ciudades" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.pais_id.$error" @blur="$v.formMySpace.pais_id.$touch()"/>
+              <q-select dense filled placeholder="Selecciona el país donde vas a trabajar" v-model="selectPais" :options="paises" @input="formMySpace.pais_id = selectPais[0].pais_id" option-value="ciudades" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.pais_id.$error" @blur="$v.formMySpace.pais_id.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Ciudad</div>
               <q-select outlined dense filled placeholder="Seleccione la región a la que pertenece" v-model="formMySpace.ciudad_id" :options="selectPais" option-value="_id" option-label="name" emit-value map-options error-message="Este campo es requerido" :error="$v.formMySpace.ciudad_id.$error" @blur="$v.formMySpace.ciudad_id.$touch()"/>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Dirección</div>
               <q-input  v-model="formMySpace.direction" placeholder="Escriba la direccion fisica del espacio" outlined dense filled error-message="Este campo es requerido" :error="$v.formMySpace.direction.$error" @blur="$v.formMySpace.direction.$touch()"/>
             </div>
@@ -142,13 +142,39 @@
             <div class="row items-center q-mb-md">
               <div class="text-subtitle1 col">Horario de apertura</div>
               <div class="col column">
-                <q-input type="time" filled v-model="formMySpace.hora_inicio" dense error-message="Este campo es requerido" :error="$v.formMySpace.hora_inicio.$error" @blur="$v.formMySpace.hora_inicio.$touch()"/>
+                <q-input filled dense readonly v-model="formMySpace.hora_inicio" placeholder="--:--" @click="$refs.qTimeProxy1.show()"
+                error-message="Este campo es requerido" :error="$v.formMySpace.hora_inicio.$error" @blur="$v.formMySpace.hora_inicio.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="access_time" class="cursor-pointer">
+                      <q-popup-proxy ref="qTimeProxy1" transition-show="scale" transition-hide="scale">
+                        <q-time v-model="formMySpace.hora_inicio">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-time>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
               </div>
             </div>
             <div class="row items-center q-mb-md">
               <div class="text-subtitle1 col">Horario de cierre</div>
               <div class="col column">
-                <q-input type="time" filled v-model="formMySpace.hora_cierre" dense error-message="Este campo es requerido" :error="$v.formMySpace.hora_cierre.$error" @blur="$v.formMySpace.hora_cierre.$touch()"/>
+                <q-input filled dense readonly v-model="formMySpace.hora_cierre" placeholder="--:--" @click="$refs.qTimeProxy2.show()"
+                error-message="Este campo es requerido" :error="$v.formMySpace.hora_cierre.$error" @blur="$v.formMySpace.hora_cierre.$touch()">
+                  <template v-slot:append>
+                    <q-icon name="access_time" class="cursor-pointer">
+                      <q-popup-proxy ref="qTimeProxy2" transition-show="scale" transition-hide="scale">
+                        <q-time v-model="formMySpace.hora_cierre">
+                          <div class="row items-center justify-end">
+                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                          </div>
+                        </q-time>
+                      </q-popup-proxy>
+                    </q-icon>
+                  </template>
+                </q-input>
               </div>
             </div>
           </div>

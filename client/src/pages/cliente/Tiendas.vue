@@ -136,7 +136,7 @@ export default {
       this.$q.loading.show({
         message: 'Filtrando datos'
       })
-      this.$api.post(!this.nologin ? 'filtrar_tiendas' : 'filtrar_tiendas_no_logueo', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
+      this.$api.post('filtrar_tiendas', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
         this.stores = res
         this.$q.loading.hide()
       })

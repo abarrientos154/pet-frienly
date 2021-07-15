@@ -4,11 +4,11 @@
         <div class="col-1">
         <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
         </div>
-        <div class="col-10 text-white text-subtitle1 text-center">{{edit ? 'Actualizar datos de mascota' : 'Crear nueva mascota'}}</div>
+        <div class="col-10 text-white text-subtitle1 text-center">{{edit ? 'Editar mascota' : 'Nueva mascota'}}</div>
     </q-header>
 
     <div class="row justify-center q-mb-lg">
-      <div class="text-center text-grey text-h5 text-bold q-my-lg">Cuentanos de tu <br> mascota</div>
+      <div class="text-center text-grey-8 text-h5 q-my-lg">Cuentanos de tu <br> mascota</div>
       <q-img :src="mostrarImg" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
     </div>
 
@@ -89,7 +89,7 @@
         <q-input type="textarea" filled v-model="form.description" error-message="Requerido" :error="$v.form.description.$error" @blur="$v.form.description.$touch()"/>
       </div>
       <div class="column items-center">
-        <q-btn rounded class="q-pa-sm" color="primary" :label="edit ? 'Actualizar Mascota' : 'Crear Mascota'" style="width: 70%;" @click="edit ? updatePet() : savePet()"/>
+        <q-btn rounded no-caps class="q-pa-sm" color="primary" :label="edit ? 'Actualizar Mascota' : 'Crear Mascota'" style="width: 70%;" @click="edit ? updatePet() : savePet()"/>
       </div>
     </div>
   </div>

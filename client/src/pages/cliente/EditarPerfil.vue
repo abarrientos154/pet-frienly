@@ -7,7 +7,7 @@
         <div class="col-10 text-white text-subtitle1 text-center">Mi perfil</div>
     </q-header>
 
-    <q-carousel class="window-height" animated v-model="slide" infinite ref="carousel">
+    <q-carousel style="height: 100%" animated v-model="slide" infinite ref="carousel">
       <q-carousel-slide :name="1" class="q-pa-none">
         <div class="q-pa-md">
           <div class="row justify-center">
@@ -37,7 +37,7 @@
           </div>
          </div>
          <div class="row justify-center q-mt-lg">
-           <q-btn rounded no-caps color="primary" label="Siguiente" style="width: 90%;" @click="next()" class="q-py-xs"/>
+           <q-btn rounded no-caps color="primary" label="Siguiente" style="width: 70%;" @click="next()" class="q-py-xs"/>
          </div>
         </div>
       </q-carousel-slide>
@@ -52,7 +52,7 @@
             </q-avatar>
           </div>
          <div class="q-mx-xl">
-           <div class="q-mb-md">
+           <div>
               <div class="text-caption">País</div>
               <q-select outlined dense filled placeholder="Escoja un pais" v-model="country" :options="countries" @input="cities = country.ciudades, city = null" option-label="name" map-options
               error-message="Este campo es requerido" :error="$v.country.$error" @blur="$v.country.$touch()">
@@ -63,7 +63,7 @@
                 </template>
               </q-select>
             </div>
-            <div class="q-mb-md">
+            <div>
               <div class="text-caption">Ciudad</div>
               <q-select outlined dense filled placeholder="Escoja una ciudad" v-model="city" :options="cities" option-label="name" map-options
               error-message="Este campo es requerido" :error="$v.city.$error" @blur="$v.city.$touch()">
@@ -80,11 +80,11 @@
            </div>
          </div>
          <div class="row justify-center q-mt-lg">
-            <q-btn no-caps rounded color="primary" label="Finalizar" class="q-py-xs" style="width: 90%;"
+            <q-btn no-caps rounded color="primary" label="Finalizar" class="q-py-xs" style="width: 70%;"
             @click="finish()"/>
           </div>
          <div class="row justify-center q-mt-sm">
-            <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 90%;"
+            <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 70%;"
             @click="slide = 1"/>
           </div>
         </div>

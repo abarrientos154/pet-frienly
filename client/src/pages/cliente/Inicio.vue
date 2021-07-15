@@ -111,7 +111,7 @@
         >
           <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width:100%">
             <q-card style="border-radius: 15px; width:330px" clickable v-ripple v-for="(item, index) in lastHost" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
-               <q-img :src="imgProfile + item.spaceFile.name" style="height: 200px; width: 100%">
+               <q-img :src="imgProfile + item._id" style="height: 200px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="row justify-center items-center q-ma-md">
@@ -133,7 +133,7 @@
         <div class="row justify-center col-6 q-mb-sm" v-for="(item, index) in host" :key="index">
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
             @click="$router.push('/inicio-hospedador/' + item._id)">
-              <q-img :src="imgProfile + item.spaceFile.name" style="height: 280px; width: 100%">
+              <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%">
                 <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-bottom q-pl-sm column justify-end q-mb-md bg-primary">

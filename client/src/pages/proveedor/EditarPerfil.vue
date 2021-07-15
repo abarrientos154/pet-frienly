@@ -98,7 +98,7 @@
          </div>
          <div>
            Correo de contacto tienda
-           <q-input filled readonly v-model="formTienda.email"  dense placeholder="micorreo@petfriendly.com "
+           <q-input filled readonly v-model="formTienda.email"  dense placeholder="micorreo@email.com "
            />
          </div>
          <div>
@@ -115,10 +115,6 @@
             <q-btn no-caps rounded color="primary" label="Siguiente" class="q-py-xs" style="width: 90%;"
             @click="siguiente(2)"/>
           </div>
-         <!-- <div class="row justify-center q-mt-sm">
-            <q-btn no-caps flat color="white" text-color="grey-9" label="Atras" style="width: 90%;"
-            @click="slide = 1"/>
-          </div> -->
         </div>
       </q-carousel-slide>
 
@@ -127,7 +123,7 @@
           <div class="q-mb-md text-center text-h5 text-grey-8 q-mt-xl">Dirección del local</div>
           <div class="row justify-center">
             <q-img
-              src="noimg.png"
+              :src="imgPerfil"
               style="height: 40%; width: 90%;"
               >
             </q-img>
@@ -186,8 +182,20 @@
               Horario de Apertura
             </div>
             <div class="col-6">
-              <q-input type="time" filled v-model="formTienda.hora_inicio" dense
-              error-message="Este campo es requerido" :error="$v.formTienda.hora_inicio.$error" @blur="$v.formTienda.hora_inicio.$touch()"/>
+              <q-input filled dense readonly v-model="formTienda.hora_inicio" placeholder="--:--" @click="$refs.qTimeProxy1.show()"
+              error-message="Este campo es requerido" :error="$v.formTienda.hora_inicio.$error" @blur="$v.formTienda.hora_inicio.$touch()">
+                <template v-slot:append>
+                  <q-icon name="access_time" class="cursor-pointer">
+                    <q-popup-proxy ref="qTimeProxy1" transition-show="scale" transition-hide="scale">
+                      <q-time v-model="formTienda.hora_inicio">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                        </div>
+                      </q-time>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
             </div>
           </div>
           <div class="col row">
@@ -195,8 +203,20 @@
               Horario de cierre
             </div>
             <div class="col-6">
-              <q-input type="time" filled v-model="formTienda.hora_cierre" dense
-              error-message="Este campo es requerido" :error="$v.formTienda.hora_cierre.$error" @blur="$v.formTienda.hora_cierre.$touch()"/>
+              <q-input filled dense readonly v-model="formTienda.hora_cierre" placeholder="--:--" @click="$refs.qTimeProxy2.show()"
+              error-message="Este campo es requerido" :error="$v.formTienda.hora_cierre.$error" @blur="$v.formTienda.hora_cierre.$touch()">
+                <template v-slot:append>
+                  <q-icon name="access_time" class="cursor-pointer">
+                    <q-popup-proxy ref="qTimeProxy2" transition-show="scale" transition-hide="scale">
+                      <q-time v-model="formTienda.hora_cierre">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                        </div>
+                      </q-time>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
             </div>
           </div>
           <div><q-checkbox v-model="formTienda.despachoReg" size="xs" label="Despachos a regiones"/></div>

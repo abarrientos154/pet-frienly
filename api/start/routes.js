@@ -78,8 +78,6 @@ addPrefixToGroup(
 
     Route.post("filtrar_tiendas", "UserController.filtrarTiendas")
     Route.post("filtrar_alojamientos", "UserController.filtrarAlojamientos")
-    Route.post("filtrar_tiendas_no_logueo", "UserController.filtrarTiendasNoLogueo")
-    Route.post("filtrar_alojamientos_no_logueo", "UserController.filtrarAlojamientosNoLogueo")
     Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
     Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
   })
