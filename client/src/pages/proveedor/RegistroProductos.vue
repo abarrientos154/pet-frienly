@@ -224,7 +224,7 @@ export default {
           if (res) {
             this.$q.notify({
               message: 'Producto actualizado correctamente',
-              positive: 'positive'
+              color: 'positive'
             })
             this.$q.loading.hide()
             this.$router.go(-1)

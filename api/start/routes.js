@@ -69,16 +69,21 @@ addPrefixToGroup(
     Route.get('producto', 'ProductoController.index')
     Route.get('producto/:id', 'ProductoController.show')
     Route.get('producto_by_proveedor/:proveedor_id', 'ProductoController.productoByProveedor')
+    Route.get('producto_by_cliente/:proveedor_id', 'ProductoController.productoByCliente')
+    Route.get('servicios_by_proveedor/:proveedor_id', 'ServicioController.servicioByProveedor')
+    Route.get('servicios_by_cliente/:proveedor_id', 'ServicioController.servicioByCliente')
 
     Route.get('hospedaje', 'HospedajeController.index')
     Route.get('hospedaje/:id', 'HospedajeController.show')
     Route.get("tienda_by_id/:id", "UserController.tiendaById")
     Route.get("hospedaje_by_id/:id", "UserController.hospedajeById")
     Route.get('hospedaje_by_hospedador/:hospedador_id', 'HospedajeController.hospedajeByHospedador')
+    Route.get('hospedaje_by_cliente/:hospedador_id', 'HospedajeController.hospedajeByCliente')
 
     Route.post("filtrar_tiendas", "UserController.filtrarTiendas")
     Route.post("filtrar_alojamientos", "UserController.filtrarAlojamientos")
     Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
+    Route.get('categorias_by_cliente/:id', 'ProductoController.categoriasByCliente')
     Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
   })
   );

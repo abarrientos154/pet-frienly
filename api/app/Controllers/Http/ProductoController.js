@@ -1,5 +1,6 @@
 'use strict'
 const Producto = use("App/Models/Producto")
+const Mascota = use("App/Models/Mascota")
 const Categoria = use("App/Models/Categoria")
 const Pedidos = use("App/Models/Pedido")
 const Reservas = use("App/Models/Reserva")
@@ -48,6 +49,39 @@ class ProductoController {
     response.send(datos)
   }
 
+  async productoByCliente ({ auth, response, params }) {
+    let user = (await auth.getUser()).toJSON()
+    let mascotas = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
+    var perro = mascotas.find(v => v.type === 'Perro') ? true : false
+    var gato = mascotas.find(v => v.type === 'Gato') ? true : false
+    let filtrado = []
+    let datos = (await Producto.query().where({proveedor_id: params.proveedor_id}).fetch()).toJSON()
+    datos.forEach(async v => {
+      if (v.oferta) {
+        if (moment(v.fecha_termino) < moment()) {
+          v.oferta = false
+          await Producto.query().where({_id: v._id}).update(v)
+        }
+      }
+    });
+    for (let i = 0; i < datos.length; i++) {
+      if (gato && perro) {
+        if (datos[i].destinatario === 'Perros' || datos[i].destinatario === 'Gatos' || datos[i].destinatario === 'Ambos') {
+          filtrado.push(datos[i])
+        }
+      } else if (gato && !perro) {
+        if (datos[i].destinatario === 'Gatos' || datos[i].destinatario === 'Ambos') {
+          filtrado.push(datos[i])
+        }
+      } else if (!gato && perro) {
+        if (datos[i].destinatario === 'Perros' || datos[i].destinatario === 'Ambos') {
+          filtrado.push(datos[i])
+        }
+      }
+    }
+    response.send(filtrado)
+  }
+
   async categorias ({ request, response, view }) {
     let categorias = (await Categoria.query().where({}).fetch()).toJSON()
     response.send(categorias)
@@ -62,6 +96,37 @@ class ProductoController {
       }
     })
     response.send(filtrado)
+  }
+
+  async categoriasByCliente ({ params, response, auth }) {
+    let user = (await auth.getUser()).toJSON()
+    let mascotas = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
+    var perro = mascotas.find(v => v.type === 'Perro') ? true : false
+    var gato = mascotas.find(v => v.type === 'Gato') ? true : false
+    let filtrado = []
+    let categorias = (await Categoria.query().where({}).fetch()).toJSON()
+    let productos = (await Producto.query().where({proveedor_id: params.id}).fetch()).toJSON()
+    for (let i = 0; i < productos.length; i++) {
+      if (gato && perro) {
+        if (productos[i].destinatario === 'Perros' || productos[i].destinatario === 'Gatos' || productos[i].destinatario === 'Ambos') {
+          filtrado.push(productos[i])
+        }
+      } else if (gato && !perro) {
+        if (productos[i].destinatario === 'Gatos' || productos[i].destinatario === 'Ambos') {
+          filtrado.push(productos[i])
+        }
+      } else if (!gato && perro) {
+        if (productos[i].destinatario === 'Perros' || productos[i].destinatario === 'Ambos') {
+          filtrado.push(productos[i])
+        }
+      }
+    }
+    let respuesta = categorias.filter(v => {
+      if (filtrado.find(c => c.categoria_id === v._id)) {
+        return v
+      }
+    })
+    response.send(respuesta)
   }
 
   async pedidos ({ request, response, auth }) {

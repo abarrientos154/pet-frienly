@@ -2,6 +2,7 @@
 const Hospedaje = use("App/Models/Hospedaje")
 const Servicios = use("App/Models/Servicio")
 const User = use("App/Models/Hospedaje")
+const Mascota = use("App/Models/Mascota")
 const { validate } = use("Validator")
 const Helpers = use('Helpers')
 const mkdirp = use('mkdirp')
@@ -37,6 +38,34 @@ class HospedajeController {
       datos[i].filename = datos[i].images[0]
     }
     response.send(datos)
+  }
+
+  async hospedajeByCliente ({ auth, response, params }) {
+    let user = (await auth.getUser()).toJSON()
+    let mascotas = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
+    var perro = mascotas.find(v => v.type === 'Perro') ? true : false
+    var gato = mascotas.find(v => v.type === 'Gato') ? true : false
+    let filtrado = []
+    let datos = (await Hospedaje.query().where({ hospedador_id: params.hospedador_id }).with('datos_hospedador').fetch()).toJSON()
+    for (let i in datos) {
+      datos[i].filename = datos[i].images[0]
+    }
+    for (let i = 0; i < datos.length; i++) {
+      if (gato && perro) {
+        if (datos[i].pet_type === 'Perros' || datos[i].pet_type === 'Gatos' || datos[i].pet_type === 'Ambos') {
+          filtrado.push(datos[i])
+        }
+      } else if (gato && !perro) {
+        if (datos[i].pet_type === 'Gatos' || datos[i].pet_type === 'Ambos') {
+          filtrado.push(datos[i])
+        }
+      } else if (!gato && perro) {
+        if (datos[i].pet_type === 'Perros' || datos[i].pet_type === 'Ambos') {
+          filtrado.push(datos[i])
+        }
+      }
+    }
+    response.send(filtrado)
   }
 
   /**

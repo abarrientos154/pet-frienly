@@ -25,10 +25,8 @@ class MascotaController {
    */
   async index ({ request, response, auth }) {
     try {
-      console.log('sirve index');
       var user = (await auth.getUser()).toJSON();
       let pets = (await Mascota.where({ ownerId: user._id }).fetch()).toJSON()
-      console.log(pets)
       response.send(pets)
     } catch (error) {
       console.error('index ' + error.name + ': ' + error.message)
@@ -62,7 +60,6 @@ class MascotaController {
    */
   async store ({ request, response, auth }) {
     try {
-      console.log(request.all())
       var dat = request.only(['dat'])
       dat = JSON.parse(dat.dat)
       const validation = await validate(dat, Mascota.fieldValidationRules())
@@ -77,7 +74,6 @@ class MascotaController {
               types: ['image'],
               size: '20mb'
             })
-            console.log('albumpic :>> ', albumpic);
             if (albumpic != null) {
               if (Helpers.appRoot('storage/uploads/pets')) {
                 await albumpic.move(Helpers.appRoot('storage/uploads/pets'), {
@@ -158,7 +154,6 @@ class MascotaController {
               overwrite: true
             })
           } else if (profilePic != null) {
-            console.log('profilePic :>> ', profilePic)
             if (Helpers.appRoot('storage/uploads/pets')) {
               await profilePic.move(Helpers.appRoot('storage/uploads/pets'), {
                 name: codeFile,
@@ -198,7 +193,6 @@ class MascotaController {
       });
     }
     let petDestroy = (await Mascota.find(id)).delete();
-    console.log('probando')
     response.send(petDestroy)
 
     /* let eliminar = await Mascota.find(params.id)

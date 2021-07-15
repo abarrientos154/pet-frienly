@@ -177,7 +177,7 @@ export default {
       this.$q.loading.show({
         message: 'Cargando hospedajes'
       })
-      this.$api.get('hospedaje_by_hospedador/' + this.hospedador._id).then(res => {
+      this.$api.get(this.rol !== 2 ? 'hospedaje_by_hospedador/' + this.hospedador._id : 'hospedaje_by_cliente/' + this.hospedador._id).then(res => {
         if (res) {
           this.allhospedajes = res
           this.hospedajes = this.allhospedajes.slice(0, 3)

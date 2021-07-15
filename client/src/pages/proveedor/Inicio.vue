@@ -31,12 +31,12 @@
     <div class="q-pa-sm q-mt-md">
       <div class="text-h6">Servicios ofrecidos</div>
       <q-scroll-area
-          v-if="tienda.servicios && tienda.servicios.length"
+          v-if="servicios.length"
           horizontal
           style="height: 160px;"
         >
           <div class="row no-wrap q-py-sm q-px-md q-gutter-md">
-            <q-card style="border-radius: 50px; width:140px; height:140px" clickable v-ripple v-for="(item, index) in tienda.servicios" :key="index"
+            <q-card style="border-radius: 50px; width:140px; height:140px" clickable v-ripple v-for="(item, index) in servicios" :key="index"
             @click="servicio = item, verServicio = true">
               <q-img :src="baseuServicios + item._id" style="height: 100%; width: 100%; border-radius: 50px" >
                 <div class="full-width text-center absolute-bottom bg-primary">{{item.servicio.name}}</div>
@@ -248,7 +248,7 @@
             <div class="text-subtitle1 text-bold">Detalles del servicio ofrecido</div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold">Disponible: </div>
-              <div class="text-subtitle1 q-pl-sm">{{servicio.destinatario}}</div>
+              <div class="text-subtitle1 q-pl-sm">{{servicio.destinatario === 'Ambos' ? 'Perros y Gatos' : servicio.destinatario}}</div>
             </div>
             <div class="row items-center">
               <div class="text-subtitle1 text-bold">Valor por hora: </div>
@@ -292,6 +292,7 @@
               </div>
               <div class="q-py-md">
                 <div class="text-h6">{{producto.name}}</div>
+                <div class="text-subtitle1 text-grey-8">Para - {{producto.destinatario === 'Ambos' ? 'Perros y Gatos' : producto.destinatario}}</div>
                 <div class="text-subtitle1 text-grey-8">Disponible - {{producto.cantidad}} unidades</div>
                 <div class="text-primary text-h5 q-py-md">$ {{producto.oferta ? formatPrice(producto.oferta_price) : formatPrice(producto.price)}}</div>
                 <div class="text-h6">Descripción</div>
@@ -509,6 +510,7 @@ export default {
       producto: {},
       form: {},
       direccion: null,
+      servicios: [],
       comentarios: [],
       carrito: [],
       allProductos: [],
@@ -554,7 +556,6 @@ export default {
     if (this.$route.params.id) {
       this.id = this.$route.params.id
       this.getTienda(this.id)
-      this.getProductos(this.id)
     }
     const value = localStorage.getItem('TRI_SESSION_INFO')
     if (value) {
@@ -571,8 +572,6 @@ export default {
           if (this.user.roles[0] === 3) {
             this.id = this.user._id
             this.getTienda(this.user._id)
-            this.getProductos(this.user._id)
-            this.getCategorias(this.user._id)
           }
         }
       })
@@ -581,12 +580,14 @@ export default {
       await this.$api.get('tienda_by_id/' + id).then(v => {
         if (v) {
           this.tienda = v.tienda
-          this.getCategorias(v._id)
           if (this.user._id === v._id) {
             this.miTienda = true
           } else {
             this.miTienda = false
           }
+          this.getServicios(id)
+          this.getCategorias(id)
+          this.getProductos(id)
           this.$api.get('mis_comentarios/' + id).then(res => {
             if (res) {
               this.comentarios = res
@@ -597,9 +598,10 @@ export default {
     },
     getProductos (id) {
       this.$q.loading.show({
-        message: 'Cargando productos'
+        message: 'Cargando datos'
       })
-      this.$api.get('producto_by_proveedor/' + id).then(res => {
+      const variable = this.miTienda || !this.login ? 'producto_by_proveedor/' + id : 'producto_by_cliente/' + id
+      this.$api.get(variable).then(res => {
         if (res) {
           this.allProductos = res
           var tot = res.slice()
@@ -611,8 +613,17 @@ export default {
         }
       })
     },
+    getServicios (id) {
+      const variable = this.miTienda || !this.login ? 'servicios_by_proveedor/' + id : 'servicios_by_cliente/' + id
+      this.$api.get(variable).then(res => {
+        if (res) {
+          this.servicios = res
+        }
+      })
+    },
     getCategorias (id) {
-      this.$api.get('categorias_by_user/' + id).then(res => {
+      const variable = this.miTienda || !this.login ? 'categorias_by_user/' + id : 'categorias_by_cliente/' + id
+      this.$api.get(variable).then(res => {
         if (res) {
           this.categorias = res
         }

@@ -8,6 +8,7 @@ const User = use("App/Models/User")
 const Servicio = use("App/Models/Servicio")
 const TiendaServicio = use("App/Models/TiendaServicio")
 const Producto = use("App/Models/Producto")
+const Mascota = use("App/Models/Mascota")
 const Hospedaje = use("App/Models/Hospedaje")
 const Comentario = use('App/Models/Comentario')
 const Role = use("App/Models/Role")
@@ -413,10 +414,8 @@ class UserController {
 
   async tiendaById({ params, response }) {
     const user = (await User.query().where({_id: params.id}).first()).toJSON()
-    let servicios = (await TiendaServicio.query().where({tienda_id: params.id}).with('servicio').fetch()).toJSON()
     let country = await Pais.find(user.tienda.country_id)
     let city = await Ciudad.find(user.tienda.city_id)
-    user.tienda.servicios = servicios
     user.tienda.country = country
     user.tienda.city = city
 
@@ -456,8 +455,13 @@ class UserController {
   async userByRol({ request, auth, response }) {
     try {
       let logueado = (await auth.getUser()).toJSON()
+      let mascotas = (await Mascota.where({ ownerId: logueado._id }).fetch()).toJSON()
+      var perro = mascotas.find(v => v.type === 'Perro') ? true : false
+      var gato = mascotas.find(v => v.type === 'Gato') ? true : false
+      let tiene = []
       let filtrado
       let rol = request.all()
+
       const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
       if (rol.rol[0] == 3) {
         for (let i in user) {
@@ -474,7 +478,25 @@ class UserController {
             user[i].calificacion = total
           }
         }
-        filtrado = user.filter(v => v.tienda.city_id === logueado.city_id)
+
+        for (let m = 0; m < user.length; m++) {
+          var prod = (await Producto.query().where({proveedor_id: user[m]._id}).fetch()).toJSON()
+          var serv = (await TiendaServicio.query().where({tienda_id: user[m]._id}).fetch()).toJSON()
+          if (gato && perro) {
+            if (prod.find(v => v.destinatario === 'Perros' || v.destinatario === 'Gatos' || v.destinatario === 'Ambos') || serv.find(v => v.destinatario === 'Perros' || v.destinatario === 'Gatos' || v.destinatario === 'Ambos')) {
+              tiene.push(user[m])
+            }
+          } else if (gato && !perro) {
+            if (prod.find(v => v.destinatario === 'Gatos' || v.destinatario === 'Ambos') || serv.find(v => v.destinatario === 'Gatos' || v.destinatario === 'Ambos')) {
+              tiene.push(user[m])
+            }
+          } else if (!gato && perro) {
+            if (prod.find(v => v.destinatario === 'Perros' || v.destinatario === 'Ambos') || serv.find(v => v.destinatario === 'Perros' || v.destinatario === 'Ambos')) {
+              tiene.push(user[m])
+            }
+          }
+        }
+        filtrado = tiene.filter(v => v.tienda.city_id === logueado.city_id)
       } else if (rol.rol[0] == 4) {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].my_space.ciudad_id)).name
@@ -491,7 +513,24 @@ class UserController {
             user[i].calificacion = total
           }
         }
-        filtrado = user.filter(v => v.my_space.ciudad_id === logueado.city_id)
+
+        for (let m = 0; m < user.length; m++) {
+          var hosp = (await Hospedaje.query().where({hospedador_id: user[m]._id}).fetch()).toJSON()
+          if (gato && perro) {
+            if (hosp.find(v => v.pet_type === 'Perros' || v.pet_type === 'Gatos' || v.pet_type === 'Ambos')) {
+              tiene.push(user[m])
+            }
+          } else if (gato && !perro) {
+            if (hosp.find(v => v.pet_type === 'Gatos' || v.pet_type === 'Ambos')) {
+              tiene.push(user[m])
+            }
+          } else if (!gato && perro) {
+            if (hosp.find(v => v.pet_type === 'Perros' || v.pet_type === 'Ambos')) {
+              tiene.push(user[m])
+            }
+          }
+        }
+        filtrado = tiene.filter(v => v.my_space.ciudad_id === logueado.city_id)
       }
       response.send(filtrado)
     } catch (error) {
