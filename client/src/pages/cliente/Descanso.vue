@@ -48,9 +48,9 @@
           </q-select>
         </div>
         </div>
-        <div class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
-        <div class="text-caption text-grey-8">Selecciona tu ciudad</div>
-        <div class="row q-px-sm q-mb-sm">
+        <div v-if="!nologin" class="q-mb-md q-mx-sm text-weight-bolder">¿Donde estas buscando?
+        <div v-if="!nologin" class="text-caption text-grey-8">Selecciona tu ciudad</div>
+        <div v-if="!nologin" class="row q-px-sm q-mb-sm">
           <q-select dense filled class="col-11" v-model="city" :options="cities" option-label="name" map-options
           @input="filtrarAlojamientos()">
           </q-select>
@@ -89,6 +89,7 @@ export default {
     return {
       petType: null,
       city: null,
+      nologin: true,
       imgProfile: '',
       petTypes: ['Perros', 'Gatos', 'Ambos'],
       cities: [],
@@ -97,8 +98,14 @@ export default {
     }
   },
   mounted () {
-    this.getCities()
-    this.getHost()
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getCities()
+      this.nologin = false
+      this.getHost()
+    } else {
+      this.getHost()
+    }
   },
   methods: {
     async getCities () {
@@ -109,18 +116,20 @@ export default {
             this.petType = this.$route.params.type
             this.city = this.cities.find(v => v._id === this.$route.params.city)
             this.filtrarAlojamientos()
-            console.log('ciudad', this.city)
           }
         }
       })
     },
     async getHost () {
-      await this.$api.post('user_by_rol', { rol: [4] }).then(res => {
+      await this.$api.post(!this.nologin ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [4] }).then(res => {
         this.imgProfile = env.apiUrl + 'espacio_img/'
         if (res) {
           this.mejorCalificados = res
           if (!this.$route.params.type) {
             this.host = res
+          } else {
+            this.petType = this.$route.params.type
+            this.filtrarAlojamientos()
           }
         }
       })
@@ -129,7 +138,7 @@ export default {
       this.$q.loading.show({
         message: 'Filtrando datos'
       })
-      this.$api.post('filtrar_alojamientos', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
+      this.$api.post(this.nologin ? 'filtrar_alojamientos' : 'filtrar_alojamientos_no_logueo', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
         this.host = res
         this.$q.loading.hide()
       })

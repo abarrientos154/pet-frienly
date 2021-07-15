@@ -123,7 +123,7 @@
                 </div>
                 <div class="col-3">
                   <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
-                  <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="addCarrito(item)" />
+                  <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="login ? addCarrito(item) : nologin = true" />
                 </div>
               </div>
               <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
@@ -170,7 +170,7 @@
                   </div>
                   <div class="col-3">
                     <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
-                    <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="addCarrito(item)" />
+                    <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="login ? addCarrito(item) : nologin = true" />
                   </div>
                 </div>
                 <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
@@ -206,7 +206,7 @@
                   </div>
                   <div class="col-3">
                     <q-btn v-if="miTienda" flat round color="grey-10" icon="edit" @click="$router.push('/editar_producto/' + item._id)" />
-                    <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="addCarrito(item)" />
+                    <q-btn v-if="miTienda === false" round color="primary" icon="shopping_bag" @click="login ? addCarrito(item) : nologin = true" />
                   </div>
                 </div>
                 <div class="bg-primary absolute-bottom q-mb-md" style="width:100%">
@@ -232,7 +232,7 @@
       </q-fab>
     </q-page-sticky>
 
-    <q-page-sticky v-if="miTienda === false" position="bottom-right" :offset="[18, 18]">
+    <q-page-sticky v-if="miTienda === false && login" position="bottom-right" :offset="[18, 18]">
       <q-btn fab icon="shopping_bag" color="primary" @click="verCarrito = true" />
     </q-page-sticky>
 
@@ -263,7 +263,7 @@
           <q-btn v-if="miTienda" flat no-caps color="red" icon="delete"
           @click="eliminarServicio(servicio._id)"/>
           <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
-          @click="addCarrito(servicio, true), verServicio = false"/>
+          @click="login ? addCarrito(servicio, true) : nologin = true, verServicio = false"/>
         </div>
       </q-card>
     </q-dialog>
@@ -307,7 +307,7 @@
           <q-btn v-if="miTienda" flat no-caps color="red" icon="delete"
           @click="eliminarProducto(producto._id)"/>
           <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
-          @click="addCarrito(producto,false), verProducto = false"/>
+          @click="login ? addCarrito(producto,false) : nologin = true, verProducto = false"/>
         </div>
       </q-card>
     </q-dialog>
@@ -397,27 +397,8 @@
             <div class="q-px-sm">
               <div class="text-h6 text-bold">Dirección de envío</div>
               <div class="text-subtitle1 text-grey-7">{{user.name}}</div>
-              <q-select borderless dense color="black" v-model="direccion" :options="ciudades" label="Seleccione dirección" map-options
-                error-message="requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"
-                option-label="name" >
-                  <template v-slot:no-option>
-                    <q-item>
-                      <q-item-section class="text-grey text-italic">
-                        No hay Resultados
-                      </q-item-section>
-                    </q-item>
-                  </template>
-                  <template v-slot:option="scope">
-                    <q-item
-                      v-bind="scope.itemProps"
-                      v-on="scope.itemEvents"
-                    >
-                      <q-item-section>
-                        <q-item-label v-html="scope.opt.name" />
-                      </q-item-section>
-                    </q-item>
-                  </template>
-              </q-select>
+              <q-input filled v-model="direccion"  dense placeholder="Ingrese una dirección"
+                error-message="Requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"/>
               <q-separator />
               <div class="text-h6 text-bold q-my-md">Pedido</div>
               <div class="row justify-between" style="width:100%">
@@ -472,6 +453,23 @@
         </q-img>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="nologin">
+      <q-card class="q-pa-md">
+        <q-card-section>
+          <div class="text-center text-subtitle1">Para poder adquirir un servicio o producto debes tener una cuenta.</div>
+          <div class="text-center text-h6">¿Deseas registrarte?</div>
+        </q-card-section>
+
+        <q-card-section class="column items-center">
+          <q-btn no-caps style="border-radius: 14px" label="Registrarme" color="primary" @click="$router.push('/registro')" />
+          <div class="row items-center">
+            <div>Ya tengo una cuenta</div>
+            <q-btn no-caps flat dense class="text-subtitle1 text-bold" color="primary" @click="$router.push('/login')" >Iniciar Sesión</q-btn>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -492,6 +490,8 @@ export default {
       comprarCarrito: false,
       compraExitosa: false,
       compraFallo: false,
+      login: true,
+      nologin: false,
       id: '',
       filterSelec: '',
       baseuTienda: '',
@@ -511,7 +511,6 @@ export default {
       direccion: null,
       comentarios: [],
       carrito: [],
-      ciudades: [],
       allProductos: [],
       ultimos: [],
       productos: [],
@@ -552,11 +551,16 @@ export default {
     this.baseuPerfil = env.apiUrl + 'perfil_img/'
     this.baseuproductos = env.apiUrl + 'productos_img/'
     this.baseuServicios = env.apiUrl + 'servicio_img/'
-    this.getUser()
     if (this.$route.params.id) {
       this.id = this.$route.params.id
       this.getTienda(this.id)
       this.getProductos(this.id)
+    }
+    const value = localStorage.getItem('TRI_SESSION_INFO')
+    if (value) {
+      this.getUser()
+    } else {
+      this.login = false
     }
   },
   methods: {
@@ -569,12 +573,6 @@ export default {
             this.getTienda(this.user._id)
             this.getProductos(this.user._id)
             this.getCategorias(this.user._id)
-          } else {
-            this.$api.get('cityByCountry/' + this.user.country_id).then(v => {
-              if (v) {
-                this.ciudades = v
-              }
-            })
           }
         }
       })
@@ -736,7 +734,8 @@ export default {
           message: 'Iniciando compra'
         })
         this.form.country_id = this.user.country_id
-        this.form.city_id = this.direccion._id
+        this.form.city_id = this.user.city_id
+        this.form.direccion = this.direccion
         this.form.cliente_id = this.user._id
         this.form.tienda_id = this.id
         this.form.tienda_name = this.tienda.name

@@ -63,6 +63,7 @@ addPrefixToGroup(
     Route.get('servicio_img/:file', 'UploadController.getFileByDirectoryServicio')
 
     Route.post("user_by_rol", "UserController.userByRol") // metodo para obtener usuarios segun el rol
+    Route.post("user_by_rol_no_logueo", "UserController.userByRolNoLogueo")
     Route.get("user_by_id/:id", "UserController.userById") // metodo para obtener informacion del usuario por id del mismo
 
     Route.get('producto', 'ProductoController.index')
@@ -71,6 +72,16 @@ addPrefixToGroup(
 
     Route.get('hospedaje', 'HospedajeController.index')
     Route.get('hospedaje/:id', 'HospedajeController.show')
+    Route.get("tienda_by_id/:id", "UserController.tiendaById")
+    Route.get("hospedaje_by_id/:id", "UserController.hospedajeById")
+    Route.get('hospedaje_by_hospedador/:hospedador_id', 'HospedajeController.hospedajeByHospedador')
+
+    Route.post("filtrar_tiendas", "UserController.filtrarTiendas")
+    Route.post("filtrar_alojamientos", "UserController.filtrarAlojamientos")
+    Route.post("filtrar_tiendas_no_logueo", "UserController.filtrarTiendasNoLogueo")
+    Route.post("filtrar_alojamientos_no_logueo", "UserController.filtrarAlojamientosNoLogueo")
+    Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
+    Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
   })
   );
   addPrefixToGroup(
@@ -78,8 +89,6 @@ addPrefixToGroup(
       // Insertar rutas con protección de autenticación aquí
     Route.get("user_info", "UserController.userInfo") // metodo para obtener informacion del usuario que esta logueado
     Route.get("user_logueado", "UserController.userLogueado")
-    Route.get("tienda_by_id/:id", "UserController.tiendaById")
-    Route.get("hospedaje_by_id/:id", "UserController.hospedajeById")
     Route.get("all_user", "UserController.allUser") // metodo para obtener informacion del usuario que esta logueado
     Route.post("user_enable/:id", "UserController.userEnable") // metodo para bloquear o desbloquear usuarios
     Route.post("user_by_status", "UserController.userByStatus") // metodo para obtener proveedores pendientes
@@ -99,7 +108,6 @@ addPrefixToGroup(
 
     Route.post('producto', 'UploadController.registrarProducto')
     Route.get('categorias', 'ProductoController.categorias')
-    Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
     Route.put('producto/:id', 'ProductoController.update')
     Route.delete('producto/:id', 'ProductoController.destroy')
     Route.get('producto_filtrado/:filtrar', 'ProductoController.productoFiltrado')
@@ -108,7 +116,6 @@ addPrefixToGroup(
 
     Route.post('hospedaje', 'UploadController.registrarHospedaje')
     Route.put('hospedaje/:id', 'HospedajeController.update')
-    Route.get('hospedaje_by_hospedador/:hospedador_id', 'HospedajeController.hospedajeByHospedador')
     Route.delete('hospedaje/:id', 'HospedajeController.destroy')
     Route.post('hospedaje_filtrado', 'HospedajeController.hospedajeFiltrado')
     Route.post('perfil_imagen', 'UploadController.newimagenById')
@@ -136,10 +143,6 @@ addPrefixToGroup(
     Route.get("ventas_diarias", "ProductoController.ventasDiarias")
     Route.post("estadistica", "ProductoController.crearEstadistica")
     Route.post("calificar", "ProductoController.calificarTienda")
-    Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
-
-    Route.post("filtrar_tiendas", "UserController.filtrarTiendas")
-    Route.post("filtrar_alojamientos", "UserController.filtrarAlojamientos")
 
   }).middleware("auth")
 );
