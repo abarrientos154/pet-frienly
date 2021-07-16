@@ -7,17 +7,17 @@
           <div class="q-mb-lg text-center text-h5 text-grey-8">Datos del Aliado</div>
 
           <div class="column items-center q-mb-lg">
-            <q-avatar rounded style="height: 200px; width: 90%; border-radius: 25px;" class="row justify-center">
-              <q-img style="height:100%; width:100%" :src="imgRepresentante != '' ? imgRepresentante : 'noimg.png'">
-                <q-file borderless v-model="imgR" @input="representante_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
-                @blur="$v.imgR.$touch()">
-                  <div v-if="imgRepresentante != ''" class="absolute-center column items-center">
+            <q-avatar rounded style="height: 200px; width: 200px; border-radius: 25px;" class="bg-grey">
+              <q-img style="height: 100%;" :src="imgRepresentante != '' ? imgRepresentante : ''">
+                <q-file borderless v-model="imgR" class="button-camera" @input="representante_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%; font-size: 0px">
+                  <div class="absolute-center row justify-center" style="width:100%">
                     <q-icon name="cloud_upload" size="75px" color="white" />
+                    <div class="col-12 text-center text-white" style="font-size: 14px">Toca para subir una selfie</div>
                   </div>
                 </q-file>
               </q-img>
             </q-avatar>
-            <div :class="$v.imgR.$error ? 'text-negative text-subtitle2 text-center' : 'text-grey-8 text-subtitle2 text-center'"> IMG Representante legal </div>
+            <div class="text-negative" v-if="$v.imgR.$error"> La imagen es Requerida </div>
           </div>
 
           <div class="q-mt-sm">
@@ -75,33 +75,31 @@
           </div>
           <div>
               <div class="text-caption q-mb-sm">Imágenes de documento de identificación</div>
-              <div class="row q-gutter-sm">
-                <div class="col q-mb-sm">
+              <div class="row q-gutter-sm q-mb-sm">
+                <div class="col-7">
                   <div class="text-caption">Carga la parte frontal de tu documento de identidad</div>
                   <q-avatar rounded style="width: 100%;" class="bg-primary">
                     <q-file borderless :disable="identificacion.length < 1 ? false : true" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
                     </q-file>
                   </q-avatar>
+                  <q-avatar class="bg-grey q-mt-sm" rounded style="height: 50px;width: 100%">
+                    <q-img style="height: 100%;" :src="identificacion.length ? identificacion[0] : ''"/>
+                    <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.images_ident.$error">Imagen requerida</div>
+                  </q-avatar>
                 </div>
-                <div class="col q-mb-sm">
+                <div class="col-7">
                   <div class="text-caption">Carga la parte trasera de tu documento de identidad</div>
                   <q-avatar rounded style="width: 100%;" class="bg-primary">
                     <q-file borderless :disable="identificacion.length > 1 || identificacion.length < 1 ? true : false" v-model="imgI" @input="identificacion_img()" accept=".jpg, image/*" style="width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1 bg-transparent">Cargar imagen</div>
                     </q-file>
                   </q-avatar>
+                  <q-avatar class="bg-grey q-mt-sm" rounded style="height: 50px;width: 100%">
+                    <q-img style="height: 100%;" :src="identificacion.length > 1 ? identificacion[1] : ''"/>
+                    <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.images_ident.$error">Imagen requerida</div>
+                  </q-avatar>
                 </div>
-              </div>
-              <div class="row">
-                <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="identificacion.length ? identificacion[0] : ''"/>
-                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.images_ident.$error">Imagen requerida</div>
-                </q-avatar>
-                <q-avatar class="bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="identificacion.length > 1 ? identificacion[1] : ''"/>
-                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.images_ident.$error">Imagen requerida</div>
-                </q-avatar>
               </div>
           </div>
           <div class="column items-center justify-center" style="padding-top: 20px">

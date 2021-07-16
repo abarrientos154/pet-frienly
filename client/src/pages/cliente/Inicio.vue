@@ -3,9 +3,6 @@
     <div style="height: 300px; width: 100%;" class="bg-grey">
       <q-img src="nopublicidad.jpg" style="height: 300px; width: 100%" />
     </div>
-    <div v-if="!login" class="absolute-top-right q-pa-md">
-      <q-btn no-caps rounded color="primary" label="Iniciar sesión" to="/login" />
-    </div>
 
     <div class="q-mx-md">
       <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
@@ -51,13 +48,13 @@
               </q-img>
               <div class="absolute-bottom column justify-end q-mb-md">
                 <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
-                <div class="bg-primary q-pl-sm">
+                <div class="bg-primary q-pl-sm" style="width:100%">
                   <div class="row no-wrap items-center" style="width:100%">
                     <div class="text-white text-subtitle1 ellipsis">{{store.tienda.name}}</div>
                   </div>
-                  <div class="row no-wrap items-center" style="width:100%">
-                    <q-icon name="place" class="q-mr-xs text-white"/>
-                    <div class="ellipsis text-caption text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+                  <div class="row no-wrap items-start" style="width:100%">
+                    <q-icon name="place" class="q-pt-xs q-pr-xs text-white"/>
+                    <div class="ellipsis text-caption text-white">{{store.city}} <br> {{store.tienda.direccion}}</div>
                   </div>
                 </div>
               </div>
@@ -80,13 +77,13 @@
               </q-img>
               <div class="absolute-bottom column justify-end q-mb-md">
                 <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
-                <div class="bg-primary q-pl-sm">
+                <div class="bg-primary q-pl-sm" style="width:100%">
                   <div class="row no-wrap items-center" style="width:100%">
                     <div class="text-white text-subtitle1 ellipsis">{{store.tienda.name}}</div>
                   </div>
-                  <div class="row no-wrap items-center" style="width:100%">
-                    <q-icon name="place" class="q-mr-xs text-white"/>
-                    <div class="ellipsis text-caption text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+                  <div class="row no-wrap items-start" style="width:100%">
+                    <q-icon name="place" class="q-pt-xs q-pr-xs text-white"/>
+                    <div class="ellipsis text-caption text-white">{{store.city}} <br> {{store.tienda.direccion}}</div>
                   </div>
                 </div>
               </div>
@@ -118,9 +115,9 @@
                 <div class="row no-wrap items-center" style="width:100%">
                   <div class="text-grey-8 text-bold text-subtitle1 ellipsis">{{item.my_space.name}}</div>
                 </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-grey-8"/>
-                  <div class="text-grey-8 ellipsis text-caption col-10">{{item.country}}, {{item.city}}</div>
+                <div class="row no-wrap items-start" style="width:100%">
+                  <q-icon name="place" class="q-pt-xs q-pr-xs text-grey-8"/>
+                  <div class="text-grey-8 ellipsis text-caption col-10">{{item.country}} <br> {{item.city}}</div>
                 </div>
               </div>
             </q-card>
@@ -140,9 +137,9 @@
                 <div class="row no-wrap items-center" style="width:100%">
                   <div class="text-white text-subtitle1 ellipsis">{{item.my_space.name}}</div>
                 </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-white text-caption q-mr-sm">{{item.city}}, {{item.my_space.direction}}</div>
+                <div class="row no-wrap items-start" style="width:100%">
+                  <q-icon name="place" class="q-pt-xs q-pr-xs text-white"/>
+                  <div class="ellipsis text-white text-caption">{{item.city}} <br> {{item.my_space.direction}}</div>
                 </div>
               </div>
             </q-card>
@@ -162,6 +159,10 @@
         <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
           color="primary" icon="pets" label="Mascotas" @click="$router.push('/mascotas')" />
       </q-fab>
+    </q-page-sticky>
+
+    <q-page-sticky v-if="!login" position="bottom-right" :offset="[18, 18]">
+      <q-btn no-caps class="q-pa-xs" rounded color="primary" label="¡Regístrate ahora!" to="/login" />
     </q-page-sticky>
   </div>
 </template>

@@ -7,9 +7,8 @@
         <div class="col-10 text-white text-subtitle1 text-center">{{edit ? 'Editar mascota' : 'Nueva mascota'}}</div>
     </q-header>
 
-    <div class="row justify-center q-mb-lg">
-      <div class="text-center text-grey-8 text-h5 q-my-lg">Cuentanos de tu <br> mascota</div>
-      <q-img :src="mostrarImg" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
+    <div class="row justify-center q-mb-md">
+      <div class="text-center text-grey-8 text-h5 q-my-lg">Cuéntanos de tu <br> mascota</div>
     </div>
 
     <div>
@@ -107,7 +106,6 @@ export default {
       form: {},
       index: [],
       img: null,
-      mostrarImg: null,
       files: [],
       petImg: [],
       perfilFile: null,
@@ -150,7 +148,6 @@ export default {
           this.form = res
           console.log('this.form >> ', this.form)
           this.imgsTraidas()
-          this.mostrarImg = this.petImg[0]
         }
       }).catch(error => {
         console.log(error)
@@ -249,12 +246,10 @@ export default {
       if (this.img && i != null) {
         this.files[i] = this.img
         this.petImg[i] = URL.createObjectURL(this.img)
-        this.mostrarImg = URL.createObjectURL(this.img)
         this.img = null
       } else {
         this.files.push(this.img)
         this.petImg.push(URL.createObjectURL(this.img))
-        this.mostrarImg = URL.createObjectURL(this.img)
         this.img = null
       }
     }

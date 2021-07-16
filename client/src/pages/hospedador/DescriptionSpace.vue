@@ -155,31 +155,39 @@
 
       <q-dialog persistent maximized v-model="reservaExitosa">
       <q-card style="width: 100%; height: 100%">
-        <q-img src="noimg.png" style="width:100%; height: 100%">
-          <div class="absolute-bottom q-py-sm full-width">
-            <div class="text-h4 text-white text-bold q-px-sm">Tu reserva se ha realizado con éxito</div>
-            <div class="text-subtitle1 text-white q-px-sm">Puedes ver tu reserva en tu panel de reservas</div>
-            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
-              <q-btn no-caps color="primary" label="Volver al alojamiento" class="q-py-xs" style="width: 60%;"
-                @click="$router.go(-1)"/>
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
             </div>
+            <div class="text-h5 text-bold text-center text-grey-9 q-px-md">Tu reserva se ha realizado con éxito</div>
+            <div class="text-caption text-center">Puedes ver tu reserva en tu panel de reservas</div>
           </div>
-        </q-img>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Volver al alojamiento" style="width: 60%"
+              @click="$router.go(-1)"/>
+          </div>
+        </div>
       </q-card>
     </q-dialog>
 
     <q-dialog persistent maximized v-model="reservaFallo">
       <q-card style="width: 100%; height: 100%">
-        <q-img src="noimg.png" style="width:100%; height: 100%">
-          <div class="absolute-bottom q-py-sm full-width">
-            <div class="text-h4 text-white text-bold q-px-sm">Tu reserva ha fallado</div>
-            <div class="text-subtitle1 text-white q-px-sm">Te estamos redireccionando al hospedaje</div>
-            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
-              <q-btn no-caps color="primary" label="Volver al alojamiento" class="q-py-xs" style="width: 60%;"
-                @click="$router.go(-1)"/>
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
             </div>
+            <div class="text-h5 text-bold text-center text-grey-9 q-px-md">Tu reserva ha fallado</div>
+            <div class="text-caption text-center">Te estamos redireccionando al hospedaje</div>
           </div>
-        </q-img>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Volver al alojamiento" style="width: 60%"
+              @click="$router.go(-1)"/>
+          </div>
+        </div>
       </q-card>
     </q-dialog>
 

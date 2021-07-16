@@ -105,13 +105,12 @@
 
       <q-carousel-slide :name="3" class="q-pa-none">
         <div>
-          <div class="q-pa-lg">
+          <div class="q-pt-lg q-pl-lg">
             <q-btn flat round color="primary" icon="arrow_back" @click="slide=2"/>
           </div>
 
-          <div class="row justify-center q-mb-lg">
+          <div class="row justify-center q-mb-md">
             <div class="text-center text-grey-8 text-h5 q-mb-lg">Cuéntanos de tu <br> mascota</div>
-            <q-img :src="petImg[files.length - 1]" class="bg-grey" style="width: 60%; height: 150px; border-radius: 5px;"/>
           </div>
 
           <div>
@@ -197,13 +196,19 @@
         </div>
       </q-carousel-slide>
 
-      <q-carousel-slide :name="4" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax2.jpg">
-        <div class="absolute-bottom custom-caption">
-          <div class="text-h4" color="white">¡Tu mascota ha sido</div>
-          <div class="text-h4" color="white">creada con exito!</div>
-        </div>
-        <div class="absolute-bottom bg-transparent custom-captionTwo row justify-center">
-          <q-btn no-caps rounded class="q-mx-xl q-py-sm" color="primary" label="Ir al Inicio" style="width: 100%;" to="/inicio"/>
+      <q-carousel-slide :name="4" class="q-pa-none">
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
+            </div>
+            <div class="text-h5 text-bold text-center text-grey-9">¡Tu mascota ha sido <br> creada con éxito!</div>
+          </div>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Ir al Inicio" style="width: 60%"
+              to="/inicio"/>
+          </div>
         </div>
       </q-carousel-slide>
     </q-carousel>

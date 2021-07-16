@@ -9,8 +9,11 @@
           <div class="column items-center q-mb-lg">
             <q-avatar rounded style="height: 200px; width: 200px; border-radius: 25px;" class="bg-grey">
               <q-img style="height: 100%;" :src="representImg != '' ? representImg : ''">
-                <q-file  borderless v-model="img" class="button-camera" @input="represent_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
-                  <q-icon name="image" class="absolute-center" size="75px" color="white" />
+                <q-file  borderless v-model="img" class="button-camera" @input="represent_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%; font-size: 0px">
+                  <div class="absolute-center row justify-center" style="width:100%">
+                    <q-icon name="cloud_upload" size="75px" color="white" />
+                    <div class="col-12 text-center text-white" style="font-size: 14px">Toca para subir una selfie</div>
+                  </div>
                 </q-file>
               </q-img>
             </q-avatar>
@@ -69,33 +72,31 @@
             </div>
             <div>
               <div class="text-caption q-pb-sm text-bold">Imágenes de documento de identificación</div>
-              <div class="row q-gutter-sm">
-                <div class="col q-mb-sm">
+              <div class="row q-gutter-sm q-mb-sm">
+                <div class="col-7">
                   <div class="text-caption">Carga la parte frontal de tu documento de identidad</div>
                   <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
                     <q-file  borderless :disable="IImg.length < 1 ? false : true" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
                     </q-file>
                   </q-avatar>
+                  <q-avatar class="bg-grey q-mt-sm" rounded style="height: 50px; width: 100%">
+                    <q-img style="height: 100%;" :src="identificacionImg.length ? identificacionImg[0] : ''"/>
+                    <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
+                  </q-avatar>
                 </div>
-                <div class="col q-mb-sm">
+                <div class="col-7">
                   <div class="text-caption">Carga la parte trasera de tu documento de identidad</div>
                   <q-avatar rounded style="height: 50px; width: 100%;" class="bg-primary">
                     <q-file  borderless :disable="IImg.length > 1 || IImg.length < 1 ? true : false" v-model="img" class="button-camera" @input="identificacion_img()" accept=".jpg, image/*" style="z-index:1; width: 100%; height: 100%;">
                       <div class="absolute-center text-center text-white full-width text-subtitle1">Cargar imagen</div>
                     </q-file>
                   </q-avatar>
+                  <q-avatar class="bg-grey q-mt-sm" rounded style="height: 50px; width: 100%">
+                    <q-img style="height: 100%;" :src="identificacionImg.length > 1 ? identificacionImg[1] : ''"/>
+                    <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
+                  </q-avatar>
                 </div>
-              </div>
-              <div class="row">
-                <q-avatar class="q-mr-sm bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="identificacionImg.length ? identificacionImg[0] : ''"/>
-                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
-                </q-avatar>
-                <q-avatar class="bg-grey col" rounded style="height: 50px;">
-                  <q-img style="height: 100%;" :src="identificacionImg.length > 1 ? identificacionImg[1] : ''"/>
-                  <div class="absolute-center text-center text-negative full-width text-subtitle1" v-if="$v.IImg.$error">Imagen requerida</div>
-                </q-avatar>
               </div>
             </div>
           </div>
@@ -224,22 +225,23 @@
         </div>
       </q-carousel-slide>
 
-      <q-carousel-slide :name="4" class="q-pa-none" img-src="https://cdn.quasar.dev/img/parallax1.jpg">
-        <div class="absolute-full">
-          <div class="absolute-bottom">
-            <div class="q-pb-xl q-px-lg">
-              <div class="text-h5 text-white">¿Te gustaria agregar un</div>
-              <div class="text-h5 text-white">espacio de descanso?</div>
-              <div class="text-subtitle1 text-white">Toca la pantalla y agrega los servicios que</div>
-              <div class="text-subtitle1 text-white">quieres ofrecer.</div>
+      <q-carousel-slide :name="4" class="q-pa-none">
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
             </div>
-            <div class="column items-center q-mt-xl">
-              <q-btn rounded color="primary" label="Nuevo" class="q-pa-xs q-mb-sm" style="width: 60%;" @click="slide = 5" no-caps/>
-              <div class="text-subtitle1 text-white" @click="$router.push('/inicio_hospedador')">Omitir para ir a tu espacio.</div>
-            </div>
+            <div class="text-h5 text-bold text-center text-grey-9">¿Te gustaria agregar un espacio de descanso?</div>
+            <div class="text-caption text-center q-px-lg q-pt-md">Toca la pantalla y agrega los alojamientos que quieres arrendar</div>
+          </div>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Nuevo" style="width: 60%"
+              @click="slide = 5"/>
+            <q-btn no-caps flat class="q-my-xs" color="primary" label="Omitir para ir a tu espacio" style="width: 60%"
+              @click="$router.push('/inicio_hospedador')"/>
           </div>
         </div>
-        <q-btn flat round color="primary" icon="arrow_forward_ios" class="fixed-right" />
       </q-carousel-slide>
 
       <q-carousel-slide :name="5" class="q-pa-none">
@@ -363,7 +365,7 @@ export default {
       selectPais: null,
       selectCiudad: null,
       img: null,
-      slide: 1,
+      slide: 5,
       password: '',
       repeatPassword: '',
       representImg: '',
