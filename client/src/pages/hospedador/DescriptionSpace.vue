@@ -39,7 +39,7 @@
             </div>
           </div>
 
-          <div v-if="rol === 2">
+          <div v-if="rol === 2 && hospedaje.state === 'Disponible'">
             <div class="q-my-md">
               <div class="text-overline">Cuando te vas a alojar</div>
               <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
@@ -91,7 +91,7 @@
       </div>
 
       <div class="row items-center q-pa-md">
-        <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : !login ? nologin = true : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
+        <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : !login ? nologin = true : hospedaje.state !== 'Disponible' ? ocupado = true : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
         <div class="col q-px-sm q-py-md text-black bg-orange-2 text-center ellipsis" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;" >${{formatPrice(hospedaje.price)}} por día</div>
       </div>
 
@@ -213,6 +213,22 @@
         </q-card-section>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="ocupado">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">Querido usuario</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Actualmente el alojamiento se encuentra {{hospedaje.state}} por lo que no podras reservar. Debes esperar a que vuelva a estar disponible para recibir a tu mascota.
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat no-caps label="Cerrar" color="primary" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
@@ -229,6 +245,7 @@ export default {
       reservaFallo: false,
       login: true,
       nologin: false,
+      ocupado: false,
       slide: 0,
       rol: 0,
       user: {},
@@ -298,6 +315,7 @@ export default {
         this.$api.get('hospedaje/' + this.id).then(res => {
           if (res) {
             this.hospedaje = res
+            console.log('aloja', this.hospedaje)
             this.baseu = env.apiUrl + 'hospedajes_img/'
           }
         })
