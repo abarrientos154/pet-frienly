@@ -85,6 +85,8 @@ addPrefixToGroup(
     Route.get('categorias_by_user/:id', 'ProductoController.categoriasByUser')
     Route.get('categorias_by_cliente/:id', 'ProductoController.categoriasByCliente')
     Route.get("mis_comentarios/:id", "ProductoController.traerComentarios")
+
+    Route.get("reservas/:hospedaje_id", "ProductoController.reservasByHospedajeId")
   })
   );
   addPrefixToGroup(

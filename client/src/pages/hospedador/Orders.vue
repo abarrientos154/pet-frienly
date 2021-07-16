@@ -63,11 +63,11 @@
                 <div class="column q-mb-md">
                   <div class="row justify-between">
                     <div class="text-caption text-grey-8">Inicio del alojamiento</div>
-                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_ingreso}}</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fechasReserva[0]}}</div>
                   </div>
                   <div class="row justify-between">
                     <div class="text-caption text-grey-8">Fin del alojamiento</div>
-                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_salida}}</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fechasReserva[item.fechasReserva.length - 1]}}</div>
                   </div>
                 </div>
                 <div class="row justify-between">
@@ -168,11 +168,11 @@
                 <div class="column q-mb-md">
                   <div class="row justify-between">
                     <div class="text-caption text-grey-8">Inicio del alojamiento</div>
-                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_ingreso}}</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fechasReserva[0]}}</div>
                   </div>
                   <div class="row justify-between">
                     <div class="text-caption text-grey-8">Fin del alojamiento</div>
-                    <div class="text-caption text-grey-8 text-bold">{{item.fecha_salida}}</div>
+                    <div class="text-caption text-grey-8 text-bold">{{item.fechasReserva[item.fechasReserva.length - 1]}}</div>
                   </div>
                 </div>
                 <div class="row justify-between">

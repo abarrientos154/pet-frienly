@@ -42,28 +42,14 @@
           <div v-if="rol === 2 && hospedaje.state === 'Disponible'">
             <div class="q-my-md">
               <div class="text-overline">Cuando te vas a alojar</div>
-              <div class="text-caption">Selecciona tu fecha de ingreso y salida</div>
+              <div class="text-caption">Selecciona los días que vas arrendar</div>
               <div class="row justify-around">
-                <q-input filled readonly dense v-model="form.fecha_ingreso" class="col-5" placeholder="aaaa/mm/dd" hint="Fecha de ingreso" @click="$refs.qDateProxy1.show()"
-                error-message="Este campo es requerido" :error="$v.form.fecha_ingreso.$error" @blur="$v.form.fecha_ingreso.$touch()">
+                <q-input filled readonly dense v-model="fechas" class="col-12" hint="Selecciona días continuos y disponibles" @click="$refs.qDateProxy1.show()"
+                error-message="Este campo es requerido" :error="$v.fechas.$error" @blur="$v.fechas.$touch()">
                   <template v-slot:append>
                     <q-icon name="event" class="cursor-pointer">
                       <q-popup-proxy ref="qDateProxy1" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="form.fecha_ingreso">
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Cerrar" color="primary" flat />
-                          </div>
-                        </q-date>
-                      </q-popup-proxy>
-                    </q-icon>
-                  </template>
-                </q-input>
-                <q-input filled readonly dense v-model="form.fecha_salida" class="col-5" placeholder="aaaa/mm/dd" hint="Fecha de salida" @click="$refs.qDateProxy2.show()"
-                error-message="Este campo es requerido" :error="$v.form.fecha_salida.$error" @blur="$v.form.fecha_salida.$touch()">
-                  <template v-slot:append>
-                    <q-icon name="event" class="cursor-pointer">
-                      <q-popup-proxy ref="qDateProxy2" transition-show="scale" transition-hide="scale">
-                        <q-date v-model="form.fecha_salida">
+                        <q-date v-model="fechas" mask="YYYY/MM/DD" multiple @input="verificar()" :options="bloqueo">
                           <div class="row items-center justify-end">
                             <q-btn v-close-popup label="Cerrar" color="primary" flat />
                           </div>
@@ -74,7 +60,7 @@
                 </q-input>
               </div>
             </div>
-            <div class="q-my-md">
+            <div class="q-mb-md">
               <div class="text-overline">Selecciona tu(s) mascota(s)</div>
               <div class="text-caption">Recuerda que solo podras agregar mascotas que cumplan los requisitos</div>
               <q-select dense multiple use-chips filled v-model="form.mascotas" :options="mascotas" option-label="name" map-options
@@ -149,7 +135,7 @@
                   <div class="text-grey-8">Precio alojamiento</div>
                 </q-card-section>
                 <q-card-section>
-                  <div>${{hospedaje.price}}</div>
+                  <div>${{formatPrice(hospedaje.price)}}</div>
                 </q-card-section>
               </q-card-section>
               <q-separator />
@@ -158,7 +144,7 @@
                   <div class="text-pink-13">Total a pagar</div>
                 </q-card-section>
                 <q-card-section>
-                  <div class="text-pink-13">${{totalPrice}}</div>
+                  <div class="text-pink-13">${{formatPrice(totalPrice)}}</div>
                 </q-card-section>
               </q-card-section>
             </q-card>
@@ -240,7 +226,6 @@ export default {
   data () {
     return {
       reserva: false,
-      fechaValida: false,
       reservaExitosa: false,
       reservaFallo: false,
       login: true,
@@ -255,30 +240,25 @@ export default {
       form: {
         mascotas: []
       },
+      fechas: [],
+      reservas: [],
       mascotas: []
     }
   },
   validations: {
     form: {
-      fecha_ingreso: { required },
-      fecha_salida: { required },
       mascotas: { required },
       name: { required },
       card: { required },
       expiration: { required },
       cvv: { required }
-    }
+    },
+    fechas: { required }
   },
   computed: {
     totalPrice () {
       var total = 0
-      var dias = 0
-      if (this.fechaValida && this.form.fecha_ingreso < this.form.fecha_salida) {
-        dias = moment(this.form.fecha_salida).diff(this.form.fecha_ingreso, 'days')
-      } else if (this.form.fecha_ingreso === this.form.fecha_salida) {
-        dias = 1
-      }
-      total = this.hospedaje.price * dias
+      total = this.hospedaje.price * this.fechas.length
       return total
     }
   },
@@ -293,9 +273,6 @@ export default {
   },
   methods: {
     getUser () {
-      this.$q.loading.show({
-        message: 'Cargando datos'
-      })
       this.$api.get('user_logueado').then(res => {
         if (res) {
           this.rol = res.roles[0]
@@ -303,45 +280,55 @@ export default {
           this.$api.get('mascota_by_user_id/' + this.user._id).then(v => {
             if (v) {
               this.mascotas = v
-              this.$q.loading.hide()
             }
           })
         }
       })
     },
     getHospedaje () {
+      this.$q.loading.show({
+        message: 'Cargando datos'
+      })
       if (this.$route.params.id) {
         this.id = this.$route.params.id
         this.$api.get('hospedaje/' + this.id).then(res => {
           if (res) {
             this.hospedaje = res
-            console.log('aloja', this.hospedaje)
+            this.getReservas(this.id)
             this.baseu = env.apiUrl + 'hospedajes_img/'
+            this.$q.loading.hide()
           }
         })
       }
     },
-    reservar () {
-      this.$v.form.fecha_ingreso.$touch()
-      this.$v.form.fecha_salida.$touch()
-      this.$v.form.mascotas.$touch()
-      if (!this.$v.form.fecha_ingreso.$error && !this.$v.form.fecha_salida.$error && !this.$v.form.mascotas.$error) {
-        if (this.form.fecha_ingreso <= this.form.fecha_salida) {
-          this.fechaValida = true
-          this.reserva = true
-        } else {
-          this.fechaValida = false
-          this.$q.dialog({
-            title: 'Atención',
-            message: 'El orden de las fechas no coinciden',
-            cancel: false,
-            persistent: true
-          }).onOk(() => {
-            // Ok
-          }).onCancel(() => {
-            // cancel
-          })
+    async getReservas (id) {
+      await this.$api.get('reservas/' + id).then(res => {
+        if (res) {
+          this.reservas = res
         }
+      })
+    },
+    bloqueo (date) {
+      var a = this.reservas.find(v => date === v)
+      return date !== a && date > moment().format('YYYY/MM/DD')
+    },
+    verificar () {
+      if (this.fechas.length > 1) {
+        if (moment(this.fechas[this.fechas.length - 2]).add(1, 'days').format('YYYY/MM/DD') !== moment(this.fechas[this.fechas.length - 1]).format('YYYY/MM/DD')) {
+          this.fechas = []
+          this.$q.dialog({
+            title: 'Usuario',
+            message: 'Debes seleccional fechas continuas',
+            persistent: false
+          }).onOk(() => {})
+        }
+      }
+    },
+    reservar () {
+      this.$v.fechas.$touch()
+      this.$v.form.mascotas.$touch()
+      if (!this.$v.fechas.$error && !this.$v.form.mascotas.$error) {
+        this.reserva = true
       }
     },
     pagar () {
@@ -357,6 +344,7 @@ export default {
         this.form.hospedaje_id = this.hospedaje._id
         this.form.image = this.hospedaje.images[0].src
         this.form.cliente_id = this.user._id
+        this.form.fechasReserva = this.fechas
         this.form.hospedaje_price = this.hospedaje.price
         this.form.total = this.totalPrice
         this.$api.post('arrendar_espacio', { dat: this.form }).then(async res => {

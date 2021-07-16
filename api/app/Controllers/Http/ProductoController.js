@@ -160,12 +160,30 @@ class ProductoController {
       return {
         ...v,
         detalles: false,
-        dias: moment(v.fecha_salida).diff(v.fecha_ingreso, 'days') + 1,
-        expirado: moment(v.expiration) > moment() ? false : true,
+        dias: v.fechasReserva.length,
+        expirado: moment(v.fechasReserva[v.fechasReserva.length - 1]) > moment() ? false : true,
         fecha_arriendo: moment(v.created_at).format('DD/MM/YYYY')
       }
     })
     response.send(data)
+  }
+
+  async reservasByHospedajeId ({ params, response, auth }) {
+    let data = (await Reservas.query().where({hospedaje_id: params.hospedaje_id}).with('representante').with('calificacion').fetch()).toJSON()
+    data = data.map(v => {
+      return {
+        ...v,
+        dias: v.fechasReserva.length,
+        expirado: moment(v.fechasReserva[v.fechasReserva.length - 1]) > moment() ? false : true,
+        fecha_arriendo: moment(v.created_at).format('DD/MM/YYYY')
+      }
+    })
+    let respuesta = data.filter(v => !v.expirado)
+    let arrayFechas = []
+    respuesta.forEach(v => {
+      arrayFechas = arrayFechas.concat(v.fechasReserva)
+    })
+    response.send(arrayFechas)
   }
 
   async pedidoStatus({ params, request, response }) {
