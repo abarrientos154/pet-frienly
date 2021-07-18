@@ -78,21 +78,21 @@
         <div class="text-subtitle1 text-bold col">Valor por noche</div>
         <div class=" col column">
           <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Ingresa el costo por noche</div>
-          <q-input prefix="$" filled color="primary" v-model.number="form.price" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.price.$error" @blur="$v.form.price.$touch()"/>
+          <q-input prefix="$" filled color="primary" v-model="price" @input="number_format(price, 1)" min="0" dense error-message="Este campo es requerido" :error="$v.price.$error" @blur="$v.price.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">Cantidad de huéspedes</div>
         <div class=" col column">
           <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Cantidad de huéspedes</div>
-          <q-input filled color="primary" v-model.number="form.guests" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.guests.$error" @blur="$v.form.guests.$touch()"/>
+          <q-input filled color="primary" v-model="guests" @input="number_format(guests, 2)" dense min="0" error-message="Este campo es requerido" :error="$v.guests.$error" @blur="$v.guests.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
         <div class="text-subtitle1 text-bold col">Metros cuadrados</div>
         <div class=" col column">
           <div class="text-caption text-grey-10 text-italic" style="font-size: 11px">Cantidad de metros cuadrados</div>
-          <q-input filled color="primary" v-model.number="form.dimensions" type="number" dense :rules="[val => val > 0]" min="0" error-message="Este campo es requerido" :error="$v.form.dimensions.$error" @blur="$v.form.dimensions.$touch()"/>
+          <q-input filled color="primary" v-model="dimensions" @input="number_format(dimensions, 3)" dense min="0" error-message="Este campo es requerido" :error="$v.dimensions.$error" @blur="$v.dimensions.$touch()"/>
         </div>
       </div>
       <div class="row items-center">
@@ -123,7 +123,10 @@ export default {
       mascotas: [{ name: 'Perros' }, { name: 'Gatos' }, { name: 'Ambos' }],
       location: [{ name: 'Espacio compartido', description: 'Tu mascota se aloja en un espacio compartido con otros perros y gatos' }, { name: 'Espacio privado', description: 'Espacio habilitado para una sola mascota' }],
       state: [{ name: 'Disponible' }, { name: 'Ocupado' }, { name: 'Mantención' }],
-      only_pets: [{ name: 'Hotel para mascotas' }, { name: 'Persona natural' }]
+      only_pets: [{ name: 'Hotel para mascotas' }, { name: 'Persona natural' }],
+      price: '',
+      guests: '',
+      dimensions: ''
     }
   },
   validations: {
@@ -140,9 +143,15 @@ export default {
       location: { required },
       state: { required }
     },
+    price: { required },
+    guests: { required },
+    dimensions: { required },
     espacioImg: { required, minLength: minLength(1) }
   },
   mounted () {
+    // alert(new Intl.NumberFormat('de-DE').format(this.form.price))
+    // alert(new Intl.NumberFormat('de-DE').format(this.form.guests))
+    // alert(new Intl.NumberFormat('de-DE').format(this.form.dimensions))
   },
   methods: {
     espacio_img () {
@@ -186,6 +195,52 @@ export default {
           message: 'Debe ingresar todos los datos correspondientes',
           color: 'negative'
         })
+      }
+    },
+    number_format (num, ind) {
+      num = num.replace(/[^0-9]/g, '')
+      num = num.split('.').join('')
+      num = num.split('').reverse()
+      let aux = ''
+      var salida = []
+      var paginador = Math.ceil(num.length / 3)
+      for (let i = 0; i < paginador; i++) {
+        for (let j = 0; j < 3; j++) {
+          if (num[j + (i * 3)] !== undefined) {
+            aux += num[j + (i * 3)]
+          }
+        }
+        salida.push(aux)
+        aux = ''
+      }
+      num = salida.join('.').split('').reverse().join('')
+      console.log(num)
+      if (ind === 1) {
+        this.price = num
+        this.form.price = parseInt(num.replace(/[^0-9]/g, ''))
+        if (isNaN(this.form.price)) {
+          delete this.form.price
+          this.price = ''
+        }
+        // console.log(this.form)
+      }
+      if (ind === 2) {
+        this.guests = num
+        this.form.guests = parseInt(num.replace(/[^0-9]/g, ''))
+        if (isNaN(this.form.guests)) {
+          delete this.form.guests
+          this.guests = ''
+        }
+        // console.log(this.form)
+      }
+      if (ind === 3) {
+        this.dimensions = num
+        this.form.dimensions = parseInt(num.replace(/[^0-9]/g, ''))
+        if (isNaN(this.form.dimensions)) {
+          delete this.form.dimensions
+          this.dimensions = ''
+        }
+        // console.log(this.form)
       }
     }
   }
