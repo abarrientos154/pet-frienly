@@ -10,6 +10,31 @@
     <div class="column items-center q-mt-xl q-pt-md">
       <div class="q-mb-md text-center text-h5 text-grey-8">Selecciona tus servicios</div>
 
+      <div class="row" style="width: 80%">
+        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-px-xs">
+          <div class="q-mb-xs text-black text-caption">¿Qué servicio quieres ofrecer?</div>
+          <q-select filled dense color="black" v-model="servicio" :options="servicios" label="Selecciona el servicio que deseas ofrecer" map-options
+            error-message="requerido" :error="$v.servicio.$error" @blur="$v.servicio.$touch()"
+            option-label="name" >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
+                </q-item>
+              </template>
+              <template v-slot:option="scope">
+                <q-item
+                  v-bind="scope.itemProps"
+                  v-on="scope.itemEvents"
+                >
+                  <q-item-section>
+                    <q-item-label v-html="scope.opt.name" />
+                  </q-item-section>
+                </q-item>
+              </template>
+          </q-select>
+        </div>
+      </div>
+
       <div class="column items-center q-mb-lg" style="width:100%">
         <q-avatar rounded style="height: 200px; width: 80%; border-radius: 25px;" class="row justify-center">
           <q-img style="height: 100%; width: 100%" :src="imgServicio != '' ? imgServicio : 'noimg.png'">
@@ -21,33 +46,11 @@
             </q-file>
           </q-img>
         </q-avatar>
-        <div v-if="$v.img.$error" class="text-negative text-subtitle2 text-center"> Carga una foto </div>
+        <div :class="$v.img.$error ? 'text-negative' : 'text-grey-8'" class="text-subtitle2 text-center"> Sube una foto de tu servicio </div>
       </div>
 
       <div style="width: 80%">
         <div class="row">
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-px-xs">
-            <div class="q-mb-xs text-black text-caption">¿Qué servicio quieres ofrecer?</div>
-            <q-select filled dense color="black" v-model="servicio" :options="servicios" label="Selecciona el servicio que deseas ofrecer" map-options
-              error-message="requerido" :error="$v.servicio.$error" @blur="$v.servicio.$touch()"
-              option-label="name" >
-                <template v-slot:no-option>
-                  <q-item>
-                    <q-item-section class="text-grey text-italic">No hay Resultados</q-item-section>
-                  </q-item>
-                </template>
-                <template v-slot:option="scope">
-                  <q-item
-                    v-bind="scope.itemProps"
-                    v-on="scope.itemEvents"
-                  >
-                    <q-item-section>
-                      <q-item-label v-html="scope.opt.name" />
-                    </q-item-section>
-                  </q-item>
-                </template>
-            </q-select>
-          </div>
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 q-px-xs">
             <div class="q-mb-xs text-black text-caption">¿Quién podra adquirir estos servicios?</div>
             <q-select filled dense color="black" v-model="form.destinatario" :options="mascotas" label="Selecciona el tipo de mascota" map-options

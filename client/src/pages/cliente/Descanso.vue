@@ -16,17 +16,16 @@
         <div class="row no-wrap q-py-md q-px-md q-gutter-md">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(item, index) in mejorCalificados" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
             <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-bottom column justify-end q-mb-md">
               <q-rating readonly class="q-mt-lg q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
-              <div class="bg-primary q-pl-sm">
+              <div class="bg-primary q-pl-sm" style="width:100%">
                 <div class="row no-wrap items-center" style="width:100%">
                   <div class="text-white text-subtitle1 ellipsis">{{item.my_space.name}}</div>
                 </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-white text-caption">{{item.city}}, {{item.my_space.direction}}</div>
+                <div class="row no-wrap items-start" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs q-mt-xs text-white"/>
+                  <div class="ellipsis text-white text-caption">{{item.city}} <br> {{item.my_space.direction}}</div>
                 </div>
               </div>
             </div>
@@ -62,17 +61,16 @@
       <div class="col-6 q-mb-sm" v-for="(item, index) in host" :key="index">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple @click="$router.push('/inicio-hospedador/' + item._id)">
             <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-bottom column justify-end q-mb-md">
               <q-rating readonly class="q-mt-lg q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="item.calificacion" :max="5" size="20px" />
-              <div class="bg-primary q-pl-sm">
+              <div class="bg-primary q-pl-sm" style="width:100%">
                 <div class="row no-wrap items-center" style="width:100%">
                   <div class="text-white text-subtitle1 ellipsis">{{item.my_space.name}}</div>
                 </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-white text-caption">{{item.city}}, {{item.my_space.direction}}</div>
+                <div class="row no-wrap items-start" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs q-mt-xs text-white"/>
+                  <div class="ellipsis text-white text-caption">{{item.city}} <br> {{item.my_space.direction}}</div>
                 </div>
               </div>
             </div>

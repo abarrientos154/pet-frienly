@@ -225,9 +225,9 @@
 
     <q-page-sticky v-if="miTienda" position="bottom-right" :offset="[18, 18]">
       <q-fab color="primary" icon="add" label="Nuevo" no-caps direction="up" vertical-actions-align="right">
-        <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
+        <q-fab-action label-class="bg-primary text-white text-subtitle2 q-py-xs" external-label label-position="left"
           color="primary" icon="add_shopping_cart" label="Producto" @click="$router.push('/registro_producto')" />
-        <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
+        <q-fab-action label-class="bg-primary text-white text-subtitle2 q-py-xs" external-label label-position="left"
           color="primary" icon="add_business" label="Servicio" @click="$router.push('/registro_servicio')" />
       </q-fab>
     </q-page-sticky>
@@ -397,8 +397,11 @@
           <div class="col-12">
             <div class="q-px-sm">
               <div class="text-h6 text-bold">Dirección de envío</div>
-              <div class="text-subtitle1 text-grey-7">{{user.name}}</div>
-              <q-input filled v-model="direccion"  dense placeholder="Ingrese una dirección"
+              <div>Seleccione una ciudad</div>
+              <q-select dense filled v-model="city" :options="cities" option-value="_id" label="Ciudad de destino" option-label="name" emit-value map-options
+              error-message="Requerido" :error="$v.city.$error" @blur="$v.city.$touch()"/>
+              <div class="q-pt-sm">Ingrese una dirección</div>
+              <q-input dense filled v-model="direccion" placeholder="Dirección del envio"
                 error-message="Requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"/>
               <q-separator />
               <div class="text-h6 text-bold q-my-md">Pedido</div>
@@ -427,31 +430,39 @@
 
     <q-dialog persistent maximized v-model="compraExitosa">
       <q-card style="width: 100%; height: 100%">
-        <q-img src="noimg.png" style="width:100%; height: 100%">
-          <div class="absolute-bottom q-py-sm full-width">
-            <div class="text-h4 text-white text-bold q-px-sm">Tu pedido ha sido comprado con éxito</div>
-            <div class="text-subtitle1 text-white q-px-sm">Puedes ver tu pedido en tu panel de pedidos</div>
-            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
-              <q-btn no-caps color="primary" label="Volver a tienda" class="q-py-xs" style="width: 60%;"
-                @click="compraExitosa = false"/>
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
             </div>
+            <div class="text-h5 text-bold text-center text-grey-9 q-px-md">Tu pedido ha sido comprado con éxito</div>
+            <div class="text-caption text-center">Puedes ver tu pedido en tu panel de pedidos</div>
           </div>
-        </q-img>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Volver a tienda" style="width: 60%"
+              @click="compraExitosa = false"/>
+          </div>
+        </div>
       </q-card>
     </q-dialog>
 
     <q-dialog persistent maximized v-model="compraFallo">
       <q-card style="width: 100%; height: 100%">
-        <q-img src="noimg.png" style="width:100%; height: 100%">
-          <div class="absolute-bottom q-py-sm full-width">
-            <div class="text-h4 text-white text-bold q-px-sm">Tu compra ha fallado</div>
-            <div class="text-subtitle1 text-white q-px-sm">Te estamos redireccionando a la tienda</div>
-            <div class="row justify-center q-mb-md q-mt-xl q-pt-lg">
-              <q-btn no-caps color="primary" label="Volver a tienda" class="q-py-xs" style="width: 60%;"
-                @click="compraFallo = false"/>
+        <div class="absolute-center full-width column justify-between">
+          <div class="q-pb-xl">
+            <div class="row justify-center q-pb-lg">
+              <img src="logo.png" style="width:260px" />
             </div>
+            <div class="text-h5 text-bold text-center text-grey-9 q-px-md">Tu compra ha fallado</div>
+            <div class="text-caption text-center">Te estamos redireccionando a la tienda</div>
           </div>
-        </q-img>
+
+          <div class="q-pt-xl column items-center q-gutter-sm">
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Volver a tienda" style="width: 60%"
+              @click="compraFallo = false"/>
+          </div>
+        </div>
       </q-card>
     </q-dialog>
 
@@ -484,7 +495,6 @@ export default {
     return {
       ver1: false,
       ver2: false,
-      miTienda: null,
       verServicio: false,
       verProducto: false,
       verCarrito: false,
@@ -493,6 +503,9 @@ export default {
       compraFallo: false,
       login: true,
       nologin: false,
+      miTienda: null,
+      city: null,
+      direccion: '',
       id: '',
       filterSelec: '',
       baseuTienda: '',
@@ -509,8 +522,8 @@ export default {
       servicio: {},
       producto: {},
       form: {},
-      direccion: null,
       servicios: [],
+      cities: [],
       comentarios: [],
       carrito: [],
       allProductos: [],
@@ -522,7 +535,8 @@ export default {
     }
   },
   validations: {
-    direccion: { required }
+    direccion: { required },
+    city: { required }
   },
   computed: {
     totalCarrito () {
@@ -572,6 +586,8 @@ export default {
           if (this.user.roles[0] === 3) {
             this.id = this.user._id
             this.getTienda(this.user._id)
+          } else if (this.user.roles[0] === 2) {
+            this.getCities()
           }
         }
       })
@@ -626,6 +642,13 @@ export default {
       this.$api.get(variable).then(res => {
         if (res) {
           this.categorias = res
+        }
+      })
+    },
+    async getCities () {
+      await this.$api.get('ciudades').then(res => {
+        if (res) {
+          this.cities = res
         }
       })
     },
@@ -740,12 +763,13 @@ export default {
     },
     async iniciarCompra () {
       this.$v.direccion.$touch()
-      if (!this.$v.direccion.$error) {
+      this.$v.city.$touch()
+      if (!this.$v.direccion.$error && !this.$v.city.$error) {
         this.$q.loading.show({
           message: 'Iniciando compra'
         })
         this.form.country_id = this.user.country_id
-        this.form.city_id = this.user.city_id
+        this.form.city_id = this.city
         this.form.direccion = this.direccion
         this.form.cliente_id = this.user._id
         this.form.tienda_id = this.id

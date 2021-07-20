@@ -365,7 +365,7 @@ export default {
       selectPais: null,
       selectCiudad: null,
       img: null,
-      slide: 5,
+      slide: 1,
       password: '',
       repeatPassword: '',
       representImg: '',

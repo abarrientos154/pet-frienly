@@ -44,7 +44,6 @@
           <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width: 100%">
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(store, index) in lastStores" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
-                <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-bottom column justify-end q-mb-md">
                 <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
@@ -73,7 +72,6 @@
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
             @click="$router.push('/inicio-proveedor/' + store._id)">
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
-                <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-bottom column justify-end q-mb-md">
                 <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
@@ -104,12 +102,11 @@
       <q-scroll-area
           v-if="lastHost.length"
           horizontal
-          style="height: 330px;"
+          style="height: 340px;"
         >
           <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width:100%">
             <q-card style="border-radius: 15px; width:330px" clickable v-ripple v-for="(item, index) in lastHost" :key="index" @click="$router.push('/inicio-hospedador/' + item._id)">
                <q-img :src="imgProfile + item._id" style="height: 200px; width: 100%">
-                <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="row justify-center items-center q-ma-md">
                 <div class="row no-wrap items-center" style="width:100%">
@@ -131,7 +128,6 @@
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
             @click="$router.push('/inicio-hospedador/' + item._id)">
               <q-img :src="imgProfile + item._id" style="height: 280px; width: 100%">
-                <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
               </q-img>
               <div class="absolute-bottom q-pl-sm column justify-end q-mb-md bg-primary">
                 <div class="row no-wrap items-center" style="width:100%">
@@ -154,9 +150,9 @@
 
     <q-page-sticky v-if="user._id" position="bottom-right" :offset="[18, 18]">
       <q-fab color="primary" icon="pets" label="Mis acciones" no-caps direction="up" vertical-actions-align="right">
-        <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
+        <q-fab-action label-class="bg-primary text-white text-subtitle2 q-py-xs" external-label label-position="left"
           color="primary" icon="person" label="Editar perfil" @click="$router.push('/editar-perfil/' + user._id)" />
-        <q-fab-action label-class="bg-grey-4 text-grey-10" external-label label-position="left"
+        <q-fab-action label-class="bg-primary text-white text-subtitle2 q-py-xs" external-label label-position="left"
           color="primary" icon="pets" label="Mascotas" @click="$router.push('/mascotas')" />
       </q-fab>
     </q-page-sticky>

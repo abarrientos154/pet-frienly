@@ -13,20 +13,19 @@
         horizontal
         style="height: 330px;"
       >
-        <div class="row no-wrap q-py-md q-px-md q-gutter-md">
+        <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width: 100%">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(store, index) in mejorCalificadas" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-bottom column justify-end q-mb-md">
               <q-rating readonly class="q-pl-sm q-mb-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
-              <div class="bg-primary q-pl-sm">
+              <div class="bg-primary q-pl-sm" style="width:100%">
                 <div class="row no-wrap items-center" style="width:100%">
                   <div class="text-white text-subtitle1 ellipsis">{{store.tienda.name}}</div>
                 </div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-white text-caption col-10">{{store.city}}, {{store.tienda.direccion}}</div>
+                <div class="row no-wrap items-start" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs q-mt-xs text-white"/>
+                  <div class="ellipsis text-white text-caption col-10">{{store.city}} <br> {{store.tienda.direccion}}</div>
                 </div>
               </div>
             </div>
@@ -62,15 +61,14 @@
       <div class="col-6 q-mb-sm" v-for="(store, index) in stores" :key="index">
           <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple @click="$router.push('/inicio-proveedor/' + store._id)">
             <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
-              <q-btn flat round color="white" icon="favorite" class="q-mt-md q-ml-md bg-grey q-mb-xl"/>
             </q-img>
             <div class="absolute-bottom column justify-end q-mb-md">
               <q-rating readonly class="q-mb-sm q-pl-sm" color="grey" color-selected="orange-8" v-model="store.calificacion" :max="5" size="20px" />
-              <div class="bg-primary q-pl-sm">
-                <div class="text-white text-subtitle1">{{store.tienda.name}}</div>
-                <div class="row no-wrap items-center" style="width:100%">
-                  <q-icon name="place" class="q-mr-xs text-white"/>
-                  <div class="ellipsis text-caption text-white">{{store.city}}, {{store.tienda.direccion}}</div>
+              <div class="bg-primary q-pl-sm" style="width:100%">
+                <div class="text-white text-subtitle1 ellipsis">{{store.tienda.name}}</div>
+                <div class="row no-wrap items-start" style="width:100%">
+                  <q-icon name="place" class="q-mr-xs q-mt-xs text-white"/>
+                  <div class="ellipsis text-caption text-white">{{store.city}} <br> {{store.tienda.direccion}}</div>
                 </div>
               </div>
             </div>
