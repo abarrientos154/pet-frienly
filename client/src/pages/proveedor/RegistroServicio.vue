@@ -36,12 +36,12 @@
       </div>
 
       <div class="column items-center q-mb-lg" style="width:100%">
-        <q-avatar rounded style="height: 200px; width: 80%; border-radius: 25px;" class="row justify-center">
-          <q-img style="height: 100%; width: 100%" :src="imgServicio != '' ? imgServicio : 'noimg.png'">
+        <q-avatar rounded style="height: 200px; width: 200px; border-radius: 25px;" class="bg-grey">
+          <q-img style="height: 100%;" :src="imgServicio != '' ? imgServicio : ''">
             <q-file borderless v-model="img" @input="!edit ? servicio_img() : edit_img()" accept=".jpg, image/*" style="width: 100%; height: 100%; font-size: 0px"
             @blur="$v.img.$touch()">
               <div class="absolute-center column items-center" style="width:100%">
-                <q-icon v-if="imgServicio != ''" name="image" size="75px" color="white" />
+                <q-icon name="cloud_upload" size="75px" color="white" />
               </div>
             </q-file>
           </q-img>
@@ -189,7 +189,7 @@ export default {
             color: 'positive'
           })
           this.$q.loading.hide()
-          this.$router.go(-1)
+          this.$router.push('/inicio_proveedor')
         })
       } else {
         this.$q.notify({
@@ -210,10 +210,10 @@ export default {
           if (res) {
             this.$q.notify({
               message: 'Servicio actualizado correctamente',
-              positive: 'positive'
+              color: 'positive'
             })
             this.$q.loading.hide()
-            this.$router.go(-1)
+            this.$router.push('/inicio_proveedor')
           } else {
             this.$q.loading.hide()
           }
