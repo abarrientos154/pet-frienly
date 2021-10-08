@@ -44,6 +44,8 @@
             <div class="text-h5 text-bold text-center text-grey-9 q-pb-sm">¿Qué tipo de aliado <br> quieres ser?</div>
             <q-btn no-caps rounded class="q-py-xs" color="primary" label="Tienda" style="width: 60%"
               to="/registro/proveedor"/>
+            <q-btn no-caps rounded class="q-py-xs" color="primary" label="Servicios" style="width: 60%"
+              to="/registro/servicios"/>
             <q-btn no-caps rounded class="q-py-xs" color="primary" label="Hospedador" style="width: 60%"
               to="/registro/hospedador"/>
           </div>

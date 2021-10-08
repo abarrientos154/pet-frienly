@@ -42,7 +42,7 @@
           style="height: 330px;"
         >
           <div class="row no-wrap q-py-md q-px-md q-gutter-md" style="width: 100%">
-            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(store, index) in lastStores" :key="index" @click="$router.push('/inicio-proveedor/' + store._id)">
+            <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:200px" clickable v-ripple v-for="(store, index) in lastStores" :key="index" @click="store.roles[0] === 3 ? $router.push('/inicio-proveedor/' + store._id) : $router.push('/inicio-servicios/' + store._id)">
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%" class="column">
               </q-img>
               <div class="absolute-bottom column justify-end q-mb-md">
@@ -70,7 +70,7 @@
       <div v-if="stores.length" class="row justify-around" style="width:100%">
         <div class="col-6 q-mb-sm row justify-center" v-for="(store, index) in stores" :key="index">
             <q-card style="border-top-left-radius: 24px; border-top-right-radius: 24px; width:95%" clickable v-ripple
-            @click="$router.push('/inicio-proveedor/' + store._id)">
+            @click="store.roles[0] === 3 ? $router.push('/inicio-proveedor/' + store._id) : $router.push('/inicio-servicios/' + store._id)">
               <q-img :src="imgTienda + store._id" style="height: 280px; width: 100%">
               </q-img>
               <div class="absolute-bottom column justify-end q-mb-md">
@@ -220,7 +220,7 @@ export default {
       })
     },
     async getStore () {
-      await this.$api.post(this.login ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [3] }).then(res => {
+      await this.$api.post(this.login ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [3, 5] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
           this.stores = res.slice(0, 4)

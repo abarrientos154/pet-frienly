@@ -15,6 +15,8 @@ const routes = [
       { path: '/inicio_proveedor', component: () => import('pages/proveedor/Inicio.vue') },
       { path: '/pedidos', component: () => import('pages/proveedor/Pedidos.vue') },
       { path: '/estadisticas_resportes', component: () => import('pages/proveedor/Reportes.vue') },
+      // Servicios
+      { path: '/inicio_servicios', component: () => import('pages/servidor/Inicio.vue') },
       // Hospedador
       { path: '/inicio_hospedador', component: () => import('pages/hospedador/Home.vue') },
       { path: '/editar_hospedador', component: () => import('pages/hospedador/EditProfile.vue') },
@@ -35,6 +37,7 @@ const routes = [
       { path: '/descanso/:type', component: () => import('pages/cliente/Descanso.vue') },
       { path: '/descripcionproducto/:id', component: () => import('pages/cliente/DescripcionProducto.vue') },
       { path: '/inicio-proveedor/:id', component: () => import('pages/proveedor/Inicio.vue') },
+      { path: '/inicio-servicios/:id', component: () => import('pages/servidor/Inicio.vue') },
       { path: '/inicio-hospedador/:id', component: () => import('pages/hospedador/Home.vue') },
       { path: '/mis_pedidos', component: () => import('pages/cliente/Pedidos.vue') },
       { path: '/mis_reservas', component: () => import('pages/cliente/Reservas.vue') },
@@ -49,11 +52,13 @@ const routes = [
   { path: '/registro', component: () => import('pages/registro/TipoRegistro.vue') },
   { path: '/registro/cliente', component: () => import('pages/registro/RegistroCliente.vue') },
   { path: '/registro/proveedor', component: () => import('pages/registro/RegistroTienda.vue') },
+  { path: '/registro/servicios', component: () => import('pages/registro/RegistroServicios.vue') },
   { path: '/registro/hospedador', component: () => import('pages/registro/RegistroHospedador.vue') },
 
-  { path: '/servicios_productos', component: () => import('pages/proveedor/FinRegister.vue') },
-  { path: '/registro_servicio', component: () => import('pages/proveedor/RegistroServicio.vue') },
-  { path: '/editar_servicio/:id', component: () => import('pages/proveedor/RegistroServicio.vue') },
+  { path: '/productos', component: () => import('pages/proveedor/FinRegister.vue') },
+  { path: '/servicios', component: () => import('pages/servidor/FinRegister.vue') },
+  { path: '/registro_servicio', component: () => import('pages/servidor/RegistroServicio.vue') },
+  { path: '/editar_servicio/:id', component: () => import('pages/servidor/RegistroServicio.vue') },
   { path: '/registro_producto', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_proveedor', component: () => import('pages/proveedor/EditarPerfil.vue') },

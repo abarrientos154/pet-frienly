@@ -384,7 +384,7 @@ export default {
         formData.append('RFiles', this.imgR)
         formData.append('PFiles', this.imgP)
         formData.append('dat', JSON.stringify(this.form))
-        this.$api.post('register_proveedor', formData, {
+        this.$api.post('register_servidor', formData, {
           headers: {
             'Content-Type': undefined
           }
@@ -411,9 +411,9 @@ export default {
       this.$api.post('login', this.form).then(res => {
         if (res) { // Se debe ejecutar una mutacion que modifique el state con sessionInfo
           const user = res.TRI_SESSION_INFO.roles[0]
-          if (user === 3) {
+          if (user === 5) {
             this.login(res)
-            this.$router.push('/productos')
+            this.$router.push('/servicios')
           }
         } else {
           console.log('error de ususario')

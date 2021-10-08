@@ -189,7 +189,7 @@ export default {
             color: 'positive'
           })
           this.$q.loading.hide()
-          this.$router.push('/inicio_proveedor')
+          this.$router.push('/inicio_servicios')
         })
       } else {
         this.$q.notify({
@@ -213,7 +213,7 @@ export default {
               color: 'positive'
             })
             this.$q.loading.hide()
-            this.$router.push('/inicio_proveedor')
+            this.$router.push('/inicio_servicios')
           } else {
             this.$q.loading.hide()
           }

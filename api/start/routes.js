@@ -39,6 +39,7 @@ addPrefixToGroup(
     Route.get("servicios", "ServicioController.index")
     Route.post("login", "UserController.login");
     Route.post("register_proveedor", "UserController.registerProveedor")
+    Route.post("register_servidor", "UserController.registerServidor")
     Route.post("register_client", "UserController.registerClient")
     Route.post("update_client", "UserController.updateClient")
     Route.post("register_hospedador", "UserController.registerHospedador")

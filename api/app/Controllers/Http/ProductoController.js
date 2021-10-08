@@ -281,7 +281,7 @@ class ProductoController {
   async ventasDiarias ({ params, request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
     var total = 0
-    if (user.roles[0] === 3) {
+    if (user.roles[0] === 3 || user.roles[0] === 5) {
       let pedidos = (await Pedidos.query().where({tienda_id: user._id}).fetch()).toJSON()
       pedidos.forEach(v => {
         if (moment(v.created_at).format('YYYY/MM/DD') === moment().format('YYYY/MM/DD')) {
@@ -304,7 +304,7 @@ class ProductoController {
     const Modelo = use(`App/Models/${data.modelo}`)
     let user = await auth.getUser()
     var objParam
-    if (user.roles.some(v => v == 3)) {
+    if (user.roles.some(v => v == 3 || v == 5)) {
       objParam = {
         tienda_id: String(user._id)
       }

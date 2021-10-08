@@ -134,6 +134,8 @@ export default {
               this.$router.push('/inicio_proveedor')
             } else if (this.user.roles[0] === 4) {
               this.$router.push('/inicio_hospedador')
+            } else if (this.user.roles[0] === 5) {
+              this.$router.push('/inicio_servicios')
             }
           } else {
             console.log('error de ususario')

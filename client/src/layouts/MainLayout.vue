@@ -116,6 +116,28 @@ export default {
           ruta: ''
         }
       ],
+      servicios: [
+        {
+          icon: 'home',
+          label: 'Home',
+          ruta: '/inicio_servicios'
+        },
+        {
+          icon: 'assignment',
+          label: 'Pedidos',
+          ruta: '/pedidos'
+        },
+        {
+          icon: 'description',
+          label: 'Estadísticas',
+          ruta: '/estadisticas_resportes'
+        },
+        {
+          icon: 'power_settings_new',
+          label: 'Salir',
+          ruta: ''
+        }
+      ],
       hospedador: [
         {
           icon: 'home',
@@ -172,6 +194,8 @@ export default {
               this.menu = this.proveedor
             } else if (this.rol === 4) {
               this.menu = this.hospedador
+            } else if (this.rol === 5) {
+              this.menu = this.servicios
             }
           }
         })

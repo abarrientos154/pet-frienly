@@ -122,6 +122,69 @@ class UserController {
       }
   }
 
+  async registerServidor({ request, response }) {
+    var dat = request.only(['dat'])
+    dat = JSON.parse(dat.dat)
+    const validation = await validate(dat, User.fieldValidationRulesProveedor())
+    if (validation.fails()) {
+      response.unprocessableEntity(validation.messages())
+    } else if (((await User.where({email: dat.email}).fetch()).toJSON()).length) {
+      response.unprocessableEntity([{
+        message: 'Correo ya registrado en el sistema!'
+      }])
+    } else {
+      let images_ident = []
+      for (let i = 0; i < 2; i++) {
+        let codeFile = randomize('Aa0', 30)
+        const profilePic = request.file('IFiles' + i, {
+          types: ['image']
+        })
+        if (Helpers.appRoot('storage/uploads/identificacionFiles')) {
+          await profilePic.move(Helpers.appRoot('storage/uploads/identificacionFiles'), {
+            name: codeFile,
+            overwrite: true
+          })
+        } else {
+          mkdirp.sync(`${__dirname}/storage/Excel`)
+        }
+        images_ident.push(profilePic.fileName)
+      }
+
+      let body = dat
+      body.estatus = 0 // Estatus para verificacion del Servidor
+      body.roles = [5]
+      body.images_ident = images_ident
+      body.tienda.calificacion = 0
+      const user = await User.create(body)
+
+      const profilePic2 = request.file('PFiles', {
+        types: ['image']
+      })
+      if (Helpers.appRoot('storage/uploads/tiendaFiles')) {
+        await profilePic2.move(Helpers.appRoot('storage/uploads/tiendaFiles'), {
+          name: user._id.toString(),
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+
+      const profilePic3 = request.file('RFiles', {
+        types: ['image']
+      })
+      if (Helpers.appRoot('storage/uploads/perfil')) {
+        await profilePic3.move(Helpers.appRoot('storage/uploads/perfil'), {
+          name: user._id.toString(),
+          overwrite: true
+        })
+      } else {
+        mkdirp.sync(`${__dirname}/storage/Excel`)
+      }
+      const data = { name: profilePic3.fileName }
+      response.send(user)
+    }
+}
+
   async editProveedor({ request, response, auth }) {
     let user = (await auth.getUser()).toJSON()
     let body = request.all()
@@ -241,7 +304,7 @@ class UserController {
   async filtrarTiendas({ response, request, auth }) {
     let typePet = request.all().type
     let city = request.all().ciudad
-    let allTiendas = (await User.query().where({roles: [3]}).fetch()).toJSON()
+    let allTiendas = (await User.query().where({$or: [{roles: [3]}, {roles: [5]}]}).fetch()).toJSON()
     let tiendas
     let tiendasFilter = []
 
@@ -462,8 +525,16 @@ class UserController {
       let filtrado
       let rol = request.all()
 
-      const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
-      if (rol.rol[0] == 3) {
+      const userOld = (await User.query().where({}).fetch()).toJSON()
+      const user = userOld.filter(v => {
+        if (rol.rol.find(x => x === v.roles[0])) {
+          return v
+        } else {
+          return false
+        }
+      })
+
+      if (rol.rol.find(v => v === 3 || v === 5)) {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].tienda.city_id)).name
           var cal = []
@@ -541,8 +612,15 @@ class UserController {
   async userByRolNoLogueo({ request, params, response }) {
     try {
       let rol = request.all()
-      const user = (await User.query().where({roles: rol.rol}).fetch()).toJSON()
-      if (rol.rol[0] == 3) {
+      const userOld = (await User.query().where({}).fetch()).toJSON()
+      const user = userOld.filter(v => {
+        if (rol.rol.find(x => x === v.roles[0])) {
+          return v
+        } else {
+          return false
+        }
+      })
+      if (rol.rol.find(v => v === 3 || v === 5)) {
         for (let i in user) {
           user[i].city = (await Ciudad.find(user[i].tienda.city_id)).name
           var cal = []
