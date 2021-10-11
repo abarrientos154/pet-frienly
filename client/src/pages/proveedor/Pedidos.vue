@@ -24,7 +24,7 @@
             <div class="full-width q-my-lg q-px-md" v-if="item.detalles">
               <div class="q-mb-sm">
                 <div class="text-caption text-bold">Detalles del pedido</div>
-                <div class="text-caption text-italic">Los productos adquiridos fueron</div>
+                <div class="text-caption text-italic">Los {{item.servicios ? 'servicios' : 'productos'}} adquiridos fueron</div>
               </div>
               <div class="column q-my-lg">
                 <div class="row q-mb-md" v-for="(prod, index2) in item.productos" :key="index2">
@@ -44,7 +44,7 @@
               </div>
               <div class="q-px-sm">
                 <div class="row justify-between q-mb-sm">
-                  <div class="text-caption text-grey-7">Cantidad de artículos</div>
+                  <div class="text-caption text-grey-7">Cantidad de {{item.servicios ? 'servicios' : 'artículos'}}</div>
                   <div class="text-caption text-black">{{item.totalProductos}}</div>
                 </div>
                 <q-separator/>
@@ -123,7 +123,7 @@
             <div class="full-width q-my-lg q-px-md" v-if="item.detalles">
               <div class="q-mb-sm">
                 <div class="text-caption text-bold">Detalles del pedido</div>
-                <div class="text-caption text-italic">Los productos adquiridos fueron</div>
+                <div class="text-caption text-italic">Los {{item.servicios ? 'servicios' : 'productos'}} adquiridos fueron</div>
               </div>
               <div class="column q-my-lg">
                 <div class="row q-mb-md" v-for="(prod, index2) in item.productos" :key="index2">
@@ -143,7 +143,7 @@
               </div>
               <div class="q-px-sm">
                 <div class="row justify-between q-mb-sm">
-                  <div class="text-caption text-grey-7">Cantidad de artículos</div>
+                  <div class="text-caption text-grey-7">Cantidad de {{item.servicios ? 'servicios' : 'artículos'}}</div>
                   <div class="text-caption text-black">{{item.totalProductos}}</div>
                 </div>
                 <q-separator/>

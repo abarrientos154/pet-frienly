@@ -329,8 +329,6 @@ class ProductoController {
         respuesta.push(nuevo)
       }
     } else if (data.type === 'Mensual') {
-      if (fecha < 10)
-      /* fecha = '0' + fecha */
       todas = ventas.filter(v => moment(v.created_at).format('YYYY/MM') == moment().format('YYYY') + '/' + fecha)
       var num = 0
       for (let j = 0; j < todas.length; j++) {

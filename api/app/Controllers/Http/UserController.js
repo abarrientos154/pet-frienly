@@ -413,7 +413,7 @@ class UserController {
 
   async userLogueado({ request, response, auth }) {
     const user = (await auth.getUser()).toJSON()
-    if (user.roles[0] === 3) {
+    if (user.roles[0] === 3 || user.roles[0] === 5) {
       let country = await Pais.find(user.tienda.country_id)
       let city = await Ciudad.find(user.tienda.city_id)
       user.tienda.country = country

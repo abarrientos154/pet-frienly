@@ -62,6 +62,7 @@ const routes = [
   { path: '/registro_producto', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_producto/:id', component: () => import('pages/proveedor/RegistroProductos.vue') },
   { path: '/editar_proveedor', component: () => import('pages/proveedor/EditarPerfil.vue') },
+  { path: '/editar_servicios', component: () => import('pages/proveedor/EditarPerfil.vue') },
 
   { path: '/descripcion_espacio/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
   { path: '/editar_espacio/:id', component: () => import('pages/hospedador/EditSpace.vue') },

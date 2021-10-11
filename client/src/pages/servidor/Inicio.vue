@@ -23,7 +23,7 @@
         <div class="text-bold text-subtitle1">Bienvenido</div>
         <div>{{tienda.descripcion}}</div>
         <div v-if="miTienda" class="q-pt-sm">
-          <q-btn label="Editar perfil" color="primary" no-caps style="width: 100%" to="/editar_proveedor"/>
+          <q-btn label="Editar perfil" color="primary" no-caps style="width: 100%" to="/editar_servicios"/>
         </div>
       </div>
     </div>
@@ -498,6 +498,7 @@ export default {
         this.form.tienda_name = this.tienda.name
         this.form.totalValor = this.totalCarrito
         this.form.totalProductos = this.totalProductos
+        this.form.servicios = true
         this.$api.post('comprar_productos', { dat: this.form, carrito: this.carrito }).then(async res => {
           if (res) {
             this.carrito = []
