@@ -1,9 +1,127 @@
 <template>
-  <div>
-    <div style="height: 300px; width: 100%;" class="bg-grey">
-      <q-img src="nopublicidad.jpg" style="height: 300px; width: 100%" />
+  <q-page style="padding-bottom: 80px;">
+    <div style="height: 140px; width: 100%;" class="bg-grey">
+      <img src="mascotas1.svg" style="height: 100%; width: 100%; border:none; object-fit: cover;" />
     </div>
 
+    <div class="row q-pt-lg">
+      <div class="col-12 text-center text-h5">Bienestar a 4 patas</div>
+    </div>
+
+    <div class="full-width row q-pt-md">
+      <div class="col-12 row justify-around q-gutter-x-xs">
+
+        <div
+          v-for="(item, index) in services"
+          :key="index"
+          class="row style-card-services q-pa-md"
+          :style="service === item.value ? 'background-color: #F0B418;' : ''"
+          @click="service = item.value"
+        >
+          <div class="row col-12 justify-center">
+            <q-img :src="item.icon" width="50px" height="50px" />
+            <div class="col-12 text-center" :class="service === item.value ? 'text-white' : 'text-black'">{{ item.name }}</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row q-pt-xl q-pa-lg">
+      <q-card class="col-12 row q-pa-md q-pb-xl q-pt-xl q-gutter-y-md" style="border-radius:12px; overflow:hidden">
+        <q-img src="pata2.svg" class="img-style"/>
+        <div class="col-12 text-center text-bold">Busca espacio para tu mascota</div>
+        <div class="col-12">
+          <q-select
+            outlined
+            dense
+            rounded
+            label="Gato o Perro"
+            v-model="petType"
+            :options="petTypes"
+            map-options
+          />
+        </div>
+
+        <div v-if="!login" class="col-12">
+          <q-select
+            outlined
+            dense
+            rounded
+            v-model="city"
+            :options="cities"
+            option-value="_id"
+            option-label="name"
+            emit-value
+            map-options
+            label="Ciudad"
+          />
+        </div>
+
+        <div class="col-12 row justify-center">
+          <div class="col-6">
+            <q-btn
+              label="Buscar"
+              rounded
+              color="secondary"
+              style="width:100%"
+              dense
+              push
+              :disable="login ? !service || !petType || !city ? true : false : !service || !petType ? true : false"
+              @click="filtrarDatos()"
+            />
+          </div>
+        </div>
+
+      </q-card>
+    </div>
+
+    <section class="col-12 row q-pa-md">
+      <div class="col-12 text-center text-h5">Ultimas tiendas añadidas</div>
+      <q-list
+        class="col-12 q-pt-md"
+        v-if="lastStores.length > 0"
+      >
+        <q-card
+          class="row q-py-xs q-px-sm items-center"
+          clickable
+          v-ripple
+          v-for="(store, index) in lastStores"
+          :key="index"
+          @click="store.roles[0] === 3 ? $router.push('/inicio-proveedor/' + store._id) : $router.push('/inicio-servicios/' + store._id)"
+        >
+          <div class="col-4">
+            <img
+              :src="imgTienda + store._id"
+              width="100%"
+              height="70px"
+              style="border-radius: 200px"
+            />
+          </div>
+          <div class="col-7 row q-px-sm q-pl-md">
+            <div class="text-bold text-subtitle1 col-12"> {{store.tienda.name}} </div>
+            <div class="col-6">
+              <q-rating
+                v-model="store.calificacion"
+                size="1em"
+                :max="5"
+                color="primary"
+                readonly
+              />
+              <div class="row no-wrap items-center">
+                <q-icon name="location_on" color="grey" />
+                <div class="text-caption">
+                  {{store.city}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </q-card>
+      </q-list>
+      <div v-else class="col-12 text-center q-pt-md text-caption">No hay tiendas actualmente</div>
+    </section>
+
+<!--
     <div class="q-mx-md">
       <div class="q-mt-md q-mx-sm text-h5">Bienvenido Usuario</div>
       <div class="q-mb-md q-mx-sm">El amor es una palabra de cuatro patas</div>
@@ -33,7 +151,6 @@
         :disable="login ? !service || !petType || !city ? true : false : !service || !petType ? true : false" @click="filtrarDatos()"/>
       </div>
     </div>
-
     <div class="q-pa-sm">
       <div class="q-mb-md text-h5 text-center">Ultimas tiendas añadidas</div>
       <q-scroll-area
@@ -147,6 +264,7 @@
         <q-btn no-caps color="primary" label="Ver más" class="q-py-sm" style="width: 70%;" @click="$router.push('/descanso')"/>
       </div>
     </div>
+ -->
 
     <q-page-sticky v-if="user._id" position="bottom-right" :offset="[18, 18]">
       <q-fab color="primary" icon="pets" label="Mis acciones" no-caps direction="up" vertical-actions-align="right">
@@ -160,7 +278,7 @@
     <q-page-sticky v-if="!login" position="bottom-right" :offset="[18, 18]">
       <q-btn no-caps class="q-pa-xs" rounded color="primary" label="¡Regístrate ahora!" to="/login" />
     </q-page-sticky>
-  </div>
+  </q-page>
 </template>
 
 <script>
@@ -170,7 +288,7 @@ export default {
   },
   data () {
     return {
-      service: null,
+      service: 1,
       petType: null,
       city: null,
       login: true,
@@ -185,8 +303,14 @@ export default {
       cities: [],
       petTypes: ['Perros', 'Gatos', 'Ambos'],
       services: [
-        { name: 'Hospedaje', value: 1 },
-        { name: 'Tienda', value: 2 }
+        { name: 'Hospedaje', value: 1, icon: 'ihospedaje1.svg' },
+        { name: 'Tienda', value: 2, icon: 'itienda1.svg' }
+      ],
+      itemSelect: 1,
+      items: [
+        { title: 'Hospedaje', value: 1, icon: 'ihospedaje1.svg' },
+        // { title: 'Servicios', value: 2, icon: 'iservicio1.svg' },
+        { title: 'Tienda', value: 3, icon: 'itienda1.svg' }
       ]
     }
   },
@@ -258,10 +382,34 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.style-card-services {
+  border: 1px solid black;
+  border-radius: 100%;
+  height: 110px;
+  width: 110px;
+}
+
+.img-style {
+  position:absolute;
+  top:-25px;
+  left:-10px;
+  transform: rotate(117deg);
+  width: 60px;
+  height: 60px;
+}
+
+.div-btn {
+  border-radius: 20px;
+}
+
+</style>
+
 <style lang="sass" scoped>
 .bordes
   border-top-left-radius: 0px
   border-top-right-radius: 30px
   border-bottom-left-radius: 30px
   border-bottom-right-radius: 30px
+
 </style>
