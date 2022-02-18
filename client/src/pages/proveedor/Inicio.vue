@@ -86,7 +86,13 @@
         horizontal
         style="height: 330px; width:100%">
         <div class="row no-wrap q-gutter-md" style="width: 100%">
-          <q-card v-for="(item, index) in ultimos" :key="index" v-ripple clickable style="width: 200px; height: 300px; border-radius: 20px">
+          <q-card
+            v-for="(item, index) in ultimos"
+            :key="index"
+            v-ripple
+            clickable
+            style="width: 200px; height: 300px; border-radius: 20px"
+          >
             <q-img :src="baseuproductos + item.images[0]" style="width: 100%; height: 100%; border-radius: 20px"
             @click="accionProducto(item)">
             </q-img>
@@ -216,6 +222,54 @@
     </q-page-sticky>
 
     <q-dialog v-model="verProducto" maximized persistent>
+
+      <q-card class="full-width">
+        <q-toolbar class="bg-primary row items-center" style="width:100%; height:60px">
+          <div class="col-1">
+            <q-btn flat round color="white" icon="arrow_back" @click="verProducto = false"/>
+          </div>
+          <div class="col-10 text-white text-subtitle1 text-center">{{producto.name}}</div>
+        </q-toolbar>
+
+        <q-scroll-area style="height: 340px; width: 100%;">
+          <div class="row">
+            <div class="col-2 q-pt-xs q-px-sm column items-center">
+              <div class="q-pb-sm" v-for="(item, index) in producto.images" :key="index">
+                <img :src="baseuproductos + item" style="height:50px; width: 50px; border-radius: 10px"
+                @click="imgProd = item" />
+              </div>
+            </div>
+
+            <div class="col-10">
+              <div class="row justify-center">
+                <img :src="baseuproductos + imgProd" style="height: 340px; width: 100%" />
+              </div>
+            </div>
+          </div>
+        </q-scroll-area>
+
+        <div class="q-py-md q-pa-md">
+          <div class="text-h6">{{producto.name}}</div>
+          <div class="text-bold text-h5 q-py-md">$ {{producto.oferta ? formatPrice(producto.oferta_price) : formatPrice(producto.price)}}</div>
+          <div class="text-subtitle1 text-grey-8">Para - {{producto.destinatario === 'Ambos' ? 'Perros y Gatos' : producto.destinatario}}</div>
+          <div class="text-subtitle1 text-grey-8">Disponible - {{producto.cantidad}} unidades</div>
+          <div class="text-h6">Descripción</div>
+          <div class="text-subtitle1 text-grey-8">{{producto.descripcion}}</div>
+        </div>
+
+        <div class="row justify-center q-py-lg">
+          <q-btn v-if="miTienda" class="q-py-sm" no-caps color="primary" label="Editar producto" style="width:70%"
+          @click="$router.push('/editar_producto/' + producto._id)"/>
+          <q-btn v-if="miTienda" flat no-caps color="red" icon="delete"
+          @click="eliminarProducto(producto._id)"/>
+          <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="blue" label="Agregar al carro" style="width:80%" push
+          @click="login ? addCarrito(producto) : nologin = true, verProducto = false"/>
+        </div>
+
+      </q-card>
+
+      <!--
+
       <q-card style="width:100%;">
         <q-toolbar class="bg-primary row items-center" style="width:100%; height:60px">
           <div class="col-1">
@@ -258,6 +312,7 @@
           @click="login ? addCarrito(producto) : nologin = true, verProducto = false"/>
         </div>
       </q-card>
+       -->
     </q-dialog>
 
     <q-dialog v-model="verCarrito" maximized persistent>
