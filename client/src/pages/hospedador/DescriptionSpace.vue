@@ -1,8 +1,113 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated class="bg-primary row items-center" style="width:100%; height:60px">
+  <section>
+    <div class="row full-width">
+      <q-btn
+        icon="arrow_back"
+        round
+        dense
+        size="sm"
+        color="white"
+        text-color="black"
+        @click="$router.go(-1)"
+        style="position: absolute; top: 10px; left: 10px; z-index: 1"
+      />
+      <div class="col-12" style="position: relative">
+        <q-carousel
+          v-model="slide"
+          style="height: 300px;"
+          transition-prev="jump-right"
+          transition-next="jump-left"
+          swipeable
+          animated
+          prev-icon="arrow_left"
+          next-icon="arrow_right"
+          navigation
+          arrows
+        >
+          <q-carousel-slide
+            v-for="(img, index) in hospedaje.images"
+            :key="index"
+            :name="index"
+            :img-src="baseu + img.src"
+          >
+            <div class="absolute-bottom-right">
+              <q-btn
+                v-if="rol === 4"
+                flat
+                no-caps
+                color="red"
+                icon="delete"
+                @click="eliminarAlojamiento()"
+              />
+            </div>
+          </q-carousel-slide>
+        </q-carousel>
+        <div style="position: absolute; bottom: 60px; left: 20px" class="full-width row">
+          <div class="col-12 text-white text-h6"> {{ hospedaje.name }} </div>
+        </div>
+      </div>
+
+      <div
+        style="position:relative; top: -45px; border-radius: 25px 25px 0 0;"
+        class="bg-white col-12 row"
+      >
+        <div class="col-12 text-right q-pt-md q-pr-lg text-h5 text-bold"> ${{formatPrice(hospedaje.price)}} por día </div>
+        <div class="col-12 row">
+          <div class="col-12 column q-pl-md">
+            <div class="row items-center q-pt-md">
+              <q-icon name="location_on" size="sm" />
+              <div class="text-bold text-h6">Ubicacion</div>
+            </div>
+            <div class="q-pl-lg"> {{hospedaje.location}} </div>
+          </div>
+        </div>
+
+        <q-separator class="q-mt-lg" color="black" />
+
+        <div class="col-12 row q-pt-lg q-pl-md">
+          <div class="col-12 text-bold">Servicios</div>
+          <div class="row">
+              <div class="col q-mx-sm">
+                <div class="text-subtitle2 text-bold text-grey-8">Disponible para</div>
+                <div class="text-caption text-grey-8">{{hospedaje.pet_type === 'Ambos' ? 'Perros y Gatos' : hospedaje.pet_type}}</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Cantidad de pasajero</div>
+                <div class="text-caption text-grey-8">{{hospedaje.guests}} mascotas</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Tipo de espacio</div>
+                <div class="text-caption text-grey-8">{{hospedaje.location}}</div>
+                <div class="text-subtitle2 text-bold text-grey-8">Tamaños que recibe</div>
+                <div class="text-caption text-grey-8">{{hospedaje.petSize}}</div>
+              </div>
+            </div>
+        </div>
+
+        <q-separator class="q-mt-lg" color="black" />
+
+        <div class="row col-12 q-pl-md q-pt-lg">
+          <div class="col-12 text-bold">Descripción</div>
+          <div class="col-12">
+            <div class="text-caption">
+              {{hospedaje.description}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 row justify-center q-pt-lg">
+          <q-btn
+            color="blue"
+            push
+            no-caps
+            class="text-bold"
+            :label="rol === 4 ? 'Editar alojamiento' : 'Reserva este espacio'"
+            @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : !login ? nologin = true : hospedaje.state !== 'Disponible' ? ocupado = true : reservar()"
+          />
+        </div>
+
+      </div>
+    </div>
+    <!--
+    <q-header elevated class="bg-transparent row items-center" style="width:100%; height:60px">
       <div class="col-1">
-        <q-btn flat round color="white" icon="arrow_back" @click="$router.go(-1)"/>
+        <q-btn round color="white" icon="arrow_back" @click="$router.go(-1)"/>
       </div>
       <div class="col-10 text-white text-subtitle1 text-center">{{hospedaje.name}}</div>
     </q-header>
@@ -223,7 +328,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-  </q-layout>
+     -->
+  </section>
 </template>
 
 <script>
