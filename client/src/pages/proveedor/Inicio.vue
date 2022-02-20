@@ -575,7 +575,7 @@ export default {
       verProducto: false,
       verCarrito: false,
       comprarCarrito: false,
-      compraExitosa: true,
+      compraExitosa: false,
       compraFallo: false,
       login: true,
       nologin: false,
