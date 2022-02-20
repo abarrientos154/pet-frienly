@@ -321,10 +321,13 @@
           <div class="col-1">
             <q-btn flat round color="white" icon="arrow_back" @click="verCarrito = false"/>
           </div>
-          <div class="col-10 text-white text-subtitle1 text-center">Carro de compra</div>
+          <div class="col-10 text-white text-subtitle1 text-center">Carrito</div>
         </q-toolbar>
 
         <q-scroll-area style="height: 65%; width: 100%;">
+          <div class="row">
+            <div class="text-bold col-12 text-center q-pt-md">Mi carrito</div>
+          </div>
           <div class="q-px-md q-pt-xl">
             <q-list class="q-gutter-md" v-if="carrito.length">
               <div v-for="(producto, index) in carrito" :key="index">
@@ -339,26 +342,33 @@
                   <div class="col-8 row items-between" style="height: 100px">
                     <div class="col-12 row justify-between items-strat">
                       <div class="row no-wrap q-pl-sm col-11">
-                        <div class="text-subtitle1 ellipsis">{{producto.name}}</div>
+                        <div class="text-subtitle2 text-grey-7 ellipsis">{{producto.name}}</div>
                       </div>
                       <div class="col-1">
-                        <q-btn flat round no-caps dense color="grey-6" icon="delete"
-                        @click="deleteProdCarrito(index)" />
+                        <q-btn
+                          flat
+                          round
+                          no-caps
+                          dense
+                          color="grey-6"
+                          icon="highlight_off"
+                          @click="deleteProdCarrito(index)"
+                        />
                       </div>
                     </div>
 
                     <div class="col-12 row justify-between items-end">
-                      <div class="q-ml-sm">
-                        <div class="text-h6 text-primary">${{!producto.oferta ? formatPrice(producto.price) : formatPrice(producto.oferta_price)}} </div>
-                      </div>
                       <div class="row">
                         <div>
-                          <q-btn size="12px" dense color="grey" icon="remove" @click="editCantidad(index, false)" />
+                          <q-btn size="12px" dense color="grey-2" text-color="grey-7" icon="remove" @click="editCantidad(index, false)" />
                         </div>
                         <div class="text-primary text-h6 q-px-sm">{{producto.cantidad_compra}}</div>
                         <div>
-                          <q-btn size="12px" dense color="primary" icon="add" @click="editCantidad(index, true)" />
+                          <q-btn size="12px" dense color="grey-2" text-color="grey-7" icon="add" @click="editCantidad(index, true)" />
                         </div>
+                      </div>
+                      <div class="q-ml-sm">
+                        <div class="text-subtitle1 text-bold">${{!producto.oferta ? formatPrice(producto.price) : formatPrice(producto.oferta_price)}} </div>
                       </div>
                     </div>
                   </div>
@@ -370,19 +380,30 @@
         </q-scroll-area>
 
         <div class="q-pt-lg q-px-md">
+          <!--
           <div class="row justify-between" style="width:100%">
             <div class="text-subtitle1 text-grey-8">Cantidad de artículos</div>
             <div class="text-subtitle1 text-primary">{{totalProductos}}</div>
           </div>
           <q-separator />
+           -->
           <div class="row justify-between q-my-lg" style="width:100%">
             <div class="text-subtitle1 text-grey-8">Precio total</div>
-            <div class="text-h6 text-primary">${{formatPrice(totalCarrito)}}</div>
+            <div class="text-h6 text-bold">${{formatPrice(totalCarrito)}}</div>
           </div>
         </div>
 
         <div class="row justify-center q-pb-md" style="width:100%">
-          <q-btn :disable="carrito.length ? false : true" @click="$v.direccion.$reset(), comprarCarrito = true, verCarrito = false" no-caps label="Pagar" color="primary" class="q-py-sm" style="width: 80%;" />
+          <q-btn
+            :disable="carrito.length ? false : true"
+            @click="$v.direccion.$reset(), comprarCarrito = true, verCarrito = false"
+            no-caps
+            label="Ir al checkout"
+            color="blue"
+            class="q-py-sm"
+            style="width: 80%;"
+            push
+          />
         </div>
       </q-card>
     </q-dialog>
@@ -393,37 +414,60 @@
           <div class="col-1">
             <q-btn flat round color="white" icon="arrow_back" @click="verCarrito = true, comprarCarrito = false"/>
           </div>
-          <div class="col-10 text-white text-subtitle1 text-center">Pagar</div>
+          <div class="col-10 text-white text-subtitle1 text-center">Check Out</div>
         </q-toolbar>
-        <div class="q-px-md q-pt-xl row items-between" style="height:92%">
+        <div class="q-px-md q-pt-xl row items-between container" style="height:92%">
           <div class="col-12">
             <div class="q-px-sm">
-              <div class="text-h6 text-bold">Dirección de envío</div>
-              <div>Seleccione una ciudad</div>
-              <q-select dense filled v-model="city" :options="cities" option-value="_id" label="Ciudad de destino" option-label="name" emit-value map-options
-              error-message="Requerido" :error="$v.city.$error" @blur="$v.city.$touch()"/>
-              <div class="q-pt-sm">Ingrese una dirección</div>
-              <q-input dense filled v-model="direccion" placeholder="Dirección del envio"
-                error-message="Requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()"/>
-              <q-separator />
-              <div class="text-h6 text-bold q-my-md">Pedido</div>
-              <div class="row justify-between" style="width:100%">
-                <div class="text-subtitle1 text-grey-8">Cantidad de productos</div>
-                <div class="text-subtitle1 text-primary">{{totalProductos}}</div>
+              <div class="text-h6 text-grey-8 text-subtitle1">Dirección de envío</div>
+              <div class="col-12 row container-dir shadow-1">
+
+                <div class="row col-12">
+                  <div class="col-12">Seleccione una ciudad</div>
+                  <div class="col-12">
+                    <q-select dense v-model="city" :options="cities" option-value="_id" label="Ciudad de destino" option-label="name" emit-value map-options error-message="Requerido" :error="$v.city.$error" @blur="$v.city.$touch()" />
+                  </div>
+                </div>
+
+                <div class="row col-12">
+                  <div class="q-pt-sm col-12">Ingrese una dirección</div>
+                  <div class="col-12">
+                    <q-input dense v-model="direccion" placeholder="Dirección del envio" error-message="Requerido" :error="$v.direccion.$error" @blur="$v.direccion.$touch()" />
+                  </div>
+                </div>
+
               </div>
-              <div class="row justify-between items-center q-pt-md" style="width:100%">
-                <div class="text-subtitle1 text-grey-8">Total a pagar</div>
-                <div class="text-h6 text-primary">${{formatPrice(totalCarrito)}}</div>
-              </div>
+
+              <div class="text-h6 text-subtitle1 text-grey-8 q-mt-lg">Pedido</div>
+              <section class="container-dir shadow-1 q-gutter-y-sm q-mt-xs">
+                <div class="row justify-between" style="width:100%">
+                  <div class="text-subtitle1 text-grey-8">Cantidad de productos</div>
+                  <div class="text-subtitle1 text-bold">{{totalProductos}}</div>
+                </div>
+                <div class="row justify-between items-center" style="width:100%">
+                  <div class="text-subtitle1 text-grey-8">Total a pagar</div>
+                  <div class="text-h6 text-bold">${{formatPrice(totalCarrito)}}</div>
+                </div>
+                <div class="row justify-between" style="width:100%">
+                  <div class="text-subtitle1 text-grey-8">Precio total</div>
+                  <div class="text-h6 text-bold">${{formatPrice(totalCarrito)}}</div>
+                </div>
+              </section>
+
             </div>
           </div>
           <div class="col-12 q-py-lg column justify-end items-end">
-            <div class="row justify-between q-my-lg" style="width:100%">
-              <div class="text-subtitle1 text-grey-8">Precio total</div>
-              <div class="text-h6 text-primary">${{formatPrice(totalCarrito)}}</div>
-            </div>
+
             <div class="row justify-center" style="width:100%">
-              <q-btn :disable="carrito.length ? false : true" @click="iniciarCompra()" no-caps label="Pagar ahora" color="primary" class="q-py-sm" style="width: 80%;" />
+              <q-btn
+                :disable="carrito.length ? false : true"
+                @click="iniciarCompra()"
+                label="Pagar"
+                color="blue"
+                class="q-py-sm"
+                style="width: 80%;"
+                push
+              />
             </div>
           </div>
         </div>
@@ -431,7 +475,38 @@
     </q-dialog>
 
     <q-dialog persistent maximized v-model="compraExitosa">
-      <q-card style="width: 100%; height: 100%">
+      <q-card class="flex flex-center">
+        <div class="column">
+
+          <div class="col-12 q-mt-md" style="height:100px">
+            <img src="logo1.svg" width="100%" height="100%" />
+          </div>
+
+          <div class="col-12 text-center text-h4 text-grey-7">
+            Todo ha ido bien!
+          </div>
+
+          <div class="col-12 q-pt-xl row justify-center">
+            <q-icon name="check_circle" size="150px" color="positive" />
+          </div>
+
+          <div class="col-12 text-center text-subtitle1 q-px-xl text-grey-8">
+            Tu orden sera entregada muy pronto en la puerta de tu hogar!
+          </div>
+
+          <div class="q-pt-xl col-12 justify-center column items-center q-gutter-sm">
+            <q-btn
+              no-caps
+              push
+              style="width:60%"
+              color="blue"
+              label="Volver a tienda"
+              @click="compraExitosa = false"
+            />
+          </div>
+        </div>
+      </q-card>
+      <!-- <q-card style="width: 100%; height: 100%">
         <div class="absolute-center full-width column justify-between">
           <div class="q-pb-xl">
             <div class="row justify-center q-pb-lg">
@@ -446,7 +521,7 @@
               @click="compraExitosa = false"/>
           </div>
         </div>
-      </q-card>
+      </q-card> -->
     </q-dialog>
 
     <q-dialog persistent maximized v-model="compraFallo">
@@ -500,7 +575,7 @@ export default {
       verProducto: false,
       verCarrito: false,
       comprarCarrito: false,
-      compraExitosa: false,
+      compraExitosa: true,
       compraFallo: false,
       login: true,
       nologin: false,
@@ -779,3 +854,17 @@ export default {
   }
 }
 </script>
+
+<style lanh="scss" scoped>
+
+.container-dir {
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.container {
+  background-color: rgba(235, 235, 235, 0.563);
+}
+
+</style>
