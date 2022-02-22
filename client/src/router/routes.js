@@ -66,9 +66,10 @@ const routes = [
 
   { path: '/descripcion_espacio/:id', component: () => import('pages/hospedador/DescriptionSpace.vue') },
   { path: '/editar_espacio/:id', component: () => import('pages/hospedador/EditSpace.vue') },
+  { path: '/splash', component: () => import('pages/Splash.vue') },
   {
     path: '/',
-    redirect: '/inicio'
+    redirect: '/splash'
   },
   {
     path: '*',
