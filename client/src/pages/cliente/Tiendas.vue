@@ -4,6 +4,10 @@
       <div class="text-white text-subtitle1 text-center">Todas las tiendas</div>
     </q-header>
 
+    <div class="full-width">
+      <img src="mascotas1.svg" width="100%" height="100%" />
+    </div>
+
     <div class="column q-pl-md">
       <div class="q-mt-sm text-subtitle1 text-bold">Tiendas mejor calificadas</div>
       <div class="text-caption text-grey-8">Las tiendas mejor calificadas en tu ciudad</div>

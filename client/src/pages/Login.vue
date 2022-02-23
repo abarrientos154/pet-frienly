@@ -1,5 +1,79 @@
 <template>
-  <div>
+  <section class="absolute-full">
+    <div class="row">
+      <div class="col-12 row justify-center q-pt-xl">
+        <div class="col-5">
+          <img src="logo1.svg" style="width:100%; height:100%" />
+        </div>
+      </div>
+      <div class="col-12 text-center text-uppercase text-h4">
+        Canguru
+      </div>
+
+      <div class="col-12 row q-pa-md">
+        <div class="col-12">
+          <q-input
+            dense
+            type="email"
+            v-model="form.email"
+            placeholder="Correo electronico"
+            autofocus
+            outlined
+            rounded
+            :error="$v.form.email.$error"
+            error-message="Este campo es requerido"
+            @blur="$v.form.email.$touch()"
+          />
+        </div>
+
+        <div class="col-12 q-pt-md">
+          <q-input
+            dense
+            :type="isPwd ? 'password' : 'text'"
+            v-model="form.password"
+            placeholder="Contraseña"
+            outlined
+            rounded
+            :error="$v.form.password.$error"
+            error-message="Este campo es requerido"
+            @blur="$v.form.password.$touch()"
+          />
+        </div>
+
+        <div class="col-12 q-pt-md">
+          <q-btn
+            class="full-width"
+            color="secondary"
+            :loading="loading"
+            @click="onSubmit()"
+            no-caps
+            rounded
+            text-color="black"
+            label="Iniciar sesión"
+          >
+            <template v-slot:loading>
+              <q-spinner-hourglass class="on-center" />
+              Loading...
+            </template>
+          </q-btn>
+        </div>
+
+        <div class="row justify-center col-12 q-pt-sm">
+          <div class="text-caption text-secondary" style="cursor:pointer" @click="cambio = true">¿Olvidaste tu contraseña?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fixed-bottom full-width row">
+      <div class="text-center text-caption q-px-md" style="font-size: 12px;">Al iniciar sesion o registrarte acepta los terminos y condiciones de servicio</div>
+      <div class="row col-12 justify-center">
+        <div class="col-12">
+          <img src="perro_buttom1.svg" alt="pet" width="100%" height="80px" style="border:0 !important" >
+        </div>
+      </div>
+    </div>
+
+    <!--
     <div class="absolute-center column justify-center items-center bg-white" style="width:100%">
       <div class="column q-pa-md">
         <div class="row justify-center q-pt-xl">
@@ -41,7 +115,7 @@
           </div>
         </div>
 
-        <!-- <div class="colunm justify-center q-pa-sm">
+        <div class="colunm justify-center q-pa-sm">
           <div class="row justify-between q-mr-xl q-ml-xl q-mt-sm q-mb-sm">
             <q-btn  round color="grey-5" style="width: 40px; height: 40px">
               <img src="icons/Iconos_Redes.png" style="width: 20px; height: 20px"/>
@@ -53,9 +127,9 @@
               <img src="icons/Iconos_Redes_3.png" style="width: 20px; height: 20px"/>
             </q-btn>
           </div>
-        </div> -->
+        </div>
       </div>
-    </div>
+    </div> -->
     <q-dialog v-model="cambio">
       <q-card class="column items-center justify-center" style="width: 350px; height:350px;">
         <q-card-section>
@@ -87,7 +161,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-  </div>
+  </section>
 </template>
 
 <script>

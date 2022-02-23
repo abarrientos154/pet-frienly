@@ -109,7 +109,60 @@
       <q-btn fab icon="shopping_bag" color="primary" @click="verCarrito = true" />
     </q-page-sticky>
 
-    <q-dialog v-model="verServicio">
+    <q-dialog v-model="verServicio" maximized>
+      <q-card class="text-black q-mr-lg q-pt-md">
+        <section class="section-img">
+          <div class="content">
+            <div class="row col-12 items-center">
+              <q-btn icon="arrow_back_ios" flat v-close-popup round  />
+            </div>
+            <div class="row q-pt-lg q-pa-md">
+              <div class="col-12 row items-center" style="height:70px">
+                <div class="col-4">
+                  <q-avatar rounded style="width:100%;height:100px" >
+                    <img :src="baseuServicios + servicio._id" style="height: 100%; width: 100%; border-radius: 20px" />
+                  </q-avatar>
+                </div>
+                <div class="col-7 q-pl-md text-h6">
+                  {{servicio.servicio? servicio.servicio.name : 'Tipo de servicio'}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <q-card class="q-pt-lg shadow q-px-md q-mt-lg">
+          <div class="row text-center">
+            <div class="text-h6 col-12"> Consulta por hora </div>
+            <div class="text-h6 col-12"> ${{formatPrice(servicio.price)}} </div>
+          </div>
+          <div class="row q-gutter-y-md q-pt-xl">
+
+            <div class="row col-12 items-center q-gutter-x-sm">
+              <q-icon name="check_circle" size="md" color="positive" />
+              <div class="text-caption"> {{servicio.description}} </div>
+            </div>
+
+            <div class="row col-12 items-center q-gutter-x-sm">
+              <q-icon name="check_circle" size="md" color="positive" />
+              <div class="text-caption"> {{servicio.destinatario === 'Ambos' ? 'Perros y Gatos' : servicio.destinatario}} </div>
+            </div>
+
+          </div>
+        </q-card>
+
+        <div class="row justify-center q-my-lg fixed-bottom q-pr-lg">
+          <q-btn v-if="miTienda" class="q-py-xs" no-caps color="primary" label="Editar servicio" style="width:70%"
+          @click="$router.push('/editar_servicio/' + servicio._id)"/>
+          <q-btn v-if="miTienda" flat no-caps color="red" icon="delete"
+          @click="eliminarServicio(servicio._id)"/>
+          <q-btn v-if="miTienda === false" class="q-py-sm" no-caps color="primary" label="Agregar al carro" style="width:80%"
+          @click="login ? addCarrito(servicio) : nologin = true, verServicio = false"/>
+        </div>
+      </q-card>
+
+      <!--
+
       <q-card class="q-py-lg" style="width:100%; border-radius: 20px">
         <div>
           <div class="text-center text-h5 text-bold text-grey-8 q-mb-sm">{{servicio.servicio? servicio.servicio.name : 'Tipo de servicio'}}</div>
@@ -139,6 +192,7 @@
           @click="login ? addCarrito(servicio) : nologin = true, verServicio = false"/>
         </div>
       </q-card>
+      -->
     </q-dialog>
 
     <q-dialog v-model="verCarrito" maximized persistent>
@@ -538,3 +592,6 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+</style>
