@@ -42,7 +42,6 @@
             map-options
           />
         </div>
-
         <div v-if="!login" class="col-12">
           <q-select
             outlined
@@ -67,7 +66,6 @@
               style="width:100%"
               dense
               push
-              :disable="login ? !service || !petType || !city ? true : false : !service || !petType ? true : false"
               @click="filtrarDatos()"
             />
           </div>
@@ -304,6 +302,7 @@ export default {
       petTypes: ['Perros', 'Gatos', 'Ambos'],
       services: [
         { name: 'Hospedaje', value: 1, icon: 'ihospedaje1.svg' },
+        { name: 'Servicios', value: 3, icon: 'iservicio1.svg' },
         { name: 'Tienda', value: 2, icon: 'itienda1.svg' }
       ],
       itemSelect: 1,
@@ -370,6 +369,8 @@ export default {
         } else {
           this.$router.push('descanso/' + this.petType)
         }
+      } else if (this.service === 3) {
+        this.$router.push('tiendas/' + this.petType + '?service=' + this.service)
       } else {
         if (this.login) {
           this.$router.push('tiendas/' + this.petType + '/' + this.city)

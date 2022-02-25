@@ -855,7 +855,7 @@ export default {
 }
 </script>
 
-<style lanh="scss" scoped>
+<style lang="scss" scoped>
 
 .container-dir {
   background-color: rgb(255, 255, 255);

@@ -73,6 +73,13 @@
       </div>
     </div>
 
+    <div class="row justify-center">
+      <div class="row">
+        <div class="text-black text-h9">Aun no tienes cuenta?</div>
+        <div class="text-secondary q-ml-sm text-bold text-h9" style="cursor:pointer" @click="$router.push('/registro')">Registrate.</div>
+      </div>
+    </div>
+
     <!--
     <div class="absolute-center column justify-center items-center bg-white" style="width:100%">
       <div class="column q-pa-md">

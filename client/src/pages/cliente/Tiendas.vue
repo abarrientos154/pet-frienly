@@ -8,6 +8,23 @@
       <img src="mascotas1.svg" width="100%" height="100%" />
     </div>
 
+    <div class="full-width row q-pt-md">
+      <div class="col-12 row justify-around q-gutter-x-xs">
+
+        <div
+          v-for="(item, index) in services"
+          :key="index"
+          class="row style-card-services q-pa-md"
+          :style="service === item.value ? 'background-color: #F0B418;' : ''"
+        >
+          <div class="row col-12 justify-center">
+            <q-img :src="item.icon" width="50px" height="50px" />
+            <div class="col-12 text-center" :class="service === item.value ? 'text-white' : 'text-black'">{{ item.name }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="column q-pl-md">
       <div class="q-mt-sm text-subtitle1 text-bold">Tiendas mejor calificadas</div>
       <div class="text-caption text-grey-8">Las tiendas mejor calificadas en tu ciudad</div>
@@ -89,6 +106,12 @@ import env from '../../env'
 export default {
   data () {
     return {
+      services: [
+        { name: 'Hospedaje', value: 1, icon: 'ihospedaje1.svg' },
+        { name: 'Servicios', value: 3, icon: 'iservicio1.svg' },
+        { name: 'Tienda', value: 2, icon: 'itienda1.svg' }
+      ],
+      service: 1,
       imgTienda: '',
       petType: null,
       city: null,
@@ -99,17 +122,27 @@ export default {
       petTypes: ['Perros', 'Gatos', 'Ambos']
     }
   },
-  mounted () {
+  async mounted () {
     const value = localStorage.getItem('TRI_SESSION_INFO')
     if (value) {
-      this.getCities()
+      await this.getCities()
       this.nologin = false
-      this.getStore()
+      await this.getStore()
     } else {
-      this.getStore()
+      await this.getStore()
     }
+
+    this.verifyQueryRoute() // verifica el query para filtrar las tiendas, de momento solo filtra por servicios
   },
   methods: {
+    verifyQueryRoute () {
+      if (this.$route.query.service === '3') { // si es servicio entonces filtro las tiendas obtenidas por el rol de servicio
+        console.log(this.stores, 'stores service')
+        this.service = 3
+        this.stores = this.stores.filter(store => store.roles[0] === 5)
+        console.log(this.stores, 'stores service')
+      }
+    },
     async getCities () {
       await this.$api.get('ciudades').then(res => {
         if (res) {
@@ -122,12 +155,13 @@ export default {
         }
       })
     },
-    getStore () {
-      this.$api.post(!this.nologin ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [3, 5] }).then(res => {
+    async getStore () {
+      await this.$api.post(!this.nologin ? 'user_by_rol' : 'user_by_rol_no_logueo', { rol: [3, 5] }).then(res => {
         this.imgTienda = env.apiUrl + 'tienda_img/'
         if (res) {
           this.mejorCalificadas = res
           if (!this.$route.params.type) {
+            console.log('GETSTORE')
             this.stores = res
           } else {
             this.petType = this.$route.params.type
@@ -136,15 +170,27 @@ export default {
         }
       })
     },
-    filtrarTiendas () {
+    async filtrarTiendas () {
       this.$q.loading.show({
         message: 'Filtrando datos'
       })
-      this.$api.post('filtrar_tiendas', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
+      await this.$api.post('filtrar_tiendas', { type: this.petType ? this.petType : false, ciudad: this.city ? this.city : false }).then(res => {
         this.stores = res
+        this.verifyQueryRoute() // para verificar si la ruta tienes query para filtrar las tiendas por servicios (ROL 5)
+        console.log('FILTRARSTORE')
         this.$q.loading.hide()
       })
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.style-card-services {
+  border: 1px solid black;
+  border-radius: 100%;
+  height: 110px;
+  width: 110px;
+}
+
+</style>

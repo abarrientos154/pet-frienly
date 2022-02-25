@@ -391,7 +391,7 @@ export default {
         }).then(res => {
           if (res) {
             this.$q.notify({
-              message: 'Ya formas parte de PetFriendly, Bienvenido',
+              message: 'Ya formas parte de Canguru, Bienvenido',
               color: 'positive'
             })
             this.loguear()

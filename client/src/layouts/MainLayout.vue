@@ -18,7 +18,7 @@
     <q-dialog v-model="modal">
       <q-card class="q-pa-md">
         <q-card-section>
-          <div class="text-center text-h5 text-bold text-primary q-pb-sm">Bienvenido a PetFriendly</div>
+          <div class="text-center text-h5 text-bold text-primary q-pb-sm">Bienvenido a Canguru</div>
           <div class="text-center text-subtitle2">Te invitamos a registrarte para que conozcas tiendas y alojamientos cerca de ti</div>
         </q-card-section>
 
