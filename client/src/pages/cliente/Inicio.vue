@@ -364,7 +364,7 @@ export default {
     },
     filtrarDatos () {
       if (this.service === 1) {
-        if (this.login) {
+        if (!this.login) {
           this.$router.push('descanso/' + this.petType + '/' + this.city)
         } else {
           this.$router.push('descanso/' + this.petType)
@@ -372,7 +372,7 @@ export default {
       } else if (this.service === 3) {
         this.$router.push('tiendas/' + this.petType + '?service=' + this.service)
       } else {
-        if (this.login) {
+        if (!this.login) {
           this.$router.push('tiendas/' + this.petType + '/' + this.city)
         } else {
           this.$router.push('tiendas/' + this.petType)

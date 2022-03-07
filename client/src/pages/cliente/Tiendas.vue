@@ -16,13 +16,62 @@
           :key="index"
           class="row style-card-services q-pa-md"
           :style="service === item.value ? 'background-color: #F0B418;' : ''"
+          @click="service = item.value"
         >
           <div class="row col-12 justify-center">
             <q-img :src="item.icon" width="50px" height="50px" />
             <div class="col-12 text-center" :class="service === item.value ? 'text-white' : 'text-black'">{{ item.name }}</div>
           </div>
         </div>
+
       </div>
+    </div>
+
+    <div class="row q-pt-xl q-pa-lg">
+      <q-card class="col-12 row q-pa-md q-pb-xl q-pt-xl q-gutter-y-md" style="border-radius:12px; overflow:hidden">
+        <q-img src="pata2.svg" class="img-style"/>
+        <div class="col-12 text-center text-bold">Busca espacio para tu mascota</div>
+        <div class="col-12">
+          <q-select
+            outlined
+            dense
+            rounded
+            label="Gato o Perro"
+            v-model="petType"
+            :options="petTypes"
+            map-options
+          />
+        </div>
+        <div v-if="!login" class="col-12">
+          <q-select
+            outlined
+            dense
+            rounded
+            v-model="city"
+            :options="cities"
+            option-value="_id"
+            option-label="name"
+            emit-value
+            map-options
+            label="Ciudad"
+          />
+        </div>
+
+        <div class="col-12 row justify-center">
+          <div class="col-6">
+            <q-btn
+              label="Buscar"
+              rounded
+              color="secondary"
+              style="width:100%"
+              dense
+              push
+              @click="filtrarDatos()"
+            />
+          </div>
+        </div>
+
+      </q-card>
     </div>
 
     <div class="column q-pl-md">
@@ -116,6 +165,7 @@ export default {
       petType: null,
       city: null,
       nologin: true,
+      login: true,
       cities: [],
       mejorCalificadas: [],
       stores: [],
@@ -129,10 +179,15 @@ export default {
       this.nologin = false
       await this.getStore()
     } else {
+      this.login = false
       await this.getStore()
     }
-
     this.verifyQueryRoute() // verifica el query para filtrar las tiendas, de momento solo filtra por servicios
+  },
+  watch: {
+    $route () {
+      location.reload()
+    }
   },
   methods: {
     verifyQueryRoute () {
@@ -180,6 +235,23 @@ export default {
         console.log('FILTRARSTORE')
         this.$q.loading.hide()
       })
+    },
+    filtrarDatos () {
+      if (this.service === 1) {
+        if (!this.login) {
+          this.$router.push('descanso/' + this.petType + '/' + this.city)
+        } else {
+          this.$router.push('/descanso/' + this.petType)
+        }
+      } else if (this.service === 3) {
+        this.$router.push(this.petType + '?service=' + this.service)
+      } else {
+        if (!this.login) {
+          this.$router.push(this.petType + '/' + this.city)
+        } else {
+          this.$router.push(this.petType)
+        }
+      }
     }
   }
 }
@@ -191,6 +263,19 @@ export default {
   border-radius: 100%;
   height: 110px;
   width: 110px;
+}
+
+.img-style {
+  position:absolute;
+  top:-25px;
+  left:-10px;
+  transform: rotate(117deg);
+  width: 60px;
+  height: 60px;
+}
+
+.div-btn {
+  border-radius: 20px;
 }
 
 </style>
