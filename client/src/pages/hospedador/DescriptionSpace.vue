@@ -91,6 +91,41 @@
           </div>
         </div>
 
+        <div class="q-px-md" v-if="rol === 2 && hospedaje.state === 'Disponible'">
+          <div class="q-my-md">
+            <div class="text-overline">Cuando te vas a alojar</div>
+            <div class="text-caption">Selecciona los días que vas arrendar</div>
+            <div class="row justify-around">
+              <q-input filled readonly dense v-model="fechas" class="col-12" hint="Selecciona días continuos y disponibles" @click="$refs.qDateProxy1.show()"
+              error-message="Este campo es requerido" :error="$v.fechas.$error" @blur="$v.fechas.$touch()">
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy ref="qDateProxy1" transition-show="scale" transition-hide="scale">
+                      <q-date v-model="fechas" mask="YYYY/MM/DD" multiple @input="verificar()" :options="bloqueo">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+          </div>
+          <div class="q-mb-md">
+            <div class="text-overline">Selecciona tu(s) mascota(s)</div>
+            <div class="text-caption">Recuerda que solo podras agregar mascotas que cumplan los requisitos</div>
+            <q-select dense multiple use-chips filled v-model="form.mascotas" :options="mascotas" option-label="name" map-options
+            error-message="Este campo es requerido" :error="$v.form.mascotas.$error" @blur="$v.form.mascotas.$touch()">
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey text-italic">No hay mascotas</q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+        </div>
+
         <div class="col-12 row justify-center q-pt-lg">
           <q-btn
             color="blue"
@@ -101,7 +136,6 @@
             @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : !login ? nologin = true : hospedaje.state !== 'Disponible' ? ocupado = true : reservar()"
           />
         </div>
-
       </div>
     </div>
     <!--
@@ -121,6 +155,7 @@
             </div>
           </q-carousel-slide>
         </q-carousel>
+
         <div class="q-pa-md">
           <div class="q-mb-md">
             <div class="text-subtitle1 q-mb-sm">Conoce nuestro alojamiento</div>
@@ -184,7 +219,7 @@
       <div class="row items-center q-pa-md">
         <q-btn class="col q-pa-sm" color="primary" :label="rol === 4 ? 'Editar alojamiento' : 'Reservar'" @click="rol === 4 ? $router.push('/editar_espacio/' + hospedaje._id) : !login ? nologin = true : hospedaje.state !== 'Disponible' ? ocupado = true : reservar()" style="border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;" no-caps/>
         <div class="col q-px-sm q-py-md text-black bg-orange-2 text-center ellipsis" style="border-top-right-radius: 15px; border-bottom-right-radius: 15px;" >${{formatPrice(hospedaje.price)}} por día</div>
-      </div>
+      </div> -->
 
       <q-dialog v-model="reserva" maximized persistent>
         <q-card style="width:100%;">
@@ -328,7 +363,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-     -->
+
   </section>
 </template>
 
